@@ -1,0 +1,29 @@
+name: Scrape odds (money flow)
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "*/15 13-23,0-6 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install --with-deps chromium
+      - name: Run odds scraper
+        run: python scrape_odds.py
+      - name: Commit new data
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "資金流向快照更新"
+          file_pattern: "docs/data/**"
