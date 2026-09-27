@@ -24,8 +24,15 @@ jobs:
           playwright install --with-deps chromium
       - name: Run odds scraper
         run: python scrape_odds.py
-      - name: Commit new data
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "資金流向快照更新"
-          file_pattern: "docs/data/**"
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data
+          if git diff --cached --quiet; then echo "沒有新資料"; exit 0; fi
+          git commit -m "資金流向快照更新"
+          for i in 1 2 3 4 5; do
+            git pull --rebase && git push && exit 0
+            sleep 15
+          done
+          exit 1
