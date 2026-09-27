@@ -1,0 +1,39 @@
+name: Find Taiwan lottery data
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  find:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install browser
+        run: |
+          pip install playwright==1.47.0
+          playwright install --with-deps chromium
+      - name: Find data URLs
+        run: |
+          cat > f.py <<'EOF'
+          from playwright.sync_api import sync_playwright
+          urls = set()
+          def rec(r):
+              if "json" in r.headers.get("content-type", "") or "apidata" in r.url or "/api/" in r.url:
+                  urls.add(f"{r.status} {r.url}")
+          with sync_playwright() as p:
+              b = p.chromium.launch(headless=True)
+              pg = b.new_page(locale="zh-TW", user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15")
+              pg.on("response", rec)
+              try:
+                  r = pg.goto("https://www.sportslottery.com.tw/zh-tw/game/pre", timeout=60000, wait_until="networkidle")
+                  print("PAGE", r.status if r else None)
+                  pg.wait_for_timeout(5000)
+              except Exception as e:
+                  print("ERR", e)
+              b.close()
+          for u in sorted(urls):
+              print(u[:250])
+          EOF
+          python f.py
