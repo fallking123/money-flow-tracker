@@ -11,7 +11,7 @@
    去水後隱含機率
 2. docs/data/odds_books.csv    —— 每家莊家、每個盤、每一邊的賠率明細（盤口移動分析用）
 
-分層頻率：距開賽 >3 小時每 120 分鐘、1~3 小時每 30 分鐘、<1 小時每 12 分鐘
+分層頻率：距開賽 >3 小時每 120 分鐘、1~3 小時每 30 分鐘、1 小時內每 10 分鐘
 """
 
 import csv
@@ -63,7 +63,7 @@ def tier_interval_minutes(hrs: float) -> int:
         return 120
     if hrs > 1:
         return 30
-    return 12
+    return 10
 
 
 def american_to_decimal(s):
@@ -296,7 +296,9 @@ def run():
         if not (0 <= hrs <= 24):
             continue
         last = state.get(g["id"])
-        if last and (now - datetime.fromisoformat(last)).total_seconds() / 60 < tier_interval_minutes(hrs):
+        # 容許約 1/4 間隔的誤差：GitHub 排程常延遲幾分鐘，避免剛好差一點就跳過一次
+        interval = tier_interval_minutes(hrs)
+        if last and (now - datetime.fromisoformat(last)).total_seconds() / 60 < interval * 0.75:
             continue
         if lookup is None:
             lookup = mlb_id_lookup(now)
