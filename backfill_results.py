@@ -16,7 +16,7 @@ results.csv 用 sbd_id 跟 odds_history 對起來（同一場比賽的編號）�
 import os
 from datetime import datetime, timezone, timedelta
 
-from sports_common import (SPORTS, espn_events, is_college, match_event, parse_time,
+from sports_common import (SPORTS, active_sports, espn_events, is_college, match_event, parse_time,
                            read_rows, recent_monthly_files, sport_dir, append_rows)
 
 RESULT_FIELDS = [
@@ -92,7 +92,7 @@ def run_sport(sport, now):
 
 def run():
     now = datetime.now(timezone.utc)
-    for sport, cfg in SPORTS.items():
+    for sport, cfg in active_sports().items():
         try:
             n = run_sport(sport, now)
             print(f"{cfg['name']}: 回填 {n} 場賽果")

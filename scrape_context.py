@@ -18,7 +18,7 @@ from datetime import datetime, timezone, timedelta
 
 import requests
 
-from sports_common import (MLB_ROOF_TEAMS, SPORTS, STATE_DIR, UA, append_rows, espn_events, sport_dir)
+from sports_common import (MLB_ROOF_TEAMS, SPORTS, active_sports, STATE_DIR, UA, append_rows, espn_events, sport_dir)
 
 OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
 GEOCODE_URL = "https://geocoding-api.open-meteo.com/v1/search"
@@ -98,7 +98,7 @@ def get_weather(lat, lon, target_time_utc):
 def run():
     now = datetime.now(timezone.utc)
     coords = load_coords()
-    for sport, cfg in SPORTS.items():
+    for sport, cfg in active_sports().items():
         try:
             events = espn_events(sport, now, now + timedelta(hours=HORIZON_H))
         except Exception as e:

@@ -29,7 +29,7 @@ from datetime import datetime, timezone, timedelta
 
 import requests
 
-from sports_common import (SPORTS, STATE_DIR, UA, append_rows, espn_events, is_college,
+from sports_common import (SPORTS, active_sports, STATE_DIR, UA, append_rows, espn_events, is_college,
                            match_event, monthly_path, parse_time, sbd_full_name, sport_dir)
 
 API_URL = "https://www.sportsbettingdime.com/wp-json/adpt/v1/{sbd}-odds"
@@ -324,7 +324,7 @@ def run(use_browser=False):
 
     if use_browser:
         with BrowserFetcher() as bf:
-            for sport in SPORTS:
+            for sport in active_sports():
                 try:
                     fetched[sport] = bf.fetch(sport)
                 except Blocked:
@@ -332,7 +332,7 @@ def run(use_browser=False):
                 except Exception as e:
                     print(f"  {sport}: 讀取失敗 {e}")
     else:
-        for sport in SPORTS:
+        for sport in active_sports():
             try:
                 fetched[sport] = fetch_direct(sport)
             except Blocked:
@@ -349,7 +349,7 @@ def run(use_browser=False):
 
     if blocked:
         print(f"被網站擋下：{', '.join(blocked)}")
-        if not use_browser and len(blocked) == len(SPORTS):
+        if not use_browser and len(blocked) == len(active_sports()):
             sys.exit(3)
 
 

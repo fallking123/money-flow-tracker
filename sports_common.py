@@ -34,14 +34,22 @@ UA = {"User-Agent": "Mozilla/5.0"}
 # sbd = SportsBettingDime 資料名稱；espn = ESPN 路徑
 # horizon_h = 開賽前多久開始記錄（美式足球一週一賽，整週都在下注，所以抓 7 天）
 # outdoor = 需要抓天氣的運動
+# enabled = False 代表暫停記錄（台彩沒有開賣的項目先關掉，要恢復就把 False 刪掉）
 SPORTS = {
     "mlb":   {"name": "MLB 美國職棒",     "sbd": "mlb",    "espn": "baseball/mlb",                      "horizon_h": 48,  "outdoor": True,  "params": [{}]},
     "nfl":   {"name": "NFL 美式足球",     "sbd": "nfl",    "espn": "football/nfl",                      "horizon_h": 168, "outdoor": True,  "params": [{}]},
-    "ncaaf": {"name": "NCAAF 大學美式足球", "sbd": "ncaafb", "espn": "football/college-football",         "horizon_h": 168, "outdoor": True,  "params": [{"groups": "80"}, {"groups": "81"}]},
+    "ncaaf": {"name": "NCAAF 大學美式足球", "sbd": "ncaafb", "espn": "football/college-football",         "horizon_h": 168, "outdoor": True,  "params": [{"groups": "80"}, {"groups": "81"}], "enabled": False},
     "nba":   {"name": "NBA 美國職籃",     "sbd": "nba",    "espn": "basketball/nba",                    "horizon_h": 48,  "outdoor": False, "params": [{}]},
     "nhl":   {"name": "NHL 美國冰球",     "sbd": "nhl",    "espn": "hockey/nhl",                        "horizon_h": 48,  "outdoor": False, "params": [{}]},
-    "ncaab": {"name": "NCAAB 大學籃球",   "sbd": "ncaamb", "espn": "basketball/mens-college-basketball", "horizon_h": 48,  "outdoor": False, "params": [{"groups": "50"}]},
+    "ncaab": {"name": "NCAAB 大學籃球",   "sbd": "ncaamb", "espn": "basketball/mens-college-basketball", "horizon_h": 48,  "outdoor": False, "params": [{"groups": "50"}], "enabled": False},
 }
+
+
+
+def active_sports():
+    """目前有在記錄的運動"""
+    return {k: v for k, v in SPORTS.items() if v.get("enabled", True)}
+
 
 SEASON_TYPES = {1: "preseason", 2: "regular", 3: "postseason", 4: "offseason"}
 
