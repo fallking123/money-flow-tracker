@@ -20,11 +20,12 @@ jobs:
           from scrape_odds import fetch_direct
           now = datetime.now(timezone.utc)
           for s, cfg in SPORTS.items():
-              games = [g for g in fetch_direct(s) if g.get("status") == "not_started"]
+              lim = now + timedelta(hours=cfg["horizon_h"])
+              games = [g for g in fetch_direct(s) if g.get("status") == "not_started"
+                       and datetime.fromisoformat(g["scheduled"].replace("Z", "+00:00")) <= lim]
               if not games:
-                  print(s, "no games"); continue
-              last = max(datetime.fromisoformat(g["scheduled"].replace("Z", "+00:00")) for g in games)
-              evs = espn_events(s, now - timedelta(days=1), min(last, now + timedelta(days=9)))
+                  print(s, "no games in horizon"); continue
+              evs = espn_events(s, now - timedelta(days=1), lim + timedelta(days=1))
               bad = []
               for g in games:
                   if match_event(g, evs, college=is_college(s)) is None:
@@ -32,7 +33,7 @@ jobs:
                       bad.append((c["away"], c["home"], g["scheduled"]))
               print(s, "games", len(games), "espn", len(evs), "unmatched", len(bad))
               for b in bad[:40]:
-                  print("   ", b)
+                  print("   ", b[0].get("market"), b[0].get("name"), "@", b[1].get("market"), b[1].get("name"), b[2])
           PY
       - run: |
           git config user.name "github-actions[bot]"

@@ -35,12 +35,12 @@ UA = {"User-Agent": "Mozilla/5.0"}
 # horizon_h = 開賽前多久開始記錄（美式足球一週一賽，整週都在下注，所以抓 7 天）
 # outdoor = 需要抓天氣的運動
 SPORTS = {
-    "mlb":   {"name": "MLB 美國職棒",     "sbd": "mlb",    "espn": "baseball/mlb",                      "horizon_h": 48,  "outdoor": True,  "params": {}},
-    "nfl":   {"name": "NFL 美式足球",     "sbd": "nfl",    "espn": "football/nfl",                      "horizon_h": 168, "outdoor": True,  "params": {}},
-    "ncaaf": {"name": "NCAAF 大學美式足球", "sbd": "ncaafb", "espn": "football/college-football",         "horizon_h": 168, "outdoor": True,  "params": {"groups": "80"}},
-    "nba":   {"name": "NBA 美國職籃",     "sbd": "nba",    "espn": "basketball/nba",                    "horizon_h": 48,  "outdoor": False, "params": {}},
-    "nhl":   {"name": "NHL 美國冰球",     "sbd": "nhl",    "espn": "hockey/nhl",                        "horizon_h": 48,  "outdoor": False, "params": {}},
-    "ncaab": {"name": "NCAAB 大學籃球",   "sbd": "ncaamb", "espn": "basketball/mens-college-basketball", "horizon_h": 48,  "outdoor": False, "params": {"groups": "50"}},
+    "mlb":   {"name": "MLB 美國職棒",     "sbd": "mlb",    "espn": "baseball/mlb",                      "horizon_h": 48,  "outdoor": True,  "params": [{}]},
+    "nfl":   {"name": "NFL 美式足球",     "sbd": "nfl",    "espn": "football/nfl",                      "horizon_h": 168, "outdoor": True,  "params": [{}]},
+    "ncaaf": {"name": "NCAAF 大學美式足球", "sbd": "ncaafb", "espn": "football/college-football",         "horizon_h": 168, "outdoor": True,  "params": [{"groups": "80"}, {"groups": "81"}]},
+    "nba":   {"name": "NBA 美國職籃",     "sbd": "nba",    "espn": "basketball/nba",                    "horizon_h": 48,  "outdoor": False, "params": [{}]},
+    "nhl":   {"name": "NHL 美國冰球",     "sbd": "nhl",    "espn": "hockey/nhl",                        "horizon_h": 48,  "outdoor": False, "params": [{}]},
+    "ncaab": {"name": "NCAAB 大學籃球",   "sbd": "ncaamb", "espn": "basketball/mens-college-basketball", "horizon_h": 48,  "outdoor": False, "params": [{"groups": "50"}]},
 }
 
 SEASON_TYPES = {1: "preseason", 2: "regular", 3: "postseason", 4: "offseason"}
@@ -97,13 +97,14 @@ def espn_events(sport, start_utc, end_utc):
     day, last = start_utc.astimezone(ET).date(), end_utc.astimezone(ET).date()
     events, seen = [], set()
     while day <= last:
-        params = {"dates": day.strftime("%Y%m%d"), "limit": "300", **cfg["params"]}
-        r = requests.get(url, params=params, timeout=30)
-        r.raise_for_status()
-        for e in r.json().get("events", []):
-            if e.get("id") not in seen:
-                seen.add(e.get("id"))
-                events.append(parse_espn_event(e))
+        for extra in cfg["params"]:  # 大學美式足球要分別查 FBS（80）與 FCS（81）
+            params = {"dates": day.strftime("%Y%m%d"), "limit": "300", **extra}
+            r = requests.get(url, params=params, timeout=30)
+            r.raise_for_status()
+            for e in r.json().get("events", []):
+                if e.get("id") not in seen:
+                    seen.add(e.get("id"))
+                    events.append(parse_espn_event(e))
         day += timedelta(days=1)
     return events
 
@@ -168,10 +169,14 @@ def team_match(sbd_team, espn_team, college=False):
         if nick and nick in (enick, disp):
             return True
         return full.split()[-1] == disp.split()[-1] if disp else False
-    # 大學隊：學校名稱要對上
-    if full in (short, loc):
+    # 大學隊：學校名稱對上就算（隊名寫法常不同，例如 Fightin' Blue Hens / Blue Hens）
+    if full in (short, loc) or (market and market in (loc, short)):
         return True
-    return bool(market) and market in (loc, short) and (not nick or nick == enick)
+    # 學校名稱寫法不同（Louisiana-Monroe / UL Monroe、Miami (FL) / Miami）：
+    # 隊名要一樣，而且學校名稱至少有一個關鍵字相同
+    stop = {"state", "university", "of", "the", "college", "and", "fl", "oh"}
+    school = set((market or full).split()) - stop
+    return bool(nick) and nick == enick and bool(school & (set(f"{loc} {short}".split()) - stop))
 
 
 def match_event(sbd_game, events, college=False, max_gap_h=8):
