@@ -1,10 +1,19 @@
-football/nfl {'dates': '20260927-20261004'} 400 {"code":400,"message":"Failed to get events endpoint."}
-football/nfl {'dates': '20261004'} 200 14
-football/nfl {'dates': '20261004', 'limit': '1000'} 200 14
-football/college-football {'dates': '20261003', 'groups': '80'} 200 54
-football/college-football {'dates': '20261003', 'groups': '80', 'limit': '300'} 200 54
-football/college-football {'dates': '20261003', 'groups': '80', 'limit': '1000'} 200 25
-baseball/mlb {'dates': '20260927'} 200 15
-baseball/mlb {'dates': '20260926-20260928'} 400 {"code":400,"message":"Failed to get events endpoint."}
-hockey/nhl {'dates': '20260929'} 200 5
-basketball/mens-college-basketball {'dates': '20261115', 'groups': '50', 'limit': '500'} 200 35
+MLB 美國職棒: 回填 15 場賽果
+NFL 美式足球: 回填 0 場賽果
+NCAAF 大學美式足球: 回填 0 場賽果
+NBA 美國職籃: 回填 0 場賽果
+NHL 美國冰球: 回填 0 場賽果
+NCAAB 大學籃球: 回填 0 場賽果
+MLB 美國職棒: 寫入 0 場背景資料
+NFL 美式足球: 寫入 1 場背景資料
+NCAAF 大學美式足球: 寫入 0 場背景資料
+NBA 美國職籃: 寫入 0 場背景資料
+NHL 美國冰球: 寫入 0 場背景資料
+NCAAB 大學籃球: 寫入 0 場背景資料
+  ncaab: HTTP 204，略過
+  MLB 美國職棒: 共 6 場，這次沒有需要記錄的比賽
+  NFL 美式足球: 共 32 場，這次沒有需要記錄的比賽
+  NCAAF 大學美式足球: 共 109 場，這次沒有需要記錄的比賽
+  NBA 美國職籃: 共 41 場，這次沒有需要記錄的比賽
+  NHL 美國冰球: 共 38 場，這次沒有需要記錄的比賽
+  NCAAB 大學籃球: 共 0 場，這次沒有需要記錄的比賽
