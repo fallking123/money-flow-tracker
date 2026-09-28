@@ -1,182 +1,248 @@
 <title>資金流向看板</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@500;600&family=Noto+Sans+TC:wght@400;500;700&display=swap">
 <style>
 :root{
-  --ground:#EDF0F2; --surface:#FFFFFF; --sunk:#F5F7F8; --ink:#15212C; --muted:#5E6B78; --line:#D5DBE1;
-  --accent:#1F5FAD; --accent-ink:#FFFFFF; --money:#13805A; --money-soft:#DCEFE6; --public:#C2410C; --public-soft:#F8E3D8;
-  --bar-bet:#9AA6B2; --warn:#8A6100; --warn-soft:#F6EBCB;
+  --ground:#F3F5F7; --surface:#FFFFFF; --sunk:#F7F9FA; --hover:#F0F4F8; --ink:#0F1B26; --ink2:#34424F; --muted:#6B7885; --line:#E1E6EB; --line2:#EEF1F4;
+  --bar:#0F1B26; --bar-ink:#E9EEF3; --bar-muted:#8D9AA7;
+  --accent:#1B5FB8; --accent-soft:#E6EFFA; --accent-ink:#FFFFFF;
+  --money:#0E7C55; --money-soft:#E1F3EB; --public:#C24A12; --public-soft:#FBEADF; --warn:#8A6100; --warn-soft:#F7EDCF;
+  --betbar:#A8B3BE; --moneybar:#1B5FB8;
   --num:"Barlow Condensed","Noto Sans TC",system-ui,sans-serif;
+  --lat:"Barlow","Noto Sans TC",system-ui,sans-serif;
   --body:"Noto Sans TC",system-ui,-apple-system,"PingFang TC",sans-serif;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     color-scheme:dark;
-    --ground:#0D141A; --surface:#151F28; --sunk:#111A22; --ink:#E4EAF0; --muted:#8C99A6; --line:#26323D;
-    --accent:#6AA7F0; --accent-ink:#0D141A; --money:#3FBF8A; --money-soft:#16352A; --public:#F07A4A; --public-soft:#3A2218;
-    --bar-bet:#5B6A78; --warn:#E3B54F; --warn-soft:#362C12;
+    --ground:#0A1016; --surface:#111921; --sunk:#0E151C; --hover:#16212B; --ink:#E6ECF2; --ink2:#C2CCD6; --muted:#83909D; --line:#212D38; --line2:#1A242E;
+    --bar:#060B10; --bar-ink:#E6ECF2; --bar-muted:#7D8A97;
+    --accent:#6BA8F2; --accent-soft:#16293F; --accent-ink:#06121F;
+    --money:#3DC48E; --money-soft:#11302A; --public:#F2814F; --public-soft:#3A2016; --warn:#E6B94F; --warn-soft:#352B11;
+    --betbar:#4E5C69; --moneybar:#6BA8F2;
   }
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
-  --ground:#0D141A; --surface:#151F28; --sunk:#111A22; --ink:#E4EAF0; --muted:#8C99A6; --line:#26323D;
-  --accent:#6AA7F0; --accent-ink:#0D141A; --money:#3FBF8A; --money-soft:#16352A; --public:#F07A4A; --public-soft:#3A2218;
-  --bar-bet:#5B6A78; --warn:#E3B54F; --warn-soft:#362C12;
+  --ground:#0A1016; --surface:#111921; --sunk:#0E151C; --hover:#16212B; --ink:#E6ECF2; --ink2:#C2CCD6; --muted:#83909D; --line:#212D38; --line2:#1A242E;
+  --bar:#060B10; --bar-ink:#E6ECF2; --bar-muted:#7D8A97;
+  --accent:#6BA8F2; --accent-soft:#16293F; --accent-ink:#06121F;
+  --money:#3DC48E; --money-soft:#11302A; --public:#F2814F; --public-soft:#3A2016; --warn:#E6B94F; --warn-soft:#352B11;
+  --betbar:#4E5C69; --moneybar:#6BA8F2;
 }
 *{box-sizing:border-box}
-body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:0 40px}
-.wrap{max-width:760px;margin:0 auto}
-.num{font-family:var(--num);font-variant-numeric:tabular-nums}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.45;padding-inline:0;padding-block:0 48px}
+.num{font-family:var(--num);font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.wrap{max-width:980px;margin:0 auto;padding-inline:16px}
+button{font:inherit;color:inherit}
 
-/* header */
-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--ground);padding-block:14px 10px;margin-inline:-16px;padding-inline:16px;border-bottom:1px solid var(--line)}
-.hrow{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;max-width:760px;margin:0 auto}
-h1{font-family:var(--num);font-weight:700;font-size:26px;letter-spacing:.02em;margin:0;text-wrap:balance}
-.updated{color:var(--muted);font-size:13px}
-.tabs{display:flex;gap:6px;overflow-x:auto;max-width:760px;margin:10px auto 0;scrollbar-width:none}
-.tab{font-family:var(--num);font-weight:600;font-size:17px;letter-spacing:.04em;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:4px 14px;cursor:pointer;white-space:nowrap;display:flex;gap:6px;align-items:center}
-.tab .c{color:var(--muted);font-weight:500}
-.tab[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.tab[aria-pressed="true"] .c{color:var(--accent-ink);opacity:.8}
-.tab:focus-visible,.seg button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* ── top bar ── */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--bar);color:var(--bar-ink)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:10px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand svg{flex:none}
+.brand b{font-family:var(--num);font-weight:700;font-size:21px;letter-spacing:.04em}
+.brand small{color:var(--bar-muted);font-size:12px;margin-left:2px}
+.upd{color:var(--bar-muted);font-size:12px;white-space:nowrap}
+.upd i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--money);margin-right:6px;vertical-align:1px}
+.sports{background:var(--bar);border-top:1px solid #ffffff14}
+.sports .wrap{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.sp{appearance:none;border:0;background:none;color:var(--bar-muted);font-family:var(--num);font-weight:600;font-size:16px;letter-spacing:.06em;padding:9px 12px 8px;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap}
+.sp .c{font-size:13px;margin-left:5px;opacity:.75}
+.sp[aria-pressed="true"]{color:var(--bar-ink);border-bottom-color:var(--accent)}
+.sp:focus-visible,.seg button:focus-visible,.chipbtn:focus-visible,th button:focus-visible,tbody.g:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 
-/* controls */
-.controls{display:grid;grid-template-columns:1fr auto;gap:12px 16px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:14px}
-.thr{display:flex;align-items:center;gap:10px;min-width:0}
-.thr label{font-size:13px;color:var(--muted);white-space:nowrap}
+/* ── toolbar ── */
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding-block:14px 4px}
+.seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:2px}
+.seg button{border:0;background:none;padding:5px 14px;border-radius:6px;font-weight:500;cursor:pointer;color:var(--ink2)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.thr{display:flex;align-items:center;gap:10px;flex:1;min-width:210px;max-width:340px}
+.thr label{font-size:12px;color:var(--muted);white-space:nowrap}
 .thr input{flex:1;min-width:0;accent-color:var(--accent)}
-.thr output{font-family:var(--num);font-weight:700;font-size:20px;min-width:3.2ch;text-align:right}
-.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
-.seg button{border:0;background:var(--surface);color:var(--ink);font:500 14px var(--body);padding:5px 12px;cursor:pointer}
-.seg button+button{border-left:1px solid var(--line)}
-.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
-.only{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);grid-column:1/-1}
-.only input{accent-color:var(--accent)}
-.legend{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
-.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.thr output{font-family:var(--num);font-weight:700;font-size:19px;min-width:3.2ch;text-align:right}
+.chipbtn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px;font-size:13px;cursor:pointer;color:var(--ink2)}
+.chipbtn[aria-pressed="true"]{border-color:var(--money);color:var(--money);background:var(--money-soft)}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--muted);padding-block:2px 0}
+.legend i{display:inline-block;width:14px;height:4px;border-radius:2px;margin-right:5px;vertical-align:2px}
 
-/* sections */
-h2{font-family:var(--num);font-weight:700;font-size:20px;letter-spacing:.03em;margin:26px 0 4px;text-wrap:balance}
-.sub{color:var(--muted);font-size:13px;margin:0 0 10px}
-.day{font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.06em;margin:16px 0 8px}
-.list{display:flex;flex-direction:column;gap:10px}
-.empty{background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:18px;color:var(--muted);font-size:14px;text-align:center}
+/* ── section heads ── */
+.sh{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:28px 0 10px;flex-wrap:wrap}
+.sh h2{font-family:var(--num);font-weight:700;font-size:22px;letter-spacing:.04em;margin:0;text-wrap:balance}
+.sh h2 .c{color:var(--muted);font-weight:600;font-size:16px;margin-left:6px}
+.sh p{margin:0;color:var(--muted);font-size:12px}
 
-/* game card */
-.game{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:10px}
-.game.sig{border-color:var(--money)}
-.top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
-.when{font-family:var(--num);font-weight:600;font-size:18px}
-.when small{font-family:var(--body);font-size:12px;color:var(--muted);font-weight:400;margin-left:6px}
-.chips{display:flex;gap:6px;flex-wrap:wrap}
-.chip{font-size:12px;border-radius:6px;padding:1px 7px;background:var(--sunk);color:var(--muted);white-space:nowrap}
-.chip.post{background:var(--warn-soft);color:var(--warn);font-weight:700}
-.chip.rev{background:var(--public-soft);color:var(--public);font-weight:700}
-.chip.lg{font-family:var(--num);font-weight:600;letter-spacing:.05em}
-.match{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
-.ab{font-family:var(--num);font-weight:700;font-size:22px;letter-spacing:.03em}
-.zh{font-size:14px;font-weight:500}
-.at{color:var(--muted);font-size:13px}
-.ctx{font-size:12px;color:var(--muted)}
+/* ── board table ── */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.card + .card{margin-top:14px}
+.dayh{display:flex;justify-content:space-between;align-items:baseline;padding:9px 14px;background:var(--sunk);border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}
+.dayh b{color:var(--ink);font-size:13px;letter-spacing:.04em}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%}
+.board{min-width:600px;font-size:13px}
+.board th{font-size:11px;font-weight:500;color:var(--muted);text-align:right;padding:7px 10px;border-bottom:1px solid var(--line);white-space:nowrap;letter-spacing:.04em}
+.board th.l{text-align:left}
+.board td{padding:6px 10px;text-align:right;white-space:nowrap;vertical-align:middle}
+.board td.l{text-align:left}
+tbody.g{cursor:pointer}
+tbody.g + tbody.g tr:first-child td,tbody.g + tbody.det + tbody.g tr:first-child td{border-top:1px solid var(--line2)}
+tbody.g:hover td{background:var(--hover)}
+tr.r1 td{padding-top:9px} tr.r2 td{padding-bottom:9px}
+td.tm{width:74px;vertical-align:top;padding-top:10px}
+.tm .t{font-family:var(--num);font-weight:600;font-size:17px;line-height:1}
+.tm .rel{display:block;font-size:11px;color:var(--muted);margin-top:3px}
+.tags{display:flex;flex-direction:column;align-items:flex-start;gap:3px;margin-top:5px}
+.tag{font-size:10px;font-weight:700;letter-spacing:.04em;padding:1px 5px;border-radius:3px;background:var(--line2);color:var(--muted)}
+.tag.post{background:var(--warn-soft);color:var(--warn)}
+.tag.lg{font-family:var(--num);font-size:11px}
+.team{display:flex;align-items:baseline;gap:7px;min-width:0}
+.team .ab{font-family:var(--num);font-weight:700;font-size:16px;letter-spacing:.03em;min-width:3ch}
+.team .zh{color:var(--ink2);font-size:13px}
+.team .sc{font-family:var(--num);font-weight:700;font-size:16px;margin-left:auto}
+td.mk{font-family:var(--num);font-size:15px;font-variant-numeric:tabular-nums}
+td.mk small{color:var(--muted);font-size:12px;margin-left:4px}
+td.op{color:var(--muted)}
+.mv{font-size:10px;margin-left:3px}
+.mv.up{color:var(--money)} .mv.dn{color:var(--public)}
+td.pc{width:92px}
+.pcv{font-family:var(--num);font-size:15px;font-variant-numeric:tabular-nums}
+.mini{height:3px;border-radius:2px;background:var(--line2);margin-top:3px;position:relative;overflow:hidden}
+.mini i{position:absolute;inset:0 auto 0 0;border-radius:2px}
+.mini.b i{background:var(--betbar)} .mini.m i{background:var(--moneybar)}
+.df{display:inline-block;min-width:44px;text-align:center;font-family:var(--num);font-weight:700;font-size:15px;border-radius:4px;padding:1px 6px}
+.df.up{background:var(--money-soft);color:var(--money)} .df.dn{background:var(--public-soft);color:var(--public)} .df.nt{color:var(--muted)}
+tr.sig td:first-child{box-shadow:none}
+tr.sig td.l.tmn{box-shadow:inset 3px 0 0 var(--money)}
+.rv{display:inline-block;font-family:var(--body);font-size:10px;font-weight:700;color:var(--public);border:1px solid currentColor;border-radius:3px;padding:0 4px;margin-right:6px;vertical-align:1px}
+td.tr{width:108px;padding-block:4px}
+td.tr svg{display:block;width:96px;height:30px;margin-left:auto}
+.na{color:var(--muted);font-size:12px}
+tbody.det td{background:var(--sunk);padding:12px 14px 14px;text-align:left;white-space:normal;border-top:1px solid var(--line2)}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px 22px}
+.dgrid h4{margin:0 0 4px;font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.06em}
+.dgrid p{margin:0;font-size:13px;color:var(--ink2)}
+.mrow{display:flex;justify-content:space-between;gap:8px;font-size:13px;padding:2px 0}
+.mrow span:first-child{color:var(--muted)}
+.big{width:100%;max-width:360px;height:auto;display:block}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:22px;color:var(--muted);text-align:center}
 
-.side{display:grid;grid-template-columns:minmax(78px,auto) 1fr auto;gap:4px 10px;align-items:center}
-.side .nm{font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.side .nm .ln{font-family:var(--num);font-weight:600;color:var(--muted);margin-left:4px}
-.bars{display:grid;gap:3px}
-.bar{height:7px;border-radius:4px;background:var(--sunk);position:relative;overflow:hidden}
-.bar i{position:absolute;inset:0 auto 0 0;border-radius:4px}
-.bar.b i{background:var(--bar-bet)}
-.bar.m i{background:var(--accent)}
-.bars .lab{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);font-family:var(--num);letter-spacing:.02em}
-.diff{font-family:var(--num);font-weight:700;font-size:17px;border-radius:6px;padding:0 7px;min-width:48px;text-align:center}
-.diff.up{background:var(--money-soft);color:var(--money)}
-.diff.dn{background:var(--public-soft);color:var(--public)}
-.diff.nt{background:var(--sunk);color:var(--muted)}
-.odds{grid-column:2/-1;font-size:12px;color:var(--muted);font-family:var(--num);letter-spacing:.02em;margin-top:-2px}
-.odds b{color:var(--ink);font-weight:600}
-.spark{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted)}
-.spark svg{flex:1;height:30px;min-width:0}
-.na{font-size:13px;color:var(--muted)}
+/* ── KPI ── */
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border-bottom:1px solid var(--line)}
+.kpi{padding:12px 14px;border-right:1px solid var(--line2)}
+.kpi:last-child{border-right:0}
+.kpi .k{font-size:11px;color:var(--muted);letter-spacing:.04em}
+.kpi .v{font-family:var(--num);font-weight:700;font-size:26px;line-height:1.15}
+.kpi .s{font-size:11px;color:var(--muted)}
+.pos{color:var(--money)} .neg{color:var(--public)}
+.prog{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}
+.prog .track{flex:1;height:6px;border-radius:3px;background:var(--line2);overflow:hidden}
+.prog .track i{display:block;height:100%;background:var(--accent);border-radius:3px}
+.prog b{color:var(--ink);font-family:var(--num);font-size:15px}
+.sub2{display:flex;flex-wrap:wrap;gap:4px 22px;padding:9px 14px;font-size:12px;color:var(--muted);border-bottom:1px solid var(--line)}
+.sub2 b{font-family:var(--num);font-size:15px;color:var(--ink);font-weight:600}
 
-/* backtest */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.stat{background:var(--surface);padding:10px 12px}
-.stat .k{font-size:12px;color:var(--muted)}
-.stat .v{font-family:var(--num);font-weight:700;font-size:24px;line-height:1.2}
-.stat .v.pos{color:var(--money)} .stat .v.neg{color:var(--public)}
-td.pos,.substats .pos{color:var(--money)} td.neg,.substats .neg{color:var(--public)}
-.substats{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:13px;margin-top:8px}
-.substats div{display:flex;gap:6px;align-items:baseline}
-.substats .k{color:var(--muted);font-size:12px}
-.substats .num{font-size:16px;font-weight:600}
-.tbl{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-top:10px}
-table{border-collapse:collapse;width:100%;font-size:13px;min-width:520px}
-th,td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
-th{font-size:12px;color:var(--muted);font-weight:500;background:var(--sunk)}
-tr:last-child td{border-bottom:0}
-td.r,th.r{text-align:right}
-.w{color:var(--money);font-weight:700} .l{color:var(--public);font-weight:700} .p{color:var(--muted)}
-.note{font-size:12px;color:var(--muted);margin-top:10px;max-width:65ch}
-.prog{font-size:12px;color:var(--muted);margin:8px 0}
-.prog .bar{height:6px;margin-top:5px}
-.prog .bar i{background:var(--accent)}
-@media (max-width:480px){
-  .controls{grid-template-columns:1fr}
-  .stats{grid-template-columns:repeat(2,1fr)}
-  .ab{font-size:20px}
+/* ── data tables ── */
+.dt{min-width:620px;font-size:13px}
+.dt th{font-size:11px;font-weight:500;color:var(--muted);text-align:left;padding:8px 10px;background:var(--sunk);border-bottom:1px solid var(--line);white-space:nowrap;letter-spacing:.04em}
+.dt th.r,.dt td.r{text-align:right}
+.dt th button{border:0;background:none;padding:0;cursor:pointer;color:inherit;font:inherit;letter-spacing:inherit}
+.dt th button::after{content:"";display:inline-block;width:0;margin-left:3px}
+.dt th button[data-dir="1"]::after{content:"▲";font-size:8px}
+.dt th button[data-dir="-1"]::after{content:"▼";font-size:8px}
+.dt td{padding:7px 10px;border-bottom:1px solid var(--line2);white-space:nowrap}
+.dt tr:last-child td{border-bottom:0}
+.dt tbody tr:hover td{background:var(--hover)}
+.res{font-weight:700;font-size:12px;padding:1px 6px;border-radius:3px}
+.res.w{background:var(--money-soft);color:var(--money)} .res.l{background:var(--public-soft);color:var(--public)} .res.p{background:var(--line2);color:var(--muted)}
+.mut{color:var(--muted)}
+
+/* ── notes ── */
+details.gl{margin-top:26px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:0 14px}
+details.gl summary{cursor:pointer;padding:12px 0;font-weight:500;font-size:13px;color:var(--ink2)}
+details.gl dl{display:grid;grid-template-columns:max-content 1fr;gap:8px 16px;margin:0 0 14px;font-size:13px}
+details.gl dt{font-weight:700;color:var(--ink)}
+details.gl dd{margin:0;color:var(--ink2);max-width:65ch}
+.foot{color:var(--muted);font-size:12px;margin-top:14px;max-width:70ch}
+
+@media (max-width:640px){
+  .board{min-width:0}
+  .hide-s{display:none}
+  .dt.fit{min-width:0}
+  .dt.fit td,.dt.fit th{padding-inline:8px}
+  td.pc{width:auto}
+  .team .zh{display:none}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .kpi{border-bottom:1px solid var(--line2)}
+  .kpi:nth-child(2n){border-right:0}
+  .kpi:last-child{grid-column:1/-1}
+  .brand small{display:none}
 }
-@media (prefers-reduced-motion:no-preference){ .bar i{transition:width .25s ease} }
+@media (max-width:400px){
+  .board td,.board th{padding-inline:6px}
+  td.tm{width:58px}
+}
 </style>
 
-<header>
-  <div class="hrow">
-    <h1>資金流向看板</h1>
-    <span class="updated" id="updated">讀取中…</span>
+<div class="top">
+  <div class="wrap">
+    <div class="brand">
+      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect width="26" height="26" rx="6" fill="#1B5FB8"/><path d="M5 18 L10 12 L14 15 L21 7" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="7" r="2" fill="#3DC48E"/></svg>
+      <b>資金流向</b><small>下注人數 vs 下注金額</small>
+    </div>
+    <span class="upd" id="updated"><i></i>讀取中…</span>
   </div>
-  <div class="tabs" id="tabs" role="group" aria-label="運動"></div>
-</header>
+  <nav class="sports" aria-label="運動"><div class="wrap" id="tabs"></div></nav>
+</div>
 
 <main class="wrap">
-  <section class="controls" aria-label="篩選">
-    <div class="thr">
-      <label for="thr">訊號門檻</label>
-      <input type="range" id="thr" min="5" max="30" step="1" value="15">
-      <output id="thrv" for="thr" class="num">15%</output>
-    </div>
+  <div class="toolbar">
     <div class="seg" id="mkt" role="group" aria-label="盤別">
       <button type="button" data-m="ml" aria-pressed="true">獨贏</button>
       <button type="button" data-m="sp" aria-pressed="false">讓分</button>
       <button type="button" data-m="ou" aria-pressed="false">大小分</button>
     </div>
-    <label class="only"><input type="checkbox" id="only"> 只看有訊號的比賽</label>
-    <div class="legend">
-      <span><i class="sw" style="background:var(--bar-bet)"></i>下注人數 %</span>
-      <span><i class="sw" style="background:var(--accent)"></i>下注金額 %</span>
-      <span><i class="sw" style="background:var(--money)"></i>錢比人多（訊號）</span>
-      <span><i class="sw" style="background:var(--public)"></i>人比錢多（大眾熱門）</span>
+    <div class="thr">
+      <label for="thr">訊號門檻</label>
+      <input type="range" id="thr" min="5" max="30" step="1" value="15">
+      <output id="thrv" for="thr" class="num">15%</output>
     </div>
-  </section>
+    <button type="button" class="chipbtn" id="only" aria-pressed="false">只看有訊號</button>
+  </div>
+  <div class="legend">
+    <span><i style="background:var(--betbar)"></i>下注人數 %</span>
+    <span><i style="background:var(--moneybar)"></i>下注金額 %</span>
+    <span><i style="background:var(--money)"></i>差距 = 金額 − 人數，達門檻＝錢比人多</span>
+    <span><b class="rv" style="margin:0">逆向</b> 大眾押另一邊，盤口卻往這邊動</span>
+  </div>
 
-  <h2>即將開賽</h2>
-  <p class="sub">時間為台灣時間。賠率為美國莊家中間值（小數格式，跟台彩同一種寫法），箭頭左邊是開盤、右邊是現在。</p>
+  <div class="sh"><h2>即將開賽<span class="c num" id="upn"></span></h2><p>台灣時間。賠率為美國各家中間值（小數賠率）。點比賽看詳細資料。</p></div>
   <div id="upcoming"></div>
 
-  <h2>累積驗證</h2>
-  <p class="sub" id="btsub">用目前的門檻與盤別，回頭算「全部歷史」已完賽的比賽：跟著「錢比人多」那一邊下注，每注 1 單位、以美國收盤賠率計算。調整門檻不用重新收集資料，這裡會直接重算。</p>
-  <div id="prog200"></div>
-  <div id="backtest"></div>
-  <p class="note"><b>逆向</b>：多數人押另一邊、盤口卻往這邊有利的方向動（同向＝跟訊號一致）。<b>CLV</b>：訊號第一次出現就下注的賠率，比收盤賠率好多少（正數＝搶到比較好的價錢，職業玩家用來判斷有沒有真本事的指標）。</p>
-  <p class="note">場數還很少，結果主要是運氣，只能當參考。台彩賠率通常比美國低，實際在台彩的結果會比這裡差一些；下面的「台彩對照」會隨你傳的截圖累積折扣資料。</p>
+  <div class="sh"><h2>累積驗證</h2><p id="btsub"></p></div>
+  <div class="card" id="bt"></div>
 
-  <h2>台彩賠率對照</h2>
-  <p class="sub">你把台彩截圖傳給 Claude 時，由 Claude 讀圖記錄下來，跟當時美國收盤賠率比對算出折扣（負數代表台彩賠率比美國低）。</p>
-  <div id="twpanel"></div>
+  <div class="sh"><h2>台彩對照</h2><p>由你傳的台彩賠率截圖記錄，跟美國收盤比較。</p></div>
+  <div id="tw"></div>
+
+  <details class="gl">
+    <summary>名詞說明</summary>
+    <dl>
+      <dt>差距</dt><dd>同一邊的「下注金額 % − 下注人數 %」。正數代表錢比人多（下注的人少，但每注金額大，常被視為專業資金）。</dd>
+      <dt>訊號</dt><dd>差距達到你設的門檻，就把那一邊標成訊號邊。</dd>
+      <dt>逆向</dt><dd>下注人數 55% 以上押某一邊，但盤口或賠率反而往對他有利的方向動（莊家照錢調盤，錢其實在另一邊）。</dd>
+      <dt>CLV</dt><dd>訊號第一次出現就下注的賠率，跟收盤賠率比好多少。正數＝搶到比收盤更好的價錢。長期正 CLV 是判斷有沒有真優勢的指標。</dd>
+      <dt>抽成</dt><dd>兩邊賠率倒數相加 − 1。莊家從每 1 元下注平均留下的比例，越低對下注的人越有利。</dd>
+      <dt>折扣</dt><dd>(台彩賠率 − 美國收盤賠率) ÷ 美國收盤賠率。負數＝台彩給得比較少。</dd>
+    </dl>
+  </details>
+  <p class="foot">場數還少時，勝率與損益主要是運氣，只能當參考。回測以美國收盤賠率計算，實際在台彩的結果會比這裡差（見台彩對照的抽成）。</p>
 </main>
 
 <script>
 (() => {
   const MK = {ml: "獨贏", sp: "讓分", ou: "大小分"};
+  const SIDE = {away: "客", home: "主", over: "大", under: "小"};
   const SEASON = {preseason: "季前賽", postseason: "季後賽"};
   const TZ = "Asia/Taipei";
   const fmtDay = new Intl.DateTimeFormat("zh-TW", {timeZone: TZ, month: "numeric", day: "numeric", weekday: "short"});
@@ -188,17 +254,18 @@ td.r,th.r{text-align:right}
     get(k, d) { try { const v = localStorage.getItem("mft:" + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
     set(k, v) { try { localStorage.setItem("mft:" + k, JSON.stringify(v)); } catch (e) {} },
   };
-
-  const state = {sport: store.get("sport", "all"), thr: store.get("thr", 15), mkt: store.get("mkt", "ml"), only: store.get("only", false)};
+  const state = {sport: store.get("sport", "all"), thr: store.get("thr", 15), mkt: store.get("mkt", "ml"), only: store.get("only", false),
+                 sort: store.get("sort", {k: "t", dir: -1}), open: new Set()};
   let DATA = null;
 
   const pct = (v) => (v == null ? "–" : Math.round(v) + "%");
   const odd = (v) => (v == null ? "–" : v.toFixed(2));
-  const line = (v) => (v == null ? "" : (v > 0 ? "+" : "") + v);
+  const line = (v) => (v == null ? "–" : (v > 0 ? "+" : "") + v);
+  const sgn = (v, dp) => (v > 0 ? "+" : "") + v.toFixed(dp);
 
-  // 各盤別的兩邊：[名稱, bet%, money%, 賠率, 盤口]
+  // ───── 計算（跟 Python 回測一致）─────
   function sides(g, s, mkt) {
-    const a = s[mkt] || [];
+    const a = (s && s[mkt]) || [];
     if (mkt === "ml") return [
       {key: "away", nm: g.away_zh || g.away_ab, bet: a[0], money: a[1], odds: a[4]},
       {key: "home", nm: g.home_zh || g.home_ab, bet: a[2], money: a[3], odds: a[5]}];
@@ -210,18 +277,14 @@ td.r,th.r{text-align:right}
       {key: "under", nm: "小分", bet: a[2], money: a[3], odds: a[6], ln: a[4]}];
   }
   const diffOf = (sd) => (sd.bet == null || sd.money == null ? null : sd.money - sd.bet);
-
   function signal(g, s, mkt, thr) {
-    const ss = sides(g, s, mkt);
-    for (const sd of ss) { const d = diffOf(sd); if (d != null && d >= thr) return {...sd, diff: d}; }
+    for (const sd of sides(g, s, mkt)) { const d = diffOf(sd); if (d != null && d >= thr) return {...sd, diff: d}; }
     return null;
   }
   const closing = (g) => { const pre = g.snaps.filter((s) => s.hrs == null || s.hrs >= 0); return pre.length ? pre[pre.length - 1] : g.snaps[g.snaps.length - 1]; };
   const latest = (g) => g.snaps[g.snaps.length - 1];
 
-  // 盤口逆向：下注人數 ≥55% 的那一邊（大眾），跟開盤比反而變得更划算
-  // （賠率變高，或讓分多給、大小分線往對他有利的方向動 0.5 以上）
-  // → 莊家照「錢」調盤，錢其實在另一邊；回傳另一邊（聰明錢那邊）
+  // 盤口逆向：人數 ≥55% 的大眾那邊，盤口/賠率反而變好 → 錢在另一邊，回傳另一邊
   function rlm(g, mkt) {
     const ss = sides(g, closing(g), mkt);
     if (ss[0].bet == null || ss[1].bet == null) return null;
@@ -242,9 +305,7 @@ td.r,th.r{text-align:right}
     if (openOdds == null || pub.odds == null) return null;
     return pub.odds - openOdds >= 0.04 ? sharp : null;
   }
-
-  // CLV：訊號第一次出現時就下注的賠率，跟收盤賠率比。正數 = 比收盤拿到更好的價錢
-  // （讓分/大小分如果中間盤口變了，賠率不能直接比，就不算）
+  // CLV：訊號第一次出現時的賠率 vs 收盤賠率（讓分/大小分盤口變了就不算）
   function clv(g, mkt, thr, key) {
     const cs = sides(g, closing(g), mkt).find((x) => x.key === key);
     for (const s of g.snaps.filter((x) => x.hrs == null || x.hrs >= 0)) {
@@ -255,7 +316,6 @@ td.r,th.r{text-align:right}
     }
     return null;
   }
-
   function settle(g, sd, mkt) {
     const r = g.result; if (!r || sd.odds == null) return null;
     let o;
@@ -271,192 +331,237 @@ td.r,th.r{text-align:right}
     }
     return {o, pl: o > 0 ? sd.odds - 1 : o < 0 ? -1 : 0};
   }
+  const inSport = (g) => state.sport === "all" || g.sport === state.sport;
 
-  function sparkline(g, mkt, key, thr) {
-    const vals = g.snaps.map((s) => { const sd = sides(g, s, mkt).find((x) => x.key === key); return diffOf(sd); });
+  // ───── 走勢圖（差距隨時間）─────
+  function trend(g, mkt, key, thr, W, H) {
+    const vals = g.snaps.map((s) => diffOf(sides(g, s, mkt).find((x) => x.key === key)));
     const pts = vals.map((v, i) => [i, v]).filter((p) => p[1] != null);
     if (pts.length < 2) return "";
-    const W = 300, H = 30, lo = Math.min(-thr - 5, ...pts.map((p) => p[1])), hi = Math.max(thr + 5, ...pts.map((p) => p[1]));
-    const x = (i) => 3 + (i / (vals.length - 1)) * (W - 6), y = (v) => 3 + (1 - (v - lo) / (hi - lo)) * (H - 6);
+    const lo = Math.min(-thr - 5, ...pts.map((p) => p[1])), hi = Math.max(thr + 5, ...pts.map((p) => p[1]));
+    const x = (i) => 2 + (i / (vals.length - 1)) * (W - 4), y = (v) => 2 + (1 - (v - lo) / (hi - lo)) * (H - 4);
     const path = pts.map((p, j) => (j ? "L" : "M") + x(p[0]).toFixed(1) + " " + y(p[1]).toFixed(1)).join(" ");
     const last = pts[pts.length - 1];
     const col = last[1] >= thr ? "var(--money)" : last[1] <= -thr ? "var(--public)" : "var(--muted)";
-    return `<div class="spark"><span>走勢</span><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="金額減人數差距走勢">
-      <line x1="0" x2="${W}" y1="${y(0)}" y2="${y(0)}" stroke="var(--line)" stroke-width="1" fill="none"/>
-      <line x1="0" x2="${W}" y1="${y(thr)}" y2="${y(thr)}" stroke="var(--money)" stroke-width="1" stroke-dasharray="3 4" opacity=".5" fill="none"/>
-      <line x1="0" x2="${W}" y1="${y(-thr)}" y2="${y(-thr)}" stroke="var(--public)" stroke-width="1" stroke-dasharray="3 4" opacity=".5" fill="none"/>
-      <path d="${path}" stroke="${col}" stroke-width="2" fill="none" vector-effect="non-scaling-stroke"/>
-      <circle cx="${x(last[0])}" cy="${y(last[1])}" r="3" fill="${col}"/></svg><span>${g.snaps.length} 次</span></div>`;
+    return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="差距走勢，最新 ${Math.round(last[1])}">
+      <rect x="0" y="${y(hi)}" width="${W}" height="${Math.max(0, y(thr) - y(hi))}" fill="var(--money-soft)"/>
+      <line x1="0" x2="${W}" y1="${y(0)}" y2="${y(0)}" stroke="var(--line)" stroke-width="1" vector-effect="non-scaling-stroke" fill="none"/>
+      <path d="${path}" stroke="${col}" stroke-width="1.8" fill="none" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>
+      <circle cx="${x(last[0])}" cy="${y(last[1])}" r="2.4" fill="${col}"/></svg>`;
   }
 
-  function sideRow(sd, g, mkt, thr) {
-    const d = diffOf(sd);
-    const cls = d == null ? "nt" : d >= thr ? "up" : d <= -thr ? "dn" : "nt";
-    const openOdds = mkt === "ml" ? g.open.ml[sd.key === "away" ? 0 : 1] : null;
-    const openLn = mkt === "sp" ? (g.open.sp == null ? null : sd.key === "away" ? g.open.sp : -g.open.sp) : mkt === "ou" ? g.open.ou : null;
-    let oddsTxt = "";
-    if (mkt === "ml") oddsTxt = `賠率 ${odd(openOdds)} → <b>${odd(sd.odds)}</b>`;
-    else oddsTxt = `盤口 ${openLn == null ? "–" : (mkt === "sp" ? line(openLn) : openLn)} → <b>${sd.ln == null ? "–" : (mkt === "sp" ? line(sd.ln) : sd.ln)}</b>　賠率 <b>${odd(sd.odds)}</b>`;
-    return `<div class="side">
-      <div class="nm">${esc(sd.nm)}${mkt === "sp" && sd.ln != null ? `<span class="ln">${line(sd.ln)}</span>` : ""}</div>
-      <div class="bars">
-        <div class="bar b" title="下注人數"><i style="width:${sd.bet ?? 0}%"></i></div>
-        <div class="bar m" title="下注金額"><i style="width:${sd.money ?? 0}%"></i></div>
-        <div class="lab"><span>人數 ${pct(sd.bet)}</span><span>金額 ${pct(sd.money)}</span></div>
-      </div>
-      <div class="diff ${cls}">${d == null ? "–" : (d > 0 ? "+" : "") + Math.round(d)}</div>
-      <div class="odds">${oddsTxt}</div>
-    </div>`;
-  }
-
-  function gameCard(g) {
-    const s = latest(g), mkt = state.mkt, thr = state.thr;
-    const t = new Date(g.t), hrs = (t - Date.now()) / 36e5;
-    const ss = sides(g, s, mkt);
-    const sig = signal(g, s, mkt, thr);
-    const rev = rlm(g, mkt);
-    const chips = [];
-    if (state.sport === "all") chips.push(`<span class="chip lg">${g.sport.toUpperCase()}</span>`);
-    if (SEASON[g.season]) chips.push(`<span class="chip ${g.season === "postseason" ? "post" : ""}">${SEASON[g.season]}</span>`);
-    if (g.series) chips.push(`<span class="chip">${esc(g.series)}</span>`);
-    if (rev) chips.push(`<span class="chip rev" title="多數人押另一邊，盤口卻往對那邊有利的方向動，代表錢可能在這一邊">盤口逆向：錢在${esc(rev.nm)}</span>`);
-    const other = ["ml", "sp", "ou"].filter((m) => m !== mkt && signal(g, s, m, thr)).map((m) => MK[m]);
-    if (other.length) chips.push(`<span class="chip">${other.join("、")}也有訊號</span>`);
-    const rel = g.status === "started" ? "已開賽" : hrs < 1 ? `${Math.max(1, Math.round(hrs * 60))} 分鐘後` : hrs < 48 ? `${Math.round(hrs)} 小時後` : `${Math.round(hrs / 24)} 天後`;
-    const c = g.ctx;
-    let ctx = "";
-    if (c) {
-      const bits = [];
-      if (c.away_p || c.home_p) bits.push(`先發 ${esc(c.away_p || "?")} vs ${esc(c.home_p || "?")}`);
-      if (c.indoor) bits.push("室內");
-      else if (c.temp_f != null) bits.push(`${Math.round((c.temp_f - 32) * 5 / 9)}°C　風 ${Math.round(c.wind_mph * 1.609)} km/h　降雨 ${c.precip ?? "–"}%`);
-      if (bits.length) ctx = `<div class="ctx">${bits.join("　·　")}</div>`;
+  // ───── 即將開賽 ─────
+  function mkCell(g, sd, mkt, i, isOpen) {
+    const op = g.open || {};
+    if (mkt === "ml") {
+      if (isOpen) return odd((op.ml || [])[i]);
+      const o = (op.ml || [])[i], mv = o != null && sd.odds != null ? sd.odds - o : 0;
+      return `${odd(sd.odds)}${Math.abs(mv) >= 0.02 ? `<span class="mv ${mv > 0 ? "up" : "dn"}">${mv > 0 ? "▲" : "▼"}</span>` : ""}`;
     }
-    const hasData = ss.some((x) => x.bet != null);
-    return `<article class="game${sig ? " sig" : ""}">
-      <div class="top"><div class="when num">${fmtTime.format(t)}<small>${rel}</small></div><div class="chips">${chips.join("")}</div></div>
-      <div class="match"><span class="ab">${esc(g.away_ab)}</span><span class="zh">${esc(g.away_zh)}</span><span class="at">@</span><span class="ab">${esc(g.home_ab)}</span><span class="zh">${esc(g.home_zh)}</span></div>
-      ${ctx}
-      ${hasData ? ss.map((sd) => sideRow(sd, g, mkt, thr)).join("") + sparkline(g, mkt, ss[0].key, thr) : `<div class="na">網站還沒有這個盤的下注比例</div>`}
-    </article>`;
+    if (mkt === "sp") {
+      const oln = op.sp == null ? null : (i === 0 ? op.sp : -op.sp);
+      return isOpen ? line(oln) : `${line(sd.ln)}<small>${odd(sd.odds)}</small>`;
+    }
+    const lab = i === 0 ? "大" : "小";
+    return isOpen ? (op.ou == null ? "–" : `${lab} ${op.ou}`) : `${lab} ${sd.ln ?? "–"}<small>${odd(sd.odds)}</small>`;
   }
 
-  function inSport(g) { return state.sport === "all" || g.sport === state.sport; }
+  function gameRows(g) {
+    const mkt = state.mkt, thr = state.thr, s = latest(g), ss = sides(g, s, mkt);
+    const t = new Date(g.t), hrs = (t - Date.now()) / 36e5;
+    const sig = signal(g, s, mkt, thr), rev = rlm(g, mkt);
+    const rel = g.status === "started" ? "進行中" : hrs < 1 ? `${Math.max(1, Math.round(hrs * 60))} 分後` : hrs < 48 ? `${Math.round(hrs)} 小時後` : `${Math.round(hrs / 24)} 天後`;
+    const tags = [];
+    if (state.sport === "all") tags.push(`<span class="tag lg">${g.sport.toUpperCase()}</span>`);
+    if (SEASON[g.season]) tags.push(`<span class="tag ${g.season === "postseason" ? "post" : ""}">${SEASON[g.season]}</span>`);
+    const has = ss.some((x) => x.bet != null);
+    const teams = [{ab: g.away_ab, zh: g.away_zh}, {ab: g.home_ab, zh: g.home_zh}];
+    const key = g.sport + "|" + g.id, isOpen = state.open.has(key);
+    let html = `<tbody class="g" data-k="${esc(key)}" tabindex="0" aria-expanded="${isOpen}">`;
+    ss.forEach((sd, i) => {
+      const d = diffOf(sd), on = sig && sig.key === sd.key;
+      const cls = d == null ? "nt" : d >= thr ? "up" : d <= -thr ? "dn" : "nt";
+      html += `<tr class="r${i + 1}${on ? " sig" : ""}">`;
+      if (i === 0) html += `<td class="l tm" rowspan="2"><span class="t">${fmtTime.format(t)}</span><span class="rel">${rel}</span>${tags.length ? `<span class="tags">${tags.join("")}</span>` : ""}</td>`;
+      html += `<td class="l tmn"><div class="team"><span class="ab">${esc(teams[i].ab)}</span><span class="zh">${esc(teams[i].zh)}</span></div></td>`;
+      if (!has) {
+        if (i === 0) html += `<td colspan="6" rowspan="2" class="na">網站還沒有這個盤的下注比例</td>`;
+        html += `</tr>`; return;
+      }
+      html += `<td class="mk op hide-s">${mkCell(g, sd, mkt, i, true)}</td>`;
+      html += `<td class="mk">${rev && rev.key === sd.key ? `<span class="rv" title="大眾押另一邊，盤口卻往這邊動">逆向</span>` : ""}${mkCell(g, sd, mkt, i, false)}</td>`;
+      html += `<td class="pc"><div class="pcv">${pct(sd.bet)}</div><div class="mini b"><i style="width:${sd.bet ?? 0}%"></i></div></td>`;
+      html += `<td class="pc"><div class="pcv">${pct(sd.money)}</div><div class="mini m"><i style="width:${sd.money ?? 0}%"></i></div></td>`;
+      html += `<td><span class="df ${cls}">${d == null ? "–" : (d > 0 ? "+" : "") + Math.round(d)}</span></td>`;
+      if (i === 0) html += `<td class="tr hide-s" rowspan="2">${trend(g, mkt, (sig || ss[0]).key, thr, 96, 30)}</td>`;
+      html += `</tr>`;
+    });
+    html += `</tbody>`;
+    if (isOpen) html += detail(g);
+    return html;
+  }
+
+  function detail(g) {
+    const thr = state.thr, s = latest(g);
+    const mrows = ["ml", "sp", "ou"].map((m) => {
+      const ss = sides(g, s, m);
+      if (ss[0].bet == null) return `<div class="mrow"><span>${MK[m]}</span><span class="mut">沒有資料</span></div>`;
+      const best = ss.map((sd) => ({sd, d: diffOf(sd)})).sort((a, b) => (b.d ?? -99) - (a.d ?? -99))[0];
+      const lab = m === "ml" ? best.sd.nm : m === "sp" ? `${best.sd.nm} ${line(best.sd.ln)}` : `${best.sd.nm} ${best.sd.ln ?? ""}`;
+      const rv = rlm(g, m);
+      const cls = best.d >= thr ? "pos" : "";
+      return `<div class="mrow"><span>${MK[m]}</span><span><span class="num ${cls}">${esc(lab)} ${best.d == null ? "–" : sgn(best.d, 0)}</span>${rv ? `　<span class="rv" style="margin:0">逆向 ${esc(rv.nm)}</span>` : ""}</span></div>`;
+    }).join("");
+    const c = g.ctx, info = [];
+    if (c) {
+      if (c.away_p || c.home_p) info.push(`<div><h4>先發投手</h4><p>${esc(c.away_p || "未公布")}　vs　${esc(c.home_p || "未公布")}</p></div>`);
+      const venue = esc(c.venue || "");
+      if (c.indoor) info.push(`<div><h4>球場</h4><p>${venue}（室內／屋頂）</p></div>`);
+      else if (c.temp_f != null) info.push(`<div><h4>天氣 · ${venue}</h4><p>${Math.round((c.temp_f - 32) * 5 / 9)}°C　風 ${Math.round(c.wind_mph * 1.609)} km/h　降雨 ${c.precip ?? "–"}%</p></div>`);
+    }
+    if (g.series) info.push(`<div><h4>系列賽</h4><p>${esc(g.series)}</p></div>`);
+    const m = state.mkt, ss = sides(g, s, m), sig = signal(g, s, m, thr);
+    const big = trend(g, m, (sig || ss[0]).key, thr, 360, 70);
+    return `<tbody class="det"><tr><td colspan="8"><div class="dgrid">
+      <div><h4>三種盤別（差距最大的一邊）</h4>${mrows}</div>
+      ${big ? `<div><h4>${MK[m]}・${esc((sig || ss[0]).nm)} 差距走勢（${g.snaps.length} 次記錄，綠區＝達門檻）</h4><div class="big">${big.replace("<svg ", '<svg class="big" ')}</div></div>` : ""}
+      ${info.join("")}
+    </div></td></tr></tbody>`;
+  }
 
   function renderUpcoming() {
     const list = DATA.games.filter((g) => inSport(g) && (g.status === "upcoming" || g.status === "started"))
       .filter((g) => !state.only || signal(g, latest(g), state.mkt, state.thr));
+    $("upn").textContent = list.length ? list.length + " 場" : "";
     if (!list.length) { $("upcoming").innerHTML = `<div class="empty">${state.only ? "目前沒有達到門檻的比賽，可以把門檻調低看看" : "這個運動目前沒有即將開賽的比賽（休賽期或還沒到記錄時間）"}</div>`; return; }
-    let html = "", day = "";
-    for (const g of list) {
-      const d = fmtDay.format(new Date(g.t));
-      if (d !== day) { if (day) html += "</div>"; html += `<div class="day">${d}</div><div class="list">`; day = d; }
-      html += gameCard(g);
+    const days = new Map();
+    for (const g of list) { const d = fmtDay.format(new Date(g.t)); if (!days.has(d)) days.set(d, []); days.get(d).push(g); }
+    const mlab = state.mkt === "ml" ? "賠率" : state.mkt === "sp" ? "讓分 / 賠率" : "總分 / 賠率";
+    let html = "";
+    for (const [d, gs] of days) {
+      const nSig = gs.filter((g) => signal(g, latest(g), state.mkt, state.thr)).length;
+      html += `<section class="card"><div class="dayh"><b>${d}</b><span>${gs.length} 場${nSig ? `　·　${nSig} 場有訊號` : ""}</span></div><div class="scroll"><table class="board">
+        <thead><tr><th class="l">時間</th><th class="l">球隊</th><th class="hide-s">開盤</th><th>${mlab}</th><th>人數</th><th>金額</th><th>差距</th><th class="hide-s">走勢</th></tr></thead>
+        ${gs.map(gameRows).join("")}</table></div></section>`;
     }
-    $("upcoming").innerHTML = html + "</div>";
+    $("upcoming").innerHTML = html;
   }
 
-  // 合併「最近 14 天」跟「全部歷史」的已完賽比賽，同一場只算一次（累積驗證用全部歷史，不受 14 天限制）
+  // ───── 累積驗證 ─────
   function allFinal() {
     const map = new Map();
     for (const g of DATA.games) if (g.status === "final" && g.result) map.set(g.sport + "|" + g.id, g);
     for (const g of DATA.closed || []) if (!map.has(g.sport + "|" + g.id)) map.set(g.sport + "|" + g.id, g);
     return [...map.values()];
   }
-
   function renderBacktest() {
-    const rows = [];
+    const mkt = state.mkt, thr = state.thr, rows = [];
     for (const g of allFinal()) {
       if (!inSport(g)) continue;
-      const s = closing(g), sig = signal(g, s, state.mkt, state.thr);
+      const sig = signal(g, closing(g), mkt, thr);
       if (!sig) continue;
-      const r = settle(g, sig, state.mkt);
+      const r = settle(g, sig, mkt);
       if (!r) continue;
-      const rv = rlm(g, state.mkt);
-      rows.push({g, sig, r, rev: rv ? (rv.key === sig.key ? 1 : -1) : 0, clv: clv(g, state.mkt, state.thr, sig.key)});
+      const rv = rlm(g, mkt);
+      rows.push({g, sig, r, rev: rv ? (rv.key === sig.key ? 1 : -1) : 0, clv: clv(g, mkt, thr, sig.key)});
     }
-    rows.sort((a, b) => b.g.t.localeCompare(a.g.t));
-    const n = rows.length, w = rows.filter((x) => x.r.o > 0).length, l = rows.filter((x) => x.r.o < 0).length;
+    $("btsub").textContent = `${MK[mkt]}・門檻 ${thr}%・跟著錢比人多的一邊，每注 1 單位，美國收盤賠率`;
+    const n = rows.length, w = rows.filter((x) => x.r.o > 0).length, l = rows.filter((x) => x.r.o < 0).length, dec = w + l;
     const pl = rows.reduce((s, x) => s + x.r.pl, 0);
-    const decided = w + l;
-    $("btsub").textContent = `目前的條件：${MK[state.mkt]}、門檻 ${state.thr}%。回頭算全部歷史已完賽的比賽：跟著「錢比人多」那一邊下注，每注 1 單位、以美國收盤賠率計算。`;
-    const goal = 200, pct = Math.min(100, Math.round((n / goal) * 100));
-    $("prog200").innerHTML = n >= goal
-      ? `累積驗證：<b class="num">${n}</b> 筆，已經到你說的 200 筆里程碑了，可以認真看回測結果了`
-      : `累積驗證：<b class="num">${n}</b> / ${goal} 筆（還差 ${goal - n} 筆）<div class="bar"><i style="width:${pct}%"></i></div>`;
-    if (!n) { $("backtest").innerHTML = `<div class="empty">目前的門檻/盤別下，還沒有已完賽的訊號</div>`; return; }
-    const cls = pl > 0 ? "pos" : pl < 0 ? "neg" : "";
-    let html = `<div class="stats">
-      <div class="stat"><div class="k">訊號場數</div><div class="v num">${n}</div></div>
-      <div class="stat"><div class="k">勝－負${n - decided ? "－和" : ""}</div><div class="v num">${w}－${l}${n - decided ? "－" + (n - decided) : ""}</div></div>
-      <div class="stat"><div class="k">勝率</div><div class="v num">${decided ? Math.round((w / decided) * 100) + "%" : "–"}</div></div>
-      <div class="stat"><div class="k">損益（單位）</div><div class="v num ${cls}">${pl > 0 ? "+" : ""}${pl.toFixed(2)}</div></div>
+    const cv = rows.filter((x) => x.clv != null), avgClv = cv.length ? cv.reduce((s, x) => s + x.clv, 0) / cv.length : null;
+    const roi = n ? (pl / n) * 100 : null;
+    const goal = 200, prog = Math.min(100, (n / goal) * 100);
+    let html = `<div class="prog"><span>累積</span><b>${n}</b><span>/ ${goal} 筆</span><div class="track"><i style="width:${prog}%"></i></div><span>${n >= goal ? "已達 200 筆" : "還差 " + (goal - n) + " 筆"}</span></div>`;
+    html += `<div class="kpis">
+      <div class="kpi"><div class="k">訊號場數</div><div class="v num">${n}</div><div class="s">${MK[mkt]}</div></div>
+      <div class="kpi"><div class="k">勝－負${n - dec ? "－和" : ""}</div><div class="v num">${w}–${l}${n - dec ? "–" + (n - dec) : ""}</div><div class="s">勝率 ${dec ? Math.round((w / dec) * 100) + "%" : "–"}</div></div>
+      <div class="kpi"><div class="k">損益（單位）</div><div class="v num ${pl > 0 ? "pos" : pl < 0 ? "neg" : ""}">${n ? sgn(pl, 2) : "–"}</div><div class="s">每注 1 單位</div></div>
+      <div class="kpi"><div class="k">投報率</div><div class="v num ${roi > 0 ? "pos" : roi < 0 ? "neg" : ""}">${roi == null ? "–" : sgn(roi, 1) + "%"}</div><div class="s">損益 ÷ 注數</div></div>
+      <div class="kpi"><div class="k">平均 CLV</div><div class="v num ${avgClv > 0 ? "pos" : avgClv < 0 ? "neg" : ""}">${avgClv == null ? "–" : sgn(avgClv, 1) + "%"}</div><div class="s">${cv.length} 場可算</div></div>
     </div>`;
-    // 盤口逆向同方向確認的訊號另外統計；CLV 取平均
     const conf = rows.filter((x) => x.rev === 1), cw = conf.filter((x) => x.r.o > 0).length, cl = conf.filter((x) => x.r.o < 0).length;
     const cpl = conf.reduce((s, x) => s + x.r.pl, 0);
-    const cv = rows.filter((x) => x.clv != null), avgClv = cv.length ? cv.reduce((s, x) => s + x.clv, 0) / cv.length : null;
-    const sgn = (v, dp) => (v > 0 ? "+" : "") + v.toFixed(dp);
-    html += `<div class="substats">
-      <div><span class="k">盤口逆向也指向同一邊</span><span class="num">${conf.length} 場${conf.length ? `　${cw}－${cl}　損益 ${sgn(cpl, 2)}` : ""}</span></div>
-      <div><span class="k">平均 CLV</span><span class="num ${avgClv == null ? "" : avgClv > 0 ? "pos" : avgClv < 0 ? "neg" : ""}">${avgClv == null ? "–" : sgn(avgClv, 1) + "%"}</span><span class="k">（${cv.length} 場可算）</span></div>
-    </div>`;
-    html += `<div class="tbl"><table><thead><tr><th>日期</th><th>比賽</th><th>訊號邊</th><th class="r">差距</th><th>逆向</th><th class="r">收盤賠率</th><th class="r">CLV</th><th class="r">比分</th><th>結果</th><th class="r">損益</th></tr></thead><tbody>`;
+    html += `<div class="sub2"><span>盤口逆向同一邊 <b>${conf.length}</b> 場${conf.length ? `　${cw}–${cl}　損益 <b class="${cpl > 0 ? "pos" : cpl < 0 ? "neg" : ""}">${sgn(cpl, 2)}</b>` : ""}</span>
+      <span>逆向指向另一邊 <b>${rows.filter((x) => x.rev === -1).length}</b> 場</span></div>`;
+    if (!n) { $("bt").innerHTML = html + `<div class="empty" style="border:0;border-radius:0">這個門檻／盤別下，還沒有已完賽的訊號</div>`; return; }
+    const S = state.sort, val = {t: (x) => x.g.t, d: (x) => x.sig.diff, c: (x) => x.clv ?? -1e9, p: (x) => x.r.pl, o: (x) => x.sig.odds};
+    const f = val[S.k] || val.t;
+    rows.sort((a, b) => (f(a) < f(b) ? -1 : f(a) > f(b) ? 1 : 0) * S.dir);
+    const th = (k, lab, cls = "") => `<th class="${cls}"><button type="button" data-sort="${k}" data-dir="${S.k === k ? S.dir : 0}">${lab}</button></th>`;
+    html += `<div class="scroll"><table class="dt"><thead><tr>${th("t", "日期")}<th>比賽</th><th>訊號邊</th>${th("d", "差距", "r")}<th>逆向</th>${th("o", "收盤賠率", "r")}${th("c", "CLV", "r")}<th class="r">比分</th><th>結果</th>${th("p", "損益", "r")}</tr></thead><tbody>`;
     for (const {g, sig, r, rev, clv: c} of rows) {
-      const lab = state.mkt === "ou" ? `${sig.nm} ${sig.ln ?? ""}` : state.mkt === "sp" ? `${sig.nm} ${line(sig.ln)}` : sig.nm;
-      const res = r.o > 0 ? `<span class="w">贏</span>` : r.o < 0 ? `<span class="l">輸</span>` : `<span class="p">和</span>`;
-      const rv = rev === 1 ? `<span class="w" title="盤口逆向也指向這一邊">同向</span>` : rev === -1 ? `<span class="l" title="盤口逆向指向另一邊">反向</span>` : `<span class="p">–</span>`;
-      html += `<tr><td class="num">${fmtMD.format(new Date(g.t))}</td><td>${esc(g.away_zh || g.away_ab)} @ ${esc(g.home_zh || g.home_ab)}</td><td>${esc(lab)}</td>
+      const lab = mkt === "ou" ? `${sig.nm} ${sig.ln ?? ""}` : mkt === "sp" ? `${sig.nm} ${line(sig.ln)}` : sig.nm;
+      const res = r.o > 0 ? `<span class="res w">贏</span>` : r.o < 0 ? `<span class="res l">輸</span>` : `<span class="res p">和</span>`;
+      const rv = rev === 1 ? `<span class="pos">同向</span>` : rev === -1 ? `<span class="neg">反向</span>` : `<span class="mut">–</span>`;
+      html += `<tr><td class="num">${fmtMD.format(new Date(g.t))}</td><td>${state.sport === "all" ? `<span class="mut num">${g.sport.toUpperCase()}</span> ` : ""}${esc(g.away_zh || g.away_ab)} @ ${esc(g.home_zh || g.home_ab)}</td><td>${esc(lab)}</td>
         <td class="r num">+${Math.round(sig.diff)}</td><td>${rv}</td><td class="r num">${odd(sig.odds)}</td>
-        <td class="r num ${c == null ? "" : c > 0 ? "pos" : c < 0 ? "neg" : ""}">${c == null ? "–" : sgn(c, 1) + "%"}</td>
-        <td class="r num">${g.result.away}－${g.result.home}</td><td>${res}</td>
-        <td class="r num">${r.pl > 0 ? "+" : ""}${r.pl.toFixed(2)}</td></tr>`;
+        <td class="r num ${c > 0 ? "pos" : c < 0 ? "neg" : ""}">${c == null ? "–" : sgn(c, 1) + "%"}</td>
+        <td class="r num">${g.result.away}–${g.result.home}</td><td>${res}</td>
+        <td class="r num ${r.pl > 0 ? "pos" : r.pl < 0 ? "neg" : ""}">${sgn(r.pl, 2)}</td></tr>`;
     }
-    $("backtest").innerHTML = html + "</tbody></table></div>";
+    $("bt").innerHTML = html + "</tbody></table></div>";
   }
 
+  // ───── 台彩對照 ─────
   function renderTw() {
     const tw = DATA.tw;
-    if (!tw || !tw.n_total) {
-      $("twpanel").innerHTML = `<div class="empty">尚無記錄，把台彩截圖傳給 Claude，就會開始累積對照資料</div>`;
-      return;
+    if (!tw || !tw.n_total) { $("tw").innerHTML = `<div class="empty">尚無記錄。把台彩賠率截圖傳給 Claude，就會開始累積。</div>`; return; }
+    const groups = tw.by_group.filter((g) => state.sport === "all" || g.sport === state.sport);
+    const best = (tw.best || []).filter((b) => state.sport === "all" || b.sport === state.sport);
+    const pc = (v) => (v == null ? `<span class="mut">–</span>` : v.toFixed(1) + "%");
+    let html = `<div class="card"><div class="scroll"><table class="dt fit"><thead><tr><th class="hide-s">運動</th><th>盤別</th><th class="r hide-s">記錄場次</th><th class="r">台彩抽成</th><th class="r">美國抽成</th><th class="r">平均折扣</th></tr></thead><tbody>`;
+    if (!groups.length) html += `<tr><td colspan="6" class="mut">這個運動還沒有台彩記錄</td></tr>`;
+    for (const g of groups) {
+      html += `<tr><td class="num hide-s">${esc(g.sport.toUpperCase())}</td><td>${esc(MK[g.market] || g.market)}</td><td class="r num hide-s">${g.games ?? "–"}</td>
+        <td class="r num neg">${pc(g.tw_margin_pct)}</td><td class="r num">${pc(g.us_margin_pct)}</td>
+        <td class="r num ${g.avg_discount_pct < 0 ? "neg" : "pos"}">${g.avg_discount_pct > 0 ? "+" : ""}${pc(g.avg_discount_pct)}</td></tr>`;
     }
-    let html = `<div class="tbl"><table><thead><tr><th>運動</th><th>盤別</th><th class="r">筆數</th><th class="r">平均折扣</th></tr></thead><tbody>`;
-    for (const g of tw.by_group) {
-      const cls = g.avg_discount_pct < 0 ? "neg" : g.avg_discount_pct > 0 ? "pos" : "";
-      html += `<tr><td>${esc(g.sport.toUpperCase())}</td><td>${esc(MK[g.market] || g.market)}</td>
-        <td class="r num">${g.n}</td><td class="r num ${cls}">${g.avg_discount_pct > 0 ? "+" : ""}${g.avg_discount_pct}%</td></tr>`;
+    html += `</tbody></table></div></div>`;
+    if (best.length) {
+      html += `<div class="card"><div class="dayh"><b>台彩抽最少的幾注</b><span>折扣接近 0 或正數＝台彩幾乎沒抽，甚至比美國好</span></div><div class="scroll"><table class="dt fit"><thead><tr><th class="hide-s">日期</th><th>比賽</th><th>選項</th><th class="r">台彩</th><th class="r hide-s">美國收盤</th><th class="r">差</th></tr></thead><tbody>`;
+      for (const b of best) {
+        const tm = b.market === "ou" ? `${SIDE[b.side]}分 ${b.line ?? ""}` : `${b.side === "away" ? b.away : b.home}${b.market === "sp" ? " " + line(b.line) : ""}`;
+        html += `<tr><td class="num hide-s">${fmtMD.format(new Date(b.t))}</td><td>${esc(b.away)} @ ${esc(b.home)}</td><td>${MK[b.market]}・${esc(tm)}</td>
+          <td class="r num">${odd(b.tw)}</td><td class="r num hide-s">${odd(b.us)}</td><td class="r num ${b.d >= 0 ? "pos" : "neg"}">${sgn(b.d, 1)}%</td></tr>`;
+      }
+      html += `</tbody></table></div></div>`;
     }
-    $("twpanel").innerHTML = html + `</tbody></table></div>`;
+    $("tw").innerHTML = html;
   }
 
   function renderTabs() {
     const up = (k) => DATA.games.filter((g) => (k === "all" || g.sport === k) && (g.status === "upcoming" || g.status === "started")).length;
     const keys = ["all", ...Object.keys(DATA.sports)];
     if (!keys.includes(state.sport)) state.sport = "all";
-    $("tabs").innerHTML = keys.map((k) => `<button type="button" class="tab" data-s="${k}" aria-pressed="${k === state.sport}">${k === "all" ? "全部" : k.toUpperCase()}<span class="c">${up(k)}</span></button>`).join("");
+    $("tabs").innerHTML = keys.map((k) => `<button type="button" class="sp" data-s="${k}" aria-pressed="${k === state.sport}">${k === "all" ? "全部" : k.toUpperCase()}<span class="c">${up(k)}</span></button>`).join("");
   }
-
   function render() {
-    $("thr").value = state.thr; $("thrv").textContent = state.thr + "%"; $("only").checked = state.only;
+    $("thr").value = state.thr; $("thrv").textContent = state.thr + "%";
+    $("only").setAttribute("aria-pressed", String(state.only));
     document.querySelectorAll("#mkt button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.m === state.mkt)));
     renderTabs(); renderUpcoming(); renderBacktest(); renderTw();
   }
 
-  $("tabs").addEventListener("click", (e) => { const b = e.target.closest(".tab"); if (!b) return; state.sport = b.dataset.s; store.set("sport", state.sport); render(); });
+  $("tabs").addEventListener("click", (e) => { const b = e.target.closest(".sp"); if (!b) return; state.sport = b.dataset.s; store.set("sport", state.sport); render(); });
   $("thr").addEventListener("input", (e) => { state.thr = +e.target.value; store.set("thr", state.thr); render(); });
   $("mkt").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; state.mkt = b.dataset.m; store.set("mkt", state.mkt); render(); });
-  $("only").addEventListener("change", (e) => { state.only = e.target.checked; store.set("only", state.only); render(); });
+  $("only").addEventListener("click", () => { state.only = !state.only; store.set("only", state.only); render(); });
+  const toggle = (tb) => { const k = tb.dataset.k; state.open.has(k) ? state.open.delete(k) : state.open.add(k); renderUpcoming(); };
+  $("upcoming").addEventListener("click", (e) => { const tb = e.target.closest("tbody.g"); if (tb) toggle(tb); });
+  $("upcoming").addEventListener("keydown", (e) => { if (e.key !== "Enter" && e.key !== " ") return; const tb = e.target.closest("tbody.g"); if (tb) { e.preventDefault(); toggle(tb); } });
+  $("bt").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-sort]"); if (!b) return;
+    const k = b.dataset.sort; state.sort = {k, dir: state.sort.k === k ? -state.sort.dir : -1};
+    store.set("sort", state.sort); renderBacktest();
+  });
 
   function boot(d) {
     DATA = d;
     const gen = new Date(d.generated_utc);
-    $("updated").textContent = "資料更新：" + fmtMD.format(gen) + " " + fmtTime.format(gen);
+    $("updated").innerHTML = `<i></i>更新 ${fmtMD.format(gen)} ${fmtTime.format(gen)}`;
     render();
   }
-  const inline = document.getElementById("data");
-  if (inline && inline.textContent.trim()) boot(JSON.parse(inline.textContent));
-  else fetch("data.json", {cache: "no-store"}).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(boot)
+  fetch("data.json", {cache: "no-store"}).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(boot)
     .catch(() => { $("updated").textContent = "資料讀取失敗"; $("upcoming").innerHTML = `<div class="empty">讀不到資料檔。請跟 Claude 說「更新儀表板」。</div>`; });
 })();
 </script>

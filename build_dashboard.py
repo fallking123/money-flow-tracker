@@ -223,12 +223,16 @@ def build(now):
                     "away_p": ctx["away_probable_pitcher"], "home_p": ctx["home_probable_pitcher"]},
             })
     games.sort(key=lambda g: g["t"])
+    tw = record_tw_odds.summary()
+    for b in tw.get("best", []):
+        b["away"] = zh_name(b["sport"], b["away"]) or b["away"]
+        b["home"] = zh_name(b["sport"], b["home"]) or b["home"]
     return {
         "generated_utc": now.strftime("%Y-%m-%dT%H:%MZ"),
         "sports": {k: v["name"] for k, v in active_sports().items()},
         "games": games,
         "closed": build_closed(),
-        "tw": record_tw_odds.summary(),
+        "tw": tw,
     }
 
 
