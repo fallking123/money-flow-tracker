@@ -90,14 +90,22 @@ def parse_time(s):
 # ---------------- ESPN ----------------
 def espn_events(sport, start_utc, end_utc):
     """抓某段時間內的 ESPN 賽程（含比分、季後賽資訊、球場、先發投手）"""
+    # 注意：ESPN 不接受日期範圍查詢，要一天一天查（美東日期）；
+    # 也不要加瀏覽器標頭（會被擋 403），用 requests 預設的就好
     cfg = SPORTS[sport]
-    d0 = start_utc.astimezone(ET).strftime("%Y%m%d")
-    d1 = end_utc.astimezone(ET).strftime("%Y%m%d")
-    params = {"dates": f"{d0}-{d1}" if d0 != d1 else d0, "limit": "1000", **cfg["params"]}
     url = f"https://site.api.espn.com/apis/site/v2/sports/{cfg['espn']}/scoreboard"
-    r = requests.get(url, params=params, timeout=30, headers=UA)
-    r.raise_for_status()
-    return [parse_espn_event(e) for e in r.json().get("events", [])]
+    day, last = start_utc.astimezone(ET).date(), end_utc.astimezone(ET).date()
+    events, seen = [], set()
+    while day <= last:
+        params = {"dates": day.strftime("%Y%m%d"), "limit": "300", **cfg["params"]}
+        r = requests.get(url, params=params, timeout=30)
+        r.raise_for_status()
+        for e in r.json().get("events", []):
+            if e.get("id") not in seen:
+                seen.add(e.get("id"))
+                events.append(parse_espn_event(e))
+        day += timedelta(days=1)
+    return events
 
 
 def parse_espn_event(e):

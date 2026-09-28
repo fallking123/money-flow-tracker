@@ -14,27 +14,8 @@ jobs:
       - run: pip install requests==2.32.3
       - run: |
           mkdir -p docs/probe
-          python - > docs/probe/diag.txt 2>&1 <<'PY'
-          import requests
-          B = "https://site.api.espn.com/apis/site/v2/sports/"
-          tests = [
-            ("football/nfl", {"dates": "20260927-20261004"}),
-            ("football/nfl", {"dates": "20261004"}),
-            ("football/nfl", {"dates": "20261004", "limit": "1000"}),
-            ("football/college-football", {"dates": "20261003", "groups": "80"}),
-            ("football/college-football", {"dates": "20261003", "groups": "80", "limit": "300"}),
-            ("football/college-football", {"dates": "20261003", "groups": "80", "limit": "1000"}),
-            ("baseball/mlb", {"dates": "20260927"}),
-            ("baseball/mlb", {"dates": "20260926-20260928"}),
-            ("hockey/nhl", {"dates": "20260929"}),
-            ("basketball/mens-college-basketball", {"dates": "20261115", "groups": "50", "limit": "500"}),
-          ]
-          for path, params in tests:
-              r = requests.get(B + path + "/scoreboard", params=params, timeout=30)
-              n = len(r.json().get("events", [])) if r.ok else r.text[:100]
-              print(path, params, r.status_code, n)
-          PY
+          { python backfill_results.py; python scrape_context.py; python scrape_odds.py; } > docs/probe/diag.txt 2>&1
       - run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/probe && git commit -m "diag" && for i in 1 2 3; do git pull --rebase && git push && exit 0; sleep 10; done
+          git add docs && git commit -m "驗證：回填比分、背景資料" && for i in 1 2 3; do git pull --rebase && git push && exit 0; sleep 10; done
