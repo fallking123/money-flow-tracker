@@ -14,8 +14,27 @@ jobs:
       - run: pip install requests==2.32.3
       - run: |
           mkdir -p docs/probe
-          { python backfill_results.py; python scrape_context.py; python scrape_odds.py; } > docs/probe/diag.txt 2>&1
+          python - > docs/probe/match.txt 2>&1 <<'PY'
+          from datetime import datetime, timezone, timedelta
+          from sports_common import SPORTS, espn_events, match_event, is_college, sbd_full_name
+          from scrape_odds import fetch_direct
+          now = datetime.now(timezone.utc)
+          for s, cfg in SPORTS.items():
+              games = [g for g in fetch_direct(s) if g.get("status") == "not_started"]
+              if not games:
+                  print(s, "no games"); continue
+              last = max(datetime.fromisoformat(g["scheduled"].replace("Z", "+00:00")) for g in games)
+              evs = espn_events(s, now - timedelta(days=1), min(last, now + timedelta(days=9)))
+              bad = []
+              for g in games:
+                  if match_event(g, evs, college=is_college(s)) is None:
+                      c = g["competitors"]
+                      bad.append((c["away"], c["home"], g["scheduled"]))
+              print(s, "games", len(games), "espn", len(evs), "unmatched", len(bad))
+              for b in bad[:40]:
+                  print("   ", b)
+          PY
       - run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs && git commit -m "驗證：回填比分、背景資料" && for i in 1 2 3; do git pull --rebase && git push && exit 0; sleep 10; done
+          git add docs/probe && git commit -m "diag match" && for i in 1 2 3; do git pull --rebase && git push && exit 0; sleep 10; done
