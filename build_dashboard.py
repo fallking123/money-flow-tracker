@@ -14,10 +14,13 @@ import os
 import sys
 from datetime import datetime, timezone, timedelta
 
-from sports_common import (active_sports, parse_time, read_rows, recent_monthly_files, sport_dir)
+from sports_common import (active_sports, all_monthly_files, parse_time, read_rows,
+                            recent_monthly_files, sport_dir)
+import record_tw_odds
 
 RECENT_DAYS = 14
 MAX_SNAPS = 40
+MAX_CLOSED = 5000  # 「累積驗證」用的已完賽比賽上限（每種運動一季頂多幾百場，5000 場夠用很久）
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dashboard", "data.json")
 
 # 台灣常用中文隊名（依運動分開，因為不同聯盟有同名的隊，例如 Giants、Cardinals、Rangers）
@@ -99,6 +102,53 @@ def snap_of(r):
     }
 
 
+def closing_row(rows):
+    """比照網頁 JS 的 closing()：優先取開賽前（含）的最後一筆快照，沒有的話就取最後一筆"""
+    pre = [r for r in rows if r.get("hours_until_game") in ("", None) or num(r["hours_until_game"]) is None
+           or num(r["hours_until_game"]) >= 0]
+    return pre[-1] if pre else rows[-1]
+
+
+def build_closed():
+    """
+    「累積驗證」用的長期資料：把每種運動『全部歷史』（不只最近 14 天）已完賽的比賽，
+    各自取一筆收盤快照 + 賽果，存成跟 games 一樣的格式（但 snaps 只留 1 筆，網頁邏輯不用改）。
+    這份資料只會越存越多、不會因為調整訊號門檻而需要重新收集 —— 門檻只是事後在網頁上篩選這份資料。
+    """
+    closed = []
+    for sport in active_sports():
+        results = {r["sbd_id"]: r for r in read_rows(os.path.join(sport_dir(sport), "results.csv"))
+                   if r.get("status") == "final"}
+        if not results:
+            continue
+        by_id = {}
+        for path in all_monthly_files(sport, "odds_history"):
+            for r in read_rows(path):
+                sid = r["sbd_id"]
+                if sid not in results:
+                    continue
+                by_id.setdefault(sid, []).append(r)
+        for sid, rows in by_id.items():
+            rows.sort(key=lambda r: r["timestamp_utc"])
+            last = closing_row(rows)
+            res = results[sid]
+            t = parse_time(last["game_time_utc"])
+            away, home = last["away_team"], last["home_team"]
+            closed.append({
+                "sport": sport, "id": sid, "t": t.strftime("%Y-%m-%dT%H:%MZ"),
+                "away": away, "home": home,
+                "away_zh": zh_name(sport, away), "home_zh": zh_name(sport, home),
+                "away_ab": last.get("away_abbr") or short_name(away),
+                "home_ab": last.get("home_abbr") or short_name(home),
+                "status": "final",
+                "snaps": [snap_of(last)],
+                "result": {"away": num(res["away_score"]), "home": num(res["home_score"]),
+                           "winner": res["winner"], "margin": num(res["margin"]), "total": num(res["total_points"])},
+            })
+    closed.sort(key=lambda g: g["t"], reverse=True)
+    return closed[:MAX_CLOSED]
+
+
 def build(now):
     games = []
     for sport in active_sports():
@@ -157,6 +207,8 @@ def build(now):
         "generated_utc": now.strftime("%Y-%m-%dT%H:%MZ"),
         "sports": {k: v["name"] for k, v in active_sports().items()},
         "games": games,
+        "closed": build_closed(),
+        "tw": record_tw_odds.summary(),
     }
 
 
@@ -168,6 +220,8 @@ if __name__ == "__main__":
         json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
     n_up = sum(g["status"] in ("upcoming", "started") for g in data["games"])
     n_fin = sum(g["status"] == "final" for g in data["games"])
-    print(f"儀表板資料：{len(data['games'])} 場（即將開賽 {n_up}、已完賽 {n_fin}），{os.path.getsize(OUT) // 1024} KB")
+    print(f"儀表板資料：{len(data['games'])} 場（即將開賽 {n_up}、已完賽 {n_fin}），"
+          f"累積驗證 {len(data['closed'])} 場，台彩對照 {data['tw']['n_total']} 筆，"
+          f"{os.path.getsize(OUT) // 1024} KB")
     if "--check" in sys.argv:
         print(json.dumps(data["games"][0], ensure_ascii=False)[:1500])

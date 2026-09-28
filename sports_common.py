@@ -73,6 +73,11 @@ def recent_monthly_files(sport, prefix, months=2):
     return files[-months:]
 
 
+def all_monthly_files(sport, prefix):
+    """跟 recent_monthly_files 一樣，但拿全部歷史月份（做長期回測/驗證用，不是只拿最近）"""
+    return sorted(glob.glob(os.path.join(DATA_DIR, sport, f"{prefix}_*.csv")))
+
+
 def append_rows(path, fields, rows):
     if not rows:
         return

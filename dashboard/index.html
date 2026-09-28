@@ -105,6 +105,7 @@ h2{font-family:var(--num);font-weight:700;font-size:20px;letter-spacing:.03em;ma
 .stat .k{font-size:12px;color:var(--muted)}
 .stat .v{font-family:var(--num);font-weight:700;font-size:24px;line-height:1.2}
 .stat .v.pos{color:var(--money)} .stat .v.neg{color:var(--public)}
+td.pos{color:var(--money)} td.neg{color:var(--public)}
 .tbl{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-top:10px}
 table{border-collapse:collapse;width:100%;font-size:13px;min-width:520px}
 th,td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
@@ -113,6 +114,9 @@ tr:last-child td{border-bottom:0}
 td.r,th.r{text-align:right}
 .w{color:var(--money);font-weight:700} .l{color:var(--public);font-weight:700} .p{color:var(--muted)}
 .note{font-size:12px;color:var(--muted);margin-top:10px;max-width:65ch}
+.prog{font-size:12px;color:var(--muted);margin:8px 0}
+.prog .bar{height:6px;margin-top:5px}
+.prog .bar i{background:var(--accent)}
 @media (max-width:480px){
   .controls{grid-template-columns:1fr}
   .stats{grid-template-columns:repeat(2,1fr)}
@@ -154,10 +158,15 @@ td.r,th.r{text-align:right}
   <p class="sub">時間為台灣時間。賠率為美國莊家中間值（小數格式，跟台彩同一種寫法），箭頭左邊是開盤、右邊是現在。</p>
   <div id="upcoming"></div>
 
-  <h2>最近結果</h2>
-  <p class="sub" id="btsub">用目前的門檻與盤別，回頭算最近完賽比賽：跟著「錢比人多」那一邊下注，每注 1 單位、以美國收盤賠率計算。</p>
+  <h2>累積驗證</h2>
+  <p class="sub" id="btsub">用目前的門檻與盤別，回頭算「全部歷史」已完賽的比賽：跟著「錢比人多」那一邊下注，每注 1 單位、以美國收盤賠率計算。調整門檻不用重新收集資料，這裡會直接重算。</p>
+  <div id="prog200"></div>
   <div id="backtest"></div>
-  <p class="note">場數還很少，結果主要是運氣，只能當參考。台彩賠率通常比美國低，實際在台彩的結果會比這裡差一些；等你開始傳台彩截圖，就能算出差距再扣掉。</p>
+  <p class="note">場數還很少，結果主要是運氣，只能當參考。台彩賠率通常比美國低，實際在台彩的結果會比這裡差一些；下面的「台彩對照」會隨你傳的截圖累積折扣資料。</p>
+
+  <h2>台彩賠率對照</h2>
+  <p class="sub">你把台彩截圖傳給 Claude 時，由 Claude 讀圖記錄下來，跟當時美國收盤賠率比對算出折扣（負數代表台彩賠率比美國低）。</p>
+  <div id="twpanel"></div>
 </main>
 
 <script>
@@ -316,10 +325,18 @@ td.r,th.r{text-align:right}
     $("upcoming").innerHTML = html + "</div>";
   }
 
+  // 合併「最近 14 天」跟「全部歷史」的已完賽比賽，同一場只算一次（累積驗證用全部歷史，不受 14 天限制）
+  function allFinal() {
+    const map = new Map();
+    for (const g of DATA.games) if (g.status === "final" && g.result) map.set(g.sport + "|" + g.id, g);
+    for (const g of DATA.closed || []) if (!map.has(g.sport + "|" + g.id)) map.set(g.sport + "|" + g.id, g);
+    return [...map.values()];
+  }
+
   function renderBacktest() {
     const rows = [];
-    for (const g of DATA.games) {
-      if (!inSport(g) || g.status !== "final" || !g.result) continue;
+    for (const g of allFinal()) {
+      if (!inSport(g)) continue;
       const s = closing(g), sig = signal(g, s, state.mkt, state.thr);
       if (!sig) continue;
       const r = settle(g, sig, state.mkt);
@@ -329,8 +346,12 @@ td.r,th.r{text-align:right}
     const n = rows.length, w = rows.filter((x) => x.r.o > 0).length, l = rows.filter((x) => x.r.o < 0).length;
     const pl = rows.reduce((s, x) => s + x.r.pl, 0);
     const decided = w + l;
-    $("btsub").textContent = `目前的條件：${MK[state.mkt]}、門檻 ${state.thr}%。回頭算最近完賽的比賽：跟著「錢比人多」那一邊下注，每注 1 單位、以美國收盤賠率計算。`;
-    if (!n) { $("backtest").innerHTML = `<div class="empty">最近完賽的比賽裡，沒有達到這個門檻的訊號</div>`; return; }
+    $("btsub").textContent = `目前的條件：${MK[state.mkt]}、門檻 ${state.thr}%。回頭算全部歷史已完賽的比賽：跟著「錢比人多」那一邊下注，每注 1 單位、以美國收盤賠率計算。`;
+    const goal = 200, pct = Math.min(100, Math.round((n / goal) * 100));
+    $("prog200").innerHTML = n >= goal
+      ? `累積驗證：<b class="num">${n}</b> 筆，已經到你說的 200 筆里程碑了，可以認真看回測結果了`
+      : `累積驗證：<b class="num">${n}</b> / ${goal} 筆（還差 ${goal - n} 筆）<div class="bar"><i style="width:${pct}%"></i></div>`;
+    if (!n) { $("backtest").innerHTML = `<div class="empty">目前的門檻/盤別下，還沒有已完賽的訊號</div>`; return; }
     const cls = pl > 0 ? "pos" : pl < 0 ? "neg" : "";
     let html = `<div class="stats">
       <div class="stat"><div class="k">訊號場數</div><div class="v num">${n}</div></div>
@@ -348,6 +369,21 @@ td.r,th.r{text-align:right}
     $("backtest").innerHTML = html + "</tbody></table></div>";
   }
 
+  function renderTw() {
+    const tw = DATA.tw;
+    if (!tw || !tw.n_total) {
+      $("twpanel").innerHTML = `<div class="empty">尚無記錄，把台彩截圖傳給 Claude，就會開始累積對照資料</div>`;
+      return;
+    }
+    let html = `<div class="tbl"><table><thead><tr><th>運動</th><th>盤別</th><th class="r">筆數</th><th class="r">平均折扣</th></tr></thead><tbody>`;
+    for (const g of tw.by_group) {
+      const cls = g.avg_discount_pct < 0 ? "neg" : g.avg_discount_pct > 0 ? "pos" : "";
+      html += `<tr><td>${esc(g.sport.toUpperCase())}</td><td>${esc(MK[g.market] || g.market)}</td>
+        <td class="r num">${g.n}</td><td class="r num ${cls}">${g.avg_discount_pct > 0 ? "+" : ""}${g.avg_discount_pct}%</td></tr>`;
+    }
+    $("twpanel").innerHTML = html + `</tbody></table></div>`;
+  }
+
   function renderTabs() {
     const up = (k) => DATA.games.filter((g) => (k === "all" || g.sport === k) && (g.status === "upcoming" || g.status === "started")).length;
     const keys = ["all", ...Object.keys(DATA.sports)];
@@ -358,7 +394,7 @@ td.r,th.r{text-align:right}
   function render() {
     $("thr").value = state.thr; $("thrv").textContent = state.thr + "%"; $("only").checked = state.only;
     document.querySelectorAll("#mkt button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.m === state.mkt)));
-    renderTabs(); renderUpcoming(); renderBacktest();
+    renderTabs(); renderUpcoming(); renderBacktest(); renderTw();
   }
 
   $("tabs").addEventListener("click", (e) => { const b = e.target.closest(".tab"); if (!b) return; state.sport = b.dataset.s; store.set("sport", state.sport); render(); });
