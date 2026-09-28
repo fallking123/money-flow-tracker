@@ -1,64 +1,71 @@
 """
-資金流向抓取主程式 v3（直接讀網站背後的原始資料）
+資金流向抓取主程式 v4（多運動版）
 ====================================================
-資料來源：SportsBettingDime 頁面背後載入的 mlb-odds 原始資料（JSON），
-不再讀網頁畫面文字，數字精確到小數點，不會有辨識錯誤。
+資料來源：SportsBettingDime 背後的 <運動>-odds 原始資料（JSON），
+一次執行就依序抓完 MLB、NFL、NCAAF、NBA、NHL、NCAAB，每種運動分開存檔。
 
-每次抓取會存兩份表：
-1. docs/data/odds_history.csv  —— 每場比賽一列（核心資料）
+每種運動存在 docs/data/<運動>/：
+1. odds_history_YYYY-MM.csv —— 每場比賽一列（核心資料）
    三種盤（獨贏 / 讓分 / 大小分）的 bet% 與 money%、
-   六家美國莊家的共識賠率（目前 + 開盤）、讓分與總分線（目前 + 開盤）、
-   去水後隱含機率
-2. docs/data/odds_books.csv    —— 每家莊家、每個盤、每一邊的賠率明細（盤口移動分析用）
+   美國莊家的共識賠率（目前 + 開盤）、讓分與總分線（目前 + 開盤）、去水後隱含機率、
+   ESPN 比賽編號（對賽果用）與賽季階段（例行賽 / 季後賽）
+2. odds_books_YYYY-MM.csv   —— 每家莊家、每個盤、每一邊的賠率明細（只在賠率有變動時才記）
+3. raw/日期.json.gz         —— 每天第一次抓到的原始資料備份
 
-分層頻率：距開賽 >3 小時每 120 分鐘、1~3 小時每 30 分鐘、1 小時內每 10 分鐘
+分層頻率：距開賽 >24 小時每 6 小時、3~24 小時每 2 小時、1~3 小時每 30 分、1 小時內每 10 分
+（美式足球整週都在下注，所以開賽前 7 天就開始記錄；其他運動 48 小時）
+
+直接讀資料網址，不用開瀏覽器；萬一被擋（HTTP 403），程式結束碼為 3，
+排程會自動改用瀏覽器模式重跑（python scrape_odds.py --browser）。
 """
 
-import csv
 import gzip
+import hashlib
 import json
 import os
 import statistics
+import sys
 from datetime import datetime, timezone, timedelta
 
 import requests
-from playwright.sync_api import sync_playwright
 
-from mlb_common import get_schedule, guess_team_abbr
+from sports_common import (SPORTS, STATE_DIR, UA, append_rows, espn_events, is_college,
+                           match_event, monthly_path, parse_time, sbd_full_name, sport_dir)
 
-PAGE_URL = "https://www.sportsbettingdime.com/mlb/public-betting-trends/"
-API_MARKER = "/wp-json/adpt/v1/mlb-odds"
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, "docs", "data")
-RAW_DIR = os.path.join(DATA_DIR, "raw")
-STATE_FILE = os.path.join(DATA_DIR, "state", "last_snapshot.json")
-HISTORY_CSV = os.path.join(DATA_DIR, "odds_history.csv")
-BOOKS_CSV = os.path.join(DATA_DIR, "odds_books.csv")
+API_URL = "https://www.sportsbettingdime.com/wp-json/adpt/v1/{sbd}-odds"
+BOOKS = "sr:book:17324,sr:book:18149,sr:book:28901,sr:book:32219,sr:book:18186"
+PAGE_URL = "https://www.sportsbettingdime.com/nfl/public-betting-trends/"
+STATE_FILE = os.path.join(STATE_DIR, "last_snapshot.json")
 
 HISTORY_FIELDS = [
-    "timestamp_utc", "sbd_id", "mlb_game_id", "game_time_utc", "hours_until_game",
+    "timestamp_utc", "sport", "sbd_id", "event_id", "season_type", "game_time_utc", "hours_until_game",
     "away_team", "home_team", "away_abbr", "home_abbr",
     # 獨贏 Moneyline
     "ml_splits_updated", "ml_away_bets_pct", "ml_away_money_pct", "ml_home_bets_pct", "ml_home_money_pct",
     "ml_away_odds", "ml_home_odds", "ml_away_open_odds", "ml_home_open_odds",
     "ml_away_novig_prob", "ml_home_novig_prob",
-    # 讓分 Run line（以客隊角度記錄讓分值）
-    "rl_splits_updated", "rl_away_bets_pct", "rl_away_money_pct", "rl_home_bets_pct", "rl_home_money_pct",
-    "rl_away_line", "rl_away_open_line", "rl_away_odds", "rl_home_odds",
+    # 讓分 Spread（棒球叫 run line、冰球叫 puck line；以客隊角度記錄讓分值）
+    "sp_splits_updated", "sp_away_bets_pct", "sp_away_money_pct", "sp_home_bets_pct", "sp_home_money_pct",
+    "sp_away_line", "sp_away_open_line", "sp_away_odds", "sp_home_odds",
     # 大小分 Total
     "ou_splits_updated", "ou_over_bets_pct", "ou_over_money_pct", "ou_under_bets_pct", "ou_under_money_pct",
     "ou_line", "ou_open_line", "ou_over_odds", "ou_under_odds",
     "books_count",
 ]
 BOOK_FIELDS = [
-    "timestamp_utc", "sbd_id", "market", "book", "side",
+    "timestamp_utc", "sport", "sbd_id", "market", "book", "side",
     "odds_american", "open_odds_american", "line", "open_line",
 ]
 
 
+class Blocked(Exception):
+    pass
+
+
 # ---------------- 工具函數 ----------------
 def tier_interval_minutes(hrs: float) -> int:
+    if hrs > 24:
+        return 360
     if hrs > 3:
         return 120
     if hrs > 1:
@@ -96,62 +103,71 @@ def mode_value(values):
     return max(set(vals), key=vals.count)
 
 
-def load_json(path, default):
-    if os.path.exists(path):
-        with open(path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    return default
+def load_state():
+    if not os.path.exists(STATE_FILE):
+        return {}
+    with open(STATE_FILE, "r", encoding="utf-8") as f:
+        raw = json.load(f)
+    # 舊版格式：{id: 時間字串}
+    return {k: (v if isinstance(v, dict) else {"t": v}) for k, v in raw.items()}
 
 
-def append_rows(path, fields, rows):
-    if not rows:
-        return
-    exists = os.path.exists(path)
-    with open(path, "a", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=fields)
-        if not exists:
-            w.writeheader()
-        w.writerows(rows)
+def save_state(state, now):
+    cutoff = now - timedelta(days=10)
+    state = {k: v for k, v in state.items() if parse_time(v["t"]) > cutoff}
+    os.makedirs(STATE_DIR, exist_ok=True)
+    with open(STATE_FILE, "w", encoding="utf-8") as f:
+        json.dump(state, f, ensure_ascii=False, indent=1, sort_keys=True)
 
 
 # ---------------- 抓資料 ----------------
-def fetch_api_data():
-    """打開網頁，攔截它背後載入的 mlb-odds 原始資料"""
-    captured = {}
+def parse_body(status, text, sport):
+    if status == 403:
+        raise Blocked(f"{sport}: HTTP 403")
+    if status != 200:
+        print(f"  {sport}: HTTP {status}，略過")
+        return []
+    try:
+        return json.loads(text).get("data", []) or []
+    except ValueError:
+        # 休賽期網站會回空白頁，不是錯誤
+        print(f"  {sport}: 目前沒有資料（可能是休賽期）")
+        return []
 
-    def on_response(resp):
-        if API_MARKER in resp.url and "body" not in captured:
-            try:
-                captured["url"] = resp.url
-                captured["body"] = resp.json()
-            except Exception:
-                pass
 
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
-        page.on("response", on_response)
-        page.goto(PAGE_URL, wait_until="networkidle", timeout=90000)
-        page.wait_for_timeout(3000)
-        browser.close()
+def fetch_direct(sport):
+    r = requests.get(API_URL.format(sbd=SPORTS[sport]["sbd"]),
+                     params={"books": BOOKS, "format": "us"}, timeout=30, headers=UA)
+    return parse_body(r.status_code, r.text, sport)
 
-    if "body" in captured:
-        return captured["body"]
 
-    # 備援：網頁沒攔到就直接向資料網址要一次
-    fallback = ("https://www.sportsbettingdime.com/wp-json/adpt/v1/mlb-odds?books="
-                "sr%3Abook%3A17324%2Csr%3Abook%3A18149%2Csr%3Abook%3A27447%2C"
-                "sr%3Abook%3A28901%2Csr%3Abook%3A32219%2Csr%3Abook%3A18186&format=us")
-    r = requests.get(fallback, timeout=30, headers={"User-Agent": "Mozilla/5.0"})
-    r.raise_for_status()
-    return r.json()
+class BrowserFetcher:
+    """備援：開一次網頁，再用網頁本身去讀各運動資料（被擋時才用）"""
+
+    def __enter__(self):
+        from playwright.sync_api import sync_playwright
+        self._p = sync_playwright().start()
+        self._b = self._p.chromium.launch(headless=True)
+        self._page = self._b.new_page()
+        self._page.goto(PAGE_URL, wait_until="domcontentloaded", timeout=60000)
+        return self
+
+    def fetch(self, sport):
+        url = API_URL.format(sbd=SPORTS[sport]["sbd"]) + "?books=" + requests.utils.quote(BOOKS) + "&format=us"
+        res = self._page.evaluate(
+            "async (u) => { const r = await fetch(u); return {status: r.status, text: await r.text()}; }", url)
+        return parse_body(res["status"], res["text"], sport)
+
+    def __exit__(self, *a):
+        self._b.close()
+        self._p.stop()
 
 
 def compact_game(g):
     """原始資料瘦身版（拿掉球隊簡介等用不到的欄位）"""
     c = g.get("competitors", {})
     return {
-        "id": g.get("id"), "status": g.get("status"), "scheduled": g.get("scheduled"),
+        "id": g.get("id"), "status": g.get("status"), "scheduled": g.get("scheduled"), "league": g.get("league"),
         "away": {k: c.get("away", {}).get(k) for k in ("name", "abbr", "market")},
         "home": {k: c.get("home", {}).get(k) for k in ("name", "abbr", "market")},
         "markets": g.get("markets"), "bettingSplits": g.get("bettingSplits"),
@@ -164,16 +180,15 @@ def split_vals(splits, market, side):
     return s.get("betsPercentage"), s.get("stakePercentage")
 
 
-def build_rows(g, now, mlb_game_id):
+def build_rows(sport, g, now, ev):
     c = g["competitors"]
     splits = g.get("bettingSplits") or {}
     markets = g.get("markets") or {}
     ts = now.isoformat()
-    sched = datetime.fromisoformat(g["scheduled"].replace("Z", "+00:00"))
-    hrs = (sched - now).total_seconds() / 3600
+    hrs = (parse_time(g["scheduled"]) - now).total_seconds() / 3600
 
     book_rows = []
-    agg = {}  # (market, side) -> list
+    agg = {}
 
     def add(key, val):
         agg.setdefault(key, []).append(val)
@@ -189,7 +204,7 @@ def build_rows(g, now, mlb_game_id):
                 else:
                     line = open_line = None
                 book_rows.append({
-                    "timestamp_utc": ts, "sbd_id": g["id"], "market": market,
+                    "timestamp_utc": ts, "sport": sport, "sbd_id": g["id"], "market": market,
                     "book": b.get("name"), "side": side,
                     "odds_american": o.get("odds"), "open_odds_american": o.get("opening_odds"),
                     "line": line, "open_line": open_line,
@@ -199,38 +214,43 @@ def build_rows(g, now, mlb_game_id):
                 add((market, side, "line"), line)
                 add((market, side, "open_line"), open_line)
 
-    ml_a, ml_h = median_decimal(agg.get(("moneyline", "away", "odds"), [])), median_decimal(agg.get(("moneyline", "home", "odds"), []))
+    ml_a = median_decimal(agg.get(("moneyline", "away", "odds"), []))
+    ml_h = median_decimal(agg.get(("moneyline", "home", "odds"), []))
     novig_a = novig_h = None
     if ml_a and ml_h:
         pa, ph = 1 / ml_a, 1 / ml_h
         novig_a, novig_h = round(pa / (pa + ph), 4), round(ph / (pa + ph), 4)
 
-    mlb_a, mlb_m = split_vals(splits, "moneyline", "away")
+    mla_b, mla_m = split_vals(splits, "moneyline", "away")
     mlh_b, mlh_m = split_vals(splits, "moneyline", "home")
-    rla_b, rla_m = split_vals(splits, "spread", "away")
-    rlh_b, rlh_m = split_vals(splits, "spread", "home")
+    spa_b, spa_m = split_vals(splits, "spread", "away")
+    sph_b, sph_m = split_vals(splits, "spread", "home")
     ov_b, ov_m = split_vals(splits, "total", "over")
     un_b, un_m = split_vals(splits, "total", "under")
 
+    ev = ev or {}
     row = {
-        "timestamp_utc": ts, "sbd_id": g["id"], "mlb_game_id": mlb_game_id or "",
+        "timestamp_utc": ts, "sport": sport, "sbd_id": g["id"],
+        "event_id": ev.get("event_id", ""), "season_type": ev.get("season_type", ""),
         "game_time_utc": g["scheduled"], "hours_until_game": round(hrs, 2),
-        "away_team": c["away"].get("name"), "home_team": c["home"].get("name"),
-        "away_abbr": c["away"].get("abbr"), "home_abbr": c["home"].get("abbr"),
+        "away_team": (ev.get("away") or {}).get("display") or sbd_full_name(c["away"]),
+        "home_team": (ev.get("home") or {}).get("display") or sbd_full_name(c["home"]),
+        "away_abbr": c["away"].get("abbr") or (ev.get("away") or {}).get("abbr", ""),
+        "home_abbr": c["home"].get("abbr") or (ev.get("home") or {}).get("abbr", ""),
         "ml_splits_updated": (splits.get("moneyline") or {}).get("updated", ""),
-        "ml_away_bets_pct": mlb_a, "ml_away_money_pct": mlb_m,
+        "ml_away_bets_pct": mla_b, "ml_away_money_pct": mla_m,
         "ml_home_bets_pct": mlh_b, "ml_home_money_pct": mlh_m,
         "ml_away_odds": ml_a, "ml_home_odds": ml_h,
         "ml_away_open_odds": median_decimal(agg.get(("moneyline", "away", "open"), [])),
         "ml_home_open_odds": median_decimal(agg.get(("moneyline", "home", "open"), [])),
         "ml_away_novig_prob": novig_a, "ml_home_novig_prob": novig_h,
-        "rl_splits_updated": (splits.get("spread") or {}).get("updated", ""),
-        "rl_away_bets_pct": rla_b, "rl_away_money_pct": rla_m,
-        "rl_home_bets_pct": rlh_b, "rl_home_money_pct": rlh_m,
-        "rl_away_line": mode_value(agg.get(("spread", "away", "line"), [])),
-        "rl_away_open_line": mode_value(agg.get(("spread", "away", "open_line"), [])),
-        "rl_away_odds": median_decimal(agg.get(("spread", "away", "odds"), [])),
-        "rl_home_odds": median_decimal(agg.get(("spread", "home", "odds"), [])),
+        "sp_splits_updated": (splits.get("spread") or {}).get("updated", ""),
+        "sp_away_bets_pct": spa_b, "sp_away_money_pct": spa_m,
+        "sp_home_bets_pct": sph_b, "sp_home_money_pct": sph_m,
+        "sp_away_line": mode_value(agg.get(("spread", "away", "line"), [])),
+        "sp_away_open_line": mode_value(agg.get(("spread", "away", "open_line"), [])),
+        "sp_away_odds": median_decimal(agg.get(("spread", "away", "odds"), [])),
+        "sp_home_odds": median_decimal(agg.get(("spread", "home", "odds"), [])),
         "ou_splits_updated": (splits.get("total") or {}).get("updated", ""),
         "ou_over_bets_pct": ov_b, "ou_over_money_pct": ov_m,
         "ou_under_bets_pct": un_b, "ou_under_money_pct": un_m,
@@ -240,80 +260,98 @@ def build_rows(g, now, mlb_game_id):
         "ou_under_odds": median_decimal(agg.get(("total", "under", "odds"), [])),
         "books_count": len((markets.get("moneyline") or {}).get("books", [])),
     }
-    return row, book_rows, hrs
+    return row, book_rows
 
 
-def mlb_id_lookup(now):
-    """用 MLB 官方賽程，把每場比賽對應到官方 game_id（之後對賽果用）"""
-    lookup = []
-    for d in range(-1, 3):
-        try:
-            for g in get_schedule((now + timedelta(days=d)).strftime("%Y-%m-%d")):
-                lookup.append(g)
-        except Exception as e:
-            print(f"MLB 賽程讀取失敗: {e}")
-    return lookup
-
-
-def match_mlb_id(g, lookup):
-    a = guess_team_abbr(g["competitors"]["away"].get("name", ""))
-    h = guess_team_abbr(g["competitors"]["home"].get("name", ""))
-    sched = datetime.fromisoformat(g["scheduled"].replace("Z", "+00:00"))
-    best, best_gap = None, None
-    for m in lookup:
-        if guess_team_abbr(m["away_team"]) == a and guess_team_abbr(m["home_team"]) == h:
-            gap = abs((datetime.fromisoformat(m["game_time_utc"].replace("Z", "+00:00")) - sched).total_seconds())
-            if gap < 12 * 3600 and (best_gap is None or gap < best_gap):
-                best, best_gap = m["game_id"], gap
-    return best
+def books_signature(book_rows):
+    key = sorted((r["market"], r["book"], r["side"], str(r["odds_american"]), str(r["line"])) for r in book_rows)
+    return hashlib.md5(json.dumps(key).encode()).hexdigest()[:12]
 
 
 # ---------------- 主流程 ----------------
-def run():
-    now = datetime.now(timezone.utc)
-    os.makedirs(RAW_DIR, exist_ok=True)
-    os.makedirs(os.path.dirname(STATE_FILE), exist_ok=True)
-
-    body = fetch_api_data()
-    games = body.get("data", [])
-    print(f"原始資料共 {len(games)} 場比賽")
-
-    # 每天第一次抓取存一份瘦身原始檔（稽核/除錯用，壓縮後很小）
-    raw_path = os.path.join(RAW_DIR, f"{now.strftime('%Y-%m-%d')}.json.gz")
-    if not os.path.exists(raw_path):
+def process_sport(sport, games, now, state):
+    cfg = SPORTS[sport]
+    raw_dir = os.path.join(sport_dir(sport), "raw")
+    os.makedirs(raw_dir, exist_ok=True)
+    raw_path = os.path.join(raw_dir, f"{now.strftime('%Y-%m-%d')}.json.gz")
+    if games and not os.path.exists(raw_path):
         with gzip.open(raw_path, "wt", encoding="utf-8") as f:
             json.dump([compact_game(g) for g in games], f, ensure_ascii=False)
 
-    state = load_json(STATE_FILE, {})
-    lookup = None
-    hist_rows, all_book_rows = [], []
-
+    due = []
     for g in games:
         if g.get("status") != "not_started":
             continue
-        sched = datetime.fromisoformat(g["scheduled"].replace("Z", "+00:00"))
-        hrs = (sched - now).total_seconds() / 3600
-        if not (0 <= hrs <= 24):
+        hrs = (parse_time(g["scheduled"]) - now).total_seconds() / 3600
+        if not (0 <= hrs <= cfg["horizon_h"]):
             continue
-        last = state.get(g["id"])
+        last = state.get(g["id"], {}).get("t")
         # 容許約 1/4 間隔的誤差：GitHub 排程常延遲幾分鐘，避免剛好差一點就跳過一次
-        interval = tier_interval_minutes(hrs)
-        if last and (now - datetime.fromisoformat(last)).total_seconds() / 60 < interval * 0.75:
+        if last and (now - parse_time(last)).total_seconds() / 60 < tier_interval_minutes(hrs) * 0.75:
             continue
-        if lookup is None:
-            lookup = mlb_id_lookup(now)
-        row, book_rows, _ = build_rows(g, now, match_mlb_id(g, lookup))
+        due.append(g)
+    if not due:
+        print(f"  {cfg['name']}: 共 {len(games)} 場，這次沒有需要記錄的比賽")
+        return
+
+    events = []
+    try:
+        events = espn_events(sport, now - timedelta(days=1), now + timedelta(hours=cfg["horizon_h"] + 24))
+    except Exception as e:
+        print(f"  {cfg['name']}: ESPN 賽程讀取失敗（比賽編號先留空，回填比分時會再補對）: {e}")
+
+    hist_rows, book_out, unmatched = [], [], 0
+    for g in due:
+        ev = match_event(g, events, college=is_college(sport)) if events else None
+        unmatched += ev is None
+        row, book_rows = build_rows(sport, g, now, ev)
         hist_rows.append(row)
-        all_book_rows.extend(book_rows)
-        state[g["id"]] = now.isoformat()
+        sig = books_signature(book_rows)
+        if state.get(g["id"], {}).get("sig") != sig:
+            book_out.extend(book_rows)
+        state[g["id"]] = {"t": now.isoformat(), "sig": sig}
 
-    append_rows(HISTORY_CSV, HISTORY_FIELDS, hist_rows)
-    append_rows(BOOKS_CSV, BOOK_FIELDS, all_book_rows)
-    with open(STATE_FILE, "w", encoding="utf-8") as f:
-        json.dump(state, f, ensure_ascii=False, indent=1)
+    append_rows(monthly_path(sport, "odds_history", now), HISTORY_FIELDS, hist_rows)
+    append_rows(monthly_path(sport, "odds_books", now), BOOK_FIELDS, book_out)
+    note = f"（{unmatched} 場沒對到 ESPN 編號）" if unmatched else ""
+    print(f"  {cfg['name']}: 共 {len(games)} 場，寫入 {len(hist_rows)} 場快照、{len(book_out)} 筆莊家賠率變動{note}")
 
-    print(f"本次寫入 {len(hist_rows)} 場比賽快照、{len(all_book_rows)} 筆莊家賠率明細")
+
+def run(use_browser=False):
+    now = datetime.now(timezone.utc)
+    state = load_state()
+    blocked, fetched = [], {}
+
+    if use_browser:
+        with BrowserFetcher() as bf:
+            for sport in SPORTS:
+                try:
+                    fetched[sport] = bf.fetch(sport)
+                except Blocked:
+                    blocked.append(sport)
+                except Exception as e:
+                    print(f"  {sport}: 讀取失敗 {e}")
+    else:
+        for sport in SPORTS:
+            try:
+                fetched[sport] = fetch_direct(sport)
+            except Blocked:
+                blocked.append(sport)
+            except Exception as e:
+                print(f"  {sport}: 讀取失敗 {e}")
+
+    for sport, games in fetched.items():
+        try:
+            process_sport(sport, games, now, state)
+        except Exception as e:
+            print(f"  {sport}: 處理失敗 {e}")
+    save_state(state, now)
+
+    if blocked:
+        print(f"被網站擋下：{', '.join(blocked)}")
+        if not use_browser and len(blocked) == len(SPORTS):
+            sys.exit(3)
 
 
 if __name__ == "__main__":
-    run()
+    run(use_browser="--browser" in sys.argv)

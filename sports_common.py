@@ -1,0 +1,188 @@
+"""
+共用模組：各運動設定、ESPN 賽程/比分、隊名比對、CSV 工具
+============================================================
+所有程式（抓資金流向、回填比分、抓背景資料）都靠這裡：
+- SPORTS：每種運動的資料來源名稱、資料夾名稱、要追蹤多久以前的比賽
+- ESPN 公開賽程 API（免費、不用申請 key）：比賽編號、開賽時間、球場、比分、季後賽標記
+- 把 SportsBettingDime 的比賽對應到 ESPN 的比賽（靠隊名 + 開賽時間）
+
+資料夾結構（每種運動分開放）：
+docs/data/<運動>/odds_history_YYYY-MM.csv   每場比賽的資金流向快照（按月分檔）
+docs/data/<運動>/odds_books_YYYY-MM.csv     各莊家賠率明細（按月分檔，只在賠率有變時才記）
+docs/data/<運動>/results.csv                賽果
+docs/data/<運動>/context.csv                背景資料（球場、天氣、先發投手）
+docs/data/<運動>/raw/日期.json.gz           每天第一次抓到的原始資料備份
+"""
+
+import csv
+import glob
+import os
+import re
+import unicodedata
+from datetime import datetime, timezone, timedelta
+from zoneinfo import ZoneInfo
+
+import requests
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, "docs", "data")
+STATE_DIR = os.path.join(DATA_DIR, "state")
+ET = ZoneInfo("America/New_York")
+UA = {"User-Agent": "Mozilla/5.0"}
+
+# key = 資料夾名稱
+# sbd = SportsBettingDime 資料名稱；espn = ESPN 路徑
+# horizon_h = 開賽前多久開始記錄（美式足球一週一賽，整週都在下注，所以抓 7 天）
+# outdoor = 需要抓天氣的運動
+SPORTS = {
+    "mlb":   {"name": "MLB 美國職棒",     "sbd": "mlb",    "espn": "baseball/mlb",                      "horizon_h": 48,  "outdoor": True,  "params": {}},
+    "nfl":   {"name": "NFL 美式足球",     "sbd": "nfl",    "espn": "football/nfl",                      "horizon_h": 168, "outdoor": True,  "params": {}},
+    "ncaaf": {"name": "NCAAF 大學美式足球", "sbd": "ncaafb", "espn": "football/college-football",         "horizon_h": 168, "outdoor": True,  "params": {"groups": "80"}},
+    "nba":   {"name": "NBA 美國職籃",     "sbd": "nba",    "espn": "basketball/nba",                    "horizon_h": 48,  "outdoor": False, "params": {}},
+    "nhl":   {"name": "NHL 美國冰球",     "sbd": "nhl",    "espn": "hockey/nhl",                        "horizon_h": 48,  "outdoor": False, "params": {}},
+    "ncaab": {"name": "NCAAB 大學籃球",   "sbd": "ncaamb", "espn": "basketball/mens-college-basketball", "horizon_h": 48,  "outdoor": False, "params": {"groups": "50"}},
+}
+
+SEASON_TYPES = {1: "preseason", 2: "regular", 3: "postseason", 4: "offseason"}
+
+# MLB 室內 / 可開闔屋頂球場（天氣影響小，分析時可排除）
+MLB_ROOF_TEAMS = {"TB", "TOR", "MIA", "MIL", "HOU", "SEA", "TEX", "ARI"}
+
+
+# ---------------- 路徑 / CSV ----------------
+def sport_dir(sport):
+    d = os.path.join(DATA_DIR, sport)
+    os.makedirs(d, exist_ok=True)
+    return d
+
+
+def monthly_path(sport, prefix, when):
+    return os.path.join(sport_dir(sport), f"{prefix}_{when.strftime('%Y-%m')}.csv")
+
+
+def recent_monthly_files(sport, prefix, months=2):
+    files = sorted(glob.glob(os.path.join(DATA_DIR, sport, f"{prefix}_*.csv")))
+    return files[-months:]
+
+
+def append_rows(path, fields, rows):
+    if not rows:
+        return
+    exists = os.path.exists(path)
+    with open(path, "a", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
+        if not exists:
+            w.writeheader()
+        w.writerows(rows)
+
+
+def read_rows(path):
+    if not os.path.exists(path):
+        return []
+    with open(path, "r", encoding="utf-8") as f:
+        return list(csv.DictReader(f))
+
+
+def parse_time(s):
+    return datetime.fromisoformat(str(s).replace("Z", "+00:00"))
+
+
+# ---------------- ESPN ----------------
+def espn_events(sport, start_utc, end_utc):
+    """抓某段時間內的 ESPN 賽程（含比分、季後賽資訊、球場、先發投手）"""
+    cfg = SPORTS[sport]
+    d0 = start_utc.astimezone(ET).strftime("%Y%m%d")
+    d1 = end_utc.astimezone(ET).strftime("%Y%m%d")
+    params = {"dates": f"{d0}-{d1}" if d0 != d1 else d0, "limit": "1000", **cfg["params"]}
+    url = f"https://site.api.espn.com/apis/site/v2/sports/{cfg['espn']}/scoreboard"
+    r = requests.get(url, params=params, timeout=30, headers=UA)
+    r.raise_for_status()
+    return [parse_espn_event(e) for e in r.json().get("events", [])]
+
+
+def parse_espn_event(e):
+    comp = (e.get("competitions") or [{}])[0]
+    teams = {}
+    for t in comp.get("competitors", []):
+        side = t.get("homeAway")
+        team = t.get("team", {})
+        prob = (t.get("probables") or [{}])[0].get("athlete", {}).get("displayName", "")
+        teams[side] = {
+            "display": team.get("displayName", ""), "name": team.get("name", ""),
+            "short": team.get("shortDisplayName", ""), "location": team.get("location", ""),
+            "abbr": team.get("abbreviation", ""), "score": t.get("score"),
+            "winner": t.get("winner"), "probable": prob,
+        }
+    status = (e.get("status") or comp.get("status") or {}).get("type", {})
+    notes = "; ".join(n.get("headline", "") for n in comp.get("notes", []) if n.get("headline"))
+    series = comp.get("series") or {}
+    series_note = " | ".join(x for x in (notes, series.get("summary", "")) if x)
+    venue = comp.get("venue") or {}
+    addr = venue.get("address") or {}
+    return {
+        "event_id": str(e.get("id")), "time": parse_time(e.get("date")),
+        "season_type": SEASON_TYPES.get((e.get("season") or {}).get("type"), ""),
+        "series_note": series_note,
+        "state": status.get("state"), "status": status.get("name", ""), "completed": status.get("completed", False),
+        "away": teams.get("away", {}), "home": teams.get("home", {}),
+        "venue_id": venue.get("id", ""), "venue": venue.get("fullName", ""),
+        "city": addr.get("city", ""), "region": addr.get("state", ""), "country": addr.get("country", ""),
+        "indoor": venue.get("indoor"), "neutral_site": comp.get("neutralSite"),
+    }
+
+
+# ---------------- 隊名比對 ----------------
+def _norm(s):
+    s = unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode().lower()
+    s = s.replace("&", " and ")
+    s = re.sub(r"\bst\b\.?", "state", s)
+    return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9 ]", " ", s)).strip()
+
+
+def sbd_full_name(team):
+    """SBD 的隊名：職業隊是 market=城市 + name=隊名；NHL 直接是全名"""
+    name, market = team.get("name") or "", team.get("market") or ""
+    if market and market.lower() not in name.lower():
+        return f"{market} {name}"
+    return name
+
+
+def team_match(sbd_team, espn_team, college=False):
+    full, nick, market = _norm(sbd_full_name(sbd_team)), _norm(sbd_team.get("name")), _norm(sbd_team.get("market"))
+    disp, enick = _norm(espn_team.get("display")), _norm(espn_team.get("name"))
+    loc, short = _norm(espn_team.get("location")), _norm(espn_team.get("short"))
+    if not full:
+        return False
+    if full == disp:
+        return True
+    if not college:
+        # 職業隊：同一聯盟裡隊名（Broncos、Yankees）不會重複
+        if nick and nick in (enick, disp):
+            return True
+        return full.split()[-1] == disp.split()[-1] if disp else False
+    # 大學隊：學校名稱要對上
+    if full in (short, loc):
+        return True
+    return bool(market) and market in (loc, short) and (not nick or nick == enick)
+
+
+def match_event(sbd_game, events, college=False, max_gap_h=8):
+    """找出 SBD 比賽在 ESPN 上對應的那一場（兩隊都要對上，開賽時間最接近）"""
+    comp = sbd_game.get("competitors", {})
+    sa, sh = comp.get("away", {}), comp.get("home", {})
+    sched = parse_time(sbd_game["scheduled"])
+    best, best_gap = None, None
+    for ev in events:
+        ok = team_match(sa, ev["away"], college) and team_match(sh, ev["home"], college)
+        if not ok:  # 中立場地偶爾主客顛倒
+            ok = team_match(sa, ev["home"], college) and team_match(sh, ev["away"], college)
+        if not ok:
+            continue
+        gap = abs((ev["time"] - sched).total_seconds()) / 3600
+        if gap <= max_gap_h and (best_gap is None or gap < best_gap):
+            best, best_gap = ev, gap
+    return best
+
+
+def is_college(sport):
+    return sport in ("ncaaf", "ncaab")
