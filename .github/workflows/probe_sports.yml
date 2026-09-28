@@ -19,6 +19,7 @@ jobs:
           python-version: "3.11"
       - name: Probe
         run: |
+          pip install requests==2.32.3
           mkdir -p docs/probe
           cat > probe.py <<'PY'
           import json, requests
