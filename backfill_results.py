@@ -11,8 +11,11 @@ results.csv 用 sbd_id 跟 odds_history 對起來（同一場比賽的編號）�
 - winner：away 客隊勝 / home 主隊勝 / tie 和局
 - margin：主隊得分 − 客隊得分（算讓分盤用）；total_points：兩隊總分（算大小分用）
 - status：final 完賽 / canceled 取消 / postponed 延賽
+- away_periods / home_periods：每一局（節）的得分，用「-」隔開，例如 0-1-0-2-0-0-1-0-0
+  （算單隊大小分、第一局和局、前五局等用；延長賽會多出幾格）
 """
 
+import csv
 import os
 from datetime import datetime, timezone, timedelta
 
@@ -22,7 +25,60 @@ from sports_common import (SPORTS, active_sports, espn_events, is_college, match
 RESULT_FIELDS = [
     "sport", "sbd_id", "event_id", "game_time_utc", "season_type", "series_note",
     "away_team", "home_team", "away_score", "home_score", "winner", "margin", "total_points", "status",
+    "away_periods", "home_periods",
 ]
+
+
+def periods_str(values):
+    out = []
+    for v in values or []:
+        try:
+            f = float(v)
+        except (TypeError, ValueError):
+            out.append("")
+            continue
+        out.append(str(int(f)) if f.is_integer() else str(f))
+    return "-".join(out)
+
+
+def rewrite(path, rows):
+    """整個檔案重寫（加新欄位、補資料用）"""
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=RESULT_FIELDS, extrasaction="ignore")
+        w.writeheader()
+        w.writerows(rows)
+
+
+def migrate(path):
+    """舊檔案沒有新欄位的話，先把表頭補上（不然新資料會跟表頭對不齊）"""
+    if not os.path.exists(path):
+        return
+    with open(path, "r", encoding="utf-8") as f:
+        header = next(csv.reader(f), [])
+    if header != RESULT_FIELDS:
+        rewrite(path, read_rows(path))
+
+
+def fill_periods(sport, now):
+    """最近完賽、但還沒有每局比分的比賽，回頭補上"""
+    path = os.path.join(sport_dir(sport), "results.csv")
+    rows = read_rows(path)
+    todo = [r for r in rows if r.get("status") == "final" and not r.get("away_periods") and r.get("event_id")
+            and parse_time(r["game_time_utc"]) >= now - timedelta(days=LOOKBACK_DAYS)]
+    if not todo:
+        return 0
+    start = min(parse_time(r["game_time_utc"]) for r in todo) - timedelta(days=1)
+    by_id = {e["event_id"]: e for e in espn_events(sport, start, now)}
+    n = 0
+    for r in todo:
+        ev = by_id.get(r["event_id"])
+        if ev and ev["away"].get("periods"):
+            r["away_periods"] = periods_str(ev["away"]["periods"])
+            r["home_periods"] = periods_str(ev["home"]["periods"])
+            n += 1
+    if n:
+        rewrite(path, rows)
+    return n
 LOOKBACK_DAYS = 10
 WAIT_HOURS = 4
 
@@ -62,11 +118,14 @@ def result_row(sport, g, ev):
             return None
         a, h = int(a) if a.is_integer() else a, int(h) if h.is_integer() else h
         row.update({"away_score": a, "home_score": h, "margin": h - a, "total_points": a + h,
-                    "winner": "home" if h > a else "away" if a > h else "tie"})
+                    "winner": "home" if h > a else "away" if a > h else "tie",
+                    "away_periods": periods_str(ev["away"].get("periods")),
+                    "home_periods": periods_str(ev["home"].get("periods"))})
     return row
 
 
 def run_sport(sport, now):
+    migrate(os.path.join(sport_dir(sport), "results.csv"))
     games = pending_games(sport, now)
     if not games:
         return 0
@@ -95,7 +154,8 @@ def run():
     for sport, cfg in active_sports().items():
         try:
             n = run_sport(sport, now)
-            print(f"{cfg['name']}: 回填 {n} 場賽果")
+            p = fill_periods(sport, now)
+            print(f"{cfg['name']}: 回填 {n} 場賽果，補 {p} 場每局比分")
         except Exception as e:
             print(f"{cfg['name']}: 回填失敗 {e}")
 

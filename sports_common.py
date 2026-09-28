@@ -134,6 +134,8 @@ def parse_espn_event(e):
             "short": team.get("shortDisplayName", ""), "location": team.get("location", ""),
             "abbr": team.get("abbreviation", ""), "score": t.get("score"),
             "winner": t.get("winner"), "probable": prob,
+            # 每一局（冰球每一節、美式足球/籃球每一節）的得分，算單隊大小、第一局和局用
+            "periods": [ls.get("value") for ls in (t.get("linescores") or [])],
         }
     status = (e.get("status") or comp.get("status") or {}).get("type", {})
     notes = "; ".join(n.get("headline", "") for n in comp.get("notes", []) if n.get("headline"))
