@@ -63,6 +63,10 @@ class Blocked(Exception):
 
 
 # ---------------- 工具函數 ----------------
+MISSING_RETRY_MIN = 120
+SPLIT_KEY = {"ml": "ml_away_bets_pct", "sp": "sp_away_bets_pct", "ou": "ou_over_bets_pct"}
+
+
 def tier_interval_minutes(hrs: float) -> int:
     if hrs > 24:
         return 360
@@ -285,9 +289,15 @@ def process_sport(sport, games, now, state):
         hrs = (parse_time(g["scheduled"]) - now).total_seconds() / 3600
         if not (0 <= hrs <= cfg["horizon_h"]):
             continue
-        last = state.get(g["id"], {}).get("t")
+        st = state.get(g["id"], {})
+        last = st.get("t")
+        gap = tier_interval_minutes(hrs)
+        # 上次記錄時還有盤別沒有下注比例（網站常晚一點才出讓分/大小分）→ 最多隔 2 小時再抓一次，
+        # 不用等到下一個 6 小時，這樣比例一出來很快就會記到
+        if st.get("miss"):
+            gap = min(gap, MISSING_RETRY_MIN)
         # 容許約 1/4 間隔的誤差：GitHub 排程常延遲幾分鐘，避免剛好差一點就跳過一次
-        if last and (now - parse_time(last)).total_seconds() / 60 < tier_interval_minutes(hrs) * 0.75:
+        if last and (now - parse_time(last)).total_seconds() / 60 < gap * 0.75:
             continue
         due.append(g)
     if not due:
@@ -309,7 +319,8 @@ def process_sport(sport, games, now, state):
         sig = books_signature(book_rows)
         if state.get(g["id"], {}).get("sig") != sig:
             book_out.extend(book_rows)
-        state[g["id"]] = {"t": now.isoformat(), "sig": sig}
+        miss = [m for m in ("ml", "sp", "ou") if row.get(SPLIT_KEY[m]) in (None, "")]
+        state[g["id"]] = {"t": now.isoformat(), "sig": sig, "miss": miss}
 
     append_rows(monthly_path(sport, "odds_history", now), HISTORY_FIELDS, hist_rows)
     append_rows(monthly_path(sport, "odds_books", now), BOOK_FIELDS, book_out)

@@ -118,6 +118,8 @@ tr.sig td.l.tmn{box-shadow:inset 3px 0 0 var(--money)}
 td.tr{width:108px;padding-block:4px}
 td.tr svg{display:block;width:96px;height:30px;margin-left:auto}
 .na{color:var(--muted);font-size:12px}
+.board td.na{white-space:normal;text-align:left;line-height:1.5}
+.tm .snap{display:block;font-size:10.5px;color:var(--muted);margin-top:2px;opacity:.85}
 tbody.det td{background:var(--sunk);padding:12px 14px 14px;text-align:left;white-space:normal;border-top:1px solid var(--line2)}
 .dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px 22px}
 .dgrid h4{margin:0 0 4px;font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.06em}
@@ -248,6 +250,8 @@ details.gl dd{margin:0;color:var(--ink2);max-width:65ch}
   const fmtDay = new Intl.DateTimeFormat("zh-TW", {timeZone: TZ, month: "numeric", day: "numeric", weekday: "short"});
   const fmtTime = new Intl.DateTimeFormat("zh-TW", {timeZone: TZ, hour: "2-digit", minute: "2-digit", hour12: false});
   const fmtMD = new Intl.DateTimeFormat("zh-TW", {timeZone: TZ, month: "numeric", day: "numeric"});
+  // 快照時間：今天只顯示時間，其他天加日期
+  const snapLabel = (ts) => { const x = new Date(ts); return (fmtMD.format(x) === fmtMD.format(new Date()) ? "" : fmtMD.format(x) + " ") + fmtTime.format(x); };
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
   const store = {
@@ -382,10 +386,10 @@ details.gl dd{margin:0;color:var(--ink2);max-width:65ch}
       const d = diffOf(sd), on = sig && sig.key === sd.key;
       const cls = d == null ? "nt" : d >= thr ? "up" : d <= -thr ? "dn" : "nt";
       html += `<tr class="r${i + 1}${on ? " sig" : ""}">`;
-      if (i === 0) html += `<td class="l tm" rowspan="2"><span class="t">${fmtTime.format(t)}</span><span class="rel">${rel}</span>${tags.length ? `<span class="tags">${tags.join("")}</span>` : ""}</td>`;
+      if (i === 0) html += `<td class="l tm" rowspan="2"><span class="t">${fmtTime.format(t)}</span><span class="rel">${rel}</span>${s ? `<span class="snap">截圖 ${snapLabel(s.ts)}</span>` : ""}${tags.length ? `<span class="tags">${tags.join("")}</span>` : ""}</td>`;
       html += `<td class="l tmn"><div class="team"><span class="ab">${esc(teams[i].ab)}</span><span class="zh">${esc(teams[i].zh)}</span></div></td>`;
       if (!has) {
-        if (i === 0) html += `<td colspan="6" rowspan="2" class="na">網站還沒有這個盤的下注比例</td>`;
+        if (i === 0) html += `<td colspan="6" rowspan="2" class="na">${s ? snapLabel(s.ts) : "–"} 截圖時，網站還沒出這個盤的下注比例。出來後約 2 小時內會補抓（看板每天 6、12、18、23 點更新）</td>`;
         html += `</tr>`; return;
       }
       html += `<td class="mk op hide-s">${mkCell(g, sd, mkt, i, true)}</td>`;
@@ -539,7 +543,12 @@ details.gl dd{margin:0;color:var(--ink2);max-width:65ch}
     $("thr").value = state.thr; $("thrv").textContent = state.thr + "%";
     $("only").setAttribute("aria-pressed", String(state.only));
     document.querySelectorAll("#mkt button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.m === state.mkt)));
-    renderTabs(); renderUpcoming(); renderBacktest(); renderTw();
+    renderTabs(); renderUpcoming(); renderBacktest(); renderTw(); renderUpd();
+  }
+  // 最後截圖＝目前這個運動最新一筆資金流向快照的時間（跟看板更新時間不一樣）
+  function renderUpd() {
+    const last = DATA.games.filter(inSport).flatMap((g) => g.snaps.slice(-1).map((x) => x.ts)).sort().pop();
+    $("updated").innerHTML = `<i></i>最後截圖 ${last ? snapLabel(last) : "–"}<span class="hide-s">　·　看板更新 ${GEN}</span>`;
   }
 
   $("tabs").addEventListener("click", (e) => { const b = e.target.closest(".sp"); if (!b) return; state.sport = b.dataset.s; store.set("sport", state.sport); render(); });
@@ -555,10 +564,11 @@ details.gl dd{margin:0;color:var(--ink2);max-width:65ch}
     store.set("sort", state.sort); renderBacktest();
   });
 
+  let GEN = "";
   function boot(d) {
     DATA = d;
     const gen = new Date(d.generated_utc);
-    $("updated").innerHTML = `<i></i>更新 ${fmtMD.format(gen)} ${fmtTime.format(gen)}`;
+    GEN = `${fmtMD.format(gen)} ${fmtTime.format(gen)}`;
     render();
   }
   fetch("data.json", {cache: "no-store"}).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(boot)
