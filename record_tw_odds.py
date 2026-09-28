@@ -91,6 +91,8 @@ def add_tw_bet(sport, away_team, home_team, game_date, market, side, tw_odds, tw
     odds_field, line_field = MARKET_FIELDS[market][side]
     us_odds = _num(row.get(odds_field))
     us_line = _num(row.get(line_field)) if line_field else None
+    if market == "sp" and side == "home" and us_line is not None:
+        us_line = -us_line  # 資料裡存的是客隊讓分，主隊要反過來
     if us_odds is None:
         return {"ok": False, "error": "找到比賽了，但美國賠率資料是空的（可能太早記錄、賠率還沒抓到）"}
 
@@ -121,21 +123,53 @@ def add_tw_bet(sport, away_team, home_team, game_date, market, side, tw_odds, tw
     return {"ok": True, "row": out}
 
 
+def _avg(vals):
+    vals = [v for v in vals if v is not None]
+    return round(sum(vals) / len(vals), 2) if vals else None
+
+
 def summary():
-    """依運動+盤別統計台彩折扣的平均值、筆數（給儀表板用）"""
+    """
+    依運動+盤別統計（給儀表板用）：
+    - avg_discount_pct：台彩賠率比美國收盤低多少（平均）
+    - tw_margin_pct / us_margin_pct：抽成（兩邊賠率倒數相加 − 1），美國只算同盤口的場次
+    - best：台彩給得最好（折扣最小）的幾筆，看台彩在哪些地方幾乎沒抽
+    """
     rows = read_rows(TW_ODDS_FILE)
-    groups = {}
+    groups, pairs = {}, {}
     for r in rows:
-        key = (r["sport"], r["market"])
-        groups.setdefault(key, []).append(_num(r["discount_pct"]))
+        # 盤口不同（例如台彩讓 2.5、美國讓 1.5）的賠率不能直接比，不算進平均折扣
+        if r["market"] == "ml" or _num(r["tw_line"]) == _num(r["us_line"]):
+            groups.setdefault((r["sport"], r["market"]), []).append(_num(r["discount_pct"]))
+        pairs.setdefault((r["sport"], r["market"], r["sbd_id"]), []).append(r)
+    tw_m, us_m = {}, {}
+    for (sport, market, _), ps in pairs.items():
+        if len(ps) != 2:
+            continue
+        a, b = ps
+        ta, tb, ua, ub = (_num(a["tw_odds"]), _num(b["tw_odds"]), _num(a["us_odds"]), _num(b["us_odds"]))
+        if ta and tb:
+            tw_m.setdefault((sport, market), []).append((1 / ta + 1 / tb - 1) * 100)
+        if ua and ub and _num(a["tw_line"]) == _num(a["us_line"]) and _num(b["tw_line"]) == _num(b["us_line"]):
+            us_m.setdefault((sport, market), []).append((1 / ua + 1 / ub - 1) * 100)
     out = []
     for (sport, market), vals in sorted(groups.items()):
         vals = [v for v in vals if v is not None]
         if not vals:
             continue
         out.append({"sport": sport, "market": market, "n": len(vals),
-                    "avg_discount_pct": round(sum(vals) / len(vals), 2)})
-    return {"n_total": len(rows), "by_group": out}
+                    "games": len(tw_m.get((sport, market), [])),
+                    "avg_discount_pct": _avg(vals),
+                    "tw_margin_pct": _avg(tw_m.get((sport, market), [])),
+                    "us_margin_pct": _avg(us_m.get((sport, market), []))})
+    # 同盤口才能比，盤口不同的（例如台彩讓 2.5、美國讓 1.5）不算
+    same = [r for r in rows if r["market"] == "ml" or _num(r["tw_line"]) == _num(r["us_line"])]
+    same.sort(key=lambda r: -(_num(r["discount_pct"]) or -999))
+    best = [{"sport": r["sport"], "t": r["game_time_utc"], "away": r["away_team"], "home": r["home_team"],
+             "market": r["market"], "side": r["side"], "line": _num(r["tw_line"]),
+             "tw": _num(r["tw_odds"]), "us": _num(r["us_odds"]), "d": _num(r["discount_pct"])}
+            for r in same[:8]]
+    return {"n_total": len(rows), "by_group": out, "best": best}
 
 
 if __name__ == "__main__":
