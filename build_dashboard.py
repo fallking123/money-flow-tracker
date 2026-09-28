@@ -102,11 +102,30 @@ def snap_of(r):
     }
 
 
+CLOSED_SNAPS = 8  # 已完賽比賽保留幾筆快照（算 CLV、盤口逆向用；太多會讓資料檔變太大）
+
+
+def pre_game_rows(rows):
+    """開賽前（含）的快照；都沒有的話就用全部。最後一筆 = 收盤，跟網頁 JS 的 closing() 一致"""
+    pre = [r for r in rows if num(r.get("hours_until_game")) is None or num(r["hours_until_game"]) >= 0]
+    return pre or rows
+
+
 def closing_row(rows):
-    """比照網頁 JS 的 closing()：優先取開賽前（含）的最後一筆快照，沒有的話就取最後一筆"""
-    pre = [r for r in rows if r.get("hours_until_game") in ("", None) or num(r["hours_until_game"]) is None
-           or num(r["hours_until_game"]) >= 0]
-    return pre[-1] if pre else rows[-1]
+    return pre_game_rows(rows)[-1]
+
+
+def thin(rows, k=CLOSED_SNAPS):
+    """平均挑 k 筆，一定包含第一筆跟最後一筆"""
+    if len(rows) <= k:
+        return rows
+    idx = sorted({round(i * (len(rows) - 1) / (k - 1)) for i in range(k)})
+    return [rows[i] for i in idx]
+
+
+def open_of(first):
+    return {"ml": [num(first["ml_away_open_odds"]), num(first["ml_home_open_odds"])],
+            "sp": num(first["sp_away_open_line"]), "ou": num(first["ou_open_line"])}
 
 
 def build_closed():
@@ -130,7 +149,8 @@ def build_closed():
                 by_id.setdefault(sid, []).append(r)
         for sid, rows in by_id.items():
             rows.sort(key=lambda r: r["timestamp_utc"])
-            last = closing_row(rows)
+            pre = pre_game_rows(rows)
+            last = pre[-1]
             res = results[sid]
             t = parse_time(last["game_time_utc"])
             away, home = last["away_team"], last["home_team"]
@@ -141,7 +161,8 @@ def build_closed():
                 "away_ab": last.get("away_abbr") or short_name(away),
                 "home_ab": last.get("home_abbr") or short_name(home),
                 "status": "final",
-                "snaps": [snap_of(last)],
+                "open": open_of(rows[0]),
+                "snaps": [snap_of(r) for r in thin(pre)],
                 "result": {"away": num(res["away_score"]), "home": num(res["home_score"]),
                            "winner": res["winner"], "margin": num(res["margin"]), "total": num(res["total_points"])},
             })
@@ -190,8 +211,7 @@ def build(now):
                 "away_ab": last.get("away_abbr") or short_name(away),
                 "home_ab": last.get("home_abbr") or short_name(home),
                 "status": status,
-                "open": {"ml": [num(first["ml_away_open_odds"]), num(first["ml_home_open_odds"])],
-                         "sp": num(first["sp_away_open_line"]), "ou": num(first["ou_open_line"])},
+                "open": open_of(first),
                 "snaps": [snap_of(r) for r in rows[-MAX_SNAPS:]],
                 "result": None if not res or res["status"] != "final" else {
                     "away": num(res["away_score"]), "home": num(res["home_score"]),

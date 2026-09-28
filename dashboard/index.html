@@ -105,7 +105,11 @@ h2{font-family:var(--num);font-weight:700;font-size:20px;letter-spacing:.03em;ma
 .stat .k{font-size:12px;color:var(--muted)}
 .stat .v{font-family:var(--num);font-weight:700;font-size:24px;line-height:1.2}
 .stat .v.pos{color:var(--money)} .stat .v.neg{color:var(--public)}
-td.pos{color:var(--money)} td.neg{color:var(--public)}
+td.pos,.substats .pos{color:var(--money)} td.neg,.substats .neg{color:var(--public)}
+.substats{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:13px;margin-top:8px}
+.substats div{display:flex;gap:6px;align-items:baseline}
+.substats .k{color:var(--muted);font-size:12px}
+.substats .num{font-size:16px;font-weight:600}
 .tbl{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-top:10px}
 table{border-collapse:collapse;width:100%;font-size:13px;min-width:520px}
 th,td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
@@ -162,6 +166,7 @@ td.r,th.r{text-align:right}
   <p class="sub" id="btsub">用目前的門檻與盤別，回頭算「全部歷史」已完賽的比賽：跟著「錢比人多」那一邊下注，每注 1 單位、以美國收盤賠率計算。調整門檻不用重新收集資料，這裡會直接重算。</p>
   <div id="prog200"></div>
   <div id="backtest"></div>
+  <p class="note"><b>逆向</b>：多數人押另一邊、盤口卻往這邊有利的方向動（同向＝跟訊號一致）。<b>CLV</b>：訊號第一次出現就下注的賠率，比收盤賠率好多少（正數＝搶到比較好的價錢，職業玩家用來判斷有沒有真本事的指標）。</p>
   <p class="note">場數還很少，結果主要是運氣，只能當參考。台彩賠率通常比美國低，實際在台彩的結果會比這裡差一些；下面的「台彩對照」會隨你傳的截圖累積折扣資料。</p>
 
   <h2>台彩賠率對照</h2>
@@ -214,15 +219,41 @@ td.r,th.r{text-align:right}
   const closing = (g) => { const pre = g.snaps.filter((s) => s.hrs == null || s.hrs >= 0); return pre.length ? pre[pre.length - 1] : g.snaps[g.snaps.length - 1]; };
   const latest = (g) => g.snaps[g.snaps.length - 1];
 
-  // 大眾那邊（bet% 較高）的賠率比開盤變長 → 盤口逆向移動（獨贏）
-  function reverseMove(g) {
-    const s = latest(g), a = s.ml;
-    if (!a || a[0] == null || !g.open.ml[0]) return null;
-    const pubAway = a[0] >= a[2];
-    const now = pubAway ? a[4] : a[5], open = pubAway ? g.open.ml[0] : g.open.ml[1];
-    const pubPct = pubAway ? a[0] : a[2];
-    if (now == null || open == null || pubPct < 55) return null;
-    return now - open >= 0.04 ? (pubAway ? g.away_zh || g.away_ab : g.home_zh || g.home_ab) : null;
+  // 盤口逆向：下注人數 ≥55% 的那一邊（大眾），跟開盤比反而變得更划算
+  // （賠率變高，或讓分多給、大小分線往對他有利的方向動 0.5 以上）
+  // → 莊家照「錢」調盤，錢其實在另一邊；回傳另一邊（聰明錢那邊）
+  function rlm(g, mkt) {
+    const ss = sides(g, closing(g), mkt);
+    if (ss[0].bet == null || ss[1].bet == null) return null;
+    const pi = ss[0].bet >= ss[1].bet ? 0 : 1, pub = ss[pi], sharp = ss[1 - pi];
+    if (pub.bet < 55) return null;
+    const first = sides(g, g.snaps[0], mkt)[pi];
+    const op = g.open || {};
+    let lnMove = null;
+    if (mkt === "sp") {
+      const openLn = op.sp == null ? first.ln : (pub.key === "away" ? op.sp : -op.sp);
+      if (openLn != null && pub.ln != null) lnMove = pub.ln - openLn;
+    } else if (mkt === "ou") {
+      const openLn = op.ou ?? first.ln;
+      if (openLn != null && pub.ln != null) lnMove = pub.key === "over" ? openLn - pub.ln : pub.ln - openLn;
+    }
+    if (lnMove != null && Math.abs(lnMove) >= 0.5) return lnMove > 0 ? sharp : null;
+    const openOdds = mkt === "ml" ? (op.ml || [])[pi] : first.odds;
+    if (openOdds == null || pub.odds == null) return null;
+    return pub.odds - openOdds >= 0.04 ? sharp : null;
+  }
+
+  // CLV：訊號第一次出現時就下注的賠率，跟收盤賠率比。正數 = 比收盤拿到更好的價錢
+  // （讓分/大小分如果中間盤口變了，賠率不能直接比，就不算）
+  function clv(g, mkt, thr, key) {
+    const cs = sides(g, closing(g), mkt).find((x) => x.key === key);
+    for (const s of g.snaps.filter((x) => x.hrs == null || x.hrs >= 0)) {
+      const sd = sides(g, s, mkt).find((x) => x.key === key), d = diffOf(sd);
+      if (d == null || d < thr) continue;
+      if (sd.odds == null || cs.odds == null || (mkt !== "ml" && sd.ln !== cs.ln)) return null;
+      return (sd.odds / cs.odds - 1) * 100;
+    }
+    return null;
   }
 
   function settle(g, sd, mkt) {
@@ -283,12 +314,12 @@ td.r,th.r{text-align:right}
     const t = new Date(g.t), hrs = (t - Date.now()) / 36e5;
     const ss = sides(g, s, mkt);
     const sig = signal(g, s, mkt, thr);
-    const rev = reverseMove(g);
+    const rev = rlm(g, mkt);
     const chips = [];
     if (state.sport === "all") chips.push(`<span class="chip lg">${g.sport.toUpperCase()}</span>`);
     if (SEASON[g.season]) chips.push(`<span class="chip ${g.season === "postseason" ? "post" : ""}">${SEASON[g.season]}</span>`);
     if (g.series) chips.push(`<span class="chip">${esc(g.series)}</span>`);
-    if (rev) chips.push(`<span class="chip rev" title="大眾下注的那一邊，賠率反而比開盤變高">盤口逆向：${esc(rev)}</span>`);
+    if (rev) chips.push(`<span class="chip rev" title="多數人押另一邊，盤口卻往對那邊有利的方向動，代表錢可能在這一邊">盤口逆向：錢在${esc(rev.nm)}</span>`);
     const other = ["ml", "sp", "ou"].filter((m) => m !== mkt && signal(g, s, m, thr)).map((m) => MK[m]);
     if (other.length) chips.push(`<span class="chip">${other.join("、")}也有訊號</span>`);
     const rel = g.status === "started" ? "已開賽" : hrs < 1 ? `${Math.max(1, Math.round(hrs * 60))} 分鐘後` : hrs < 48 ? `${Math.round(hrs)} 小時後` : `${Math.round(hrs / 24)} 天後`;
@@ -340,7 +371,9 @@ td.r,th.r{text-align:right}
       const s = closing(g), sig = signal(g, s, state.mkt, state.thr);
       if (!sig) continue;
       const r = settle(g, sig, state.mkt);
-      if (r) rows.push({g, sig, r});
+      if (!r) continue;
+      const rv = rlm(g, state.mkt);
+      rows.push({g, sig, r, rev: rv ? (rv.key === sig.key ? 1 : -1) : 0, clv: clv(g, state.mkt, state.thr, sig.key)});
     }
     rows.sort((a, b) => b.g.t.localeCompare(a.g.t));
     const n = rows.length, w = rows.filter((x) => x.r.o > 0).length, l = rows.filter((x) => x.r.o < 0).length;
@@ -358,12 +391,25 @@ td.r,th.r{text-align:right}
       <div class="stat"><div class="k">勝－負${n - decided ? "－和" : ""}</div><div class="v num">${w}－${l}${n - decided ? "－" + (n - decided) : ""}</div></div>
       <div class="stat"><div class="k">勝率</div><div class="v num">${decided ? Math.round((w / decided) * 100) + "%" : "–"}</div></div>
       <div class="stat"><div class="k">損益（單位）</div><div class="v num ${cls}">${pl > 0 ? "+" : ""}${pl.toFixed(2)}</div></div>
-    </div><div class="tbl"><table><thead><tr><th>日期</th><th>比賽</th><th>訊號邊</th><th class="r">差距</th><th class="r">收盤賠率</th><th class="r">比分</th><th>結果</th><th class="r">損益</th></tr></thead><tbody>`;
-    for (const {g, sig, r} of rows) {
+    </div>`;
+    // 盤口逆向同方向確認的訊號另外統計；CLV 取平均
+    const conf = rows.filter((x) => x.rev === 1), cw = conf.filter((x) => x.r.o > 0).length, cl = conf.filter((x) => x.r.o < 0).length;
+    const cpl = conf.reduce((s, x) => s + x.r.pl, 0);
+    const cv = rows.filter((x) => x.clv != null), avgClv = cv.length ? cv.reduce((s, x) => s + x.clv, 0) / cv.length : null;
+    const sgn = (v, dp) => (v > 0 ? "+" : "") + v.toFixed(dp);
+    html += `<div class="substats">
+      <div><span class="k">盤口逆向也指向同一邊</span><span class="num">${conf.length} 場${conf.length ? `　${cw}－${cl}　損益 ${sgn(cpl, 2)}` : ""}</span></div>
+      <div><span class="k">平均 CLV</span><span class="num ${avgClv == null ? "" : avgClv > 0 ? "pos" : avgClv < 0 ? "neg" : ""}">${avgClv == null ? "–" : sgn(avgClv, 1) + "%"}</span><span class="k">（${cv.length} 場可算）</span></div>
+    </div>`;
+    html += `<div class="tbl"><table><thead><tr><th>日期</th><th>比賽</th><th>訊號邊</th><th class="r">差距</th><th>逆向</th><th class="r">收盤賠率</th><th class="r">CLV</th><th class="r">比分</th><th>結果</th><th class="r">損益</th></tr></thead><tbody>`;
+    for (const {g, sig, r, rev, clv: c} of rows) {
       const lab = state.mkt === "ou" ? `${sig.nm} ${sig.ln ?? ""}` : state.mkt === "sp" ? `${sig.nm} ${line(sig.ln)}` : sig.nm;
       const res = r.o > 0 ? `<span class="w">贏</span>` : r.o < 0 ? `<span class="l">輸</span>` : `<span class="p">和</span>`;
+      const rv = rev === 1 ? `<span class="w" title="盤口逆向也指向這一邊">同向</span>` : rev === -1 ? `<span class="l" title="盤口逆向指向另一邊">反向</span>` : `<span class="p">–</span>`;
       html += `<tr><td class="num">${fmtMD.format(new Date(g.t))}</td><td>${esc(g.away_zh || g.away_ab)} @ ${esc(g.home_zh || g.home_ab)}</td><td>${esc(lab)}</td>
-        <td class="r num">+${Math.round(sig.diff)}</td><td class="r num">${odd(sig.odds)}</td><td class="r num">${g.result.away}－${g.result.home}</td><td>${res}</td>
+        <td class="r num">+${Math.round(sig.diff)}</td><td>${rv}</td><td class="r num">${odd(sig.odds)}</td>
+        <td class="r num ${c == null ? "" : c > 0 ? "pos" : c < 0 ? "neg" : ""}">${c == null ? "–" : sgn(c, 1) + "%"}</td>
+        <td class="r num">${g.result.away}－${g.result.home}</td><td>${res}</td>
         <td class="r num">${r.pl > 0 ? "+" : ""}${r.pl.toFixed(2)}</td></tr>`;
     }
     $("backtest").innerHTML = html + "</tbody></table></div>";
