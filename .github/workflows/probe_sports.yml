@@ -17,55 +17,30 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Install
-        run: |
-          pip install playwright==1.47.0 requests==2.32.3
-          playwright install --with-deps chromium
       - name: Probe
         run: |
           mkdir -p docs/probe
           cat > probe.py <<'PY'
-          import json, time, requests
-          from playwright.sync_api import sync_playwright
-          SPORTS = ["mlb", "nfl", "ncaaf", "nba", "nhl", "ncaab"]
-          BOOKS = "sr%3Abook%3A17324%2Csr%3Abook%3A18149%2Csr%3Abook%3A28901%2Csr%3Abook%3A32219%2Csr%3Abook%3A18186"
-          def url(s, books=True):
-              return f"https://www.sportsbettingdime.com/wp-json/adpt/v1/{s}-odds?" + (f"books={BOOKS}&" if books else "") + "format=us"
-          def summ(body):
-              data = body.get("data", []) if isinstance(body, dict) else []
-              return {"count": len(data), "statuses": sorted({g.get("status") for g in data}),
-                      "first": data[:2], "books": sorted({b.get("name") for g in data for b in ((g.get("markets") or {}).get("moneyline") or {}).get("books", [])})}
-          out = {"direct": {}, "inpage": {}, "timing": {}}
-          for s in SPORTS:
+          import json, requests
+          H = {"User-Agent": "Mozilla/5.0"}
+          out = {}
+          r = requests.get("https://www.sportsbettingdime.com/wp-json/adpt/v1", timeout=30, headers=H)
+          out["index_status"] = r.status_code
+          try:
+              out["routes"] = sorted(r.json().get("routes", {}).keys())
+          except Exception as e:
+              out["routes_err"] = str(e); out["text"] = r.text[:500]
+          tries = {}
+          for name in ["cfb", "ncaafb", "college-football", "ncaa-football", "ncaa", "cbb", "ncaamb", "college-basketball", "ncaa-basketball", "wnba", "soccer", "epl", "mls", "ufc", "mma"]:
               try:
-                  r = requests.get(url(s), timeout=30, headers={"User-Agent": "Mozilla/5.0"})
-                  out["direct"][s] = {"status": r.status_code, **(summ(r.json()) if r.ok else {"text": r.text[:200]})}
+                  rr = requests.get(f"https://www.sportsbettingdime.com/wp-json/adpt/v1/{name}-odds?format=us", timeout=30, headers=H)
+                  n = len(rr.json().get("data", [])) if rr.ok else None
+                  tries[name] = [rr.status_code, n]
               except Exception as e:
-                  out["direct"][s] = {"error": str(e)}
-          t0 = time.time()
-          with sync_playwright() as p:
-              b = p.chromium.launch(headless=True)
-              pg = b.new_page()
-              try:
-                  pg.goto("https://www.sportsbettingdime.com/nfl/public-betting-trends/", wait_until="domcontentloaded", timeout=60000)
-              except Exception as e:
-                  out["goto_error"] = str(e)
-              out["timing"]["goto"] = time.time() - t0
-              for s in SPORTS:
-                  for books in (True, False):
-                      key = s + ("" if books else "_nobooks")
-                      try:
-                          res = pg.evaluate("async (u) => { const r = await fetch(u); return {status: r.status, body: r.ok ? await r.json() : await r.text()}; }", url(s, books))
-                          out["inpage"][key] = {"status": res["status"], **(summ(res["body"]) if res["status"] == 200 else {"text": str(res["body"])[:200]})}
-                      except Exception as e:
-                          out["inpage"][key] = {"error": str(e)}
-              out["timing"]["total"] = time.time() - t0
-              b.close()
-          json.dump(out, open("docs/probe/probe2.json", "w"), ensure_ascii=False, indent=1, default=str)
-          for k in ("direct", "inpage"):
-              for s, v in out[k].items():
-                  print(k, s, v.get("status"), v.get("count"), v.get("statuses"), v.get("books"), v.get("error"), v.get("text"))
-          print(out["timing"])
+                  tries[name] = str(e)
+          out["tries"] = tries
+          json.dump(out, open("docs/probe/probe3.json", "w"), ensure_ascii=False, indent=1)
+          print(json.dumps(out, indent=1)[:3000])
           PY
           python probe.py
       - name: Commit and push
