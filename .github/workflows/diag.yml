@@ -1,0 +1,35 @@
+name: Diag ESPN
+on:
+  push:
+    paths: [".github/workflows/diag.yml"]
+permissions:
+  contents: write
+jobs:
+  d:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: pip install requests==2.32.3
+      - run: |
+          mkdir -p docs/probe
+          python - > docs/probe/diag.txt 2>&1 <<'PY'
+          import traceback, requests
+          from datetime import datetime, timezone, timedelta
+          from sports_common import espn_events, SPORTS, ET
+          now = datetime.now(timezone.utc)
+          for s in SPORTS:
+              try:
+                  ev = espn_events(s, now - timedelta(days=1), now + timedelta(days=2))
+                  print(s, "OK", len(ev))
+              except Exception:
+                  print(s, "FAIL"); traceback.print_exc()
+          for params in [{"dates": "20260927-20260930"}, {"dates": "20260927-20260930", "limit": "1000"}, {"dates": "20260928"}, {"limit": "1000"}]:
+              r = requests.get("https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard", params=params, timeout=30, headers={"User-Agent": "Mozilla/5.0"})
+              print(params, r.status_code, r.text[:150].replace("\n", " "))
+          PY
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/probe && git commit -m "diag" && for i in 1 2 3; do git pull --rebase && git push && exit 0; sleep 10; done
