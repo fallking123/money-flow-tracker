@@ -15,19 +15,18 @@ jobs:
       - run: |
           mkdir -p docs/probe
           python - > docs/probe/diag.txt 2>&1 <<'PY'
-          import traceback, requests
-          from datetime import datetime, timezone, timedelta
-          from sports_common import espn_events, SPORTS, ET
-          now = datetime.now(timezone.utc)
-          for s in SPORTS:
-              try:
-                  ev = espn_events(s, now - timedelta(days=1), now + timedelta(days=2))
-                  print(s, "OK", len(ev))
-              except Exception:
-                  print(s, "FAIL"); traceback.print_exc()
-          for params in [{"dates": "20260927-20260930"}, {"dates": "20260927-20260930", "limit": "1000"}, {"dates": "20260928"}, {"limit": "1000"}]:
-              r = requests.get("https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard", params=params, timeout=30, headers={"User-Agent": "Mozilla/5.0"})
-              print(params, r.status_code, r.text[:150].replace("\n", " "))
+          import requests
+          U = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard"
+          FULL = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36"
+          for name, h in [("default", {}), ("short", {"User-Agent": "Mozilla/5.0"}), ("full", {"User-Agent": FULL})]:
+              for params in [{"dates": "20260927-20261004", "limit": "1000"}, {"dates": "20260928"}]:
+                  r = requests.get(U, params=params, headers=h, timeout=30)
+                  n = len(r.json().get("events", [])) if r.ok else None
+                  print(name, params, r.status_code, n)
+          r = requests.get("https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard", params={"dates": "20260927-20261004", "limit": "1000", "groups": "80"}, timeout=30)
+          print("ncaaf default", r.status_code, len(r.json().get("events", [])) if r.ok else None)
+          r = requests.get("https://geocoding-api.open-meteo.com/v1/search", params={"name": "Chicago", "count": 3}, headers={"User-Agent": "Mozilla/5.0"}, timeout=30)
+          print("geocode short", r.status_code, r.text[:120])
           PY
       - run: |
           git config user.name "github-actions[bot]"
