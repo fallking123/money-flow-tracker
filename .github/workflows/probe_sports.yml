@@ -25,50 +25,47 @@ jobs:
         run: |
           mkdir -p docs/probe
           cat > probe.py <<'PY'
-          import json, requests
+          import json, time, requests
           from playwright.sync_api import sync_playwright
-          SPORTS = ["mlb", "nfl", "ncaaf", "nba", "nhl", "ncaab", "wnba"]
-          out = {}
+          SPORTS = ["mlb", "nfl", "ncaaf", "nba", "nhl", "ncaab"]
+          BOOKS = "sr%3Abook%3A17324%2Csr%3Abook%3A18149%2Csr%3Abook%3A28901%2Csr%3Abook%3A32219%2Csr%3Abook%3A18186"
+          def url(s, books=True):
+              return f"https://www.sportsbettingdime.com/wp-json/adpt/v1/{s}-odds?" + (f"books={BOOKS}&" if books else "") + "format=us"
+          def summ(body):
+              data = body.get("data", []) if isinstance(body, dict) else []
+              return {"count": len(data), "statuses": sorted({g.get("status") for g in data}),
+                      "first": data[:2], "books": sorted({b.get("name") for g in data for b in ((g.get("markets") or {}).get("moneyline") or {}).get("books", [])})}
+          out = {"direct": {}, "inpage": {}, "timing": {}}
+          for s in SPORTS:
+              try:
+                  r = requests.get(url(s), timeout=30, headers={"User-Agent": "Mozilla/5.0"})
+                  out["direct"][s] = {"status": r.status_code, **(summ(r.json()) if r.ok else {"text": r.text[:200]})}
+              except Exception as e:
+                  out["direct"][s] = {"error": str(e)}
+          t0 = time.time()
           with sync_playwright() as p:
               b = p.chromium.launch(headless=True)
-              for s in SPORTS:
-                  info = {"urls": [], "samples": {}, "error": None}
-                  pg = b.new_page()
-                  def rec(r, info=info):
-                      if "/wp-json/" in r.url:
-                          info["urls"].append(f"{r.status} {r.url}")
-                          if "odds" in r.url and r.url not in info["samples"]:
-                              try:
-                                  body = r.json()
-                                  data = body.get("data", []) if isinstance(body, dict) else body
-                                  info["samples"][r.url] = {"keys": list(body.keys()) if isinstance(body, dict) else None,
-                                                            "count": len(data), "first": data[:2]}
-                              except Exception as e:
-                                  info["samples"][r.url] = {"err": str(e)}
-                  pg.on("response", rec)
-                  try:
-                      resp = pg.goto(f"https://www.sportsbettingdime.com/{s}/public-betting-trends/", wait_until="networkidle", timeout=90000)
-                      info["status"] = resp.status if resp else None
-                      pg.wait_for_timeout(3000)
-                  except Exception as e:
-                      info["error"] = str(e)
-                  pg.close()
-                  out[s] = info
-              b.close()
-          espn = {}
-          for s, path in {"nfl": "football/nfl", "ncaaf": "football/college-football", "nba": "basketball/nba",
-                          "nhl": "hockey/nhl", "ncaab": "basketball/mens-college-basketball", "wnba": "basketball/wnba",
-                          "mlb": "baseball/mlb"}.items():
+              pg = b.new_page()
               try:
-                  r = requests.get(f"https://site.api.espn.com/apis/site/v2/sports/{path}/scoreboard", timeout=20)
-                  j = r.json()
-                  ev = j.get("events", [])
-                  espn[s] = {"status": r.status_code, "events": len(ev), "first": ev[:1]}
+                  pg.goto("https://www.sportsbettingdime.com/nfl/public-betting-trends/", wait_until="domcontentloaded", timeout=60000)
               except Exception as e:
-                  espn[s] = {"error": str(e)}
-          json.dump({"sbd": out, "espn": espn}, open("docs/probe/probe.json", "w"), ensure_ascii=False, indent=1, default=str)
-          for s, i in out.items():
-              print(s, i.get("status"), i.get("error"), len(i["urls"]), {u[:90]: v.get("count") for u, v in i["samples"].items()})
+                  out["goto_error"] = str(e)
+              out["timing"]["goto"] = time.time() - t0
+              for s in SPORTS:
+                  for books in (True, False):
+                      key = s + ("" if books else "_nobooks")
+                      try:
+                          res = pg.evaluate("async (u) => { const r = await fetch(u); return {status: r.status, body: r.ok ? await r.json() : await r.text()}; }", url(s, books))
+                          out["inpage"][key] = {"status": res["status"], **(summ(res["body"]) if res["status"] == 200 else {"text": str(res["body"])[:200]})}
+                      except Exception as e:
+                          out["inpage"][key] = {"error": str(e)}
+              out["timing"]["total"] = time.time() - t0
+              b.close()
+          json.dump(out, open("docs/probe/probe2.json", "w"), ensure_ascii=False, indent=1, default=str)
+          for k in ("direct", "inpage"):
+              for s, v in out[k].items():
+                  print(k, s, v.get("status"), v.get("count"), v.get("statuses"), v.get("books"), v.get("error"), v.get("text"))
+          print(out["timing"])
           PY
           python probe.py
       - name: Commit and push
