@@ -1,0 +1,380 @@
+<title>資金流向看板</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+:root{
+  --ground:#EDF0F2; --surface:#FFFFFF; --sunk:#F5F7F8; --ink:#15212C; --muted:#5E6B78; --line:#D5DBE1;
+  --accent:#1F5FAD; --accent-ink:#FFFFFF; --money:#13805A; --money-soft:#DCEFE6; --public:#C2410C; --public-soft:#F8E3D8;
+  --bar-bet:#9AA6B2; --warn:#8A6100; --warn-soft:#F6EBCB;
+  --num:"Barlow Condensed","Noto Sans TC",system-ui,sans-serif;
+  --body:"Noto Sans TC",system-ui,-apple-system,"PingFang TC",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#0D141A; --surface:#151F28; --sunk:#111A22; --ink:#E4EAF0; --muted:#8C99A6; --line:#26323D;
+    --accent:#6AA7F0; --accent-ink:#0D141A; --money:#3FBF8A; --money-soft:#16352A; --public:#F07A4A; --public-soft:#3A2218;
+    --bar-bet:#5B6A78; --warn:#E3B54F; --warn-soft:#362C12;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#0D141A; --surface:#151F28; --sunk:#111A22; --ink:#E4EAF0; --muted:#8C99A6; --line:#26323D;
+  --accent:#6AA7F0; --accent-ink:#0D141A; --money:#3FBF8A; --money-soft:#16352A; --public:#F07A4A; --public-soft:#3A2218;
+  --bar-bet:#5B6A78; --warn:#E3B54F; --warn-soft:#362C12;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:0 40px}
+.wrap{max-width:760px;margin:0 auto}
+.num{font-family:var(--num);font-variant-numeric:tabular-nums}
+
+/* header */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--ground);padding-block:14px 10px;margin-inline:-16px;padding-inline:16px;border-bottom:1px solid var(--line)}
+.hrow{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;max-width:760px;margin:0 auto}
+h1{font-family:var(--num);font-weight:700;font-size:26px;letter-spacing:.02em;margin:0;text-wrap:balance}
+.updated{color:var(--muted);font-size:13px}
+.tabs{display:flex;gap:6px;overflow-x:auto;max-width:760px;margin:10px auto 0;scrollbar-width:none}
+.tab{font-family:var(--num);font-weight:600;font-size:17px;letter-spacing:.04em;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:4px 14px;cursor:pointer;white-space:nowrap;display:flex;gap:6px;align-items:center}
+.tab .c{color:var(--muted);font-weight:500}
+.tab[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.tab[aria-pressed="true"] .c{color:var(--accent-ink);opacity:.8}
+.tab:focus-visible,.seg button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* controls */
+.controls{display:grid;grid-template-columns:1fr auto;gap:12px 16px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:14px}
+.thr{display:flex;align-items:center;gap:10px;min-width:0}
+.thr label{font-size:13px;color:var(--muted);white-space:nowrap}
+.thr input{flex:1;min-width:0;accent-color:var(--accent)}
+.thr output{font-family:var(--num);font-weight:700;font-size:20px;min-width:3.2ch;text-align:right}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:var(--surface);color:var(--ink);font:500 14px var(--body);padding:5px 12px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.only{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);grid-column:1/-1}
+.only input{accent-color:var(--accent)}
+.legend{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+
+/* sections */
+h2{font-family:var(--num);font-weight:700;font-size:20px;letter-spacing:.03em;margin:26px 0 4px;text-wrap:balance}
+.sub{color:var(--muted);font-size:13px;margin:0 0 10px}
+.day{font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.06em;margin:16px 0 8px}
+.list{display:flex;flex-direction:column;gap:10px}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:18px;color:var(--muted);font-size:14px;text-align:center}
+
+/* game card */
+.game{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:10px}
+.game.sig{border-color:var(--money)}
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.when{font-family:var(--num);font-weight:600;font-size:18px}
+.when small{font-family:var(--body);font-size:12px;color:var(--muted);font-weight:400;margin-left:6px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:12px;border-radius:6px;padding:1px 7px;background:var(--sunk);color:var(--muted);white-space:nowrap}
+.chip.post{background:var(--warn-soft);color:var(--warn);font-weight:700}
+.chip.rev{background:var(--public-soft);color:var(--public);font-weight:700}
+.chip.lg{font-family:var(--num);font-weight:600;letter-spacing:.05em}
+.match{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.ab{font-family:var(--num);font-weight:700;font-size:22px;letter-spacing:.03em}
+.zh{font-size:14px;font-weight:500}
+.at{color:var(--muted);font-size:13px}
+.ctx{font-size:12px;color:var(--muted)}
+
+.side{display:grid;grid-template-columns:minmax(78px,auto) 1fr auto;gap:4px 10px;align-items:center}
+.side .nm{font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.side .nm .ln{font-family:var(--num);font-weight:600;color:var(--muted);margin-left:4px}
+.bars{display:grid;gap:3px}
+.bar{height:7px;border-radius:4px;background:var(--sunk);position:relative;overflow:hidden}
+.bar i{position:absolute;inset:0 auto 0 0;border-radius:4px}
+.bar.b i{background:var(--bar-bet)}
+.bar.m i{background:var(--accent)}
+.bars .lab{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);font-family:var(--num);letter-spacing:.02em}
+.diff{font-family:var(--num);font-weight:700;font-size:17px;border-radius:6px;padding:0 7px;min-width:48px;text-align:center}
+.diff.up{background:var(--money-soft);color:var(--money)}
+.diff.dn{background:var(--public-soft);color:var(--public)}
+.diff.nt{background:var(--sunk);color:var(--muted)}
+.odds{grid-column:2/-1;font-size:12px;color:var(--muted);font-family:var(--num);letter-spacing:.02em;margin-top:-2px}
+.odds b{color:var(--ink);font-weight:600}
+.spark{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted)}
+.spark svg{flex:1;height:30px;min-width:0}
+.na{font-size:13px;color:var(--muted)}
+
+/* backtest */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.stat{background:var(--surface);padding:10px 12px}
+.stat .k{font-size:12px;color:var(--muted)}
+.stat .v{font-family:var(--num);font-weight:700;font-size:24px;line-height:1.2}
+.stat .v.pos{color:var(--money)} .stat .v.neg{color:var(--public)}
+.tbl{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-top:10px}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:520px}
+th,td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:12px;color:var(--muted);font-weight:500;background:var(--sunk)}
+tr:last-child td{border-bottom:0}
+td.r,th.r{text-align:right}
+.w{color:var(--money);font-weight:700} .l{color:var(--public);font-weight:700} .p{color:var(--muted)}
+.note{font-size:12px;color:var(--muted);margin-top:10px;max-width:65ch}
+@media (max-width:480px){
+  .controls{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .ab{font-size:20px}
+}
+@media (prefers-reduced-motion:no-preference){ .bar i{transition:width .25s ease} }
+</style>
+
+<header>
+  <div class="hrow">
+    <h1>資金流向看板</h1>
+    <span class="updated" id="updated">讀取中…</span>
+  </div>
+  <div class="tabs" id="tabs" role="group" aria-label="運動"></div>
+</header>
+
+<main class="wrap">
+  <section class="controls" aria-label="篩選">
+    <div class="thr">
+      <label for="thr">訊號門檻</label>
+      <input type="range" id="thr" min="5" max="30" step="1" value="15">
+      <output id="thrv" for="thr" class="num">15%</output>
+    </div>
+    <div class="seg" id="mkt" role="group" aria-label="盤別">
+      <button type="button" data-m="ml" aria-pressed="true">獨贏</button>
+      <button type="button" data-m="sp" aria-pressed="false">讓分</button>
+      <button type="button" data-m="ou" aria-pressed="false">大小分</button>
+    </div>
+    <label class="only"><input type="checkbox" id="only"> 只看有訊號的比賽</label>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--bar-bet)"></i>下注人數 %</span>
+      <span><i class="sw" style="background:var(--accent)"></i>下注金額 %</span>
+      <span><i class="sw" style="background:var(--money)"></i>錢比人多（訊號）</span>
+      <span><i class="sw" style="background:var(--public)"></i>人比錢多（大眾熱門）</span>
+    </div>
+  </section>
+
+  <h2>即將開賽</h2>
+  <p class="sub">時間為台灣時間。賠率為美國莊家中間值（小數格式，跟台彩同一種寫法），箭頭左邊是開盤、右邊是現在。</p>
+  <div id="upcoming"></div>
+
+  <h2>最近結果</h2>
+  <p class="sub" id="btsub">用目前的門檻與盤別，回頭算最近完賽比賽：跟著「錢比人多」那一邊下注，每注 1 單位、以美國收盤賠率計算。</p>
+  <div id="backtest"></div>
+  <p class="note">場數還很少，結果主要是運氣，只能當參考。台彩賠率通常比美國低，實際在台彩的結果會比這裡差一些；等你開始傳台彩截圖，就能算出差距再扣掉。</p>
+</main>
+
+<script>
+(() => {
+  const MK = {ml: "獨贏", sp: "讓分", ou: "大小分"};
+  const SEASON = {preseason: "季前賽", postseason: "季後賽"};
+  const TZ = "Asia/Taipei";
+  const fmtDay = new Intl.DateTimeFormat("zh-TW", {timeZone: TZ, month: "numeric", day: "numeric", weekday: "short"});
+  const fmtTime = new Intl.DateTimeFormat("zh-TW", {timeZone: TZ, hour: "2-digit", minute: "2-digit", hour12: false});
+  const fmtMD = new Intl.DateTimeFormat("zh-TW", {timeZone: TZ, month: "numeric", day: "numeric"});
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem("mft:" + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem("mft:" + k, JSON.stringify(v)); } catch (e) {} },
+  };
+
+  const state = {sport: store.get("sport", "all"), thr: store.get("thr", 15), mkt: store.get("mkt", "ml"), only: store.get("only", false)};
+  let DATA = null;
+
+  const pct = (v) => (v == null ? "–" : Math.round(v) + "%");
+  const odd = (v) => (v == null ? "–" : v.toFixed(2));
+  const line = (v) => (v == null ? "" : (v > 0 ? "+" : "") + v);
+
+  // 各盤別的兩邊：[名稱, bet%, money%, 賠率, 盤口]
+  function sides(g, s, mkt) {
+    const a = s[mkt] || [];
+    if (mkt === "ml") return [
+      {key: "away", nm: g.away_zh || g.away_ab, bet: a[0], money: a[1], odds: a[4]},
+      {key: "home", nm: g.home_zh || g.home_ab, bet: a[2], money: a[3], odds: a[5]}];
+    if (mkt === "sp") return [
+      {key: "away", nm: g.away_zh || g.away_ab, bet: a[0], money: a[1], odds: a[5], ln: a[4]},
+      {key: "home", nm: g.home_zh || g.home_ab, bet: a[2], money: a[3], odds: a[6], ln: a[4] == null ? null : -a[4]}];
+    return [
+      {key: "over", nm: "大分", bet: a[0], money: a[1], odds: a[5], ln: a[4]},
+      {key: "under", nm: "小分", bet: a[2], money: a[3], odds: a[6], ln: a[4]}];
+  }
+  const diffOf = (sd) => (sd.bet == null || sd.money == null ? null : sd.money - sd.bet);
+
+  function signal(g, s, mkt, thr) {
+    const ss = sides(g, s, mkt);
+    for (const sd of ss) { const d = diffOf(sd); if (d != null && d >= thr) return {...sd, diff: d}; }
+    return null;
+  }
+  const closing = (g) => { const pre = g.snaps.filter((s) => s.hrs == null || s.hrs >= 0); return pre.length ? pre[pre.length - 1] : g.snaps[g.snaps.length - 1]; };
+  const latest = (g) => g.snaps[g.snaps.length - 1];
+
+  // 大眾那邊（bet% 較高）的賠率比開盤變長 → 盤口逆向移動（獨贏）
+  function reverseMove(g) {
+    const s = latest(g), a = s.ml;
+    if (!a || a[0] == null || !g.open.ml[0]) return null;
+    const pubAway = a[0] >= a[2];
+    const now = pubAway ? a[4] : a[5], open = pubAway ? g.open.ml[0] : g.open.ml[1];
+    const pubPct = pubAway ? a[0] : a[2];
+    if (now == null || open == null || pubPct < 55) return null;
+    return now - open >= 0.04 ? (pubAway ? g.away_zh || g.away_ab : g.home_zh || g.home_ab) : null;
+  }
+
+  function settle(g, sd, mkt) {
+    const r = g.result; if (!r || sd.odds == null) return null;
+    let o;
+    if (mkt === "ml") o = r.winner === "tie" ? 0 : (r.winner === sd.key ? 1 : -1);
+    else if (mkt === "sp") {
+      if (sd.ln == null) return null;
+      const m = sd.key === "away" ? r.away + sd.ln - r.home : r.home + sd.ln - r.away;
+      o = m > 0 ? 1 : m < 0 ? -1 : 0;
+    } else {
+      if (sd.ln == null) return null;
+      const m = r.total - sd.ln;
+      o = sd.key === "over" ? Math.sign(m) : -Math.sign(m);
+    }
+    return {o, pl: o > 0 ? sd.odds - 1 : o < 0 ? -1 : 0};
+  }
+
+  function sparkline(g, mkt, key, thr) {
+    const vals = g.snaps.map((s) => { const sd = sides(g, s, mkt).find((x) => x.key === key); return diffOf(sd); });
+    const pts = vals.map((v, i) => [i, v]).filter((p) => p[1] != null);
+    if (pts.length < 2) return "";
+    const W = 300, H = 30, lo = Math.min(-thr - 5, ...pts.map((p) => p[1])), hi = Math.max(thr + 5, ...pts.map((p) => p[1]));
+    const x = (i) => 3 + (i / (vals.length - 1)) * (W - 6), y = (v) => 3 + (1 - (v - lo) / (hi - lo)) * (H - 6);
+    const path = pts.map((p, j) => (j ? "L" : "M") + x(p[0]).toFixed(1) + " " + y(p[1]).toFixed(1)).join(" ");
+    const last = pts[pts.length - 1];
+    const col = last[1] >= thr ? "var(--money)" : last[1] <= -thr ? "var(--public)" : "var(--muted)";
+    return `<div class="spark"><span>走勢</span><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="金額減人數差距走勢">
+      <line x1="0" x2="${W}" y1="${y(0)}" y2="${y(0)}" stroke="var(--line)" stroke-width="1" fill="none"/>
+      <line x1="0" x2="${W}" y1="${y(thr)}" y2="${y(thr)}" stroke="var(--money)" stroke-width="1" stroke-dasharray="3 4" opacity=".5" fill="none"/>
+      <line x1="0" x2="${W}" y1="${y(-thr)}" y2="${y(-thr)}" stroke="var(--public)" stroke-width="1" stroke-dasharray="3 4" opacity=".5" fill="none"/>
+      <path d="${path}" stroke="${col}" stroke-width="2" fill="none" vector-effect="non-scaling-stroke"/>
+      <circle cx="${x(last[0])}" cy="${y(last[1])}" r="3" fill="${col}"/></svg><span>${g.snaps.length} 次</span></div>`;
+  }
+
+  function sideRow(sd, g, mkt, thr) {
+    const d = diffOf(sd);
+    const cls = d == null ? "nt" : d >= thr ? "up" : d <= -thr ? "dn" : "nt";
+    const openOdds = mkt === "ml" ? g.open.ml[sd.key === "away" ? 0 : 1] : null;
+    const openLn = mkt === "sp" ? (g.open.sp == null ? null : sd.key === "away" ? g.open.sp : -g.open.sp) : mkt === "ou" ? g.open.ou : null;
+    let oddsTxt = "";
+    if (mkt === "ml") oddsTxt = `賠率 ${odd(openOdds)} → <b>${odd(sd.odds)}</b>`;
+    else oddsTxt = `盤口 ${openLn == null ? "–" : (mkt === "sp" ? line(openLn) : openLn)} → <b>${sd.ln == null ? "–" : (mkt === "sp" ? line(sd.ln) : sd.ln)}</b>　賠率 <b>${odd(sd.odds)}</b>`;
+    return `<div class="side">
+      <div class="nm">${esc(sd.nm)}${mkt === "sp" && sd.ln != null ? `<span class="ln">${line(sd.ln)}</span>` : ""}</div>
+      <div class="bars">
+        <div class="bar b" title="下注人數"><i style="width:${sd.bet ?? 0}%"></i></div>
+        <div class="bar m" title="下注金額"><i style="width:${sd.money ?? 0}%"></i></div>
+        <div class="lab"><span>人數 ${pct(sd.bet)}</span><span>金額 ${pct(sd.money)}</span></div>
+      </div>
+      <div class="diff ${cls}">${d == null ? "–" : (d > 0 ? "+" : "") + Math.round(d)}</div>
+      <div class="odds">${oddsTxt}</div>
+    </div>`;
+  }
+
+  function gameCard(g) {
+    const s = latest(g), mkt = state.mkt, thr = state.thr;
+    const t = new Date(g.t), hrs = (t - Date.now()) / 36e5;
+    const ss = sides(g, s, mkt);
+    const sig = signal(g, s, mkt, thr);
+    const rev = reverseMove(g);
+    const chips = [];
+    if (state.sport === "all") chips.push(`<span class="chip lg">${g.sport.toUpperCase()}</span>`);
+    if (SEASON[g.season]) chips.push(`<span class="chip ${g.season === "postseason" ? "post" : ""}">${SEASON[g.season]}</span>`);
+    if (g.series) chips.push(`<span class="chip">${esc(g.series)}</span>`);
+    if (rev) chips.push(`<span class="chip rev" title="大眾下注的那一邊，賠率反而比開盤變高">盤口逆向：${esc(rev)}</span>`);
+    const other = ["ml", "sp", "ou"].filter((m) => m !== mkt && signal(g, s, m, thr)).map((m) => MK[m]);
+    if (other.length) chips.push(`<span class="chip">${other.join("、")}也有訊號</span>`);
+    const rel = g.status === "started" ? "已開賽" : hrs < 1 ? `${Math.max(1, Math.round(hrs * 60))} 分鐘後` : hrs < 48 ? `${Math.round(hrs)} 小時後` : `${Math.round(hrs / 24)} 天後`;
+    const c = g.ctx;
+    let ctx = "";
+    if (c) {
+      const bits = [];
+      if (c.away_p || c.home_p) bits.push(`先發 ${esc(c.away_p || "?")} vs ${esc(c.home_p || "?")}`);
+      if (c.indoor) bits.push("室內");
+      else if (c.temp_f != null) bits.push(`${Math.round((c.temp_f - 32) * 5 / 9)}°C　風 ${Math.round(c.wind_mph * 1.609)} km/h　降雨 ${c.precip ?? "–"}%`);
+      if (bits.length) ctx = `<div class="ctx">${bits.join("　·　")}</div>`;
+    }
+    const hasData = ss.some((x) => x.bet != null);
+    return `<article class="game${sig ? " sig" : ""}">
+      <div class="top"><div class="when num">${fmtTime.format(t)}<small>${rel}</small></div><div class="chips">${chips.join("")}</div></div>
+      <div class="match"><span class="ab">${esc(g.away_ab)}</span><span class="zh">${esc(g.away_zh)}</span><span class="at">@</span><span class="ab">${esc(g.home_ab)}</span><span class="zh">${esc(g.home_zh)}</span></div>
+      ${ctx}
+      ${hasData ? ss.map((sd) => sideRow(sd, g, mkt, thr)).join("") + sparkline(g, mkt, ss[0].key, thr) : `<div class="na">網站還沒有這個盤的下注比例</div>`}
+    </article>`;
+  }
+
+  function inSport(g) { return state.sport === "all" || g.sport === state.sport; }
+
+  function renderUpcoming() {
+    const list = DATA.games.filter((g) => inSport(g) && (g.status === "upcoming" || g.status === "started"))
+      .filter((g) => !state.only || signal(g, latest(g), state.mkt, state.thr));
+    if (!list.length) { $("upcoming").innerHTML = `<div class="empty">${state.only ? "目前沒有達到門檻的比賽，可以把門檻調低看看" : "這個運動目前沒有即將開賽的比賽（休賽期或還沒到記錄時間）"}</div>`; return; }
+    let html = "", day = "";
+    for (const g of list) {
+      const d = fmtDay.format(new Date(g.t));
+      if (d !== day) { if (day) html += "</div>"; html += `<div class="day">${d}</div><div class="list">`; day = d; }
+      html += gameCard(g);
+    }
+    $("upcoming").innerHTML = html + "</div>";
+  }
+
+  function renderBacktest() {
+    const rows = [];
+    for (const g of DATA.games) {
+      if (!inSport(g) || g.status !== "final" || !g.result) continue;
+      const s = closing(g), sig = signal(g, s, state.mkt, state.thr);
+      if (!sig) continue;
+      const r = settle(g, sig, state.mkt);
+      if (r) rows.push({g, sig, r});
+    }
+    rows.sort((a, b) => b.g.t.localeCompare(a.g.t));
+    const n = rows.length, w = rows.filter((x) => x.r.o > 0).length, l = rows.filter((x) => x.r.o < 0).length;
+    const pl = rows.reduce((s, x) => s + x.r.pl, 0);
+    const decided = w + l;
+    $("btsub").textContent = `目前的條件：${MK[state.mkt]}、門檻 ${state.thr}%。回頭算最近完賽的比賽：跟著「錢比人多」那一邊下注，每注 1 單位、以美國收盤賠率計算。`;
+    if (!n) { $("backtest").innerHTML = `<div class="empty">最近完賽的比賽裡，沒有達到這個門檻的訊號</div>`; return; }
+    const cls = pl > 0 ? "pos" : pl < 0 ? "neg" : "";
+    let html = `<div class="stats">
+      <div class="stat"><div class="k">訊號場數</div><div class="v num">${n}</div></div>
+      <div class="stat"><div class="k">勝－負${n - decided ? "－和" : ""}</div><div class="v num">${w}－${l}${n - decided ? "－" + (n - decided) : ""}</div></div>
+      <div class="stat"><div class="k">勝率</div><div class="v num">${decided ? Math.round((w / decided) * 100) + "%" : "–"}</div></div>
+      <div class="stat"><div class="k">損益（單位）</div><div class="v num ${cls}">${pl > 0 ? "+" : ""}${pl.toFixed(2)}</div></div>
+    </div><div class="tbl"><table><thead><tr><th>日期</th><th>比賽</th><th>訊號邊</th><th class="r">差距</th><th class="r">收盤賠率</th><th class="r">比分</th><th>結果</th><th class="r">損益</th></tr></thead><tbody>`;
+    for (const {g, sig, r} of rows) {
+      const lab = state.mkt === "ou" ? `${sig.nm} ${sig.ln ?? ""}` : state.mkt === "sp" ? `${sig.nm} ${line(sig.ln)}` : sig.nm;
+      const res = r.o > 0 ? `<span class="w">贏</span>` : r.o < 0 ? `<span class="l">輸</span>` : `<span class="p">和</span>`;
+      html += `<tr><td class="num">${fmtMD.format(new Date(g.t))}</td><td>${esc(g.away_zh || g.away_ab)} @ ${esc(g.home_zh || g.home_ab)}</td><td>${esc(lab)}</td>
+        <td class="r num">+${Math.round(sig.diff)}</td><td class="r num">${odd(sig.odds)}</td><td class="r num">${g.result.away}－${g.result.home}</td><td>${res}</td>
+        <td class="r num">${r.pl > 0 ? "+" : ""}${r.pl.toFixed(2)}</td></tr>`;
+    }
+    $("backtest").innerHTML = html + "</tbody></table></div>";
+  }
+
+  function renderTabs() {
+    const up = (k) => DATA.games.filter((g) => (k === "all" || g.sport === k) && (g.status === "upcoming" || g.status === "started")).length;
+    const keys = ["all", ...Object.keys(DATA.sports)];
+    if (!keys.includes(state.sport)) state.sport = "all";
+    $("tabs").innerHTML = keys.map((k) => `<button type="button" class="tab" data-s="${k}" aria-pressed="${k === state.sport}">${k === "all" ? "全部" : k.toUpperCase()}<span class="c">${up(k)}</span></button>`).join("");
+  }
+
+  function render() {
+    $("thr").value = state.thr; $("thrv").textContent = state.thr + "%"; $("only").checked = state.only;
+    document.querySelectorAll("#mkt button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.m === state.mkt)));
+    renderTabs(); renderUpcoming(); renderBacktest();
+  }
+
+  $("tabs").addEventListener("click", (e) => { const b = e.target.closest(".tab"); if (!b) return; state.sport = b.dataset.s; store.set("sport", state.sport); render(); });
+  $("thr").addEventListener("input", (e) => { state.thr = +e.target.value; store.set("thr", state.thr); render(); });
+  $("mkt").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; state.mkt = b.dataset.m; store.set("mkt", state.mkt); render(); });
+  $("only").addEventListener("change", (e) => { state.only = e.target.checked; store.set("only", state.only); render(); });
+
+  function boot(d) {
+    DATA = d;
+    const gen = new Date(d.generated_utc);
+    $("updated").textContent = "資料更新：" + fmtMD.format(gen) + " " + fmtTime.format(gen);
+    render();
+  }
+  const inline = document.getElementById("data");
+  if (inline && inline.textContent.trim()) boot(JSON.parse(inline.textContent));
+  else fetch("data.json", {cache: "no-store"}).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(boot)
+    .catch(() => { $("updated").textContent = "資料讀取失敗"; $("upcoming").innerHTML = `<div class="empty">讀不到資料檔。請跟 Claude 說「更新儀表板」。</div>`; });
+})();
+</script>
