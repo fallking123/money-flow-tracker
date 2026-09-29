@@ -1,0 +1,43 @@
+name: Scrape soccer (money flow + European odds)
+
+# 足球：每小時跑一次；程式自己依距離開賽時間決定要不要記（越接近開賽越密）
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "25 * * * *"
+  push:
+    paths:
+      - scrape_soccer.py
+      - .github/workflows/scrape_soccer.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: scrape-soccer
+  cancel-in-progress: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install requests==2.32.3
+      - name: Run soccer scraper
+        run: python scrape_soccer.py
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data
+          if git diff --cached --quiet; then echo "沒有新資料"; exit 0; fi
+          git commit -m "足球資料更新"
+          for i in 1 2 3 4 5; do
+            git pull --rebase && git push && exit 0
+            sleep 15
+          done
+          exit 1
