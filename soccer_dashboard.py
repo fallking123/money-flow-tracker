@@ -132,26 +132,55 @@ def model_params():
     return _PARAMS
 
 
-def predict(league, home, away, odds):
-    """回傳 [主, 和, 客] 機率；賠率不齊或對不到隊伍 Elo 就回傳 None"""
+CLOSE_HOURS = 3   # 開賽前幾小時內改用「臨場版」模型（配即時賠率）
+
+
+def predict(league, home, away, odds, version="pre"):
+    """回傳 [主, 和, 客] 機率；賠率不齊或對不到隊伍分數就回傳 None
+    version：pre＝賽前版（配歐洲賽前平均賠率訓練）；close＝臨場版（配收盤賠率訓練）"""
     P = model_params()
-    if not P or not odds or any(o is None or o <= 1 for o in odds):
+    M = P.get(version) if P else None
+    if not M or not odds or any(o is None or o <= 1 for o in odds):
         return None
     elo = P["elo"].get(league) or {}
+    pi = (P.get("pi") or {}).get(league) or {}
     th, ta = best_team(home, elo), best_team(away, elo)
     if not th or not ta or th == ta:
         return None
     inv = [1 / o for o in odds]
     tot = sum(inv)
     ph, pd_, pa = (x / tot for x in inv)
-    x = {"lm_h": math.log(ph / pa), "lm_d": math.log(pd_ / pa), "elo_diff": elo[th] + P["elo_home"] - elo[ta]}
-    z = [(x[f] - m) / sc for f, m, sc in zip(P["features"], P["mean"], P["scale"])]
-    logits = [sum(w * v for w, v in zip(ws, z)) + b for ws, b in zip(P["coef"], P["intercept"])]
+    lh, ld = math.log(ph / pa), math.log(pd_ / pa)
+    x = {"lm_h": lh, "lm_d": ld, "lc_h": lh, "lc_d": ld, "elo_diff": elo[th] + P["elo_home"] - elo[ta],
+         "pi_diff": (pi[th][0] - pi[ta][1]) if th in pi and ta in pi else 0.0}
+    z = [(x[f] - m) / sc for f, m, sc in zip(M["features"], M["mean"], M["scale"])]
+    logits = [sum(w * v for w, v in zip(ws, z)) + b for ws, b in zip(M["coef"], M["intercept"])]
     mx = max(logits)
     ex = [math.exp(v - mx) for v in logits]
-    prob = dict(zip(P["classes"], (e / sum(ex) for e in ex)))
-    return {"p": [round(prob["H"], 4), round(prob["D"], 4), round(prob["A"], 4)],
-            "elo": [elo[th], elo[ta]], "mkt": [round(ph, 4), round(pd_, 4), round(pa, 4)]}
+    prob = dict(zip(M["classes"], (e / sum(ex) for e in ex)))
+    return {"p": [round(prob["H"], 4), round(prob["D"], 4), round(prob["A"], 4)], "v": version,
+            "elo": [elo[th], elo[ta]], "mkt": [round(ph, 4), round(pd_, 4), round(pa, 4)], "teams": [th, ta]}
+
+
+def model_for(league, home, away, last, eu):
+    """挑模型版本和賠率來源（要跟訓練時用的賠率一致）：
+    - 開賽前 3 小時內：臨場版＋Action Network 即時共識賠率（最接近收盤）
+    - 其他時候有歐洲賠率：賽前版＋歐洲各家平均（跟訓練資料同一種）
+    - 歐洲賠率還沒出：賽前版＋美國共識賠率（暫代）"""
+    an = [num(last.get("ml_home_odds")), num(last.get("ml_draw_odds")), num(last.get("ml_away_odds"))]
+    hrs = num(last.get("hours_until_game"))
+    tries = []
+    if hrs is not None and 0 <= hrs <= CLOSE_HOURS:
+        tries.append(("close", an, "live"))
+    if eu and all(eu.get("avg") or [None]):
+        tries.append(("pre", eu["avg"], "eu"))
+    tries.append(("pre", an, "us"))
+    for version, odds, src in tries:
+        r = predict(league, home, away, odds, version)
+        if r:
+            r["src"] = src
+            return r
+    return None
 
 
 def color(c, team=""):
@@ -248,7 +277,7 @@ def game_of(aid, rows, res, now, snaps_k=None):
         "away_ab": last.get("away_abbr") or away[:3].upper(), "home_ab": last.get("home_abbr") or home[:3].upper(),
         "away_c": [ac, ac] if ac else None, "home_c": [hc, hc] if hc else None,
         "status": status, "open": open_of(rows[0]),
-        "model": predict(last["league"], home, away, [num(last.get("ml_home_odds")), num(last.get("ml_draw_odds")), num(last.get("ml_away_odds"))]) if status != "final" else None,
+        "model": None,   # build_soccer 對到歐洲賠率之後再算（model_for）
         "snaps": [snap_of(r) for r in (thin(pre, snaps_k) if snaps_k else rows[-40:])],
         "result": None if status != "final" else {
             "away": num(res["away_score"]), "home": num(res["home_score"]), "winner": res["winner"],
@@ -271,6 +300,9 @@ def build_soccer(now, recent_days=14, closed_snaps=8):
     for aid, rows in recent.items():
         g = game_of(aid, rows, results.get(aid), now)
         g["eu"] = match_eu(by_day, g["league"], parse_time(rows[-1]["game_time_utc"]), g["home"], g["away"])
+        if g["status"] != "final":
+            last = max(rows, key=lambda r: r["timestamp_utc"])
+            g["model"] = model_for(g["league"], g["home"], g["away"], last, g["eu"])
         games.append(g)
     allrows = {}
     for path in all_monthly_files("soccer", "odds_history"):
@@ -301,5 +333,6 @@ def stats():
     if os.path.exists(rp):
         r = json.load(open(rp, encoding="utf-8"))
         rep = {k: r.get(k) for k in ("generated_utc", "train_games", "test_games", "test_seasons", "accuracy", "hit_rate",
-                                     "calibration", "betting", "base_rates", "base_rates_by_league", "by_league", "features")}
+                                     "calibration", "calibration_close", "betting", "base_rates", "base_rates_by_league", "by_league",
+                                     "features", "features_close", "settings")}
     return {"snaps": snaps, "games": len(ids), "finals": fin, "history_games": hist, "model": rep}

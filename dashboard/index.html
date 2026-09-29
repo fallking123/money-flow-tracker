@@ -565,7 +565,8 @@ table{border-collapse:collapse;width:100%}
       }
       if (soc && mkt === "ml" && g.model) {
         const P = g.model.p, Mk = g.model.mkt, f = (v) => Math.round(v * 100) + "%";
-        h += `<div class="mdl"><b>模型估計</b>主 ${f(P[0])}・和 ${f(P[1])}・客 ${f(P[2])}<small>美國莊家：主 ${f(Mk[0])}・和 ${f(Mk[1])}・客 ${f(Mk[2])}（第一層模型，還沒加資金流向）</small></div>`;
+        const SRC = {eu: ["賽前版", "歐洲各家平均賠率"], live: ["臨場版", "開賽前最新賠率"], us: ["賽前版", "美國莊家賠率（歐洲賠率還沒出，先代用）"]}[g.model.src] || ["", "莊家"];
+        h += `<div class="mdl"><b>模型估計${SRC[0] ? "・" + SRC[0] : ""}</b>主 ${f(P[0])}・和 ${f(P[1])}・客 ${f(P[2])}<small>${SRC[1]}：主 ${f(Mk[0])}・和 ${f(Mk[1])}・客 ${f(Mk[2])}（第一層模型，還沒加資金流向）</small></div>`;
       }
       // 拉鋸條：兩選一或三選一（足球獨贏有和局）
       const order = soc && mkt === "ml" ? ["home", "draw", "away"] : ss.map((x) => x.key);
@@ -905,26 +906,32 @@ table{border-collapse:collapse;width:100%}
       {s: "done", t: "收集資料", l: "進行中", p: `自動抓每場比賽的下注人數和金額、賠率、比分、天氣、先發投手。目前 ${st.snaps ?? 0} 次截圖、${st.games ?? 0} 場比賽。`},
       {s: "done", t: "整理資料", l: "進行中", p: "隊名對照、比分自動回填、讓分正負號校正、缺的盤自動補抓。"},
       {s: "doing", t: "整理成模型用的格式", l: "累積中", p: `每場比賽記下 ${st.n_features ?? "–"} 種每個運動都有的資料，再加上各運動自己特別要看的（投手、門將、背靠背、傷兵…），這些就是「特徵值」。清單在下面。`},
-      {s: "doing", t: "訓練模型", l: "足球第一版完成", p: `足球用過去五季歷史先做好第一層（成績在下面）。美國四大運動每個至少要 ${goal} 場打完的比賽，現在 ${fin} 場。`, prog: fin / goal},
+      {s: "doing", t: "訓練模型", l: "足球第一層完成", p: `足球用 2014 年起的歷史（含次級聯賽）做好第一層（成績在下面）。美國四大運動每個至少要 ${goal} 場打完的比賽，現在 ${fin} 場。`, prog: fin / goal},
       {s: "wait", t: "找划算的注", l: "等模型", p: `模型估的勝率 × 台彩賠率 > 1 才建議下。還需要更多台彩賠率記錄（目前 ${twN} 筆）。`},
     ];
     let h = `<div class="card"><h3>我們走到哪一步了</h3><div class="steps">${steps.map((x, i) => `<div class="step ${x.s}"><div class="no">${x.s === "done" ? "✓" : i + 1}</div><div><h4>${x.t}<span class="st">${x.l}</span></h4><p>${x.p}</p>${x.prog != null ? `<div class="track"><i style="width:${Math.min(100, x.prog * 100)}%"></i></div>` : ""}</div></div>`).join("")}</div></div>`;
     const sm = st.soccer_model;
     if (sm && sm.accuracy) {
       const A = sm.accuracy, U = A.uniform.logloss, gain = (x) => (x ? (U - x.logloss) / U * 100 : null);
-      const rows = [["只看球隊數據", gain(A.team_only), "var(--band)"], ["賽前賠率（莊家）", gain(A.market), "var(--band)"],
-                    ["我們的模型", gain(A.model), "var(--accent)"], ["收盤賠率（天花板）", gain(A.closing), "var(--good)"]];
-      const mx = Math.max(...rows.map((r) => r[1] || 0));
+      const rows = [["只看球隊數據", gain(A.team_only), "var(--band)"],
+                    ["賽前賠率（莊家）", gain(A.market), "var(--band)"], ["模型・賽前版", gain(A.model), "var(--accent)"],
+                    ["收盤賠率（莊家）", gain(A.closing), "var(--band)"], ["模型・臨場版", gain(A.model_close), "var(--good)"]];
+      const mn = Math.min(...rows.map((r) => r[1] ?? 99)), mx = Math.max(...rows.map((r) => r[1] || 0));
+      const w = (v) => v == null ? 0 : 8 + (v - mn) / Math.max(0.01, mx - mn) * 92;   // 差距很小，放大看
       const b5 = (sm.betting.avg || {})["0.05"] || {}, t0 = (sm.betting.tw || {})["0.0"] || {}, m0 = (sm.betting.max || {})["0.0"] || {};
-      h += `<div class="card"><h3>足球模型第一版（獨贏）<small>訓練 ${sm.train_games.toLocaleString("en-US")} 場，測試 ${sm.test_games.toLocaleString("en-US")} 場（模型沒看過的 ${esc((sm.test_seasons || []).join("、"))} 季）</small></h3>
-        <p class="mut" style="margin:0 0 8px;font-size:13.5px">比「亂猜（主和客各 1/3）」準多少，越長越準：</p>
-        ${rows.map(([n, v, c]) => `<div class="mbar"><span>${n}</span><div class="tr"><i style="width:${v == null ? 0 : Math.max(2, v / mx * 100)}%;background:${c}"></i></div><span class="n">${v == null ? "–" : v.toFixed(1) + "%"}</span></div>`).join("")}
+      const luck = (r) => r.se != null && Math.abs(r.roi) < 2 * r.se;
+      const S = sm.settings || {};
+      h += `<div class="card"><h3>足球模型第一層（獨贏）<small>訓練 ${sm.train_games.toLocaleString("en-US")} 場，測試 ${sm.test_games.toLocaleString("en-US")} 場（模型沒看過的 ${esc((sm.test_seasons || []).join("、"))} 季）</small></h3>
+        <p class="mut" style="margin:0 0 8px;font-size:13.5px">比「亂猜（主和客各 1/3）」準多少。大家差距都很小，長條有放大：</p>
+        ${rows.map(([n, v, c]) => `<div class="mbar"><span>${n}</span><div class="tr"><i style="width:${w(v)}%;background:${c}"></i></div><span class="n">${v == null ? "–" : v.toFixed(2) + "%"}</span></div>`).join("")}
         <div class="gl" style="margin-top:12px">
-          <div><b>準度：跟莊家差不多</b>模型比賽前賠率準一點點，大約追平收盤賠率。光看球隊數據明顯比較差，代表莊家的賠率本身已經很準。</div>
-          <div><b>機率很誠實</b>${(sm.calibration || []).slice(4, 6).map((c) => `模型說 ${c.pred}% 的時候，實際開出 ${c.real}%`).join("；")}。說幾成就真的大約幾成，可以拿來判斷賠率划不划算。</div>
-          <div><b>在歐洲賠率下注：還看不出穩賺</b>只挑模型覺得最划算的 ${b5.n ?? "–"} 注，投報率 ${b5.roi ?? "–"}%，但注數太少、大多是和局，可能只是運氣。用歐洲最高賠率全部照模型下（${m0.n ?? "–"} 注）大約打平（${m0.roi ?? "–"}%）。</div>
-          <div><b>在台彩：幾乎沒有注可以下</b>台彩賠率大約只有歐洲的 9 成，扣掉之後整整兩季只剩 ${t0.n ?? "–"} 注划算。單靠這一層模型，在台彩獨贏很難賺。</div>
-          <div><b>下一步</b>第二層：等足球資金流向累積，看「錢比人多」能不能在模型之上再多加一點準度。也要用你記的台彩足球賠率，校正「台彩約歐洲 9 成」這個估計。</div>
+          <div><b>兩個版本</b>賽前版：開賽前一兩天用，配歐洲各家平均賠率。臨場版：看板更新時，離開賽 3 小時內的比賽自動換成這版，配最新賠率。越接近開賽，傷兵、先發名單都已經反映在賠率裡，所以越準。要在台彩下注，越接近開賽再看越好。</div>
+          <div><b>準度</b>賽前版比賽前賠率準一點；臨場版比收盤賠率還準一點點。差距很小，還不能說一定贏過莊家，但至少沒有比較差。</div>
+          <div><b>機率很誠實</b>${(sm.calibration || []).slice(4, 6).map((c) => `模型說 ${c.pred}% 的時候，實際開出 ${c.real}%`).join("；")}。說幾成就真的大約幾成。</div>
+          <div><b>在歐洲賠率下注：還看不出穩賺</b>用歐洲最高賠率照模型下（${m0.n ?? "–"} 注，大多押和局），投報率 ${m0.roi ?? "–"}%${luck(m0) ? "，還在運氣可以解釋的範圍" : ""}。只挑最有把握的 ${b5.n ?? "–"} 注，注數太少不能當真。</div>
+          <div><b>在台彩：幾乎沒有注可以下</b>台彩賠率大約只有歐洲的 9 成，扣掉之後兩季只剩 ${t0.n ?? "–"} 注划算。單靠這一層，在台彩獨贏很難賺。</div>
+          <div><b>這一版改了什麼</b>歷史從 5 季加到 ${S.history_from ? "20" + S.history_from.slice(0, 2) + " 年起" : "更多季"}，加入英冠、西乙、義乙、德乙、法乙，升級隊一上來就有合理的強弱分數；多一個看淨勝球的分數（pi-rating）；多一個臨場版。</div>
+          <div><b>下一步</b>第二層：等足球資金流向累積，看「錢比人多」能不能再多加一點準度。也要用你記的台彩足球賠率，校正「台彩約歐洲 9 成」這個估計。</div>
         </div></div>`;
     }
     h += `<div class="card"><h3>名詞白話說明</h3><div class="gl">

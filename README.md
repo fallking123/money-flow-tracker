@@ -47,7 +47,9 @@
 | `scrape_soccer.py` | `scrape_soccer.yml` | 足球資金流向、歐洲賠率、賽果 | 每小時（程式依距離開賽決定要不要記） |
 
 資料來源：SportsBettingDime（資金流向與賠率）、ESPN（賽程、比分、傷兵、戰績）、Open-Meteo（天氣）。
-足球另外用：Action Network（1X2／讓球／大小／單隊大小的人數%、金額%）、football-data.co.uk（歐洲各家賠率；本季與過去五季完整賽果＋收盤賠率，存在 `docs/data/soccer/eu/`）。
+足球另外用：Action Network（1X2／讓球／大小／單隊大小的人數%、金額%）、football-data.co.uk（歐洲各家賠率；2014/15 季起五大聯賽＋次級聯賽完整賽果＋收盤賠率，存在 `docs/data/soccer/eu/`）。
+
+足球模型（`soccer_model.py`，每週二、五自動重練）：獨贏第一層＝賠率去水＋Elo＋pi-rating，分「賽前版」（配歐洲賽前平均賠率）和「臨場版」（配收盤／開賽前 3 小時內的即時賠率）。細節寫在程式開頭的說明。
 
 ## 之後可以做（先不急，等資料量夠）
 
