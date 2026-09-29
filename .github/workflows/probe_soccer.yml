@@ -1,0 +1,53 @@
+name: Probe soccer sources
+
+# 一次性探測：足球的資金流向、賠率、賽程比分來源。推送這個檔案就會跑一次，結果寫到 docs/probe/soccer.txt
+on:
+  workflow_dispatch: {}
+  push:
+    paths:
+      - .github/workflows/probe_soccer.yml
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probe
+        run: |
+          mkdir -p docs/probe
+          out=docs/probe/soccer.txt
+          : > $out
+          UA="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15"
+          probe() {
+            echo "== $1" >> $out
+            curl -s -L -o /tmp/o -w "HTTP %{http_code} size %{size_download}\n" -A "$UA" --max-time 25 "$1" >> $out 2>&1 || echo "連線失敗" >> $out
+            head -c ${2:-500} /tmp/o | tr '\n' ' ' >> $out; echo >> $out; echo >> $out
+          }
+          B="books=sr%3Abook%3A17324%2Csr%3Abook%3A18149%2Csr%3Abook%3A28901&format=us"
+          for s in epl soccer premier-league champions-league ucl laliga la-liga serie-a bundesliga ligue-1 mls; do
+            probe "https://www.sportsbettingdime.com/wp-json/adpt/v1/$s-odds?$B" 300
+          done
+          for s in soccer epl; do probe "https://api.actionnetwork.com/web/v1/scoreboard/$s?bookIds=15,30" 300; done
+          probe "https://api.actionnetwork.com/web/v1/leagues" 1500
+          for l in eng.1 esp.1 ita.1 ger.1 fra.1 uefa.champions; do probe "https://site.api.espn.com/apis/site/v2/sports/soccer/$l/scoreboard" 200; done
+          # ESPN 足球有沒有附賠率
+          curl -s "https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard" -o /tmp/e.json
+          python3 -c "
+          import json;d=json.load(open('/tmp/e.json'))
+          ev=(d.get('events') or [{}])[0]; c=(ev.get('competitions') or [{}])[0]
+          print('ESPN eng.1 first event:', ev.get('name'), ev.get('date'))
+          print('odds:', json.dumps(c.get('odds'))[:800])
+          " >> $out 2>&1
+          for u in https://www.football-data.co.uk/robots.txt https://www.oddsportal.com/robots.txt https://www.betexplorer.com/robots.txt; do probe "$u" 600; done
+          probe "https://www.betexplorer.com/football/england/premier-league/" 300
+          cat $out
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/probe
+          git commit -m "探測足球資料來源" || exit 0
+          for i in 1 2 3 4 5; do git pull --rebase && git push && exit 0; sleep 10; done
