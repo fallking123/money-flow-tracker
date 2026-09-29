@@ -1,47 +1,36 @@
-== an_epl_20261002.json 5411 https://api.actionnetwork.com/web/v2/scoreboard/epl?bookIds=15,30,68,69,71,75,76,79,123&date=20261002
-== an_epl_20261003.json 5411 https://api.actionnetwork.com/web/v2/scoreboard/epl?bookIds=15,30,68,69,71,75,76,79,123&date=20261003
-== an_epl_20261004.json 5411 https://api.actionnetwork.com/web/v2/scoreboard/epl?bookIds=15,30,68,69,71,75,76,79,123&date=20261004
-== an_laliga_20261002.json 8049 https://api.actionnetwork.com/web/v2/scoreboard/laliga?bookIds=15,30,68,69,71,75,76,79,123&date=20261002
-== an_laliga_20261003.json 8049 https://api.actionnetwork.com/web/v2/scoreboard/laliga?bookIds=15,30,68,69,71,75,76,79,123&date=20261003
-== an_laliga_20261004.json 8049 https://api.actionnetwork.com/web/v2/scoreboard/laliga?bookIds=15,30,68,69,71,75,76,79,123&date=20261004
-== an_seriea_20261002.json 7941 https://api.actionnetwork.com/web/v2/scoreboard/seriea?bookIds=15,30,68,69,71,75,76,79,123&date=20261002
-== an_seriea_20261003.json 7941 https://api.actionnetwork.com/web/v2/scoreboard/seriea?bookIds=15,30,68,69,71,75,76,79,123&date=20261003
-== an_seriea_20261004.json 7941 https://api.actionnetwork.com/web/v2/scoreboard/seriea?bookIds=15,30,68,69,71,75,76,79,123&date=20261004
-== an_bundesliga_20261002.json 7352 https://api.actionnetwork.com/web/v2/scoreboard/bundesliga?bookIds=15,30,68,69,71,75,76,79,123&date=20261002
-== an_bundesliga_20261003.json 7352 https://api.actionnetwork.com/web/v2/scoreboard/bundesliga?bookIds=15,30,68,69,71,75,76,79,123&date=20261003
-== an_bundesliga_20261004.json 7352 https://api.actionnetwork.com/web/v2/scoreboard/bundesliga?bookIds=15,30,68,69,71,75,76,79,123&date=20261004
-== an_ligue1_20261002.json 7968 https://api.actionnetwork.com/web/v2/scoreboard/ligue1?bookIds=15,30,68,69,71,75,76,79,123&date=20261002
-== an_ligue1_20261003.json 7968 https://api.actionnetwork.com/web/v2/scoreboard/ligue1?bookIds=15,30,68,69,71,75,76,79,123&date=20261003
-== an_ligue1_20261004.json 7968 https://api.actionnetwork.com/web/v2/scoreboard/ligue1?bookIds=15,30,68,69,71,75,76,79,123&date=20261004
-== an_try_ucl.json 113 https://api.actionnetwork.com/web/v2/scoreboard/ucl?bookIds=15,30,68,69,71,75,76,79,123&date=20260930
-== an_try_uefa.json 113 https://api.actionnetwork.com/web/v2/scoreboard/uefa?bookIds=15,30,68,69,71,75,76,79,123&date=20260930
-== an_try_championsleague.json 113 https://api.actionnetwork.com/web/v2/scoreboard/championsleague?bookIds=15,30,68,69,71,75,76,79,123&date=20260930
-== an_try_champions.json 36647 https://api.actionnetwork.com/web/v2/scoreboard/champions?bookIds=15,30,68,69,71,75,76,79,123&date=20260930
-== an_try_uefacl.json 113 https://api.actionnetwork.com/web/v2/scoreboard/uefacl?bookIds=15,30,68,69,71,75,76,79,123&date=20260930
-== an_try_cl.json 113 https://api.actionnetwork.com/web/v2/scoreboard/cl?bookIds=15,30,68,69,71,75,76,79,123&date=20260930
-== be_epl.html 158818 https://www.betexplorer.com/football/england/premier-league/
-== be_laliga.html 155841 https://www.betexplorer.com/football/spain/laliga/
-== be_ucl.html 159028 https://www.betexplorer.com/football/europe/champions-league/
-== espn eng.1 80
-== espn uefa.champions 80
-docs/probe/an_bundesliga_20261002.json games 0 bundesliga
-docs/probe/an_bundesliga_20261003.json games 0 bundesliga
-docs/probe/an_bundesliga_20261004.json games 0 bundesliga
-docs/probe/an_epl_20261002.json games 0 epl
-docs/probe/an_epl_20261003.json games 0 epl
-docs/probe/an_epl_20261004.json games 0 epl
-docs/probe/an_laliga_20261002.json games 0 laliga
-docs/probe/an_laliga_20261003.json games 0 laliga
-docs/probe/an_laliga_20261004.json games 0 laliga
-docs/probe/an_ligue1_20261002.json games 0 ligue1
-docs/probe/an_ligue1_20261003.json games 0 ligue1
-docs/probe/an_ligue1_20261004.json games 0 ligue1
-docs/probe/an_seriea_20261002.json games 0 seriea
-docs/probe/an_seriea_20261003.json games 0 seriea
-docs/probe/an_seriea_20261004.json games 0 seriea
-docs/probe/an_try_champions.json games 0 champions
-docs/probe/an_try_championsleague.json games 0 None
-docs/probe/an_try_cl.json games 0 None
-docs/probe/an_try_ucl.json games 0 None
-docs/probe/an_try_uefa.json games 0 None
-docs/probe/an_try_uefacl.json games 0 None
+== sbd_routes.json 3576 https://www.sportsbettingdime.com/wp-json/adpt/v1
+{"namespace":"adpt\/v1","routes":{"\/adpt\/v1":{"namespace":"adpt\/v1","methods":["GET"],"endpoints":[{"methods":["GET"],"args":{"namespace":{"default":"adpt\/v1","required":false},"context":{"default":"view","required":false}}}],"_links":{"self":[{"href":"https:\/\/www.sportsbettingdime.com\/wp-json\/adpt\/v1"}]}},"\/adpt\/v1\/nhl-odds":{"namespace":"adpt\/v1","methods":["GET"],"endpoints":[{"met
+== fd_fixtures.csv 0 https://www.football-data.co.uk/fixtures.csv
+
+== fd_E0.csv 0 https://www.football-data.co.uk/mmz4281/2627/E0.csv
+
+== espn eng.1 2363
+== espn esp.1 2347
+== espn ita.1 2568
+== espn ger.1 2052
+== espn fra.1 2208
+== espn uefa.champions 1786
+== an_v1_epl.json 5393 https://api.actionnetwork.com/web/v1/scoreboard/epl?bookIds=15,30&date=20261003
+{"league":{"id":9,"sport":"soccer","name":"epl","description":"English Premier League","logo":"https://static.sprtactn.co/leagues/500/epl.png","current_season":"2026","current_season_type":"reg","pre_season_start":null,"pre_season_end":null,"reg_season_start":"2026-08-21T07:00:00.000Z","reg_season_end":"2027-05-27T06:59:59.000Z","post_season_start":null,"post_season_end":null,"blacklist_dates":["2
+== an_v2_epl_nodate.json 5411 https://api.actionnetwork.com/web/v2/scoreboard/epl?bookIds=15,30
+{"league":{"id":9,"sport":"soccer","name":"epl","description":"English Premier League","logo":"https://static.sprtactn.co/leagues/500/epl.png","current_season":"2026","current_season_type":"reg","pre_season_start":null,"pre_season_end":null,"reg_season_start":"2026-08-21T07:00:00.000Z","reg_season_end":"2027-05-27T06:59:59.000Z","post_season_start":null,"post_season_end":null,"blacklist_dates":["2
+== an_v2_soccer.json 4231 https://api.actionnetwork.com/web/v2/scoreboard/soccer?bookIds=15,30&date=20261003
+{"schedule_info":{"reg_season_start":"2025-09-17T00:00:00.000Z","reg_season_end":"2027-06-14T00:00:00.000Z","blacklist_dates":["2026-09-21T07:00:00.000Z","2026-09-22T07:00:00.000Z","2026-09-24T07:00:00.000Z","2026-09-25T07:00:00.000Z","2026-09-28T07:00:00.000Z","2026-09-29T07:00:00.000Z","2026-10-02T07:00:00.000Z","2026-10-03T07:00:00.000Z","2026-10-04T07:00:00.000Z","2026-10-05T07:00:00.000Z","20
+== an_v1_mlb.json 63440 https://api.actionnetwork.com/web/v1/scoreboard/mlb?bookIds=15,30
+{"league":{"id":8,"sport":"baseball","name":"mlb","description":"Major League Baseball","logo":"https://static.sprtactn.co/leagues/500/mlb.png","current_season":"2026","current_season_type":"reg","pre_season_start":"2026-02-20T08:00:00.000Z","pre_season_end":"2026-03-26T06:59:59.000Z","reg_season_start":"2026-03-25T07:00:00.000Z","reg_season_end":"2026-09-30T06:59:59.000Z","post_season_start":"202
+SBD routes: ['/adpt/v1', '/adpt/v1/nhl-odds', '/adpt/v1/nfl-odds', '/adpt/v1/mlb-odds', '/adpt/v1/nba-odds', '/adpt/v1/ncaafb-odds', '/adpt/v1/ncaamb-odds', '/adpt/v1/player-props/(?P<sport>((nhl|nfl|mlb|nba|ncaafb|ncaamb)))', '/adpt/v1/cache/clear', '/adpt/v1/cache/status', '/adpt/v1/cache/value', '/adpt/v1/cache/delete', '/adpt/v1/futures/(?P<sport>((nhl|nfl|mlb|nba|ncaafb|ncaamb)))', '/adpt/v1/futures/(?P<sport>((nhl|nfl|mlb|nba|ncaafb|ncaamb)))/(?P<markets>markets)', '/adpt/v1/futures/(?P<sport>((nhl|nfl|mlb|nba|ncaafb|ncaamb)))/markets/(?P<market>sr:iscreen_market:\\d+)', '/adpt/v1/(?P<sport>((nhl|nfl|mlb|nba|ncaafb|ncaamb)))/schedule', '/adpt/v1/sport-event/(?P<sport>((nhl|nfl|mlb|nba|ncaafb|ncaamb)))/(?P<event_id>[^\\/]+)/?']
+fd_fixtures.csv rows 0
+fd_fixtures.csv list index out of range
+fd_E0.csv rows 0
+fd_E0.csv list index out of range
+an_v1_epl.json games 0
+an_v2_epl_nodate.json games 0
+an_v2_soccer.json games 0
+an_v1_mlb.json games 4
+  odds keys ['away_over', 'away_total', 'away_under', 'book_id', 'draw', 'home_over', 'home_total', 'home_under', 'inserted', 'line_status', 'meta', 'ml_away', 'ml_away_money', 'ml_away_public', 'ml_home', 'ml_home_money', 'ml_home_public', 'num_bets', 'over', 'spread_away', 'spread_away_line', 'spread_away_money', 'spread_away_public', 'spread_home', 'spread_home_line', 'spread_home_money', 'spread_home_public', 'total', 'total_over_money', 'total_over_public', 'total_under_money', 'total_under_public', 'type', 'under']
+espn eng.1 events 0 
+espn esp.1 events 0 
+espn ita.1 events 0 
+espn ger.1 events 0 
+espn fra.1 events 0 
+espn uefa.champions events 0 
