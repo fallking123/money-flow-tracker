@@ -26,23 +26,24 @@ jobs:
             curl -s -L -o /tmp/o -w "HTTP %{http_code} size %{size_download}\n" -A "$UA" --max-time 25 "$1" >> $out 2>&1 || echo "連線失敗" >> $out
             head -c ${2:-500} /tmp/o | tr '\n' ' ' >> $out; echo >> $out; echo >> $out
           }
-          rm -f docs/probe/an_epl_*.json
-          get() { curl -s -A "$UA" "$2" -o "docs/probe/$1.json"; echo "== $1 $(wc -c < docs/probe/$1.json) $2" >> $out; }
-          get an_epl_0920 "https://api.actionnetwork.com/web/v1/scoreboard/epl?bookIds=15,30,68,69,71,75,76,79,123&date=20260920"
-          get an_epl_v2_0920 "https://api.actionnetwork.com/web/v2/scoreboard/epl?bookIds=15,30,68,69,71,75,76,79,123&date=20260920"
-          get an_laliga "https://api.actionnetwork.com/web/v1/scoreboard/laliga?bookIds=15,30,68,69,71,75,76,79,123"
-          get an_epl_1003 "https://api.actionnetwork.com/web/v1/scoreboard/epl?bookIds=15,30&date=20261003"
+          rm -f docs/probe/*.json docs/probe/*.html
+          get() { curl -s -A "$UA" "$2" -o "docs/probe/$1"; echo "== $1 $(wc -c < docs/probe/$1) $2" >> $out; }
+          B="bookIds=15,30,68,69,71,75,76,79,123"
+          for l in epl laliga seriea bundesliga ligue1; do
+            for d in 20261002 20261003 20261004; do get "an_${l}_$d.json" "https://api.actionnetwork.com/web/v2/scoreboard/$l?$B&date=$d"; done
+          done
+          for l in ucl uefa championsleague champions uefacl cl; do get "an_try_$l.json" "https://api.actionnetwork.com/web/v2/scoreboard/$l?$B&date=20260930"; done
+          get be_epl.html "https://www.betexplorer.com/football/england/premier-league/"
+          get be_laliga.html "https://www.betexplorer.com/football/spain/laliga/"
+          get be_ucl.html "https://www.betexplorer.com/football/europe/champions-league/"
+          # ESPN（不要加瀏覽器標頭）
+          for l in eng.1 uefa.champions; do curl -s "https://site.api.espn.com/apis/site/v2/sports/soccer/$l/scoreboard?dates=20260920-20261004&limit=300" -o "docs/probe/espn_$l.json"; echo "== espn $l $(wc -c < docs/probe/espn_$l.json)" >> $out; done
           python3 -c "
           import json,glob
           for f in sorted(glob.glob('docs/probe/an_*.json')):
               try: d=json.load(open(f))
-              except Exception as e: print(f,'bad json',e); continue
-              gs=d.get('games') or []
-              print(f, 'games', len(gs))
-              if gs:
-                  g=gs[0]; print('  keys:', sorted(g.keys()))
-                  print('  teams:', [t.get('full_name') for t in g.get('teams',[])], g.get('start_time'), g.get('status'))
-                  for o in (g.get('odds') or [])[:2]: print('  odds:', json.dumps(o)[:1800])
+              except Exception as e: print(f,'bad json'); continue
+              print(f, 'games', len(d.get('games') or []), (d.get('league') or {}).get('name'))
           " >> $out 2>&1
           cat $out
       - name: Commit
@@ -50,5 +51,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/probe
-          git commit -m "探測足球資料來源（第三次）" || exit 0
+          git commit -m "探測足球資料來源（第四次）" || exit 0
           for i in 1 2 3 4 5; do git pull --rebase && git push && exit 0; sleep 10; done
