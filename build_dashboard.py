@@ -235,14 +235,30 @@ def build_closed():
     return closed[:MAX_CLOSED]
 
 
-# 每筆快照記錄了幾個「特徵」（模型之後會用的輸入資料），給方法說明頁顯示
+# 特徵值（模型之後會用的輸入資料），給說明頁顯示
+# common：每個運動都有；SPORT_FEATURES：各運動自己特別要看的（have＝已經在收，plan＝之後再加）
 FEATURES = [
-    ("資金流向", ["獨贏 人數%", "獨贏 金額%", "讓分 人數%", "讓分 金額%", "大小分 人數%", "大小分 金額%", "差距（金額−人數）"]),
+    ("資金流向", ["獨贏 人數%", "獨贏 金額%", "讓分 人數%", "讓分 金額%", "大小分 人數%", "大小分 金額%", "錢比人多（金額−人數）"]),
     ("賠率與盤口", ["獨贏賠率", "讓分盤口", "讓分賠率", "總分線", "大小分賠率", "開盤賠率／盤口", "去水公平機率", "參與莊家數"]),
     ("盤口變化", ["開盤→目前變動", "盤口逆向移動", "訊號出現時間", "距開賽時數"]),
-    ("比賽背景", ["賽季階段", "系列賽", "主客場", "球場", "室內／戶外", "氣溫", "風速", "降雨機率", "先發投手", "投手本季成績"]),
+    ("兩隊狀況", ["整季戰績", "主場／客場戰績", "休息天數", "背靠背", "7 天內出賽數", "上一場在客場（移動）", "傷兵名單"]),
+    ("比賽背景", ["賽季階段", "系列賽", "主客場", "球場"]),
     ("台彩", ["台彩賠率", "台彩抽成", "台彩 vs 美國折扣"]),
 ]
+SPORT_FEATURES = {
+    "mlb": {"name": "MLB 棒球", "why": "先發投手影響最大，天氣和球場會影響大小分。",
+            "have": ["先發投手", "投手本季成績", "氣溫", "風速", "降雨機率", "室內／屋頂球場", "每局比分（前五局、單隊大小）"],
+            "plan": ["牛棚最近三天用量", "主審好球帶", "球場得分因子", "打線對左右投成績"]},
+    "nba": {"name": "NBA 籃球", "why": "背靠背和球星缺陣影響最大，一個主力沒上盤口就會動好幾分。",
+            "have": ["背靠背", "休息天數", "7 天內出賽數", "傷兵名單（缺陣／存疑）", "上一場在客場"],
+            "plan": ["球隊節奏（每場回合數）", "攻守效率", "球星上場時間"]},
+    "nfl": {"name": "NFL 美式足球", "why": "四分衛和天氣（尤其風速）影響最大，週四短週、bye 週後休息天數差很多。",
+            "have": ["休息天數（短週／bye 後）", "傷兵名單", "氣溫", "風速", "降雨機率", "室內／屋頂球場"],
+            "plan": ["先發四分衛確認", "分區對戰", "跨時區移動"]},
+    "nhl": {"name": "NHL 冰球", "why": "先發門將影響最大，背靠背時常換替補門將。",
+            "have": ["先發門將", "門將本季成績（失分率、擋球率）", "背靠背", "休息天數", "傷兵名單"],
+            "plan": ["門將最近幾場擋球率", "多打少／少打多效率"]},
+}
 
 
 def data_stats():
@@ -263,7 +279,21 @@ def data_stats():
         per[sport] = {"snaps": n_s, "games": len(g_s), "finals": f_s}
     return {"snaps": snaps, "games": len(games), "finals": finals, "since": first[:10] if first else None,
             "per": per, "features": [{"group": g, "items": it} for g, it in FEATURES],
+            "sport_features": {k: v for k, v in SPORT_FEATURES.items() if k in active_sports()},
             "n_features": sum(len(it) for _, it in FEATURES)}
+
+
+def team_ctx(ctx, side, k):
+    """背景資料裡各隊的狀況（舊資料沒有這些欄位就回傳空值）"""
+    col = {"record": f"{side}_record", "split": "away_road_record" if side == "away" else "home_home_record",
+           "rest": f"{side}_rest_days", "b2b": f"{side}_b2b", "g7": f"{side}_games_7d",
+           "last_away": f"{side}_last_away", "out_n": f"{side}_out_n", "inj": f"{side}_injuries"}[k]
+    v = ctx.get(col, "")
+    if k in ("rest", "g7", "out_n"):
+        return num(v)
+    if k in ("b2b", "last_away"):
+        return True if v == "True" else False if v == "False" else None
+    return v or ""
 
 
 def build(now):
@@ -318,7 +348,9 @@ def build(now):
                     "temp_f": num(ctx["temp_f"]), "wind_mph": num(ctx["wind_mph"]),
                     "precip": num(ctx["precip_prob_pct"]),
                     "away_p": ctx["away_probable_pitcher"], "home_p": ctx["home_probable_pitcher"],
-                    "away_ps": ctx.get("away_pitcher_stat", ""), "home_ps": ctx.get("home_pitcher_stat", "")},
+                    "away_ps": ctx.get("away_pitcher_stat", ""), "home_ps": ctx.get("home_pitcher_stat", ""),
+                    **{f"{side}_{k}": team_ctx(ctx, side, k) for side in ("away", "home")
+                       for k in ("record", "split", "rest", "b2b", "g7", "last_away", "out_n", "inj")}},
             })
     games.sort(key=lambda g: g["t"])
     tw = record_tw_odds.summary()

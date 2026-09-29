@@ -89,6 +89,20 @@ h1{font-size:24px;font-weight:900;margin:0;text-wrap:balance}
 .pill.post{background:var(--warn-soft);color:var(--warn)}
 .pill.lg{background:var(--soft2);color:var(--ink2)}
 .pill.sig{background:var(--good-soft);color:var(--good)}
+.pill.warn{background:var(--bad-soft);color:var(--bad)}
+.ts-wrap{grid-column:1/-1}
+.ts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:10px}
+.team-st{background:var(--soft);border-radius:12px;padding:8px 10px}
+.team-st .mrow{border-bottom-color:var(--soft2)}
+.ts-h{display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.ts-h .dot{width:28px;height:28px;font-size:10px}
+.sf{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:10px}
+.sf>div{background:var(--soft);border-radius:14px;padding:12px}
+.sf h5{margin:0 0 2px;font-size:15px}
+.sf p{margin:0 0 8px;font-size:13px;color:var(--ink2)}
+.sf .lab{font-size:12px;color:var(--muted);margin:6px 0 4px}
+.feat li.plan{background:none;border:1px dashed var(--line);color:var(--muted)}
+.sf .feat li{background:var(--card)}
 
 /* ── 比賽卡 ── */
 .game{display:flex;flex-direction:column;gap:12px}
@@ -504,11 +518,11 @@ table{border-collapse:collapse;width:100%}
     const ca = tcol(g.away_c, "#8A97AB"), ch = tcol(g.home_c, "#46526A");
     const oddTxt = (sd) => (mkt === "ml" ? odd(sd.odds) : mkt === "sp" ? `${line(sd.ln)}　${odd(sd.odds)}` : "");
     let h = `<article class="card game">
-      <div class="g-top"><div class="l"><span class="t">${fmtTime.format(t)}</span><span>${rel}</span></div><div class="l">${state.sport === "all" ? `<span class="pill lg">${g.sport.toUpperCase()}</span>` : ""}${g.season === "postseason" ? `<span class="pill post">季後賽</span>` : ""}${sig ? `<span class="pill sig">有訊號</span>` : ""}</div></div>
+      <div class="g-top"><div class="l"><span class="t">${fmtTime.format(t)}</span><span>${rel}</span></div><div class="l">${state.sport === "all" ? `<span class="pill lg">${g.sport.toUpperCase()}</span>` : ""}${g.season === "postseason" ? `<span class="pill post">季後賽</span>` : ""}${sig ? `<span class="pill sig">有訊號</span>` : ""}${flags(g)}</div></div>
       <div class="teams">
-        <div class="tm">${dot(g.away_ab, g.away_c)}<div><div class="nm">${esc(g.away_zh || g.away)}</div><div class="od">客隊${mkt === "ou" ? "" : "　" + esc(oddTxt(ss[0]))}</div></div></div>
+        <div class="tm">${dot(g.away_ab, g.away_c)}<div><div class="nm">${esc(g.away_zh || g.away)}</div><div class="od">客隊${g.ctx && g.ctx.away_record ? " " + esc(g.ctx.away_record) : ""}${mkt === "ou" ? "" : "　" + esc(oddTxt(ss[0]))}</div></div></div>
         <span class="vs">VS</span>
-        <div class="tm r">${dot(g.home_ab, g.home_c)}<div><div class="nm">${esc(g.home_zh || g.home)}</div><div class="od">${mkt === "ou" ? "" : esc(oddTxt(ss[1])) + "　"}主隊</div></div></div>
+        <div class="tm r">${dot(g.home_ab, g.home_c)}<div><div class="nm">${esc(g.home_zh || g.home)}</div><div class="od">${mkt === "ou" ? "" : esc(oddTxt(ss[1])) + "　"}主隊${g.ctx && g.ctx.home_record ? " " + esc(g.ctx.home_record) : ""}</div></div></div>
       </div>`;
     if (!has) {
       h += `<div class="say">${MK[mkt]}的下注比例，網站還沒出來（最後截圖 ${when(s.ts)}）。出來後約 2 小時內會補抓。</div>`;
@@ -548,7 +562,7 @@ table{border-collapse:collapse;width:100%}
   function detail(g) {
     const thr = state.thr, s = latest(g), m = state.mkt, c = g.ctx, parts = [];
     if (c && (c.away_p || c.home_p)) {
-      parts.push(`<div><h4>先發投手</h4>
+      parts.push(`<div><h4>${g.sport === "nhl" ? "先發門將" : "先發投手"}</h4>
         <div class="pc">${dot(g.away_ab, g.away_c)}<div><div class="nm">${esc(c.away_p || "還沒公布")}</div><div class="st">${esc(c.away_ps || "本季成績還沒抓到")}</div></div></div>
         <div class="pc">${dot(g.home_ab, g.home_c)}<div><div class="nm">${esc(c.home_p || "還沒公布")}</div><div class="st">${esc(c.home_ps || "本季成績還沒抓到")}</div></div></div></div>`);
     }
@@ -559,6 +573,8 @@ table{border-collapse:collapse;width:100%}
       return `<div class="mrow"><span>${MK[mm]}</span><span>${sg ? `<b class="good">錢押 ${esc(pickLabel(sg, mm))}（+${Math.round(sg.diff)}%）</b>` : `<span class="mut">沒有明顯訊號</span>`}</span></div>`;
     }).join("");
     parts.push(`<div><h4>三種玩法各押哪邊</h4>${rows}</div>`);
+    const ts = teamStatus(g);
+    if (ts) parts.push(ts);
     const ss = sides(g, s, m), sg = signal(g, s, m, thr), tk = sg || ss[0];
     const tr = trend(g, m, tk.key, thr, 320, 90);
     if (tr) parts.push(`<div><h4>${esc(tk.nm)}「錢比人多」的變化（${g.snaps.length} 次截圖，綠色區＝有訊號）</h4><div class="spark">${tr}</div></div>`);
@@ -571,6 +587,36 @@ table{border-collapse:collapse;width:100%}
     info.push(`<div class="mrow"><span>最後截圖</span><span>${when(s.ts)}</span></div>`);
     parts.push(`<div><h4>比賽資訊</h4>${info.join("")}</div>`);
     return `<div class="det">${parts.join("")}</div>`;
+  }
+  // 兩隊狀況：戰績、休息、背靠背、傷兵（每個運動都有）
+  function flags(g) {
+    const c = g.ctx; if (!c) return "";
+    const f = [];
+    for (const [side, nm] of [["away", g.away_zh || g.away_ab], ["home", g.home_zh || g.home_ab]]) {
+      if (c[side + "_b2b"]) f.push(`<span class="pill warn">${esc(nm)} 背靠背</span>`);
+      if ((c[side + "_out_n"] || 0) >= 3) f.push(`<span class="pill warn">${esc(nm)} 缺 ${c[side + "_out_n"]} 人</span>`);
+    }
+    return f.join("");
+  }
+  function teamStatus(g) {
+    const c = g.ctx; if (!c) return "";
+    const has = ["record", "rest", "inj"].some((k) => c["away_" + k] != null && c["away_" + k] !== "" || c["home_" + k] != null && c["home_" + k] !== "");
+    if (!has) return "";
+    const rest = (side) => {
+      const r = c[side + "_rest"];
+      if (r == null) return "–";
+      let t = r === 0 ? "同一天" : `${r} 天`;
+      if (c[side + "_b2b"]) t += `　<b class="bad">背靠背</b>`;
+      else if (g.sport === "nfl" && r <= 5) t += `　<b class="bad">短週</b>`;
+      else if (g.sport === "nfl" && r >= 12) t += `　<b class="good">bye 後</b>`;
+      return t;
+    };
+    const one = (side, nm, where) => `<div class="team-st"><div class="ts-h">${dot(g[side + "_ab"], g[side + "_c"])}<b>${esc(nm)}</b></div>
+      <div class="mrow"><span>戰績</span><span>${esc(c[side + "_record"] || "–")}${c[side + "_split"] ? `　${where} ${esc(c[side + "_split"])}` : ""}</span></div>
+      <div class="mrow"><span>休息</span><span>${rest(side)}</span></div>
+      ${c[side + "_g7"] != null ? `<div class="mrow"><span>7 天內</span><span>打了 ${c[side + "_g7"]} 場${c[side + "_last_away"] ? "・上一場在客場" : ""}</span></div>` : ""}
+      <div class="mrow"><span>傷兵</span><span>${c[side + "_inj"] ? esc(c[side + "_inj"]) : '<span class="mut">沒有名單</span>'}</span></div></div>`;
+    return `<div class="ts-wrap"><h4>兩隊狀況</h4><div class="ts">${one("away", g.away_zh || g.away_ab, "客場")}${one("home", g.home_zh || g.home_ab, "主場")}</div></div>`;
   }
   function renderBoard() {
     const list = DATA.games.filter((g) => inSport(g) && (g.status === "upcoming" || g.status === "started"))
@@ -794,7 +840,7 @@ table{border-collapse:collapse;width:100%}
     const steps = [
       {s: "done", t: "收集資料", l: "進行中", p: `自動抓每場比賽的下注人數和金額、賠率、比分、天氣、先發投手。目前 ${st.snaps ?? 0} 次截圖、${st.games ?? 0} 場比賽。`},
       {s: "done", t: "整理資料", l: "進行中", p: "隊名對照、比分自動回填、讓分正負號校正、缺的盤自動補抓。"},
-      {s: "doing", t: "整理成模型用的格式", l: "累積中", p: `每場比賽記下 ${st.n_features ?? "–"} 種資料（下面有清單），這些就是「特徵值」。`},
+      {s: "doing", t: "整理成模型用的格式", l: "累積中", p: `每場比賽記下 ${st.n_features ?? "–"} 種每個運動都有的資料，再加上各運動自己特別要看的（投手、門將、背靠背、傷兵…），這些就是「特徵值」。清單在下面。`},
       {s: "wait", t: "訓練模型", l: `${Math.min(100, Math.round(fin / goal * 100))}%`, p: `至少要 ${goal} 場打完的比賽才開始，現在 ${fin} 場。`, prog: fin / goal},
       {s: "wait", t: "找划算的注", l: "等模型", p: `模型估的勝率 × 台彩賠率 > 1 才建議下。還需要更多台彩賠率記錄（目前 ${twN} 筆）。`},
     ];
@@ -810,7 +856,10 @@ table{border-collapse:collapse;width:100%}
       <div><b>抽成</b>兩邊賠率倒數加起來 − 1。莊家每收 100 元平均留下多少，越低越好。</div>
       <div><b>特徵值</b>模型拿來判斷的輸入資料，每一種算一個。不是越多越好，太多容易把過去的巧合背起來。</div>
     </div></div>`;
-    h += `<div class="card"><h3>我們記錄的特徵值<small>共 ${st.n_features ?? "–"} 種</small></h3><div class="feat">${(st.features || []).map((f) => `<div><h5>${esc(f.group)}</h5><ul>${f.items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul></div>`).join("")}</div></div>`;
+    h += `<div class="card"><h3>每個運動都有的特徵值<small>${st.n_features ?? "–"} 種</small></h3><div class="feat">${(st.features || []).map((f) => `<div><h5>${esc(f.group)}</h5><ul>${f.items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul></div>`).join("")}</div></div>`;
+    const sf = st.sport_features || {};
+    h += `<div class="card"><h3>各運動特別要看的<small>實線＝已經在收，虛線＝之後再加</small></h3><div class="sf">${Object.values(sf).map((x) => `<div><h5>${esc(x.name)}</h5><p>${esc(x.why)}</p>
+      <div class="feat"><ul>${x.have.map((i) => `<li>${esc(i)}</li>`).join("")}${x.plan.map((i) => `<li class="plan">${esc(i)}</li>`).join("")}</ul></div></div>`).join("")}</div></div>`;
     const per = st.per || {};
     h += `<div class="card"><h3>各運動資料量<small>從 ${esc(st.since || "–")} 開始</small></h3><div class="scroll"><table class="tb"><thead><tr><th>運動</th><th class="r">截圖次數</th><th class="r">比賽</th><th class="r">已打完</th></tr></thead><tbody>${Object.entries(per).map(([k, v]) => `<tr><td>${k.toUpperCase()}</td><td class="r n">${v.snaps}</td><td class="r n">${v.games}</td><td class="r n">${v.finals}</td></tr>`).join("")}</tbody></table></div>
       <p class="mut" style="font-size:13px;margin:10px 0 0">我們不會說「準確率 79%」這種數字。運彩長期能穩定贏 55–58% 就算頂尖；所有成績都附上注數和運氣範圍，讓你自己判斷是實力還是運氣。</p></div>`;
