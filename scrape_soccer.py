@@ -39,7 +39,7 @@ LEAGUES = {
     "ucl":        {"name": "歐冠", "an": "champions",  "espn": "soccer/uefa.champions", "fd": None},
 }
 FD_DIV = {v["fd"]: k for k, v in LEAGUES.items() if v["fd"]}
-HORIZON_DAYS = 7          # 開賽前 7 天內開始記錄（足球一週一輪，整週都在下注）
+HORIZON_DAYS = 12         # 開賽前 12 天內開始記錄（國際賽空檔時兩輪之間會隔比較久）
 HISTORY_SEASONS = ["2122", "2223", "2324", "2425", "2526"]
 AN_URL = "https://api.actionnetwork.com/web/v2/scoreboard/{league}"
 FD_BASE = "https://www.football-data.co.uk"
