@@ -1,41 +1,0 @@
-== https://api.actionnetwork.com/web/v1/scoreboard/kbo?date=20260929
-HTTP 400 size 113
-{"message":"Invalid data submitted as payload","statusCode":400,"error":"Bad Request","errorCode":"INVALID_DATA"}
-
-== https://api.actionnetwork.com/web/v1/scoreboard/kbo?bookIds=15,30&date=20260929
-HTTP 400 size 113
-{"message":"Invalid data submitted as payload","statusCode":400,"error":"Bad Request","errorCode":"INVALID_DATA"}
-
-== https://api.actionnetwork.com/web/v1/scoreboard/npb?date=20260929
-HTTP 400 size 113
-{"message":"Invalid data submitted as payload","statusCode":400,"error":"Bad Request","errorCode":"INVALID_DATA"}
-
-== https://api.actionnetwork.com/web/v1/scoreboard/npb?bookIds=15,30&date=20260929
-HTTP 400 size 113
-{"message":"Invalid data submitted as payload","statusCode":400,"error":"Bad Request","errorCode":"INVALID_DATA"}
-
-== https://www.cpbl.com.tw/schedule/index
-HTTP 308 size 0
-連線失敗
-{"message":"Invalid data submitted as payload","statusCode":400,"error":"Bad Request","errorCode":"INVALID_DATA"}
-
-== https://www.cpbl.com.tw/
-HTTP 200 size 352694
-  <!DOCTYPE HTML> <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hant"> <head>     <!-- Google Tag Manager -->     <script>         (function (w, d, s, l, i) {             w[l] = w[l] || []; w[l].push({                 'gtm.start':                     new Date().getTime(), event: 'gtm.js'             }); var f = d.getElementsByTagName(s)[0],                 j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =                     'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);         })(window, docum
-
-== https://blob.sportslottery.com.tw/apidata/Pre/On.json
-HTTP 404 size 215
-﻿<?xml version="1.0" encoding="utf-8"?><Error><Code>BlobNotFound</Code><Message>The specified blob does not exist. RequestId:b29ea59f-c01e-00b7-1412-50e4f8000000 Time:2026-09-29T12:57:27.0612811Z</Message></Error>
-
-== https://blob.sportslottery.com.tw/apidata/Pre/Baseball/On.json
-HTTP 404 size 215
-﻿<?xml version="1.0" encoding="utf-8"?><Error><Code>BlobNotFound</Code><Message>The specified blob does not exist. RequestId:028e5a81-201e-009f-1c12-509347000000 Time:2026-09-29T12:57:28.5472930Z</Message></Error>
-
-== https://blob.sportslottery.com.tw/apidata/PreGame/On.json
-HTTP 404 size 215
-﻿<?xml version="1.0" encoding="utf-8"?><Error><Code>BlobNotFound</Code><Message>The specified blob does not exist. RequestId:f9932888-e01e-00cd-2612-508eb5000000 Time:2026-09-29T12:57:29.6317903Z</Message></Error>
-
-== https://blob.sportslottery.com.tw/apidata/Pre/Event.json
-HTTP 404 size 215
-﻿<?xml version="1.0" encoding="utf-8"?><Error><Code>BlobNotFound</Code><Message>The specified blob does not exist. RequestId:6ca61c67-b01e-00b8-3f12-50090e000000 Time:2026-09-29T12:57:30.6854769Z</Message></Error>
-

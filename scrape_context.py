@@ -12,13 +12,14 @@
 ⚠️ 主審（裁判）的賽前指派名單目前沒有穩定的免費來源，umpire_name 先留空當手動欄位。
 """
 
+import csv
 import json
 import os
 from datetime import datetime, timezone, timedelta
 
 import requests
 
-from sports_common import (MLB_ROOF_TEAMS, SPORTS, active_sports, STATE_DIR, UA, append_rows, espn_events, sport_dir)
+from sports_common import (MLB_ROOF_TEAMS, SPORTS, active_sports, STATE_DIR, UA, append_rows, espn_events, read_rows, sport_dir)
 
 OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
 GEOCODE_URL = "https://geocoding-api.open-meteo.com/v1/search"
@@ -30,6 +31,7 @@ CONTEXT_FIELDS = [
     "away_team", "home_team", "venue", "city", "region", "indoor", "neutral_site",
     "temp_f", "wind_mph", "wind_dir_deg", "precip_prob_pct",
     "away_probable_pitcher", "home_probable_pitcher", "umpire_name",
+    "away_pitcher_stat", "home_pitcher_stat",
 ]
 
 REGION_NAMES = {
@@ -95,6 +97,20 @@ def get_weather(lat, lon, target_time_utc):
     return {}
 
 
+def migrate(path):
+    """舊檔案沒有新欄位（投手成績）的話，先補表頭，不然新資料會對不齊"""
+    if not os.path.exists(path):
+        return
+    with open(path, "r", encoding="utf-8") as f:
+        header = next(csv.reader(f), [])
+    if header != CONTEXT_FIELDS:
+        rows = read_rows(path)
+        with open(path, "w", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=CONTEXT_FIELDS, extrasaction="ignore")
+            w.writeheader()
+            w.writerows(rows)
+
+
 def run():
     now = datetime.now(timezone.utc)
     coords = load_coords()
@@ -132,8 +148,12 @@ def run():
                 "away_probable_pitcher": ev["away"].get("probable", "") if sport == "mlb" else "",
                 "home_probable_pitcher": ev["home"].get("probable", "") if sport == "mlb" else "",
                 "umpire_name": "",
+                "away_pitcher_stat": ev["away"].get("probable_stat", "") if sport == "mlb" else "",
+                "home_pitcher_stat": ev["home"].get("probable_stat", "") if sport == "mlb" else "",
             })
-        append_rows(os.path.join(sport_dir(sport), "context.csv"), CONTEXT_FIELDS, rows)
+        path = os.path.join(sport_dir(sport), "context.csv")
+        migrate(path)
+        append_rows(path, CONTEXT_FIELDS, rows)
         print(f"{cfg['name']}: 寫入 {len(rows)} 場背景資料")
     save_coords(coords)
 

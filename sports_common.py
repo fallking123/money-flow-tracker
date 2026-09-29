@@ -122,18 +122,36 @@ def espn_events(sport, start_utc, end_utc):
     return events
 
 
+def probable_stat(pr):
+    """先發投手本季成績，例如「10-5 · ERA 3.21」（ESPN 格式不固定，抓不到就留空）"""
+    st = {}
+    for x in pr.get("statistics") or []:
+        k = (x.get("abbreviation") or x.get("name") or "").upper()
+        if k:
+            st[k] = x.get("displayValue")
+    parts = []
+    if st.get("W") is not None and st.get("L") is not None:
+        parts.append(f"{st['W']}-{st['L']}")
+    if st.get("ERA"):
+        parts.append(f"ERA {st['ERA']}")
+    if not parts and isinstance(pr.get("record"), str):
+        parts.append(pr["record"].strip("() "))
+    return " · ".join(parts)
+
+
 def parse_espn_event(e):
     comp = (e.get("competitions") or [{}])[0]
     teams = {}
     for t in comp.get("competitors", []):
         side = t.get("homeAway")
         team = t.get("team", {})
-        prob = (t.get("probables") or [{}])[0].get("athlete", {}).get("displayName", "")
+        pr = (t.get("probables") or [{}])[0]
+        prob = pr.get("athlete", {}).get("displayName", "")
         teams[side] = {
             "display": team.get("displayName", ""), "name": team.get("name", ""),
             "short": team.get("shortDisplayName", ""), "location": team.get("location", ""),
             "abbr": team.get("abbreviation", ""), "score": t.get("score"),
-            "winner": t.get("winner"), "probable": prob,
+            "winner": t.get("winner"), "probable": prob, "probable_stat": probable_stat(pr),
             # 每一局（冰球每一節、美式足球/籃球每一節）的得分，算單隊大小、第一局和局用
             "periods": [ls.get("value") for ls in (t.get("linescores") or [])],
         }
