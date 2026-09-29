@@ -1,0 +1,40 @@
+name: Probe ESPN probables
+
+# 一次性：看 ESPN 先發投手／門將的原始格式（本季成績欄位在哪）
+on:
+  push:
+    paths:
+      - .github/workflows/probe_probables.yml
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probe
+        run: |
+          mkdir -p docs/probe
+          for x in baseball/mlb:20260930 baseball/mlb:20261001 hockey/nhl:20261001; do
+            p=${x%%:*}; d=${x##*:}; n=$(echo $p | tr '/' '_')
+            curl -s --compressed "https://site.api.espn.com/apis/site/v2/sports/$p/scoreboard?dates=$d" -o /tmp/s.json
+            python3 - "$n_$d" <<'PY' >> docs/probe/probables.txt
+          import json, sys
+          d = json.load(open("/tmp/s.json"))
+          for e in d.get("events", [])[:2]:
+              for c in e["competitions"][0]["competitors"]:
+                  print(e["name"], c["homeAway"])
+                  print(json.dumps(c.get("probables"), ensure_ascii=False)[:2500])
+                  print(json.dumps(c.get("records"), ensure_ascii=False)[:400])
+          PY
+          done
+          cat docs/probe/probables.txt | head -c 6000
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/probe
+          git commit -m "探測先發投手格式" || exit 0
+          for i in 1 2 3 4 5; do git pull --rebase && git push && exit 0; sleep 10; done
