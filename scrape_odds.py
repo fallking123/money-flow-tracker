@@ -64,6 +64,8 @@ class Blocked(Exception):
 
 # ---------------- 工具函數 ----------------
 MISSING_RETRY_MIN = 120
+# 手動「馬上更新」：改 force_update.txt（寫運動代碼，例如 mlb）推上去就會觸發，這些運動不管間隔、全部重抓一次
+FORCE_SPORTS = {s.strip() for s in os.environ.get("FORCE_SPORTS", "").replace("\n", ",").split(",") if s.strip()}
 SPLIT_KEY = {"ml": "ml_away_bets_pct", "sp": "sp_away_bets_pct", "ou": "ou_over_bets_pct"}
 
 
@@ -297,7 +299,7 @@ def process_sport(sport, games, now, state):
         if st.get("miss"):
             gap = min(gap, MISSING_RETRY_MIN)
         # 容許約 1/4 間隔的誤差：GitHub 排程常延遲幾分鐘，避免剛好差一點就跳過一次
-        if last and (now - parse_time(last)).total_seconds() / 60 < gap * 0.75:
+        if sport not in FORCE_SPORTS and last and (now - parse_time(last)).total_seconds() / 60 < gap * 0.75:
             continue
         due.append(g)
     if not due:

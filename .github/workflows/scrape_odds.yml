@@ -2,6 +2,10 @@ name: Scrape odds (money flow)
 
 on:
   workflow_dispatch: {}
+  # 手動馬上更新：改 force_update.txt 推上去就會跑一次（檔案內容＝要強制重抓的運動）
+  push:
+    paths:
+      - force_update.txt
   schedule:
     - cron: "*/15 22-23,0-3 * * *"
     - cron: "*/30 16-19 * * *"
@@ -23,6 +27,7 @@ jobs:
       - name: Run odds scraper (all sports)
         run: |
           set +e
+          if [ "${{ github.event_name }}" = "push" ]; then export FORCE_SPORTS="$(head -1 force_update.txt)"; echo "強制更新：$FORCE_SPORTS"; fi
           python scrape_odds.py
           code=$?
           set -e
