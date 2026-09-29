@@ -299,7 +299,7 @@ table{border-collapse:collapse;width:100%}
 (() => {
   // ═════════ 基本設定 ═════════
   const MK = {ml: "獨贏", sp: "讓分", ou: "大小分"};
-  const SIDE = {away: "客", home: "主", over: "大", under: "小"};
+  const SIDE = {away: "客", home: "主", draw: "和", over: "大", under: "小"};
   const TZ = "Asia/Taipei";
   const fmtDay = new Intl.DateTimeFormat("zh-TW", {timeZone: TZ, month: "numeric", day: "numeric", weekday: "short"});
   const fmtTime = new Intl.DateTimeFormat("zh-TW", {timeZone: TZ, hour: "2-digit", minute: "2-digit", hour12: false});
@@ -873,13 +873,13 @@ table{border-collapse:collapse;width:100%}
       <p class="mut" style="margin:0;font-size:13px">目前記錄 ${tw.n_total} 筆台彩賠率。記越多，這些數字越準。</p></div>`;
     h += `<div class="card"><h3>各玩法抽多少</h3><div class="scroll"><table class="tb"><thead><tr><th>運動</th><th>玩法</th><th class="r">台彩抽</th><th class="r">美國抽</th><th class="r">台彩賠率低多少</th><th class="r hide-s">記錄場數</th></tr></thead><tbody>`;
     if (!groups.length) h += `<tr><td colspan="6" class="mut">這個運動還沒有台彩記錄</td></tr>`;
-    for (const g of groups) h += `<tr><td>${esc(g.sport.toUpperCase())}</td><td>${esc(MK[g.market] || g.market)}</td><td class="r n bad">${g.tw_margin_pct == null ? "–" : g.tw_margin_pct.toFixed(1) + "%"}</td><td class="r n">${g.us_margin_pct == null ? "–" : g.us_margin_pct.toFixed(1) + "%"}</td><td class="r n ${gb(g.avg_discount_pct)}">${g.avg_discount_pct == null ? "–" : sgn(g.avg_discount_pct, 1) + "%"}</td><td class="r n hide-s">${g.games ?? "–"}</td></tr>`;
+    for (const g of groups) h += `<tr><td>${esc(spLabel(g.sport))}</td><td>${esc(MK[g.market] || g.market)}</td><td class="r n bad">${g.tw_margin_pct == null ? "–" : g.tw_margin_pct.toFixed(1) + "%"}</td><td class="r n">${g.us_margin_pct == null ? "–" : g.us_margin_pct.toFixed(1) + "%"}</td><td class="r n ${gb(g.avg_discount_pct)}">${g.avg_discount_pct == null ? "–" : sgn(g.avg_discount_pct, 1) + "%"}</td><td class="r n hide-s">${g.games ?? "–"}</td></tr>`;
     h += `</tbody></table></div></div>`;
     if (best.length) {
       h += `<div class="card"><h3>台彩抽最少的幾注<small>差距接近 0 或是正的＝台彩這注幾乎沒抽</small></h3><div class="scroll"><table class="tb"><thead><tr><th class="hide-s">日期</th><th>比賽</th><th>押什麼</th><th class="r">台彩</th><th class="r hide-s">美國</th><th class="r">差</th></tr></thead><tbody>`;
       for (const b of best) {
-        const t = b.market === "ou" ? `${SIDE[b.side]}分 ${b.line ?? ""}` : `${b.side === "away" ? b.away : b.home}${b.market === "sp" ? " " + line(b.line) : ""}`;
-        h += `<tr><td class="n hide-s">${fmtMD.format(new Date(b.t))}</td><td>${esc(b.away)} @ ${esc(b.home)}</td><td>${MK[b.market]}・${esc(t)}</td><td class="r n">${odd(b.tw)}</td><td class="r n hide-s">${odd(b.us)}</td><td class="r n ${gb(b.d)}">${sgn(b.d, 1)}%</td></tr>`;
+        const t = b.market === "ou" ? `${SIDE[b.side]}分 ${b.line ?? ""}` : b.side === "draw" ? "和局" : `${b.side === "away" ? b.away : b.home}${b.market === "sp" ? " " + line(b.line) : ""}`;
+        h += `<tr><td class="n hide-s">${fmtMD.format(new Date(b.t))}</td><td>${b.sport === "soccer" ? `${esc(b.home)} vs ${esc(b.away)}` : `${esc(b.away)} @ ${esc(b.home)}`}</td><td>${MK[b.market]}・${esc(t)}</td><td class="r n">${odd(b.tw)}</td><td class="r n hide-s">${odd(b.us)}</td><td class="r n ${gb(b.d)}">${sgn(b.d, 1)}%</td></tr>`;
       }
       h += `</tbody></table></div></div>`;
     }

@@ -38,6 +38,16 @@ def missing_games(now):
         games.sort(key=lambda x: x[0])
         if games:
             out[sport] = [(t, r) for t, r in games]
+    # 足球（比賽編號是 an+Action Network 編號）
+    games = []
+    for r in read_rows(os.path.join(sport_dir("soccer"), "results.csv")):
+        if r.get("status") != "final" or f"an{r['an_id']}" in recorded:
+            continue
+        t = parse_time(r["game_time_utc"])
+        if now - timedelta(hours=LOOKBACK_HOURS) <= t <= now:
+            games.append((t, r))
+    if games:
+        out["soccer"] = sorted(games, key=lambda x: x[0])
     return out
 
 
@@ -45,11 +55,16 @@ def format_report(missing):
     if not missing:
         return "今天完賽的比賽都已經有台彩記錄了（或最近沒有完賽的比賽），不用傳截圖。"
     lines = ["今天這些已完賽的比賽，還沒有台彩賠率記錄，有截圖的話麻煩傳給我：", ""]
+    from sports_common import SPORTS
+    lg = {"epl": "英超", "laliga": "西甲", "seriea": "義甲", "bundesliga": "德甲", "ligue1": "法甲", "ucl": "歐冠"}
     for sport, games in missing.items():
-        from sports_common import SPORTS
-        lines.append(f"【{SPORTS[sport]['name']}】")
+        lines.append(f"【{'足球' if sport == 'soccer' else SPORTS[sport]['name']}】")
         for t, r in games:
             local = t.astimezone(TZ).strftime(FMT)
+            if sport == "soccer":  # 足球主隊寫前面
+                score = f"{r['home_score']}－{r['away_score']}" if r.get("home_score") != "" else ""
+                lines.append(f"  {local}　{lg.get(r.get('league'), '')}　{r['home_team']} vs {r['away_team']}　{score}")
+                continue
             score = f"{r['away_score']}－{r['home_score']}" if r.get("away_score") else ""
             lines.append(f"  {local}　{r['away_team']} @ {r['home_team']}　{score}")
         lines.append("")

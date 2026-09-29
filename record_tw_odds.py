@@ -15,7 +15,8 @@
 
 存檔欄位說明：
 - market: ml（獨贏）/ sp（讓分）/ ou（大小分）
-- side:   ml→away/home；sp→away/home；ou→over/under
+- side:   ml→away/home（足球多一個 draw＝和局）；sp→away/home；ou→over/under
+- 足球（sport=soccer）：比賽編號存成 an+Action Network 編號，美國賠率用 Action Network 共識盤
 - tw_odds: 你截圖給的台彩賠率（十進位，例如 1.85）
 - us_odds: 對應的美國收盤賠率（十進位，從 odds_history 找到的）
 - discount_pct: (tw_odds - us_odds) / us_odds * 100
@@ -43,6 +44,28 @@ MARKET_FIELDS = {
     "sp": {"away": ("sp_away_odds", "sp_away_line"), "home": ("sp_home_odds", "sp_away_line")},
     "ou": {"over": ("ou_over_odds", "ou_line"), "under": ("ou_under_odds", "ou_line")},
 }
+
+
+SOCCER = "soccer"
+# 足球：獨贏有和局；讓分存的是主隊讓分（美國運動存的是客隊讓分）
+MARKET_FIELDS_SOCCER = {
+    "ml": {"home": ("ml_home_odds", None), "draw": ("ml_draw_odds", None), "away": ("ml_away_odds", None)},
+    "sp": {"home": ("sp_home_odds", "sp_home_line"), "away": ("sp_away_odds", "sp_home_line")},
+    "ou": {"over": ("ou_over_odds", "ou_line"), "under": ("ou_under_odds", "ou_line")},
+}
+
+
+def fields_for(sport):
+    return MARKET_FIELDS_SOCCER if sport == SOCCER else MARKET_FIELDS
+
+
+def valid_sports():
+    return list(active_sports()) + [SOCCER]
+
+
+def game_id(r):
+    """美國運動用 SBD 編號；足球用 an+Action Network 編號"""
+    return r.get("sbd_id") or (f"an{r['an_id']}" if r.get("an_id") else "")
 
 
 def _norm(s):
@@ -79,33 +102,37 @@ def find_game(sport, away_team, home_team, game_date):
 
 def add_tw_bet(sport, away_team, home_team, game_date, market, side, tw_odds, tw_line=None, note=""):
     """主要進入點：找到比賽 → 取美國收盤賠率 → 算折扣 → 寫入 tw_odds.csv"""
-    if sport not in active_sports():
+    if sport not in valid_sports():
         return {"ok": False, "error": f"{sport} 目前沒有在記錄"}
-    if market not in MARKET_FIELDS or side not in MARKET_FIELDS[market]:
-        return {"ok": False, "error": f"market/side 不對：{market}/{side}"}
+    mf = fields_for(sport)
+    if market not in mf or side not in mf[market]:
+        return {"ok": False, "error": f"market/side 不對：{market}/{side}（和局只有足球獨贏有）"}
 
     row = find_game(sport, away_team, home_team, game_date)
+    if row is None and sport == SOCCER:  # 足球習慣主隊寫前面，順序反了也找得到
+        row = find_game(sport, home_team, away_team, game_date)
     if row is None:
         return {"ok": False, "error": f"找不到 {game_date} {away_team}@{home_team} 這場比賽的資料"}
 
-    odds_field, line_field = MARKET_FIELDS[market][side]
+    odds_field, line_field = mf[market][side]
     us_odds = _num(row.get(odds_field))
     us_line = _num(row.get(line_field)) if line_field else None
-    if market == "sp" and side == "home" and us_line is not None:
-        us_line = -us_line  # 資料裡存的是客隊讓分，主隊要反過來
+    flip = "away" if sport == SOCCER else "home"  # 資料裡存的是哪一隊的讓分，另一隊要反過來
+    if market == "sp" and side == flip and us_line is not None:
+        us_line = -us_line
     if us_odds is None:
         return {"ok": False, "error": "找到比賽了，但美國賠率資料是空的（可能太早記錄、賠率還沒抓到）"}
 
     discount = round((tw_odds - us_odds) / us_odds * 100, 2)
 
-    sbd_id = row["sbd_id"]
+    sbd_id = game_id(row)
     existing = read_rows(TW_ODDS_FILE)
     if any(r["sbd_id"] == sbd_id and r["market"] == market and r["side"] == side for r in existing):
         return {"ok": False, "error": "這筆（同一場、同盤別、同邊）已經記錄過了，不重複記"}
 
     out = {
         "recorded_utc": datetime.now(timezone.utc).isoformat(),
-        "sport": sport, "sbd_id": sbd_id, "event_id": row.get("event_id", ""),
+        "sport": sport, "sbd_id": sbd_id, "event_id": row.get("event_id", "") or row.get("an_id", ""),
         "game_time_utc": row["game_time_utc"],
         "away_team": row["away_team"], "home_team": row["home_team"],
         "market": market, "side": side,
@@ -144,14 +171,15 @@ def summary():
         pairs.setdefault((r["sport"], r["market"], r["sbd_id"]), []).append(r)
     tw_m, us_m = {}, {}
     for (sport, market, _), ps in pairs.items():
-        if len(ps) != 2:
+        need = 3 if sport == SOCCER and market == "ml" else 2  # 足球獨贏要主／和／客三個都有才算得出抽成
+        if len({p["side"] for p in ps}) != need or len(ps) != need:
             continue
-        a, b = ps
-        ta, tb, ua, ub = (_num(a["tw_odds"]), _num(b["tw_odds"]), _num(a["us_odds"]), _num(b["us_odds"]))
-        if ta and tb:
-            tw_m.setdefault((sport, market), []).append((1 / ta + 1 / tb - 1) * 100)
-        if ua and ub and _num(a["tw_line"]) == _num(a["us_line"]) and _num(b["tw_line"]) == _num(b["us_line"]):
-            us_m.setdefault((sport, market), []).append((1 / ua + 1 / ub - 1) * 100)
+        tw = [_num(p["tw_odds"]) for p in ps]
+        us = [_num(p["us_odds"]) for p in ps]
+        if all(tw):
+            tw_m.setdefault((sport, market), []).append((sum(1 / x for x in tw) - 1) * 100)
+        if all(us) and all(_num(p["tw_line"]) == _num(p["us_line"]) for p in ps):
+            us_m.setdefault((sport, market), []).append((sum(1 / x for x in us) - 1) * 100)
     out = []
     for (sport, market), vals in sorted(groups.items()):
         vals = [v for v in vals if v is not None]
@@ -174,12 +202,12 @@ def summary():
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description="記錄一筆台彩賠率，跟美國收盤賠率比對算折扣")
-    p.add_argument("--sport", required=True, choices=list(active_sports()))
+    p.add_argument("--sport", required=True, choices=valid_sports())
     p.add_argument("--date", required=True, help="比賽日期 YYYY-MM-DD（用開賽時間的日期，UTC）")
     p.add_argument("--away", required=True)
     p.add_argument("--home", required=True)
     p.add_argument("--market", required=True, choices=["ml", "sp", "ou"])
-    p.add_argument("--side", required=True, choices=["away", "home", "over", "under"])
+    p.add_argument("--side", required=True, choices=["away", "home", "draw", "over", "under"])
     p.add_argument("--odds", required=True, type=float, help="台彩賠率（十進位，例如 1.85）")
     p.add_argument("--line", type=float, default=None, help="台彩的讓分/大小分盤口（sp/ou 才需要）")
     p.add_argument("--note", default="")

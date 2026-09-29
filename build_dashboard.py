@@ -367,6 +367,10 @@ def build(now):
     games.sort(key=lambda g: g["t"])
     tw = record_tw_odds.summary()
     for b in tw.get("best", []):
+        if b["sport"] == "soccer":
+            b["away"] = soccer_dashboard.ZH.get(b["away"]) or b["away"]
+            b["home"] = soccer_dashboard.ZH.get(b["home"]) or b["home"]
+            continue
         b["away"] = zh_name(b["sport"], b["away"]) or b["away"]
         b["home"] = zh_name(b["sport"], b["home"]) or b["home"]
     return {
