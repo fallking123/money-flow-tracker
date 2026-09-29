@@ -40,7 +40,10 @@ LEAGUES = {
 }
 FD_DIV = {v["fd"]: k for k, v in LEAGUES.items() if v["fd"]}
 HORIZON_DAYS = 12         # 開賽前 12 天內開始記錄（國際賽空檔時兩輪之間會隔比較久）
-HISTORY_SEASONS = ["2122", "2223", "2324", "2425", "2526"]
+# 歷史賽季：2014/15 起（越多季 Elo 越準、訓練樣本越多）
+HISTORY_SEASONS = [f"{y:02d}{y + 1:02d}" for y in range(14, 26)]
+# 次級聯賽（英冠、西乙、義乙、德乙、法乙）：只拿來算 Elo，讓升級隊一開始就有合理的強弱分數
+SECOND_DIV = ["E1", "SP2", "I2", "D2", "F2"]
 AN_URL = "https://api.actionnetwork.com/web/v2/scoreboard/{league}"
 FD_BASE = "https://www.football-data.co.uk"
 STATE_FILE = os.path.join(STATE_DIR, "soccer_state.json")
@@ -345,7 +348,7 @@ def download_seasons(now, state):
     cur = season_code(now)
     today = now.strftime("%Y-%m-%d")
     n = 0
-    for div in FD_DIV:
+    for div in list(FD_DIV) + SECOND_DIV:
         for season in HISTORY_SEASONS + [cur]:
             path = os.path.join(eu_dir, f"{div}_{season}.csv")
             if season != cur and os.path.exists(path):
