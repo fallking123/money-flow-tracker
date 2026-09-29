@@ -27,21 +27,49 @@ jobs:
             curl -s -L -o /tmp/o -w "HTTP %{http_code} size %{size_download}\n" -A "$UA" --max-time 25 "$1" >> $out 2>&1 || echo "連線失敗" >> $out
             head -c 600 /tmp/o | tr '\n' ' ' >> $out; echo >> $out; echo >> $out
           }
-          B="books=sr%3Abook%3A17324%2Csr%3Abook%3A18149%2Csr%3Abook%3A28901&format=us"
-          for s in kbo npb cpbl mlb; do probe "https://www.sportsbettingdime.com/wp-json/adpt/v1/$s-odds?$B"; done
-          for s in kbo npb; do probe "https://api.actionnetwork.com/web/v2/scoreboard/$s?bookIds=15,30,68,69,71,75,76"; done
-          probe "https://api.actionnetwork.com/web/v1/scoreboard/mlb?bookIds=15,30"
-          for l in kbo npb cpbl; do probe "https://site.api.espn.com/apis/site/v2/sports/baseball/$l/scoreboard"; done
-          probe "https://www.thesportsdb.com/api/v1/json/3/search_all_leagues.php?s=Baseball"
-          probe "https://www.cpbl.com.tw/schedule"
-          probe "https://npb.jp/games/2026/"
-          probe "https://www.koreabaseball.com/Schedule/Schedule.aspx"
-          probe "https://www.oddsportal.com/baseball/south-korea/kbo/"
-          probe "https://www.covers.com/sport/baseball/kbo/odds"
-          probe "https://blob.sportslottery.com.tw/apidata/Pre/Baseball.json"
-          probe "https://blob.sportslottery.com.tw/apidata/Live/On.json"
-          probe "https://www.playsport.cc/predictgame.php?allianceid=9"
-          cat $out
+          D=$(date -u +%Y%m%d)
+          for s in kbo npb; do
+            probe "https://api.actionnetwork.com/web/v1/scoreboard/$s?date=$D"
+            probe "https://api.actionnetwork.com/web/v1/scoreboard/$s?bookIds=15,30&date=$D"
+          done
+          probe "https://www.cpbl.com.tw/schedule/index"
+          probe "https://www.cpbl.com.tw/"
+          for u in Pre/On.json Pre/Baseball/On.json PreGame/On.json Pre/Event.json; do probe "https://blob.sportslottery.com.tw/apidata/$u"; done
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Find 台彩 data URLs
+        run: |
+          pip install -q playwright==1.47.0 && playwright install --with-deps chromium > /dev/null
+          cat > f.py <<'PY'
+          from playwright.sync_api import sync_playwright
+          seen = {}
+          def rec(r):
+              u = r.url
+              if any(k in u for k in ("apidata", "/api/", ".json")) and u not in seen:
+                  try:
+                      body = r.text()[:300].replace("\n", " ")
+                  except Exception:
+                      body = ""
+                  seen[u] = f"{r.status} {u}\n    {body}"
+          with sync_playwright() as p:
+              b = p.chromium.launch(headless=True)
+              pg = b.new_page(locale="zh-TW", user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15")
+              pg.on("response", rec)
+              for url in ("https://www.sportslottery.com.tw/zh-tw/game/pre", "https://www.sportslottery.com.tw/zh-tw/game/pre/baseball"):
+                  try:
+                      r = pg.goto(url, timeout=60000, wait_until="networkidle")
+                      print("PAGE", url, r.status if r else None)
+                      pg.wait_for_timeout(6000)
+                  except Exception as e:
+                      print("ERR", url, e)
+              b.close()
+          with open("docs/probe/tw.txt", "w") as f:
+              for v in seen.values():
+                  f.write(v + "\n")
+          print(len(seen), "urls")
+          PY
+          python f.py || true
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"
