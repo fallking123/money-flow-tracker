@@ -1,76 +1,41 @@
-== https://www.sportsbettingdime.com/wp-json/adpt/v1/kbo-odds?books=sr%3Abook%3A17324%2Csr%3Abook%3A18149%2Csr%3Abook%3A28901&format=us
-HTTP 404 size 114
-{"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}
-
-== https://www.sportsbettingdime.com/wp-json/adpt/v1/npb-odds?books=sr%3Abook%3A17324%2Csr%3Abook%3A18149%2Csr%3Abook%3A28901&format=us
-HTTP 404 size 114
-{"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}
-
-== https://www.sportsbettingdime.com/wp-json/adpt/v1/cpbl-odds?books=sr%3Abook%3A17324%2Csr%3Abook%3A18149%2Csr%3Abook%3A28901&format=us
-HTTP 404 size 114
-{"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}
-
-== https://www.sportsbettingdime.com/wp-json/adpt/v1/mlb-odds?books=sr%3Abook%3A17324%2Csr%3Abook%3A18149%2Csr%3Abook%3A28901&format=us
-HTTP 200 size 26703
-{"filter_keys":["National League - East","American League - West","American League - Central","American League - East","National League - West","National League - Central"],"data":[{"id":"sr:match:75060830","tournamentId":"sr:tournament:109","status":"not_started","scheduled":"2026-09-29T18:00:00+00:00","competitors":{"home":{"id":"12079497-e414-450a-8bf2-29f91de646bf","name":"Braves","country":"USA","country_code":"USA","abbreviation":"ATL","qualifier":"home","rotation_number":946,"uuids":"12079497-e414-450a-8bf2-29f91de646bf","market":"Atlanta","abbr":"ATL","sr_id":"sr:competitor:3656","foun
-
-== https://api.actionnetwork.com/web/v2/scoreboard/kbo?bookIds=15,30,68,69,71,75,76
+== https://api.actionnetwork.com/web/v1/scoreboard/kbo?date=20260929
 HTTP 400 size 113
 {"message":"Invalid data submitted as payload","statusCode":400,"error":"Bad Request","errorCode":"INVALID_DATA"}
 
-== https://api.actionnetwork.com/web/v2/scoreboard/npb?bookIds=15,30,68,69,71,75,76
+== https://api.actionnetwork.com/web/v1/scoreboard/kbo?bookIds=15,30&date=20260929
 HTTP 400 size 113
 {"message":"Invalid data submitted as payload","statusCode":400,"error":"Bad Request","errorCode":"INVALID_DATA"}
 
-== https://api.actionnetwork.com/web/v1/scoreboard/mlb?bookIds=15,30
-HTTP 200 size 151121
-{"league":{"id":8,"sport":"baseball","name":"mlb","description":"Major League Baseball","logo":"https://static.sprtactn.co/leagues/500/mlb.png","current_season":"2026","current_season_type":"reg","pre_season_start":"2026-02-20T08:00:00.000Z","pre_season_end":"2026-03-26T06:59:59.000Z","reg_season_start":"2026-03-25T07:00:00.000Z","reg_season_end":"2026-09-30T06:59:59.000Z","post_season_start":"2026-09-28T07:00:00.000Z","post_season_end":"2026-11-23T07:59:59.000Z","blacklist_dates":["2026-07-13T07:00:00.000Z","2026-07-15T07:00:00.000Z","2026-09-28T07:00:00.000Z"],"calendar_info":{},"current_wee
+== https://api.actionnetwork.com/web/v1/scoreboard/npb?date=20260929
+HTTP 400 size 113
+{"message":"Invalid data submitted as payload","statusCode":400,"error":"Bad Request","errorCode":"INVALID_DATA"}
 
-== https://site.api.espn.com/apis/site/v2/sports/baseball/kbo/scoreboard
-HTTP 403 size 440
-<HTML><HEAD> <TITLE>Access Denied</TITLE> </HEAD><BODY> <H1>Access Denied</H1>   You don't have permission to access "http&#58;&#47;&#47;site&#46;api&#46;espn&#46;com&#47;apis&#47;site&#47;v2&#47;sports&#47;baseball&#47;kbo&#47;scoreboard" on this server.<P> Reference&#32;&#35;18&#46;3be90b17&#46;1790686500&#46;c77ff24 <P>https&#58;&#47;&#47;errors&#46;edgesuite&#46;net&#47;18&#46;3be90b17&#46;1790686500&#46;c77ff24</P> </BODY> </HTML> 
+== https://api.actionnetwork.com/web/v1/scoreboard/npb?bookIds=15,30&date=20260929
+HTTP 400 size 113
+{"message":"Invalid data submitted as payload","statusCode":400,"error":"Bad Request","errorCode":"INVALID_DATA"}
 
-== https://site.api.espn.com/apis/site/v2/sports/baseball/npb/scoreboard
-HTTP 403 size 442
-<HTML><HEAD> <TITLE>Access Denied</TITLE> </HEAD><BODY> <H1>Access Denied</H1>   You don't have permission to access "http&#58;&#47;&#47;site&#46;api&#46;espn&#46;com&#47;apis&#47;site&#47;v2&#47;sports&#47;baseball&#47;npb&#47;scoreboard" on this server.<P> Reference&#32;&#35;18&#46;22e90b17&#46;1790686500&#46;1383c041 <P>https&#58;&#47;&#47;errors&#46;edgesuite&#46;net&#47;18&#46;22e90b17&#46;1790686500&#46;1383c041</P> </BODY> </HTML> 
+== https://www.cpbl.com.tw/schedule/index
+HTTP 308 size 0
+連線失敗
+{"message":"Invalid data submitted as payload","statusCode":400,"error":"Bad Request","errorCode":"INVALID_DATA"}
 
-== https://site.api.espn.com/apis/site/v2/sports/baseball/cpbl/scoreboard
-HTTP 403 size 443
-<HTML><HEAD> <TITLE>Access Denied</TITLE> </HEAD><BODY> <H1>Access Denied</H1>   You don't have permission to access "http&#58;&#47;&#47;site&#46;api&#46;espn&#46;com&#47;apis&#47;site&#47;v2&#47;sports&#47;baseball&#47;cpbl&#47;scoreboard" on this server.<P> Reference&#32;&#35;18&#46;37e90b17&#46;1790686500&#46;148d8a99 <P>https&#58;&#47;&#47;errors&#46;edgesuite&#46;net&#47;18&#46;37e90b17&#46;1790686500&#46;148d8a99</P> </BODY> </HTML> 
+== https://www.cpbl.com.tw/
+HTTP 200 size 352694
+  <!DOCTYPE HTML> <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hant"> <head>     <!-- Google Tag Manager -->     <script>         (function (w, d, s, l, i) {             w[l] = w[l] || []; w[l].push({                 'gtm.start':                     new Date().getTime(), event: 'gtm.js'             }); var f = d.getElementsByTagName(s)[0],                 j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =                     'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);         })(window, docum
 
-== https://www.thesportsdb.com/api/v1/json/3/search_all_leagues.php?s=Baseball
-HTTP 200 size 14570
-{"countries":[{"idLeague":"5107","idAPIfootball":"6","idAPIfootballv3":null,"strSport":"Baseball","strLeague":"Australian Baseball League","strLeagueAlternate":"","intDivision":"1","idCup":"0","strCurrentSeason":"2026-2027","intFormedYear":"2009","dateFirstEvent":"2012-11-01","strGender":"Male","strCountry":"Australia","strWebsite":"theabl.com.au","strFacebook":"www.facebook.com\/AustralianBaseballLeague\/","strInstagram":"","strTwitter":"twitter.com\/ABL","strYoutube":"www.youtube.com\/channel\/UC4URW7871xPZrbeiPREOldA","strRSS":"","strDescriptionEN":"The Australian Baseball League (ABL) is a
-
-== https://www.cpbl.com.tw/schedule
-HTTP 404 size 10
-NOT FOUND 
-
-== https://npb.jp/games/2026/
-HTTP 200 size 79476
-<!DOCTYPE html> <html lang="ja"> <head> <!-- Google Tag Manager --> <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src= 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-WS88V3F');</script> <!-- End Google Tag Manager -->  <meta charset="utf-8"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <meta name="copyright" content="Nippon Professional Baseball Or
-
-== https://www.koreabaseball.com/Schedule/Schedule.aspx
-HTTP 200 size 51010
-  <!DOCTYPE html> <html lang="ko"> <head><title> 	경기일정/결과 | 일정/결과 | KBO </title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta http-equiv="Content-Script-Type" content="text/javascript" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta http-equiv="X-UA-Compatible" content="IE=edge, Chrome" /><meta name="title" content="KBO" /><meta name="author" content="스포츠투아이" /><meta name="keywords" content="KBO, 한국야구위원회, 프로야구, KBO 리그, 퓨처스리그, 프로야구순위, 프로야구 일정" /><meta
-
-== https://www.oddsportal.com/baseball/south-korea/kbo/
-HTTP 200 size 469196
-<!DOCTYPE html><html lang="en" class="opensans_aaadb7a3-module__b9fGUa__variable montserrat_5d237d23-module__hkFSxG__variable"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/chunks/2x0fi7fucyswm.css" data-precedence="next"/><link rel="stylesheet" href="/_next/static/chunks/3owhnkcw8bq9a.css" data-precedence="next"/><link rel="stylesheet" href="/_next/static/chunks/02iwf8x8ssaz6.css" data-precedence="next"/><link rel="stylesheet" href="/_next/static/chunks/0lv4udsx3iyj-.css" data-precedence="next"/><li
-
-== https://www.covers.com/sport/baseball/kbo/odds
-HTTP 404 size 0
-
-
-== https://blob.sportslottery.com.tw/apidata/Pre/Baseball.json
+== https://blob.sportslottery.com.tw/apidata/Pre/On.json
 HTTP 404 size 215
-﻿<?xml version="1.0" encoding="utf-8"?><Error><Code>BlobNotFound</Code><Message>The specified blob does not exist. RequestId:f435ee34-c01e-007b-1d11-50804d000000 Time:2026-09-29T12:55:08.2452797Z</Message></Error>
+﻿<?xml version="1.0" encoding="utf-8"?><Error><Code>BlobNotFound</Code><Message>The specified blob does not exist. RequestId:b29ea59f-c01e-00b7-1412-50e4f8000000 Time:2026-09-29T12:57:27.0612811Z</Message></Error>
 
-== https://blob.sportslottery.com.tw/apidata/Live/On.json
-HTTP 200 size 2
-[]
+== https://blob.sportslottery.com.tw/apidata/Pre/Baseball/On.json
+HTTP 404 size 215
+﻿<?xml version="1.0" encoding="utf-8"?><Error><Code>BlobNotFound</Code><Message>The specified blob does not exist. RequestId:028e5a81-201e-009f-1c12-509347000000 Time:2026-09-29T12:57:28.5472930Z</Message></Error>
 
-== https://www.playsport.cc/predictgame.php?allianceid=9
-HTTP 403 size 5741
-<!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="content-security-policy" content="default-src &#39;none&#39;; script-src &#39;nonce-rjllwNV52J3LR6DkSaNDQq&#39; &#39;unsafe-eval&#39; https://challenges.cloudflare.com; script-src-attr &#39;none&#39;; style-src &#39;unsafe-inline&#39;; img-src &#39;self&#39; https://challenges
+== https://blob.sportslottery.com.tw/apidata/PreGame/On.json
+HTTP 404 size 215
+﻿<?xml version="1.0" encoding="utf-8"?><Error><Code>BlobNotFound</Code><Message>The specified blob does not exist. RequestId:f9932888-e01e-00cd-2612-508eb5000000 Time:2026-09-29T12:57:29.6317903Z</Message></Error>
+
+== https://blob.sportslottery.com.tw/apidata/Pre/Event.json
+HTTP 404 size 215
+﻿<?xml version="1.0" encoding="utf-8"?><Error><Code>BlobNotFound</Code><Message>The specified blob does not exist. RequestId:6ca61c67-b01e-00b8-3f12-50090e000000 Time:2026-09-29T12:57:30.6854769Z</Message></Error>
 
