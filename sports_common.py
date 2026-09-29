@@ -123,7 +123,7 @@ def espn_events(sport, start_utc, end_utc):
 
 
 def probable_stat(pr):
-    """先發投手本季成績，例如「10-5 · ERA 3.21」（ESPN 格式不固定，抓不到就留空）"""
+    """先發投手／門將本季成績，例如「10-5 · ERA 3.21」（ESPN 格式不固定，抓不到就留空）"""
     st = {}
     for x in pr.get("statistics") or []:
         k = (x.get("abbreviation") or x.get("name") or "").upper()
@@ -134,6 +134,13 @@ def probable_stat(pr):
         parts.append(f"{st['W']}-{st['L']}")
     if st.get("ERA"):
         parts.append(f"ERA {st['ERA']}")
+    # 冰球門將：失分率、擋球率
+    if st.get("GAA"):
+        parts.append(f"失分率 {st['GAA']}")
+    for k in ("SV%", "SVPCT", "SAVEPCT"):
+        if st.get(k):
+            parts.append(f"擋球率 {st[k]}")
+            break
     if not parts and isinstance(pr.get("record"), str):
         parts.append(pr["record"].strip("() "))
     return " · ".join(parts)
@@ -147,7 +154,17 @@ def parse_espn_event(e):
         team = t.get("team", {})
         pr = (t.get("probables") or [{}])[0]
         prob = pr.get("athlete", {}).get("displayName", "")
+        recs = {}
+        for rc in t.get("records") or []:
+            ty = (rc.get("type") or rc.get("name") or "").lower()
+            if ty in ("total", "overall", "ytd"):
+                recs["total"] = rc.get("summary", "")
+            elif ty == "home":
+                recs["home"] = rc.get("summary", "")
+            elif ty in ("road", "away"):
+                recs["road"] = rc.get("summary", "")
         teams[side] = {
+            "id": str(team.get("id", "")), "records": recs,
             "display": team.get("displayName", ""), "name": team.get("name", ""),
             "short": team.get("shortDisplayName", ""), "location": team.get("location", ""),
             "abbr": team.get("abbreviation", ""), "score": t.get("score"),
