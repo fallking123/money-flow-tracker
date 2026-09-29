@@ -148,6 +148,36 @@ def rest_info(hist, tid, game_time):
 
 
 OUT_WORDS = ("out", "reserve", "suspen", "il")
+ATHLETE_STATS = "https://site.web.api.espn.com/apis/common/v3/sports/{path}/athletes/{aid}/stats"
+_stat_cache = {}
+
+
+def athlete_stat(sport, aid):
+    """先發投手／門將最近一季成績（ESPN 賽程裡沒有附，要另外查球員頁）"""
+    if not aid:
+        return ""
+    key = (sport, aid)
+    if key in _stat_cache:
+        return _stat_cache[key]
+    txt = ""
+    try:
+        r = requests.get(ATHLETE_STATS.format(path=SPORTS[sport]["espn"], aid=aid), timeout=20)
+        r.raise_for_status()
+        cats = r.json().get("categories") or []
+        cat = next((c for c in cats if c.get("name") in ("pitching", "goaltender")), cats[0] if cats else None)
+        rows = (cat or {}).get("statistics") or []
+        if rows:
+            last = rows[-1]
+            v = dict(zip(cat.get("labels") or [], last.get("stats") or []))
+            season = (last.get("season") or {}).get("displayName", "")
+            if sport == "mlb":
+                txt = f"{season}：{v.get('W', '–')} 勝 {v.get('L', '–')} 敗・ERA {v.get('ERA', '–')}・WHIP {v.get('WHIP', '–')}・{v.get('IP', '–')} 局"
+            else:
+                txt = f"{season}：{v.get('WINS', '–')} 勝 {v.get('L', '–')} 敗・失分率 {v.get('GAA', '–')}・擋球率 {v.get('SV%', '–')}"
+    except Exception as e:
+        print(f"  球員成績讀取失敗 ({aid}): {e}")
+    _stat_cache[key] = txt
+    return txt
 
 
 def injuries(sport, event_id):
@@ -239,8 +269,8 @@ def run():
                 "away_probable_pitcher": ev["away"].get("probable", "") if prob else "",
                 "home_probable_pitcher": ev["home"].get("probable", "") if prob else "",
                 "umpire_name": "",
-                "away_pitcher_stat": ev["away"].get("probable_stat", "") if prob else "",
-                "home_pitcher_stat": ev["home"].get("probable_stat", "") if prob else "",
+                "away_pitcher_stat": (ev["away"].get("probable_stat") or athlete_stat(sport, ev["away"].get("probable_id"))) if prob else "",
+                "home_pitcher_stat": (ev["home"].get("probable_stat") or athlete_stat(sport, ev["home"].get("probable_id"))) if prob else "",
             })
         path = os.path.join(sport_dir(sport), "context.csv")
         migrate(path)

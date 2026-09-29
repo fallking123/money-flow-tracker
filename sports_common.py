@@ -154,6 +154,7 @@ def parse_espn_event(e):
         team = t.get("team", {})
         pr = (t.get("probables") or [{}])[0]
         prob = pr.get("athlete", {}).get("displayName", "")
+        prob_id = str(pr.get("playerId") or pr.get("athlete", {}).get("id") or "")
         recs = {}
         for rc in t.get("records") or []:
             ty = (rc.get("type") or rc.get("name") or "").lower()
@@ -168,7 +169,7 @@ def parse_espn_event(e):
             "display": team.get("displayName", ""), "name": team.get("name", ""),
             "short": team.get("shortDisplayName", ""), "location": team.get("location", ""),
             "abbr": team.get("abbreviation", ""), "score": t.get("score"),
-            "winner": t.get("winner"), "probable": prob, "probable_stat": probable_stat(pr),
+            "winner": t.get("winner"), "probable": prob, "probable_id": prob_id, "probable_stat": probable_stat(pr),
             # 每一局（冰球每一節、美式足球/籃球每一節）的得分，算單隊大小、第一局和局用
             "periods": [ls.get("value") for ls in (t.get("linescores") or [])],
         }
