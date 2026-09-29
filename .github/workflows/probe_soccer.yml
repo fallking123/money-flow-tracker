@@ -28,43 +28,38 @@ jobs:
           }
           rm -f docs/probe/*.json docs/probe/*.html docs/probe/*.csv
           get() { curl -s --compressed -A "$UA" "$2" -o "docs/probe/$1"; echo "== $1 $(wc -c < docs/probe/$1) $2" >> $out; head -c 400 "docs/probe/$1" | tr '\n' ' ' >> $out; echo >> $out; }
-          # 1) SBD 所有 API 路徑（看有沒有足球）
-          get sbd_routes.json "https://www.sportsbettingdime.com/wp-json/adpt/v1"
-          # 2) football-data.co.uk：即將開賽賠率＋本季賽果（Pinnacle / Bet365 / 市場平均，含亞洲讓球、大小 2.5）
-          get fd_fixtures.csv "https://www.football-data.co.uk/fixtures.csv"
-          get fd_E0.csv "https://www.football-data.co.uk/mmz4281/2627/E0.csv"
-          # 3) ESPN 足球（一天一天查）
-          for l in eng.1 esp.1 ita.1 ger.1 fra.1 uefa.champions; do curl -s --compressed "https://site.api.espn.com/apis/site/v2/sports/soccer/$l/scoreboard?dates=20261003&limit=300" -o "docs/probe/espn_$l.json"; echo "== espn $l $(wc -c < docs/probe/espn_$l.json)" >> $out; done
-          # 4) Action Network 足球其他寫法
-          get an_v1_epl.json "https://api.actionnetwork.com/web/v1/scoreboard/epl?bookIds=15,30&date=20261003"
-          get an_v2_epl_nodate.json "https://api.actionnetwork.com/web/v2/scoreboard/epl?bookIds=15,30"
-          get an_v2_soccer.json "https://api.actionnetwork.com/web/v2/scoreboard/soccer?bookIds=15,30&date=20261003"
-          get an_v1_mlb.json "https://api.actionnetwork.com/web/v1/scoreboard/mlb?bookIds=15,30"
+          # football-data.co.uk（跟著轉址、顯示狀態碼）
+          for f in fixtures.csv mmz4281/2627/E0.csv; do curl -s -L --compressed -A "$UA" -w "HTTP %{http_code} %{url_effective}\n" "https://www.football-data.co.uk/$f" -o "docs/probe/fd_$(basename $f)" >> $out; done
+          # ESPN 足球（有比賽的日期）
+          for x in uefa.champions:20260930 uefa.champions:20261001 eng.1:20261010 esp.1:20261010 ita.1:20261010 ger.1:20261010 fra.1:20261010; do l=${x%%:*}; d=${x##*:}; curl -s --compressed "https://site.api.espn.com/apis/site/v2/sports/soccer/$l/scoreboard?dates=$d&limit=300" -o "docs/probe/espn_${l}_$d.json"; done
+          # Action Network 足球（有比賽的日期）
+          for x in soccer:20260930 soccer:20261001 champions:20261001 epl:20261010 laliga:20261010 seriea:20261010 bundesliga:20261010 ligue1:20261010; do l=${x%%:*}; d=${x##*:}; get "an_${l}_$d.json" "https://api.actionnetwork.com/web/v2/scoreboard/$l?bookIds=15,30,68,69,71,75,76,79,123&date=$d"; done
           python3 - >> $out 2>&1 <<'PY'
-          import json, csv, io
-          try:
-              d = json.load(open("docs/probe/sbd_routes.json"))
-              print("SBD routes:", [r for r in d.get("routes", {})][:80])
-          except Exception as e: print("sbd", e)
-          for f in ("fd_fixtures.csv", "fd_E0.csv"):
+          import json, csv, io, glob
+          for f in sorted(glob.glob("docs/probe/fd_*.csv")):
               try:
-                  rows = list(csv.reader(io.open("docs/probe/" + f, encoding="utf-8-sig", errors="ignore")))
-                  print(f, "rows", len(rows)); print(" header", rows[0]); print(" first", rows[1] if len(rows) > 1 else None)
-                  if f == "fd_fixtures.csv": print(" divs", sorted({r[0] for r in rows[1:] if r}))
+                  rows = list(csv.reader(io.open(f, encoding="utf-8-sig", errors="ignore")))
+                  print(f, "rows", len(rows)); print(" header", rows[0] if rows else None); print(" first", rows[1] if len(rows) > 1 else None)
+                  if "fixtures" in f: print(" divs", sorted({r[0] for r in rows[1:] if r}))
               except Exception as e: print(f, e)
-          for f in ("an_v1_epl.json", "an_v2_epl_nodate.json", "an_v2_soccer.json", "an_v1_mlb.json"):
+          for f in sorted(glob.glob("docs/probe/espn_*_2026*.json")):
               try:
-                  d = json.load(open("docs/probe/" + f)); g = d.get("games") or []
+                  d = json.load(open(f)); ev = d.get("events") or []
+                  print(f, "events", len(ev), ev[0]["name"] if ev else "")
+                  if ev:
+                      c = ev[0]["competitions"][0]
+                      print("   comp keys", sorted(c.keys())); print("   odds", json.dumps(c.get("odds"))[:600])
+              except Exception as e: print(f, e)
+          for f in sorted(glob.glob("docs/probe/an_*_2026*.json")):
+              try:
+                  d = json.load(open(f)); g = d.get("games") or []
                   print(f, "games", len(g))
                   if g:
-                      o = (g[0].get("odds") or [{}])[0]
-                      print("  odds keys", sorted(o.keys())[:80])
+                      x = g[0]; print("   game keys", sorted(x.keys()))
+                      print("   teams", [t.get("full_name") for t in x.get("teams", [])], x.get("start_time"), (x.get("league_name") or ""))
+                      for o in (x.get("odds") or [])[:3]:
+                          print("   odds", json.dumps(o)[:900])
               except Exception as e: print(f, e)
-          for l in ("eng.1", "esp.1", "ita.1", "ger.1", "fra.1", "uefa.champions"):
-              try:
-                  d = json.load(open(f"docs/probe/espn_{l}.json")); ev = d.get("events") or []
-                  print("espn", l, "events", len(ev), ev[0]["name"] if ev else "")
-              except Exception as e: print("espn", l, e)
           PY
           cat $out
       - name: Commit
@@ -72,5 +67,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/probe
-          git commit -m "探測足球資料來源（第五次）" || exit 0
+          git commit -m "探測足球資料來源（第六次）" || exit 0
           for i in 1 2 3 4 5; do git pull --rebase && git push && exit 0; sleep 10; done
