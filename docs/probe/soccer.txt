@@ -1,98 +1,50 @@
-== https://www.sportsbettingdime.com/wp-json/adpt/v1/epl-odds?books=sr%3Abook%3A17324%2Csr%3Abook%3A18149%2Csr%3Abook%3A28901&format=us
-HTTP 404 size 114
-{"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}
-
-== https://www.sportsbettingdime.com/wp-json/adpt/v1/soccer-odds?books=sr%3Abook%3A17324%2Csr%3Abook%3A18149%2Csr%3Abook%3A28901&format=us
-HTTP 404 size 114
-{"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}
-
-== https://www.sportsbettingdime.com/wp-json/adpt/v1/premier-league-odds?books=sr%3Abook%3A17324%2Csr%3Abook%3A18149%2Csr%3Abook%3A28901&format=us
-HTTP 404 size 114
-{"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}
-
-== https://www.sportsbettingdime.com/wp-json/adpt/v1/champions-league-odds?books=sr%3Abook%3A17324%2Csr%3Abook%3A18149%2Csr%3Abook%3A28901&format=us
-HTTP 404 size 114
-{"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}
-
-== https://www.sportsbettingdime.com/wp-json/adpt/v1/ucl-odds?books=sr%3Abook%3A17324%2Csr%3Abook%3A18149%2Csr%3Abook%3A28901&format=us
-HTTP 404 size 114
-{"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}
-
-== https://www.sportsbettingdime.com/wp-json/adpt/v1/laliga-odds?books=sr%3Abook%3A17324%2Csr%3Abook%3A18149%2Csr%3Abook%3A28901&format=us
-HTTP 404 size 114
-{"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}
-
-== https://www.sportsbettingdime.com/wp-json/adpt/v1/la-liga-odds?books=sr%3Abook%3A17324%2Csr%3Abook%3A18149%2Csr%3Abook%3A28901&format=us
-HTTP 404 size 114
-{"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}
-
-== https://www.sportsbettingdime.com/wp-json/adpt/v1/serie-a-odds?books=sr%3Abook%3A17324%2Csr%3Abook%3A18149%2Csr%3Abook%3A28901&format=us
-HTTP 404 size 114
-{"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}
-
-== https://www.sportsbettingdime.com/wp-json/adpt/v1/bundesliga-odds?books=sr%3Abook%3A17324%2Csr%3Abook%3A18149%2Csr%3Abook%3A28901&format=us
-HTTP 404 size 114
-{"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}
-
-== https://www.sportsbettingdime.com/wp-json/adpt/v1/ligue-1-odds?books=sr%3Abook%3A17324%2Csr%3Abook%3A18149%2Csr%3Abook%3A28901&format=us
-HTTP 404 size 114
-{"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}
-
-== https://www.sportsbettingdime.com/wp-json/adpt/v1/mls-odds?books=sr%3Abook%3A17324%2Csr%3Abook%3A18149%2Csr%3Abook%3A28901&format=us
-HTTP 404 size 114
-{"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}
-
-== https://api.actionnetwork.com/web/v1/scoreboard/soccer?bookIds=15,30
-HTTP 200 size 12668
-{"schedule_info":{"reg_season_start":"2025-09-17T00:00:00.000Z","reg_season_end":"2027-06-14T00:00:00.000Z","blacklist_dates":["2026-09-21T07:00:00.000Z","2026-09-22T07:00:00.000Z","2026-09-24T07:00:00.000Z","2026-09-25T07:00:00.000Z","2026-09-28T07:00:00.000Z","2026-09-29T07:00:00.000Z","2026-10-02
-
 == https://api.actionnetwork.com/web/v1/scoreboard/epl?bookIds=15,30
 HTTP 200 size 5393
-{"league":{"id":9,"sport":"soccer","name":"epl","description":"English Premier League","logo":"https://static.sprtactn.co/leagues/500/epl.png","current_season":"2026","current_season_type":"reg","pre_season_start":null,"pre_season_end":null,"reg_season_start":"2026-08-21T07:00:00.000Z","reg_season_e
+{"league":{"id":9,"sport":"soccer","name":"epl","description":"English Premier League","logo":"https://static.sprtactn.co/leagues/500/epl.png","current_season":
 
-== https://api.actionnetwork.com/web/v1/leagues
-HTTP 404 size 67
-{"statusCode":404,"error":"Not Found","message":"No Content found"}
+== https://api.actionnetwork.com/web/v1/scoreboard/laliga?bookIds=15,30
+HTTP 200 size 8031
+{"league":{"id":12,"sport":"soccer","name":"laliga","description":"La Liga","logo":"https://static.sprtactn.co/leagues/500/laliga.png","current_season":"2026","
 
-== https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard
-HTTP 403 size 446
-<HTML><HEAD> <TITLE>Access Denied</TITLE> </HEAD><BODY> <H1>Access Denied</H1>   You don't have permission to access "http&#58;&#47;&#47;site&#46;api&#46;espn&#46;com&#47;apis&#47;site&#47;v2&#47;spor
+== https://api.actionnetwork.com/web/v1/scoreboard/la_liga?bookIds=15,30
+HTTP 400 size 113
+{"message":"Invalid data submitted as payload","statusCode":400,"error":"Bad Request","errorCode":"INVALID_DATA"}
 
-== https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/scoreboard
-HTTP 403 size 446
-<HTML><HEAD> <TITLE>Access Denied</TITLE> </HEAD><BODY> <H1>Access Denied</H1>   You don't have permission to access "http&#58;&#47;&#47;site&#46;api&#46;espn&#46;com&#47;apis&#47;site&#47;v2&#47;spor
+== https://api.actionnetwork.com/web/v1/scoreboard/seriea?bookIds=15,30
+HTTP 200 size 7923
+{"league":{"id":13,"sport":"soccer","name":"seriea","description":"Serie A","logo":"https://static.sprtactn.co/leagues/500/seriea.png","current_season":"2026","
 
-== https://site.api.espn.com/apis/site/v2/sports/soccer/ita.1/scoreboard
-HTTP 403 size 446
-<HTML><HEAD> <TITLE>Access Denied</TITLE> </HEAD><BODY> <H1>Access Denied</H1>   You don't have permission to access "http&#58;&#47;&#47;site&#46;api&#46;espn&#46;com&#47;apis&#47;site&#47;v2&#47;spor
+== https://api.actionnetwork.com/web/v1/scoreboard/serie_a?bookIds=15,30
+HTTP 400 size 113
+{"message":"Invalid data submitted as payload","statusCode":400,"error":"Bad Request","errorCode":"INVALID_DATA"}
 
-== https://site.api.espn.com/apis/site/v2/sports/soccer/ger.1/scoreboard
-HTTP 403 size 446
-<HTML><HEAD> <TITLE>Access Denied</TITLE> </HEAD><BODY> <H1>Access Denied</H1>   You don't have permission to access "http&#58;&#47;&#47;site&#46;api&#46;espn&#46;com&#47;apis&#47;site&#47;v2&#47;spor
+== https://api.actionnetwork.com/web/v1/scoreboard/bundesliga?bookIds=15,30
+HTTP 200 size 7334
+{"league":{"id":10,"sport":"soccer","name":"bundesliga","description":"Bundesliga","logo":"https://static.sprtactn.co/leagues/500/bund.png","current_season":"20
 
-== https://site.api.espn.com/apis/site/v2/sports/soccer/fra.1/scoreboard
-HTTP 403 size 446
-<HTML><HEAD> <TITLE>Access Denied</TITLE> </HEAD><BODY> <H1>Access Denied</H1>   You don't have permission to access "http&#58;&#47;&#47;site&#46;api&#46;espn&#46;com&#47;apis&#47;site&#47;v2&#47;spor
+== https://api.actionnetwork.com/web/v1/scoreboard/ligue1?bookIds=15,30
+HTTP 200 size 7950
+{"league":{"id":11,"sport":"soccer","name":"ligue1","description":"Ligue 1","logo":"https://static.sprtactn.co/leagues/500/ligue1.png","current_season":"2026","
 
-== https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/scoreboard
-HTTP 403 size 455
-<HTML><HEAD> <TITLE>Access Denied</TITLE> </HEAD><BODY> <H1>Access Denied</H1>   You don't have permission to access "http&#58;&#47;&#47;site&#46;api&#46;espn&#46;com&#47;apis&#47;site&#47;v2&#47;spor
+== https://api.actionnetwork.com/web/v1/scoreboard/ligue_1?bookIds=15,30
+HTTP 400 size 113
+{"message":"Invalid data submitted as payload","statusCode":400,"error":"Bad Request","errorCode":"INVALID_DATA"}
 
-ESPN eng.1 first event: Liverpool at AFC Bournemouth 2026-09-20T13:00Z
-odds: [null]
-== https://www.football-data.co.uk/robots.txt
-HTTP 200 size 732
-# Robots.txt file created by http://www.webtoolcentral.com # For domain: http://www.football-data.co.uk  # All robots will spider the domain User-agent: * Disallow:  # Block major AI training models User-agent: GPTBot Disallow: /  User-agent: ChatGPT-User Disallow: /  User-agent: Google-Extended Disallow: /  User-agent: Anthropic-AI Disallow: /  User-agent: Claude-Web Disallow: /  User-agent: ClaudeBot Disallow: /  User-agent: PerplexityBot Disallow: /  User-agent: Applebot-Extended Disallow: /  # Block aggressive common scraping tools User-agent: CCBot Disall
+== https://api.actionnetwork.com/web/v1/scoreboard/ucl?bookIds=15,30
+HTTP 400 size 113
+{"message":"Invalid data submitted as payload","statusCode":400,"error":"Bad Request","errorCode":"INVALID_DATA"}
 
-== https://www.oddsportal.com/robots.txt
-HTTP 200 size 1541
-Sitemap: https://www.oddsportal.com/sitemap_index.xml Sitemap: https://www.oddsportal.com/pl/sitemap_index.xml  User-agent: * Disallow: /redirect/ Disallow: /redirect-url/ Disallow: /ajax-widget/ Disallow: */feed/* Disallow: */search/* Disallow: */match-event/* Disallow: */ajax-event-last-results/* Disallow: */ajax-event-match-facts/* Disallow: */profile/* Disallow: */ajax-team-page/* Disallow: */ajax-team-page-sport-data/* Disallow: */ajax-team-events/* Disallow: */ajax-sport-country-tournament_/* Disallow: */ajax-nextgames/* Disallow: */ajax-sport-country-tournament-archive_/* Disallow: */aj
+== https://api.actionnetwork.com/web/v1/scoreboard/champions_league?bookIds=15,30
+HTTP 400 size 113
+{"message":"Invalid data submitted as payload","statusCode":400,"error":"Bad Request","errorCode":"INVALID_DATA"}
 
-== https://www.betexplorer.com/robots.txt
-HTTP 200 size 575
-Sitemap: https://www.betexplorer.com/sitemap_index.xml  User-agent: * Disallow: /ad/ Disallow: /redirect/ Disallow: /bookmaker/ Disallow: /*?year= Disallow: /*?stage= Disallow: /*?page= Disallow: /*?timezone= Disallow: /*?t= Disallow: /*?setsort= Disallow: /*?more= Disallow: /*?msg= Disallow: /*?activecountry= Disallow: /*?match= Disallow: /*?setnext= Disallow: /*?setmyonly= Disallow: /*?home= Disallow: /*?ttid= Disallow: /*?month= Allow: /reviews/wp-admin/admin-ajax.php  Sitemap: https://www.betexplorer.com/reviews/sitemap_index.xml  User-agent: SmartViper Disallow: /
+== https://api.actionnetwork.com/web/v1/scoreboard/mls?bookIds=15,30
+HTTP 200 size 15105
+{"league":{"id":14,"sport":"soccer","name":"mls","description":"Major League Soccer","logo":"https://static.sprtactn.co/leagues/500/mls.png","current_season":"2
 
-== https://www.betexplorer.com/football/england/premier-league/
-HTTP 200 size 158627
-<!DOCTYPE html> <html lang="en" class="no-js"> <head>  <script> // Remove no-js class and append js class if javascript is enabled document.documentElement.classList.remove("no-js"); document.documentElement.classList.add("js"); var desktopMode = localStorage.getItem("mode") || undefined; // Migrati
-
+== AN epl 20261003 size 5393
+== AN epl 20261004 size 5393
+keys game: []
+teams: []
+betexplorer data-odd count: 45
+s="table-main__eventstage">&nbsp;</th><th class="table-main__result">&nbsp;</th></tr> <tr> <td class="table-main__daysign"></td> <td><a href="/football/england/premier-league/arsenal-leeds/xtmHKGT0/" class="in-match"><span>Arsenal</span> - <span>Leeds</span></a></td> <td class="livebet">&nbsp;</td> <td class="h-text-center"> </td> <td class="table-main__odds " data-oid="ab68txv464x0xs9eih"><button onclick="my_selections_click('1x2', 'football', 'action=3&matchid=xtmHKGT0&outcomeid=ab68txv464x0xs9eih&otheroutcomes=ab68txv498x0x0,ab68txv464x0xs9eij', '1.38', 'en');" title="Add to My Selections" data-odd="1.38"></button></td> <td class="table-main__odds " data-oid="ab68txv498x0x0"><button onclick="my_selections_click('1x2', 'football', 'action=3&matchid=xtmHKGT0&outcomeid=ab68txv498x0x0&otheroutcomes=ab68txv464x0xs9eih,ab68txv464x0xs9eij', '4.88', 'en');" title="Add to My Selections" data-odd="4.88"></button></td> <td class="table-main__odds " data-oid="ab68txv464x0xs9eij"><button onclick
