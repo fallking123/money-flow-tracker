@@ -3,8 +3,7 @@ name: Backfill results
 on:
   workflow_dispatch: {}
   schedule:
-    # 配合看板更新（每天台灣時間 6/12/18/23 點），提前 20 分鐘跑，賽果才來得及進當次看板
-    - cron: "50 21,3,9,14 * * *"
+    - cron: "17 12 * * *"
 
 permissions:
   contents: write
