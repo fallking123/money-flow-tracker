@@ -17,17 +17,24 @@ jobs:
       - name: Probe
         run: |
           mkdir -p docs/probe
-          for x in baseball/mlb:20260930 baseball/mlb:20261001 hockey/nhl:20261001; do
-            p=${x%%:*}; d=${x##*:}; n=$(echo $p | tr '/' '_')
-            curl -s --compressed "https://site.api.espn.com/apis/site/v2/sports/$p/scoreboard?dates=$d" -o /tmp/s.json
-            python3 - "$n_$d" <<'PY' >> docs/probe/probables.txt
-          import json, sys
-          d = json.load(open("/tmp/s.json"))
-          for e in d.get("events", [])[:2]:
-              for c in e["competitions"][0]["competitors"]:
-                  print(e["name"], c["homeAway"])
-                  print(json.dumps(c.get("probables"), ensure_ascii=False)[:2500])
-                  print(json.dumps(c.get("records"), ensure_ascii=False)[:400])
+          : > docs/probe/probables.txt
+          for u in \
+            "https://site.web.api.espn.com/apis/common/v3/sports/baseball/mlb/athletes/34973/overview" \
+            "https://site.web.api.espn.com/apis/common/v3/sports/baseball/mlb/athletes/34973/stats" \
+            "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/athletes/34973" \
+            "https://site.web.api.espn.com/apis/common/v3/sports/hockey/nhl/athletes/4233889/overview" \
+            "https://site.web.api.espn.com/apis/common/v3/sports/hockey/nhl/athletes/4233889/stats"; do
+            curl -s --compressed -o /tmp/a.json -w "== %{http_code} $u\n" "$u" >> docs/probe/probables.txt
+            python3 - <<'PY' >> docs/probe/probables.txt
+          import json
+          try:
+              d = json.load(open("/tmp/a.json"))
+          except Exception as e:
+              print("bad", e); raise SystemExit
+          print("keys", list(d.keys())[:20])
+          st = d.get("statistics")
+          print(json.dumps(st, ensure_ascii=False)[:1800] if st else "no statistics")
+          if "categories" in d: print(json.dumps(d["categories"], ensure_ascii=False)[:1500])
           PY
           done
           cat docs/probe/probables.txt | head -c 6000
@@ -36,5 +43,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/probe
-          git commit -m "探測先發投手格式" || exit 0
+          git commit -m "探測先發投手格式（二）" || exit 0
           for i in 1 2 3 4 5; do git pull --rebase && git push && exit 0; sleep 10; done
