@@ -1,0 +1,51 @@
+name: Probe Asia baseball sources
+
+# 一次性探測：KBO / NPB / CPBL 的賠率與比分，哪些網站抓得到
+# 推送這個檔案就會跑一次，結果寫到 docs/probe/asia.txt
+on:
+  workflow_dispatch: {}
+  push:
+    paths:
+      - .github/workflows/probe_asia.yml
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probe
+        run: |
+          mkdir -p docs/probe
+          out=docs/probe/asia.txt
+          : > $out
+          UA="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15"
+          probe() {
+            echo "== $1" >> $out
+            curl -s -L -o /tmp/o -w "HTTP %{http_code} size %{size_download}\n" -A "$UA" --max-time 25 "$1" >> $out 2>&1 || echo "連線失敗" >> $out
+            head -c 600 /tmp/o | tr '\n' ' ' >> $out; echo >> $out; echo >> $out
+          }
+          B="books=sr%3Abook%3A17324%2Csr%3Abook%3A18149%2Csr%3Abook%3A28901&format=us"
+          for s in kbo npb cpbl mlb; do probe "https://www.sportsbettingdime.com/wp-json/adpt/v1/$s-odds?$B"; done
+          for s in kbo npb; do probe "https://api.actionnetwork.com/web/v2/scoreboard/$s?bookIds=15,30,68,69,71,75,76"; done
+          probe "https://api.actionnetwork.com/web/v1/scoreboard/mlb?bookIds=15,30"
+          for l in kbo npb cpbl; do probe "https://site.api.espn.com/apis/site/v2/sports/baseball/$l/scoreboard"; done
+          probe "https://www.thesportsdb.com/api/v1/json/3/search_all_leagues.php?s=Baseball"
+          probe "https://www.cpbl.com.tw/schedule"
+          probe "https://npb.jp/games/2026/"
+          probe "https://www.koreabaseball.com/Schedule/Schedule.aspx"
+          probe "https://www.oddsportal.com/baseball/south-korea/kbo/"
+          probe "https://www.covers.com/sport/baseball/kbo/odds"
+          probe "https://blob.sportslottery.com.tw/apidata/Pre/Baseball.json"
+          probe "https://blob.sportslottery.com.tw/apidata/Live/On.json"
+          probe "https://www.playsport.cc/predictgame.php?allianceid=9"
+          cat $out
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/probe
+          git commit -m "探測日韓台聯賽資料來源" || exit 0
+          for i in 1 2 3 4 5; do git pull --rebase && git push && exit 0; sleep 10; done
