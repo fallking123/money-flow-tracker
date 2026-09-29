@@ -1,14 +1,47 @@
-== an_epl_0920 215178 https://api.actionnetwork.com/web/v1/scoreboard/epl?bookIds=15,30,68,69,71,75,76,79,123&date=20260920
-== an_epl_v2_0920 122779 https://api.actionnetwork.com/web/v2/scoreboard/epl?bookIds=15,30,68,69,71,75,76,79,123&date=20260920
-== an_laliga 8031 https://api.actionnetwork.com/web/v1/scoreboard/laliga?bookIds=15,30,68,69,71,75,76,79,123
-== an_epl_1003 5393 https://api.actionnetwork.com/web/v1/scoreboard/epl?bookIds=15,30&date=20261003
-docs/probe/an_epl_0920.json games 4
-  keys: ['attendance', 'away_team_id', 'boxscore', 'coverage', 'home_team_id', 'id', 'is_free', 'league_id', 'league_name', 'meta', 'num_bets', 'odds', 'real_status', 'season', 'start_time', 'status', 'status_display', 'teams', 'trending', 'type', 'week', 'winning_team_id']
-  teams: ['Sunderland', 'Manchester City'] 2026-09-20T13:00:00.000Z complete
-  odds: {"ml_away": 550, "ml_home": -900, "spread_away": 1.5, "spread_home": -1.5, "spread_away_line": -130, "spread_home_line": -105, "over": -164, "under": 130, "draw": null, "total": 2.5, "away_total": 0.5, "away_over": -139, "away_under": -105, "home_total": 2.5, "home_over": 130, "home_under": -186, "ml_home_public": null, "ml_away_public": null, "spread_home_public": null, "spread_away_public": null, "total_under_public": null, "total_over_public": null, "ml_home_money": null, "ml_away_money": null, "spread_home_money": null, "spread_away_money": null, "total_over_money": null, "total_under_money": null, "meta": {"draw": null, "over": null, "under": null, "ml_away": null, "ml_home": null, "away_over": null, "home_over": null, "away_under": null, "home_under": null, "spread_away": null, "spread_home": null}, "num_bets": null, "book_id": 15, "type": "game", "inserted": "2026-09-20T14:49:56.280241+00:00", "line_status": {"draw": null, "over": 0, "under": 0, "ml_away": 0, "ml_home": 0, "away_over": 0, "home_over": 0, "away_under": 0, "home_under": 0, "spread_away": 0, "spread_home": 0}}
-  odds: {"ml_away": 319, "ml_home": -524, "spread_away": 0.5, "spread_home": -0.5, "spread_away_line": -833, "spread_home_line": 450, "over": 137, "under": -182, "draw": null, "total": 1.5, "away_total": 0.5, "away_over": 200, "away_under": -300, "home_total": 0.5, "home_over": -225, "home_under": 155, "ml_home_public": null, "ml_away_public": null, "spread_home_public": null, "spread_away_public": null, "total_under_public": null, "total_over_public": null, "ml_home_money": null, "ml_away_money": null, "spread_home_money": null, "spread_away_money": null, "total_over_money": null, "total_under_money": null, "meta": {"draw": null, "over": null, "under": null, "ml_away": null, "ml_home": null, "away_over": null, "home_over": null, "away_under": null, "home_under": null, "spread_away": null, "spread_home": null}, "num_bets": null, "book_id": 15, "type": "firsthalf", "inserted": "2026-09-20T13:45:30.267564+00:00", "line_status": {"draw": null, "over": 0, "under": 0, "ml_away": 0, "ml_home": 0, "away_over": 0, "home_over": 0, "away_under": 0, "home_under": 0, "spread_away": 0, "spread_home": 0}}
-docs/probe/an_epl_1003.json games 0
-docs/probe/an_epl_v2_0920.json games 4
-  keys: ['attendance', 'away_team_id', 'boxscore', 'core_id', 'coverage', 'home_team_id', 'id', 'is_free', 'league_id', 'league_name', 'markets', 'meta', 'num_bets', 'real_status', 'season', 'start_time', 'status', 'status_display', 'teams', 'trending', 'type', 'week', 'winning_team_id']
-  teams: ['Manchester City', 'Sunderland'] 2026-09-20T13:00:00.000Z complete
-docs/probe/an_laliga.json games 0
+== an_epl_20261002.json 5411 https://api.actionnetwork.com/web/v2/scoreboard/epl?bookIds=15,30,68,69,71,75,76,79,123&date=20261002
+== an_epl_20261003.json 5411 https://api.actionnetwork.com/web/v2/scoreboard/epl?bookIds=15,30,68,69,71,75,76,79,123&date=20261003
+== an_epl_20261004.json 5411 https://api.actionnetwork.com/web/v2/scoreboard/epl?bookIds=15,30,68,69,71,75,76,79,123&date=20261004
+== an_laliga_20261002.json 8049 https://api.actionnetwork.com/web/v2/scoreboard/laliga?bookIds=15,30,68,69,71,75,76,79,123&date=20261002
+== an_laliga_20261003.json 8049 https://api.actionnetwork.com/web/v2/scoreboard/laliga?bookIds=15,30,68,69,71,75,76,79,123&date=20261003
+== an_laliga_20261004.json 8049 https://api.actionnetwork.com/web/v2/scoreboard/laliga?bookIds=15,30,68,69,71,75,76,79,123&date=20261004
+== an_seriea_20261002.json 7941 https://api.actionnetwork.com/web/v2/scoreboard/seriea?bookIds=15,30,68,69,71,75,76,79,123&date=20261002
+== an_seriea_20261003.json 7941 https://api.actionnetwork.com/web/v2/scoreboard/seriea?bookIds=15,30,68,69,71,75,76,79,123&date=20261003
+== an_seriea_20261004.json 7941 https://api.actionnetwork.com/web/v2/scoreboard/seriea?bookIds=15,30,68,69,71,75,76,79,123&date=20261004
+== an_bundesliga_20261002.json 7352 https://api.actionnetwork.com/web/v2/scoreboard/bundesliga?bookIds=15,30,68,69,71,75,76,79,123&date=20261002
+== an_bundesliga_20261003.json 7352 https://api.actionnetwork.com/web/v2/scoreboard/bundesliga?bookIds=15,30,68,69,71,75,76,79,123&date=20261003
+== an_bundesliga_20261004.json 7352 https://api.actionnetwork.com/web/v2/scoreboard/bundesliga?bookIds=15,30,68,69,71,75,76,79,123&date=20261004
+== an_ligue1_20261002.json 7968 https://api.actionnetwork.com/web/v2/scoreboard/ligue1?bookIds=15,30,68,69,71,75,76,79,123&date=20261002
+== an_ligue1_20261003.json 7968 https://api.actionnetwork.com/web/v2/scoreboard/ligue1?bookIds=15,30,68,69,71,75,76,79,123&date=20261003
+== an_ligue1_20261004.json 7968 https://api.actionnetwork.com/web/v2/scoreboard/ligue1?bookIds=15,30,68,69,71,75,76,79,123&date=20261004
+== an_try_ucl.json 113 https://api.actionnetwork.com/web/v2/scoreboard/ucl?bookIds=15,30,68,69,71,75,76,79,123&date=20260930
+== an_try_uefa.json 113 https://api.actionnetwork.com/web/v2/scoreboard/uefa?bookIds=15,30,68,69,71,75,76,79,123&date=20260930
+== an_try_championsleague.json 113 https://api.actionnetwork.com/web/v2/scoreboard/championsleague?bookIds=15,30,68,69,71,75,76,79,123&date=20260930
+== an_try_champions.json 36647 https://api.actionnetwork.com/web/v2/scoreboard/champions?bookIds=15,30,68,69,71,75,76,79,123&date=20260930
+== an_try_uefacl.json 113 https://api.actionnetwork.com/web/v2/scoreboard/uefacl?bookIds=15,30,68,69,71,75,76,79,123&date=20260930
+== an_try_cl.json 113 https://api.actionnetwork.com/web/v2/scoreboard/cl?bookIds=15,30,68,69,71,75,76,79,123&date=20260930
+== be_epl.html 158818 https://www.betexplorer.com/football/england/premier-league/
+== be_laliga.html 155841 https://www.betexplorer.com/football/spain/laliga/
+== be_ucl.html 159028 https://www.betexplorer.com/football/europe/champions-league/
+== espn eng.1 80
+== espn uefa.champions 80
+docs/probe/an_bundesliga_20261002.json games 0 bundesliga
+docs/probe/an_bundesliga_20261003.json games 0 bundesliga
+docs/probe/an_bundesliga_20261004.json games 0 bundesliga
+docs/probe/an_epl_20261002.json games 0 epl
+docs/probe/an_epl_20261003.json games 0 epl
+docs/probe/an_epl_20261004.json games 0 epl
+docs/probe/an_laliga_20261002.json games 0 laliga
+docs/probe/an_laliga_20261003.json games 0 laliga
+docs/probe/an_laliga_20261004.json games 0 laliga
+docs/probe/an_ligue1_20261002.json games 0 ligue1
+docs/probe/an_ligue1_20261003.json games 0 ligue1
+docs/probe/an_ligue1_20261004.json games 0 ligue1
+docs/probe/an_seriea_20261002.json games 0 seriea
+docs/probe/an_seriea_20261003.json games 0 seriea
+docs/probe/an_seriea_20261004.json games 0 seriea
+docs/probe/an_try_champions.json games 0 champions
+docs/probe/an_try_championsleague.json games 0 None
+docs/probe/an_try_cl.json games 0 None
+docs/probe/an_try_ucl.json games 0 None
+docs/probe/an_try_uefa.json games 0 None
+docs/probe/an_try_uefacl.json games 0 None
