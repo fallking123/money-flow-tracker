@@ -116,6 +116,8 @@ h1{font-size:24px;font-weight:900;margin:0;text-wrap:balance}
 .tm .nm{font-weight:700;font-size:16.5px;line-height:1.25}
 .tm .od{font-family:var(--num);font-weight:700;color:var(--muted);font-size:13px}
 .vs{color:var(--muted);font-size:12px;font-family:var(--num)}
+.vs.draw{background:var(--soft);border-radius:999px;padding:3px 10px;font-weight:800;color:var(--ink2);white-space:nowrap}
+.tb.mini{font-size:12.5px;margin-bottom:6px} .tb.mini td,.tb.mini th{padding:4px 6px}
 .say{border-radius:14px;padding:11px 13px;font-size:14.5px;line-height:1.6;background:var(--soft)}
 .say.on{background:var(--good-soft)}
 .say.on b.who{color:var(--good)}
@@ -340,10 +342,22 @@ table{border-collapse:collapse;width:100%}
     return `<span class="dot" style="background:${c1};color:${tx};--c2:${c2}">${esc(ab || "?")}</span>`;
   }
   const tcol = (c, fb) => (c ? c[0] : fb);
+  const SPN = {soccer: "足球"};
+  const spLabel = (k) => SPN[k] || k.toUpperCase();
+  const lgLabel = (g) => (g.sport === "soccer" ? g.league_zh || "足球" : g.sport.toUpperCase());
 
   // ═════════ 計算（跟 Python 回測一致）═════════
   function sides(g, s, mkt) {
     const a = (s && s[mkt]) || [];
+    if (g.sport === "soccer") {
+      if (mkt === "ml") return [
+        {key: "home", nm: g.home_zh || g.home_ab, bet: a[0], money: a[1], odds: a[6]},
+        {key: "draw", nm: "和局", bet: a[2], money: a[3], odds: a[7]},
+        {key: "away", nm: g.away_zh || g.away_ab, bet: a[4], money: a[5], odds: a[8]}];
+      if (mkt === "sp") return [
+        {key: "home", nm: g.home_zh || g.home_ab, bet: a[2], money: a[3], odds: a[6], ln: a[4] == null ? null : -a[4]},
+        {key: "away", nm: g.away_zh || g.away_ab, bet: a[0], money: a[1], odds: a[5], ln: a[4]}];
+    }
     if (mkt === "ml") return [
       {key: "away", nm: g.away_zh || g.away_ab, bet: a[0], money: a[1], odds: a[4]},
       {key: "home", nm: g.home_zh || g.home_ab, bet: a[2], money: a[3], odds: a[5]}];
@@ -356,21 +370,20 @@ table{border-collapse:collapse;width:100%}
   }
   const diffOf = (sd) => (sd.bet == null || sd.money == null ? null : sd.money - sd.bet);
   function fair(ss, i) {
-    const a = ss[0].odds, b = ss[1].odds;
-    if (!a || !b) return null;
-    const ia = 1 / a, ib = 1 / b;
-    return (i === 0 ? ia : ib) / (ia + ib);
+    if (ss.some((x) => !x.odds)) return null;
+    const inv = ss.map((x) => 1 / x.odds), sum = inv.reduce((a, b) => a + b, 0);
+    return inv[i] / sum;
   }
   function signal(g, s, mkt, thr) {
     const ss = sides(g, s, mkt);
-    for (let i = 0; i < 2; i++) { const sd = ss[i], d = diffOf(sd); if (d != null && d >= thr) return {...sd, i, diff: d, fair: fair(ss, i)}; }
+    for (let i = 0; i < ss.length; i++) { const sd = ss[i], d = diffOf(sd); if (d != null && d >= thr) return {...sd, i, diff: d, fair: fair(ss, i)}; }
     return null;
   }
   const closing = (g) => { const pre = g.snaps.filter((s) => s.hrs == null || s.hrs >= 0); return pre.length ? pre[pre.length - 1] : g.snaps[g.snaps.length - 1]; };
   const latest = (g) => g.snaps[g.snaps.length - 1];
   function rlm(g, mkt) {
     const ss = sides(g, closing(g), mkt);
-    if (ss[0].bet == null || ss[1].bet == null) return null;
+    if (ss.length !== 2 || ss[0].bet == null || ss[1].bet == null) return null;
     const pi = ss[0].bet >= ss[1].bet ? 0 : 1, pub = ss[pi], sharp = ss[1 - pi];
     if (pub.bet < 55) return null;
     const first = sides(g, g.snaps[0], mkt)[pi];
@@ -384,7 +397,7 @@ table{border-collapse:collapse;width:100%}
       if (openLn != null && pub.ln != null) lnMove = pub.key === "over" ? openLn - pub.ln : pub.ln - openLn;
     }
     if (lnMove != null && Math.abs(lnMove) >= 0.5) return lnMove > 0 ? sharp : null;
-    const openOdds = mkt === "ml" ? (op.ml || [])[pi] : first.odds;
+    const openOdds = mkt === "ml" ? ((op.ml || [])[pi] ?? first.odds) : first.odds;
     if (openOdds == null || pub.odds == null) return null;
     return pub.odds - openOdds >= 0.04 ? sharp : null;
   }
@@ -398,20 +411,23 @@ table{border-collapse:collapse;width:100%}
     }
     return null;
   }
+  // 四分之一盤（例如 -0.25、2.75）拆成兩半各算一次：贏一半／輸一半
+  const quarter = (ln, f) => (Math.abs(Math.round(ln * 4)) % 2 === 1 ? (f(ln - 0.25) + f(ln + 0.25)) / 2 : f(ln));
   function settle(g, sd, mkt) {
     const r = g.result; if (!r || sd.odds == null) return null;
     let o;
-    if (mkt === "ml") o = r.winner === "tie" ? 0 : (r.winner === sd.key ? 1 : -1);
-    else if (mkt === "sp") {
+    if (mkt === "ml") {
+      if (g.sport === "soccer") o = (sd.key === "draw" ? r.winner === "tie" : r.winner === sd.key) ? 1 : -1;
+      else o = r.winner === "tie" ? 0 : (r.winner === sd.key ? 1 : -1);
+    } else if (mkt === "sp") {
       if (sd.ln == null) return null;
-      const m = sd.key === "away" ? r.away + sd.ln - r.home : r.home + sd.ln - r.away;
-      o = m > 0 ? 1 : m < 0 ? -1 : 0;
+      const diff = sd.key === "away" ? r.away - r.home : r.home - r.away;
+      o = quarter(sd.ln, (ln) => Math.sign(diff + ln));
     } else {
       if (sd.ln == null) return null;
-      const m = r.total - sd.ln;
-      o = sd.key === "over" ? Math.sign(m) : -Math.sign(m);
+      o = quarter(sd.ln, (ln) => (sd.key === "over" ? Math.sign(r.total - ln) : Math.sign(ln - r.total)));
     }
-    return {o, pl: o > 0 ? sd.odds - 1 : o < 0 ? -1 : 0};
+    return {o, pl: o > 0 ? o * (sd.odds - 1) : o < 0 ? o : 0};
   }
   const inSport = (g) => state.sport === "all" || g.sport === state.sport;
   function twDisc(sport, mkt) {
@@ -510,22 +526,27 @@ table{border-collapse:collapse;width:100%}
 
   // ═════════ 今日比賽 ═════════
   function gameCard(g) {
-    const mkt = state.mkt, thr = state.thr, s = latest(g), ss = sides(g, s, mkt);
+    const mkt = state.mkt, thr = state.thr, s = latest(g), ss = sides(g, s, mkt), soc = g.sport === "soccer";
     const t = new Date(g.t), hrs = (t - Date.now()) / 36e5;
     const rel = g.status === "started" ? "比賽中" : hrs < 1 ? `${Math.max(1, Math.round(hrs * 60))} 分鐘後開打` : hrs < 48 ? `${Math.round(hrs)} 小時後開打` : `${Math.round(hrs / 24)} 天後開打`;
     const sig = signal(g, s, mkt, thr), rev = rlm(g, mkt), has = ss.some((x) => x.bet != null);
     const key = g.sport + "|" + g.id, isOpen = state.open.has(key);
-    const ca = tcol(g.away_c, "#8A97AB"), ch = tcol(g.home_c, "#46526A");
-    const oddTxt = (sd) => (mkt === "ml" ? odd(sd.odds) : mkt === "sp" ? `${line(sd.ln)}　${odd(sd.odds)}` : "");
+    const oddTxt = (sd) => (!sd ? "" : mkt === "ml" ? odd(sd.odds) : mkt === "sp" ? `${line(sd.ln)}　${odd(sd.odds)}` : "");
+    // 足球：主隊在左；美國運動：客隊在左
+    const L = soc ? "home" : "away", R = soc ? "away" : "home";
+    const sdOf = (side) => ss.find((x) => x.key === side);
+    const rec = (side) => (g.ctx && g.ctx[side + "_record"] ? " " + esc(g.ctx[side + "_record"]) : "");
+    const tag = (side) => (side === "home" ? "主隊" : "客隊");
+    const mid = soc && mkt === "ml" ? `<span class="vs draw">和 ${odd((sdOf("draw") || {}).odds)}</span>` : `<span class="vs">VS</span>`;
     let h = `<article class="card game">
-      <div class="g-top"><div class="l"><span class="t">${fmtTime.format(t)}</span><span>${rel}</span></div><div class="l">${state.sport === "all" ? `<span class="pill lg">${g.sport.toUpperCase()}</span>` : ""}${g.season === "postseason" ? `<span class="pill post">季後賽</span>` : ""}${sig ? `<span class="pill sig">有訊號</span>` : ""}${flags(g)}</div></div>
+      <div class="g-top"><div class="l"><span class="t">${fmtTime.format(t)}</span><span>${rel}</span></div><div class="l">${state.sport === "all" || soc ? `<span class="pill lg">${esc(lgLabel(g))}</span>` : ""}${g.season === "postseason" ? `<span class="pill post">季後賽</span>` : ""}${sig ? `<span class="pill sig">有訊號</span>` : ""}${flags(g)}</div></div>
       <div class="teams">
-        <div class="tm">${dot(g.away_ab, g.away_c)}<div><div class="nm">${esc(g.away_zh || g.away)}</div><div class="od">客隊${g.ctx && g.ctx.away_record ? " " + esc(g.ctx.away_record) : ""}${mkt === "ou" ? "" : "　" + esc(oddTxt(ss[0]))}</div></div></div>
-        <span class="vs">VS</span>
-        <div class="tm r">${dot(g.home_ab, g.home_c)}<div><div class="nm">${esc(g.home_zh || g.home)}</div><div class="od">${mkt === "ou" ? "" : esc(oddTxt(ss[1])) + "　"}主隊${g.ctx && g.ctx.home_record ? " " + esc(g.ctx.home_record) : ""}</div></div></div>
+        <div class="tm">${dot(g[L + "_ab"], g[L + "_c"])}<div><div class="nm">${esc(g[L + "_zh"] || g[L])}</div><div class="od">${tag(L)}${rec(L)}${mkt === "ou" ? "" : "　" + esc(oddTxt(sdOf(L)))}</div></div></div>
+        ${mid}
+        <div class="tm r">${dot(g[R + "_ab"], g[R + "_c"])}<div><div class="nm">${esc(g[R + "_zh"] || g[R])}</div><div class="od">${mkt === "ou" ? "" : esc(oddTxt(sdOf(R))) + "　"}${tag(R)}${rec(R)}</div></div></div>
       </div>`;
     if (!has) {
-      h += `<div class="say">${MK[mkt]}的下注比例，網站還沒出來（最後截圖 ${when(s.ts)}）。出來後約 2 小時內會補抓。</div>`;
+      h += `<div class="say">${MK[mkt]}的下注比例，網站還沒出來（最後截圖 ${when(s.ts)}）。出來後會自動補抓。</div>`;
     } else {
       if (sig) {
         const strong = sig.diff >= thr + 10 ? "強" : "中等";
@@ -534,45 +555,52 @@ table{border-collapse:collapse;width:100%}
         h += `</div>`;
       } else {
         const d = Math.max(...ss.map((x) => diffOf(x) ?? -99));
-        h += `<div class="say">錢跟人差不多，<b>沒有明顯訊號</b>。<span class="sub">兩邊「錢比人多」最多 ${Math.round(d)}%，還沒到你設的 ${thr}%。</span>${rev ? `<span class="x">盤口有逆向移動，錢可能在 ${esc(pickLabel(rev, mkt))}。</span>` : ""}</div>`;
+        h += `<div class="say">錢跟人差不多，<b>沒有明顯訊號</b>。<span class="sub">${ss.length > 2 ? "三個選項" : "兩邊"}「錢比人多」最多 ${Math.round(d)}%，還沒到你設的 ${thr}%。</span>${rev ? `<span class="x">盤口有逆向移動，錢可能在 ${esc(pickLabel(rev, mkt))}。</span>` : ""}</div>`;
       }
-      const cL = mkt === "ou" ? "var(--accent)" : ca, cR = mkt === "ou" ? "var(--band)" : ch;
+      // 拉鋸條：兩選一或三選一（足球獨贏有和局）
+      const order = soc && mkt === "ml" ? ["home", "draw", "away"] : ss.map((x) => x.key);
+      const os = order.map(sdOf);
+      const colOf = (k) => (mkt === "ou" ? (k === "over" ? "var(--accent)" : "var(--band)") : k === "draw" ? "var(--band)" : tcol(g[k + "_c"], k === "home" ? "#46526A" : "#8A97AB"));
+      const lab = (arr, f) => arr.length === 3
+        ? `<span><b>${pct(arr[0][f])}</b> ${esc(arr[0].nm)}</span><span class="mid">和 <b>${pct(arr[1][f])}</b></span><span>${esc(arr[2].nm)} <b>${pct(arr[2][f])}</b></span>`
+        : `<span><b>${pct(arr[0][f])}</b> ${esc(arr[0].nm)}</span><span class="mid">${f === "bet" ? "下注人數" : "下注金額"}</span><span>${esc(arr[1].nm)} <b>${pct(arr[1][f])}</b></span>`;
+      const bar = (f) => `<div class="bar">${os.map((x, i) => `<i style="${i === os.length - 1 ? "flex:1" : `width:${x[f] ?? 0}%`};background:${colOf(x.key)}"></i>`).join("")}</div>`;
       h += `<div class="tug">
-        <div class="t"><span><b>${pct(ss[0].bet)}</b> ${esc(ss[0].nm)}</span><span class="mid">下注人數</span><span>${esc(ss[1].nm)} <b>${pct(ss[1].bet)}</b></span></div>
-        <div class="bar"><i style="width:${ss[0].bet ?? 0}%;background:${cL}"></i><i style="flex:1;background:${cR}"></i></div>
-        <div class="t"><span><b>${pct(ss[0].money)}</b> ${esc(ss[0].nm)}</span><span class="mid">下注金額</span><span>${esc(ss[1].nm)} <b>${pct(ss[1].money)}</b></span></div>
-        <div class="bar"><i style="width:${ss[0].money ?? 0}%;background:${cL}"></i><i style="flex:1;background:${cR}"></i></div>
+        ${os.length === 3 ? `<div class="t"><span class="mid">下注人數</span></div>` : ""}<div class="t">${lab(os, "bet")}</div>${bar("bet")}
+        ${os.length === 3 ? `<div class="t"><span class="mid">下注金額</span></div>` : ""}<div class="t">${lab(os, "money")}</div>${bar("money")}
       </div>`;
       // 台彩划不划算（看訊號那邊；沒訊號就看熱門那邊）
       const td = twDisc(g.sport, mkt);
-      const side = sig || (() => { const i = (ss[0].odds || 99) <= (ss[1].odds || 99) ? 0 : 1; return {...ss[i], i}; })();
+      const side = sig || (() => { let i = 0; ss.forEach((x, j) => { if ((x.odds || 99) < (ss[i].odds || 99)) i = j; }); return {...ss[i], i}; })();
       if (td && side.odds) {
         const est = side.odds * (1 + td.d / 100), be = 1 / est, fp = fair(ss, side.i), ok = fp != null && fp > be;
         h += `<div class="tiles">
           <div class="tile">台彩賠率<br>大約<b>${odd(est)}</b></div>
           <div class="tile">要贏幾成<br>才不虧<b>${Math.round(be * 100)}%</b></div>
-          <div class="tile ${fp == null ? "" : ok ? "good" : "bad"}">市場估計<br>會贏<b>${fp == null ? "–" : Math.round(fp * 100) + "%"}</b></div>
-        </div><div class="twnote">押${esc(pickLabel(side, mkt))}：${fp == null ? "" : ok ? `照市場看，這注在台彩<b class="good">划算</b>。` : `照市場看，這注在台彩長期<b class="bad">會虧</b>（還差 ${Math.max(1, Math.round((be - fp) * 100))}%）。`}${td.est ? "（台彩賠率用其他玩法的平均估算）" : ""}</div>`;
+          <div class="tile ${fp == null ? "" : ok ? "good" : "bad"}">美國莊家<br>估計會贏<b>${fp == null ? "–" : Math.round(fp * 100) + "%"}</b></div>
+        </div><div class="twnote">押${esc(pickLabel(side, mkt))}：${fp == null ? "" : ok ? `照美國莊家的賠率看，這注在台彩<b class="good">划算</b>。` : `照美國莊家的賠率看，這注在台彩長期<b class="bad">會虧</b>（還差 ${Math.max(1, Math.round((be - fp) * 100))}%）。`}${td.est ? "（台彩賠率是估的）" : ""}</div>`;
       }
     }
-    h += `<button type="button" class="more" data-open="${esc(key)}" aria-expanded="${isOpen}">${isOpen ? "收起" : "看更多：先發投手、其他玩法、變化"}</button>`;
+    h += `<button type="button" class="more" data-open="${esc(key)}" aria-expanded="${isOpen}">${isOpen ? "收起" : soc ? "看更多：歐洲賠率、單隊大小、變化" : "看更多：先發投手、其他玩法、變化"}</button>`;
     if (isOpen) h += detail(g);
     return h + `</article>`;
   }
   function detail(g) {
-    const thr = state.thr, s = latest(g), m = state.mkt, c = g.ctx, parts = [];
+    const thr = state.thr, s = latest(g), m = state.mkt, c = g.ctx, parts = [], soc = g.sport === "soccer";
     if (c && (c.away_p || c.home_p)) {
       parts.push(`<div><h4>${g.sport === "nhl" ? "先發門將" : "先發投手"}</h4>
         <div class="pc">${dot(g.away_ab, g.away_c)}<div><div class="nm">${esc(c.away_p || "還沒公布")}</div><div class="st">${esc(c.away_ps || "本季成績還沒抓到")}</div></div></div>
         <div class="pc">${dot(g.home_ab, g.home_c)}<div><div class="nm">${esc(c.home_p || "還沒公布")}</div><div class="st">${esc(c.home_ps || "本季成績還沒抓到")}</div></div></div></div>`);
     }
+    if (soc && g.eu) parts.push(euBlock(g, s));
     const rows = ["ml", "sp", "ou"].map((mm) => {
       const ss = sides(g, s, mm);
-      if (ss[0].bet == null) return `<div class="mrow"><span>${MK[mm]}</span><span class="mut">還沒有資料</span></div>`;
+      if (ss.every((x) => x.bet == null)) return `<div class="mrow"><span>${MK[mm]}</span><span class="mut">還沒有資料</span></div>`;
       const sg = signal(g, s, mm, thr);
       return `<div class="mrow"><span>${MK[mm]}</span><span>${sg ? `<b class="good">錢押 ${esc(pickLabel(sg, mm))}（+${Math.round(sg.diff)}%）</b>` : `<span class="mut">沒有明顯訊號</span>`}</span></div>`;
     }).join("");
     parts.push(`<div><h4>三種玩法各押哪邊</h4>${rows}</div>`);
+    if (soc) parts.push(teamTotals(g, s));
     const ts = teamStatus(g);
     if (ts) parts.push(ts);
     const ss = sides(g, s, m), sg = signal(g, s, m, thr), tk = sg || ss[0];
@@ -584,9 +612,33 @@ table{border-collapse:collapse;width:100%}
       else if (c.temp_f != null) info.push(`<div class="mrow"><span>天氣</span><span>${Math.round((c.temp_f - 32) * 5 / 9)}°C・風 ${Math.round(c.wind_mph * 1.609)} km/h・下雨 ${c.precip ?? "–"}%</span></div>`, `<div class="mrow"><span>球場</span><span>${esc(c.venue)}</span></div>`);
     }
     if (g.series) info.push(`<div class="mrow"><span>系列賽</span><span>${esc(g.series)}</span></div>`);
+    if (soc) info.push(`<div class="mrow"><span>聯賽</span><span>${esc(g.league_zh || "")}</span></div>`);
     info.push(`<div class="mrow"><span>最後截圖</span><span>${when(s.ts)}</span></div>`);
     parts.push(`<div><h4>比賽資訊</h4>${info.join("")}</div>`);
     return `<div class="det">${parts.join("")}</div>`;
+  }
+  // 足球：歐洲各家賠率（football-data.co.uk），跟美國共識盤比
+  function euBlock(g, s) {
+    const e = g.eu, us = sides(g, s, "ml").map((x) => x.odds);
+    const cell = (arr, i) => (arr && arr[i] ? odd(arr[i]) : "–");
+    const row = (nm, arr) => `<tr><td>${nm}</td><td class="r n">${cell(arr, 0)}</td><td class="r n">${cell(arr, 1)}</td><td class="r n">${cell(arr, 2)}</td></tr>`;
+    return `<div><h4>歐洲賠率（主／和／客）</h4><table class="tb mini"><thead><tr><th></th><th class="r">主</th><th class="r">和</th><th class="r">客</th></tr></thead><tbody>
+      ${row("歐洲平均", e.avg)}${row("歐洲最高", e.max)}${row("Bet365", e.b365)}${row("Betfair 交易所", e.bfe)}${row("美國共識", us)}</tbody></table>
+      <div class="mrow"><span>大小 2.5（平均）</span><span class="n">大 ${cell(e.ou, 0)}　小 ${cell(e.ou, 1)}</span></div>
+      ${e.ah != null ? `<div class="mrow"><span>亞洲讓球 主 ${line(e.ah)}</span><span class="n">主 ${cell(e.ah_avg, 0)}　客 ${cell(e.ah_avg, 1)}</span></div>` : ""}</div>`;
+  }
+  // 足球：單隊大小（你常下的「單隊大」）
+  function teamTotals(g, s) {
+    const one = (side, arr) => {
+      const a = arr || [];
+      if (a[4] == null) return "";
+      const nm = g[side + "_zh"] || g[side + "_ab"];
+      const has = a[0] != null || a[2] != null;
+      const d = has && a[1] != null && a[0] != null ? a[1] - a[0] : null;
+      return `<div class="mrow"><span>${esc(nm)} 大 ${a[4]}</span><span class="n">${odd(a[5])}${has ? `　人數 ${pct(a[0])}・金額 ${pct(a[1])}${d != null && Math.abs(d) >= state.thr ? `　<b class="${d > 0 ? "good" : "bad"}">${d > 0 ? "錢押大" : "錢押小"}</b>` : ""}` : `　<span class="mut">還沒有下注比例</span>`}</span></div>`;
+    };
+    const h = one("home", s.th) + one("away", s.ta);
+    return h ? `<div><h4>單隊大小</h4>${h}</div>` : "";
   }
   // 兩隊狀況：戰績、休息、背靠背、傷兵（每個運動都有）
   function flags(g) {
@@ -676,7 +728,7 @@ table{border-collapse:collapse;width:100%}
     const oddsB = (r) => (r.odds < 1.7 ? "熱門（賠率 < 1.70）" : r.odds < 2 ? "1.70–1.99" : r.odds < 2.5 ? "2.00–2.49" : "冷門（≥ 2.50）");
     const diffB = (r) => (r.sig.diff < 20 ? "錢比人多 <20%" : r.sig.diff < 30 ? "錢比人多 20–29%" : "錢比人多 ≥30%");
     const f = (v) => sgn(v, 2);
-    const gS = groupTable("依運動", rows, (r) => r.g.sport.toUpperCase(), f, 30), gM = groupTable("依玩法", rows, (r) => MK[r.mkt], f, 30);
+    const gS = groupTable("依運動", rows, (r) => lgLabel(r.g), f, 30), gM = groupTable("依玩法", rows, (r) => MK[r.mkt], f, 30);
     const gO = groupTable("依賠率", rows, oddsB, f, 30), gD = groupTable("依訊號強度", rows, diffB, f, 30);
     const gR = groupTable("依盤口有沒有逆向", rows, (r) => (r.rev === 1 ? "盤口也往這邊動" : r.rev === -1 ? "盤口往另一邊動" : "盤口沒特別動"), f, 30);
     const gW = groupTable("依星期（台灣）", rows, (r) => fmtWd.format(new Date(r.t)), f, 30);
@@ -691,7 +743,7 @@ table{border-collapse:collapse;width:100%}
     if (!rows.length) return `<p class="mut" style="margin:0">還沒有資料</p>`;
     const sports = [...new Set(rows.map((r) => r.g.sport))].sort(), mk = ["ml", "sp", "ou"], days = new Map();
     for (const r of rows) { const d = fmtISO.format(new Date(r.t)); if (!days.has(d)) days.set(d, {}); const k = r.g.sport + r.mkt; const c = days.get(d)[k] || (days.get(d)[k] = {pl: 0, n: 0}); c.pl += r.pl; c.n++; }
-    let h = `<div class="scroll"><table class="tb mx"><thead><tr><th rowspan="2">日期</th>${sports.map((s) => `<th colspan="3">${s.toUpperCase()}</th>`).join("")}</tr><tr>${sports.map(() => mk.map((m) => `<th>${MK[m]}</th>`).join("")).join("")}</tr></thead><tbody>`;
+    let h = `<div class="scroll"><table class="tb mx"><thead><tr><th rowspan="2">日期</th>${sports.map((s) => `<th colspan="3">${spLabel(s)}</th>`).join("")}</tr><tr>${sports.map(() => mk.map((m) => `<th>${MK[m]}</th>`).join("")).join("")}</tr></thead><tbody>`;
     for (const [d, cells] of [...days.entries()].sort((a, b) => (a[0] < b[0] ? 1 : -1))) {
       h += `<tr><td class="n">${d.slice(5).replace("-", "/")}</td>`;
       for (const s of sports) for (const m of mk) {
@@ -719,7 +771,7 @@ table{border-collapse:collapse;width:100%}
   }
 
   // ═════════ 我的投注（存在這個看板自己的資料庫）═════════
-  const LEAGUES = ["MLB", "NBA", "NFL", "NHL", "KBO", "NPB", "CPBL", "足球", "其他"];
+  const LEAGUES = ["MLB", "NBA", "NFL", "NHL", "英超", "西甲", "義甲", "德甲", "法甲", "歐冠", "KBO", "NPB", "CPBL", "其他足球", "其他"];
   const BTYPES = ["獨贏", "讓分", "大小分", "單隊大小", "合局", "其他"];
   const RES = {pending: "還沒開獎", win: "贏", loss: "輸", push: "走水", void: "退款"};
   const betPL = (b) => (b.result === "win" ? b.stake * (b.odds - 1) : b.result === "loss" ? -b.stake : 0);
@@ -849,7 +901,7 @@ table{border-collapse:collapse;width:100%}
       <div><b>錢比人多</b>下注金額的 % 減掉下注人數的 %。押的人少、錢卻多，代表下大注的人（常是職業玩家）在這邊。</div>
       <div><b>訊號</b>「錢比人多」超過你設的 %（預設 15%）就算有訊號；再多 10% 以上算「強」。</div>
       <div><b>盤口逆向</b>多數人押 A，但賠率或讓分反而往對 A 有利的方向動。代表莊家收到的大錢其實在另一邊。</div>
-      <div><b>市場估計會贏</b>把美國各家賠率裡的抽成拿掉，換算出來的真實勝率。</div>
+      <div><b>美國莊家估計會贏</b>把美國各家賠率裡的抽成拿掉，換算出來的勝率。這是莊家的看法，不是我們的模型。</div>
       <div><b>要贏幾成才不虧</b>1 ÷ 台彩賠率。例如賠率 2.00 要贏 50% 才打平。</div>
       <div><b>運氣範圍</b>假設完全沒本事、只靠運氣，成績 95% 會落在的範圍。跑出這個範圍，才代表可能是實力。</div>
       <div><b>搶到的價錢（CLV）</b>訊號一出現就下，比開賽前才下，賠率好多少。長期是正的＝跟得早有好處。</div>
@@ -861,7 +913,7 @@ table{border-collapse:collapse;width:100%}
     h += `<div class="card"><h3>各運動特別要看的<small>實線＝已經在收，虛線＝之後再加</small></h3><div class="sf">${Object.values(sf).map((x) => `<div><h5>${esc(x.name)}</h5><p>${esc(x.why)}</p>
       <div class="feat"><ul>${x.have.map((i) => `<li>${esc(i)}</li>`).join("")}${x.plan.map((i) => `<li class="plan">${esc(i)}</li>`).join("")}</ul></div></div>`).join("")}</div></div>`;
     const per = st.per || {};
-    h += `<div class="card"><h3>各運動資料量<small>從 ${esc(st.since || "–")} 開始</small></h3><div class="scroll"><table class="tb"><thead><tr><th>運動</th><th class="r">截圖次數</th><th class="r">比賽</th><th class="r">已打完</th></tr></thead><tbody>${Object.entries(per).map(([k, v]) => `<tr><td>${k.toUpperCase()}</td><td class="r n">${v.snaps}</td><td class="r n">${v.games}</td><td class="r n">${v.finals}</td></tr>`).join("")}</tbody></table></div>
+    h += `<div class="card"><h3>各運動資料量<small>從 ${esc(st.since || "–")} 開始</small></h3><div class="scroll"><table class="tb"><thead><tr><th>運動</th><th class="r">截圖次數</th><th class="r">比賽</th><th class="r">已打完</th></tr></thead><tbody>${Object.entries(per).map(([k, v]) => `<tr><td>${spLabel(k)}</td><td class="r n">${v.snaps}</td><td class="r n">${v.games}</td><td class="r n">${v.finals}${v.history ? `<br><span class="mut" style="font-weight:400;font-size:12px">另有歷史 ${v.history.toLocaleString("en-US")} 場</span>` : ""}</td></tr>`).join("")}</tbody></table></div>
       <p class="mut" style="font-size:13px;margin:10px 0 0">我們不會說「準確率 79%」這種數字。運彩長期能穩定贏 55–58% 就算頂尖；所有成績都附上注數和運氣範圍，讓你自己判斷是實力還是運氣。</p></div>`;
     $("method").innerHTML = h;
   }
@@ -878,7 +930,7 @@ table{border-collapse:collapse;width:100%}
     const up = (k) => DATA.games.filter((g) => (k === "all" || g.sport === k) && (g.status === "upcoming" || g.status === "started")).length;
     const keys = ["all", ...Object.keys(DATA.sports)];
     if (!keys.includes(state.sport)) state.sport = "all";
-    $("sports").innerHTML = keys.map((k) => `<button type="button" class="chip" data-s="${k}" aria-pressed="${k === state.sport}">${k === "all" ? "全部" : k.toUpperCase()}<span class="c">${up(k)}</span></button>`).join("");
+    $("sports").innerHTML = keys.map((k) => `<button type="button" class="chip" data-s="${k}" aria-pressed="${k === state.sport}">${k === "all" ? "全部" : spLabel(k)}<span class="c">${up(k)}</span></button>`).join("");
   }
   function renderUpd() {
     const last = DATA.games.filter(inSport).flatMap((g) => g.snaps.slice(-1).map((x) => x.ts)).sort().pop();

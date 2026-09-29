@@ -17,6 +17,7 @@ from datetime import datetime, timezone, timedelta
 from sports_common import (active_sports, all_monthly_files, parse_time, read_rows,
                             recent_monthly_files, sport_dir)
 import record_tw_odds
+import soccer_dashboard
 
 RECENT_DAYS = 14
 MAX_SNAPS = 40
@@ -255,6 +256,10 @@ SPORT_FEATURES = {
     "nfl": {"name": "NFL 美式足球", "why": "四分衛和天氣（尤其風速）影響最大，週四短週、bye 週後休息天數差很多。",
             "have": ["休息天數（短週／bye 後）", "傷兵名單", "氣溫", "風速", "降雨機率", "室內／屋頂球場"],
             "plan": ["先發四分衛確認", "分區對戰", "跨時區移動"]},
+    "soccer": {"name": "足球（五大聯賽＋歐冠）", "why": "有和局，所以獨贏是三選一；歐洲莊家的賠率最準，拿來跟美國的資金流向對照。",
+               "have": ["1X2 人數%／金額%（含和局）", "讓球、大小、單隊大小的人數%／金額%", "歐洲各家平均／最高賠率", "Betfair 交易所賠率",
+                        "亞洲讓球盤", "上下半場比分", "過去五季完整賽果＋收盤賠率"],
+               "plan": ["先發陣容確認", "傷停名單", "歐冠／國內盃賽前後的輪換", "xG（預期進球）走勢"]},
     "nhl": {"name": "NHL 冰球", "why": "先發門將影響最大，背靠背時常換替補門將。",
             "have": ["先發門將", "門將本季成績（失分率、擋球率）", "背靠背", "休息天數", "傷兵名單"],
             "plan": ["門將最近幾場擋球率", "多打少／少打多效率"]},
@@ -277,9 +282,14 @@ def data_stats():
         games |= {sport + sid for sid in g_s}
         finals += f_s
         per[sport] = {"snaps": n_s, "games": len(g_s), "finals": f_s}
+    ss = soccer_dashboard.stats()
+    snaps += ss["snaps"]
+    finals += ss["finals"]
+    per["soccer"] = {"snaps": ss["snaps"], "games": ss["games"], "finals": ss["finals"], "history": ss["history_games"]}
+    games |= {"soccer" + str(i) for i in range(ss["games"])}
     return {"snaps": snaps, "games": len(games), "finals": finals, "since": first[:10] if first else None,
             "per": per, "features": [{"group": g, "items": it} for g, it in FEATURES],
-            "sport_features": {k: v for k, v in SPORT_FEATURES.items() if k in active_sports()},
+            "sport_features": {k: v for k, v in SPORT_FEATURES.items() if k in active_sports() or k == "soccer"},
             "n_features": sum(len(it) for _, it in FEATURES)}
 
 
@@ -352,6 +362,8 @@ def build(now):
                     **{f"{side}_{k}": team_ctx(ctx, side, k) for side in ("away", "home")
                        for k in ("record", "split", "rest", "b2b", "g7", "last_away", "out_n", "inj")}},
             })
+    sg, sclosed = soccer_dashboard.build_soccer(now, RECENT_DAYS, CLOSED_SNAPS)
+    games += sg
     games.sort(key=lambda g: g["t"])
     tw = record_tw_odds.summary()
     for b in tw.get("best", []):
@@ -360,9 +372,9 @@ def build(now):
     return {
         "stats": data_stats(),
         "generated_utc": now.strftime("%Y-%m-%dT%H:%MZ"),
-        "sports": {k: v["name"] for k, v in active_sports().items()},
+        "sports": {**{k: v["name"] for k, v in active_sports().items()}, "soccer": "足球"},
         "games": games,
-        "closed": build_closed(),
+        "closed": build_closed() + sclosed,
         "tw": tw,
     }
 
