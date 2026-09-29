@@ -1,50 +1,14 @@
-== https://api.actionnetwork.com/web/v1/scoreboard/epl?bookIds=15,30
-HTTP 200 size 5393
-{"league":{"id":9,"sport":"soccer","name":"epl","description":"English Premier League","logo":"https://static.sprtactn.co/leagues/500/epl.png","current_season":
-
-== https://api.actionnetwork.com/web/v1/scoreboard/laliga?bookIds=15,30
-HTTP 200 size 8031
-{"league":{"id":12,"sport":"soccer","name":"laliga","description":"La Liga","logo":"https://static.sprtactn.co/leagues/500/laliga.png","current_season":"2026","
-
-== https://api.actionnetwork.com/web/v1/scoreboard/la_liga?bookIds=15,30
-HTTP 400 size 113
-{"message":"Invalid data submitted as payload","statusCode":400,"error":"Bad Request","errorCode":"INVALID_DATA"}
-
-== https://api.actionnetwork.com/web/v1/scoreboard/seriea?bookIds=15,30
-HTTP 200 size 7923
-{"league":{"id":13,"sport":"soccer","name":"seriea","description":"Serie A","logo":"https://static.sprtactn.co/leagues/500/seriea.png","current_season":"2026","
-
-== https://api.actionnetwork.com/web/v1/scoreboard/serie_a?bookIds=15,30
-HTTP 400 size 113
-{"message":"Invalid data submitted as payload","statusCode":400,"error":"Bad Request","errorCode":"INVALID_DATA"}
-
-== https://api.actionnetwork.com/web/v1/scoreboard/bundesliga?bookIds=15,30
-HTTP 200 size 7334
-{"league":{"id":10,"sport":"soccer","name":"bundesliga","description":"Bundesliga","logo":"https://static.sprtactn.co/leagues/500/bund.png","current_season":"20
-
-== https://api.actionnetwork.com/web/v1/scoreboard/ligue1?bookIds=15,30
-HTTP 200 size 7950
-{"league":{"id":11,"sport":"soccer","name":"ligue1","description":"Ligue 1","logo":"https://static.sprtactn.co/leagues/500/ligue1.png","current_season":"2026","
-
-== https://api.actionnetwork.com/web/v1/scoreboard/ligue_1?bookIds=15,30
-HTTP 400 size 113
-{"message":"Invalid data submitted as payload","statusCode":400,"error":"Bad Request","errorCode":"INVALID_DATA"}
-
-== https://api.actionnetwork.com/web/v1/scoreboard/ucl?bookIds=15,30
-HTTP 400 size 113
-{"message":"Invalid data submitted as payload","statusCode":400,"error":"Bad Request","errorCode":"INVALID_DATA"}
-
-== https://api.actionnetwork.com/web/v1/scoreboard/champions_league?bookIds=15,30
-HTTP 400 size 113
-{"message":"Invalid data submitted as payload","statusCode":400,"error":"Bad Request","errorCode":"INVALID_DATA"}
-
-== https://api.actionnetwork.com/web/v1/scoreboard/mls?bookIds=15,30
-HTTP 200 size 15105
-{"league":{"id":14,"sport":"soccer","name":"mls","description":"Major League Soccer","logo":"https://static.sprtactn.co/leagues/500/mls.png","current_season":"2
-
-== AN epl 20261003 size 5393
-== AN epl 20261004 size 5393
-keys game: []
-teams: []
-betexplorer data-odd count: 45
-s="table-main__eventstage">&nbsp;</th><th class="table-main__result">&nbsp;</th></tr> <tr> <td class="table-main__daysign"></td> <td><a href="/football/england/premier-league/arsenal-leeds/xtmHKGT0/" class="in-match"><span>Arsenal</span> - <span>Leeds</span></a></td> <td class="livebet">&nbsp;</td> <td class="h-text-center"> </td> <td class="table-main__odds " data-oid="ab68txv464x0xs9eih"><button onclick="my_selections_click('1x2', 'football', 'action=3&matchid=xtmHKGT0&outcomeid=ab68txv464x0xs9eih&otheroutcomes=ab68txv498x0x0,ab68txv464x0xs9eij', '1.38', 'en');" title="Add to My Selections" data-odd="1.38"></button></td> <td class="table-main__odds " data-oid="ab68txv498x0x0"><button onclick="my_selections_click('1x2', 'football', 'action=3&matchid=xtmHKGT0&outcomeid=ab68txv498x0x0&otheroutcomes=ab68txv464x0xs9eih,ab68txv464x0xs9eij', '4.88', 'en');" title="Add to My Selections" data-odd="4.88"></button></td> <td class="table-main__odds " data-oid="ab68txv464x0xs9eij"><button onclick
+== an_epl_0920 215178 https://api.actionnetwork.com/web/v1/scoreboard/epl?bookIds=15,30,68,69,71,75,76,79,123&date=20260920
+== an_epl_v2_0920 122779 https://api.actionnetwork.com/web/v2/scoreboard/epl?bookIds=15,30,68,69,71,75,76,79,123&date=20260920
+== an_laliga 8031 https://api.actionnetwork.com/web/v1/scoreboard/laliga?bookIds=15,30,68,69,71,75,76,79,123
+== an_epl_1003 5393 https://api.actionnetwork.com/web/v1/scoreboard/epl?bookIds=15,30&date=20261003
+docs/probe/an_epl_0920.json games 4
+  keys: ['attendance', 'away_team_id', 'boxscore', 'coverage', 'home_team_id', 'id', 'is_free', 'league_id', 'league_name', 'meta', 'num_bets', 'odds', 'real_status', 'season', 'start_time', 'status', 'status_display', 'teams', 'trending', 'type', 'week', 'winning_team_id']
+  teams: ['Sunderland', 'Manchester City'] 2026-09-20T13:00:00.000Z complete
+  odds: {"ml_away": 550, "ml_home": -900, "spread_away": 1.5, "spread_home": -1.5, "spread_away_line": -130, "spread_home_line": -105, "over": -164, "under": 130, "draw": null, "total": 2.5, "away_total": 0.5, "away_over": -139, "away_under": -105, "home_total": 2.5, "home_over": 130, "home_under": -186, "ml_home_public": null, "ml_away_public": null, "spread_home_public": null, "spread_away_public": null, "total_under_public": null, "total_over_public": null, "ml_home_money": null, "ml_away_money": null, "spread_home_money": null, "spread_away_money": null, "total_over_money": null, "total_under_money": null, "meta": {"draw": null, "over": null, "under": null, "ml_away": null, "ml_home": null, "away_over": null, "home_over": null, "away_under": null, "home_under": null, "spread_away": null, "spread_home": null}, "num_bets": null, "book_id": 15, "type": "game", "inserted": "2026-09-20T14:49:56.280241+00:00", "line_status": {"draw": null, "over": 0, "under": 0, "ml_away": 0, "ml_home": 0, "away_over": 0, "home_over": 0, "away_under": 0, "home_under": 0, "spread_away": 0, "spread_home": 0}}
+  odds: {"ml_away": 319, "ml_home": -524, "spread_away": 0.5, "spread_home": -0.5, "spread_away_line": -833, "spread_home_line": 450, "over": 137, "under": -182, "draw": null, "total": 1.5, "away_total": 0.5, "away_over": 200, "away_under": -300, "home_total": 0.5, "home_over": -225, "home_under": 155, "ml_home_public": null, "ml_away_public": null, "spread_home_public": null, "spread_away_public": null, "total_under_public": null, "total_over_public": null, "ml_home_money": null, "ml_away_money": null, "spread_home_money": null, "spread_away_money": null, "total_over_money": null, "total_under_money": null, "meta": {"draw": null, "over": null, "under": null, "ml_away": null, "ml_home": null, "away_over": null, "home_over": null, "away_under": null, "home_under": null, "spread_away": null, "spread_home": null}, "num_bets": null, "book_id": 15, "type": "firsthalf", "inserted": "2026-09-20T13:45:30.267564+00:00", "line_status": {"draw": null, "over": 0, "under": 0, "ml_away": 0, "ml_home": 0, "away_over": 0, "home_over": 0, "away_under": 0, "home_under": 0, "spread_away": 0, "spread_home": 0}}
+docs/probe/an_epl_1003.json games 0
+docs/probe/an_epl_v2_0920.json games 4
+  keys: ['attendance', 'away_team_id', 'boxscore', 'core_id', 'coverage', 'home_team_id', 'id', 'is_free', 'league_id', 'league_name', 'markets', 'meta', 'num_bets', 'real_status', 'season', 'start_time', 'status', 'status_display', 'teams', 'trending', 'type', 'week', 'winning_team_id']
+  teams: ['Manchester City', 'Sunderland'] 2026-09-20T13:00:00.000Z complete
+docs/probe/an_laliga.json games 0
