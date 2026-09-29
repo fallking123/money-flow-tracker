@@ -12,7 +12,6 @@
 | `nba` | NBA 美國職籃 | 48 小時 |
 | `nhl` | NHL 美國冰球 | 48 小時 |
 | `ncaab` | NCAAB 大學籃球（暫停：台彩沒有開賣） | 48 小時 |
-
 | `soccer` | 足球：英超、西甲、義甲、德甲、法甲、歐冠（`scrape_soccer.py`，資料來源不同，見下方） | 12 天 |
 
 休賽期的運動會自動略過，開季後自動開始記錄。
@@ -45,7 +44,6 @@
 | `backfill_results.py` | `backfill_results.yml` | 到 ESPN 查比分回填 | 每天台灣時間 20:17 |
 | `scrape_context.py` | `scrape_context.yml` | 球場、天氣、先發投手 | 每天 4 次 |
 | `sports_common.py` | — | 共用設定：運動清單、ESPN 賽程、隊名比對 | — |
-
 | `scrape_soccer.py` | `scrape_soccer.yml` | 足球資金流向、歐洲賠率、賽果 | 每小時（程式依距離開賽決定要不要記） |
 
 資料來源：SportsBettingDime（資金流向與賠率）、ESPN（賽程、比分、傷兵、戰績）、Open-Meteo（天氣）。
