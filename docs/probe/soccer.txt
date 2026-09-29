@@ -1,36 +1,64 @@
-== sbd_routes.json 3576 https://www.sportsbettingdime.com/wp-json/adpt/v1
-{"namespace":"adpt\/v1","routes":{"\/adpt\/v1":{"namespace":"adpt\/v1","methods":["GET"],"endpoints":[{"methods":["GET"],"args":{"namespace":{"default":"adpt\/v1","required":false},"context":{"default":"view","required":false}}}],"_links":{"self":[{"href":"https:\/\/www.sportsbettingdime.com\/wp-json\/adpt\/v1"}]}},"\/adpt\/v1\/nhl-odds":{"namespace":"adpt\/v1","methods":["GET"],"endpoints":[{"met
-== fd_fixtures.csv 0 https://www.football-data.co.uk/fixtures.csv
-
-== fd_E0.csv 0 https://www.football-data.co.uk/mmz4281/2627/E0.csv
-
-== espn eng.1 2363
-== espn esp.1 2347
-== espn ita.1 2568
-== espn ger.1 2052
-== espn fra.1 2208
-== espn uefa.champions 1786
-== an_v1_epl.json 5393 https://api.actionnetwork.com/web/v1/scoreboard/epl?bookIds=15,30&date=20261003
-{"league":{"id":9,"sport":"soccer","name":"epl","description":"English Premier League","logo":"https://static.sprtactn.co/leagues/500/epl.png","current_season":"2026","current_season_type":"reg","pre_season_start":null,"pre_season_end":null,"reg_season_start":"2026-08-21T07:00:00.000Z","reg_season_end":"2027-05-27T06:59:59.000Z","post_season_start":null,"post_season_end":null,"blacklist_dates":["2
-== an_v2_epl_nodate.json 5411 https://api.actionnetwork.com/web/v2/scoreboard/epl?bookIds=15,30
-{"league":{"id":9,"sport":"soccer","name":"epl","description":"English Premier League","logo":"https://static.sprtactn.co/leagues/500/epl.png","current_season":"2026","current_season_type":"reg","pre_season_start":null,"pre_season_end":null,"reg_season_start":"2026-08-21T07:00:00.000Z","reg_season_end":"2027-05-27T06:59:59.000Z","post_season_start":null,"post_season_end":null,"blacklist_dates":["2
-== an_v2_soccer.json 4231 https://api.actionnetwork.com/web/v2/scoreboard/soccer?bookIds=15,30&date=20261003
+HTTP 200 https://football-data.co.uk/fixtures.csv
+HTTP 200 https://football-data.co.uk/mmz4281/2627/E0.csv
+== an_soccer_20260930.json 38933 https://api.actionnetwork.com/web/v2/scoreboard/soccer?bookIds=15,30,68,69,71,75,76,79,123&date=20260930
 {"schedule_info":{"reg_season_start":"2025-09-17T00:00:00.000Z","reg_season_end":"2027-06-14T00:00:00.000Z","blacklist_dates":["2026-09-21T07:00:00.000Z","2026-09-22T07:00:00.000Z","2026-09-24T07:00:00.000Z","2026-09-25T07:00:00.000Z","2026-09-28T07:00:00.000Z","2026-09-29T07:00:00.000Z","2026-10-02T07:00:00.000Z","2026-10-03T07:00:00.000Z","2026-10-04T07:00:00.000Z","2026-10-05T07:00:00.000Z","20
-== an_v1_mlb.json 63440 https://api.actionnetwork.com/web/v1/scoreboard/mlb?bookIds=15,30
-{"league":{"id":8,"sport":"baseball","name":"mlb","description":"Major League Baseball","logo":"https://static.sprtactn.co/leagues/500/mlb.png","current_season":"2026","current_season_type":"reg","pre_season_start":"2026-02-20T08:00:00.000Z","pre_season_end":"2026-03-26T06:59:59.000Z","reg_season_start":"2026-03-25T07:00:00.000Z","reg_season_end":"2026-09-30T06:59:59.000Z","post_season_start":"202
-SBD routes: ['/adpt/v1', '/adpt/v1/nhl-odds', '/adpt/v1/nfl-odds', '/adpt/v1/mlb-odds', '/adpt/v1/nba-odds', '/adpt/v1/ncaafb-odds', '/adpt/v1/ncaamb-odds', '/adpt/v1/player-props/(?P<sport>((nhl|nfl|mlb|nba|ncaafb|ncaamb)))', '/adpt/v1/cache/clear', '/adpt/v1/cache/status', '/adpt/v1/cache/value', '/adpt/v1/cache/delete', '/adpt/v1/futures/(?P<sport>((nhl|nfl|mlb|nba|ncaafb|ncaamb)))', '/adpt/v1/futures/(?P<sport>((nhl|nfl|mlb|nba|ncaafb|ncaamb)))/(?P<markets>markets)', '/adpt/v1/futures/(?P<sport>((nhl|nfl|mlb|nba|ncaafb|ncaamb)))/markets/(?P<market>sr:iscreen_market:\\d+)', '/adpt/v1/(?P<sport>((nhl|nfl|mlb|nba|ncaafb|ncaamb)))/schedule', '/adpt/v1/sport-event/(?P<sport>((nhl|nfl|mlb|nba|ncaafb|ncaamb)))/(?P<event_id>[^\\/]+)/?']
-fd_fixtures.csv rows 0
-fd_fixtures.csv list index out of range
-fd_E0.csv rows 0
-fd_E0.csv list index out of range
-an_v1_epl.json games 0
-an_v2_epl_nodate.json games 0
-an_v2_soccer.json games 0
-an_v1_mlb.json games 4
-  odds keys ['away_over', 'away_total', 'away_under', 'book_id', 'draw', 'home_over', 'home_total', 'home_under', 'inserted', 'line_status', 'meta', 'ml_away', 'ml_away_money', 'ml_away_public', 'ml_home', 'ml_home_money', 'ml_home_public', 'num_bets', 'over', 'spread_away', 'spread_away_line', 'spread_away_money', 'spread_away_public', 'spread_home', 'spread_home_line', 'spread_home_money', 'spread_home_public', 'total', 'total_over_money', 'total_over_public', 'total_under_money', 'total_under_public', 'type', 'under']
-espn eng.1 events 0 
-espn esp.1 events 0 
-espn ita.1 events 0 
-espn ger.1 events 0 
-espn fra.1 events 0 
-espn uefa.champions events 0 
+== an_soccer_20261001.json 44240 https://api.actionnetwork.com/web/v2/scoreboard/soccer?bookIds=15,30,68,69,71,75,76,79,123&date=20261001
+{"schedule_info":{"reg_season_start":"2025-09-17T00:00:00.000Z","reg_season_end":"2027-06-14T00:00:00.000Z","blacklist_dates":["2026-09-21T07:00:00.000Z","2026-09-22T07:00:00.000Z","2026-09-24T07:00:00.000Z","2026-09-25T07:00:00.000Z","2026-09-28T07:00:00.000Z","2026-09-29T07:00:00.000Z","2026-10-02T07:00:00.000Z","2026-10-03T07:00:00.000Z","2026-10-04T07:00:00.000Z","2026-10-05T07:00:00.000Z","20
+== an_champions_20261001.json 36647 https://api.actionnetwork.com/web/v2/scoreboard/champions?bookIds=15,30,68,69,71,75,76,79,123&date=20261001
+{"league":{"id":15,"sport":"soccer","name":"champions","description":"Champions League","logo":"https://static.sprtactn.co/leagues/500/champions.png","current_season":"2025","current_season_type":"reg","pre_season_start":"2021-09-01T07:00:00.000Z","pre_season_end":"2021-09-10T06:59:59.000Z","reg_season_start":"2025-09-17T07:00:00.000Z","reg_season_end":"2026-06-01T06:59:59.000Z","post_season_start
+== an_epl_20261010.json 244774 https://api.actionnetwork.com/web/v2/scoreboard/epl?bookIds=15,30,68,69,71,75,76,79,123&date=20261010
+{"league":{"id":9,"sport":"soccer","name":"epl","description":"English Premier League","logo":"https://static.sprtactn.co/leagues/500/epl.png","current_season":"2026","current_season_type":"reg","pre_season_start":null,"pre_season_end":null,"reg_season_start":"2026-08-21T07:00:00.000Z","reg_season_end":"2027-05-27T06:59:59.000Z","post_season_start":null,"post_season_end":null,"blacklist_dates":["2
+== an_laliga_20261010.json 168028 https://api.actionnetwork.com/web/v2/scoreboard/laliga?bookIds=15,30,68,69,71,75,76,79,123&date=20261010
+{"league":{"id":12,"sport":"soccer","name":"laliga","description":"La Liga","logo":"https://static.sprtactn.co/leagues/500/laliga.png","current_season":"2026","current_season_type":"reg","pre_season_start":null,"pre_season_end":null,"reg_season_start":"2026-08-15T07:00:00.000Z","reg_season_end":"2027-06-14T06:59:59.000Z","post_season_start":null,"post_season_end":null,"blacklist_dates":["2025-08-2
+== an_seriea_20261010.json 125196 https://api.actionnetwork.com/web/v2/scoreboard/seriea?bookIds=15,30,68,69,71,75,76,79,123&date=20261010
+{"league":{"id":13,"sport":"soccer","name":"seriea","description":"Serie A","logo":"https://static.sprtactn.co/leagues/500/seriea.png","current_season":"2026","current_season_type":"reg","pre_season_start":null,"pre_season_end":null,"reg_season_start":"2026-08-22T07:00:00.000Z","reg_season_end":"2027-06-13T06:59:59.000Z","post_season_start":null,"post_season_end":null,"blacklist_dates":["2025-08-2
+== an_bundesliga_20261010.json 241925 https://api.actionnetwork.com/web/v2/scoreboard/bundesliga?bookIds=15,30,68,69,71,75,76,79,123&date=20261010
+{"league":{"id":10,"sport":"soccer","name":"bundesliga","description":"Bundesliga","logo":"https://static.sprtactn.co/leagues/500/bund.png","current_season":"2026","current_season_type":"reg","pre_season_start":null,"pre_season_end":null,"reg_season_start":"2026-08-28T07:00:00.000Z","reg_season_end":"2027-05-21T06:59:59.000Z","post_season_start":null,"post_season_end":null,"blacklist_dates":["2025
+== an_ligue1_20261010.json 186352 https://api.actionnetwork.com/web/v2/scoreboard/ligue1?bookIds=15,30,68,69,71,75,76,79,123&date=20261010
+{"league":{"id":11,"sport":"soccer","name":"ligue1","description":"Ligue 1","logo":"https://static.sprtactn.co/leagues/500/ligue1.png","current_season":"2026","current_season_type":"reg","pre_season_start":null,"pre_season_end":null,"reg_season_start":"2026-08-21T07:00:00.000Z","reg_season_end":"2027-06-04T06:59:59.000Z","post_season_start":null,"post_season_end":null,"blacklist_dates":["2025-08-1
+docs/probe/fd_E0.csv rows 51
+ header ['Div', 'Date', 'Time', 'HomeTeam', 'AwayTeam', 'FTHG', 'FTAG', 'FTR', 'HTHG', 'HTAG', 'HTR', 'Referee', 'HxG', 'AxG', 'HS', 'AS', 'HST', 'AST', 'HF', 'AF', 'HC', 'AC', 'HY', 'AY', 'HR', 'AR', 'B365H', 'B365D', 'B365A', 'BFDH', 'BFDD', 'BFDA', 'BVH', 'BVD', 'BVA', 'BWH', 'BWD', 'BWA', 'PPH', 'PPD', 'PPA', 'SKBH', 'SKBD', 'SKBA', 'MaxH', 'MaxD', 'MaxA', 'AvgH', 'AvgD', 'AvgA', 'BFEH', 'BFED', 'BFEA', 'B365>2.5', 'B365<2.5', 'Max>2.5', 'Max<2.5', 'Avg>2.5', 'Avg<2.5', 'BFE>2.5', 'BFE<2.5', 'AHh', 'B365AHH', 'B365AHA', 'MaxAHH', 'MaxAHA', 'AvgAHH', 'AvgAHA', 'BFEAHH', 'BFEAHA', 'B365CH', 'B365CD', 'B365CA', 'BFDCH', 'BFDCD', 'BFDCA', 'BVCH', 'BVCD', 'BVCA', 'BWCH', 'BWCD', 'BWCA', 'PPCH', 'PPCD', 'PPCA', 'SKBCH', 'SKBCD', 'SKBCA', 'MaxCH', 'MaxCD', 'MaxCA', 'AvgCH', 'AvgCD', 'AvgCA', 'BFECH', 'BFECD', 'BFECA', 'B365C>2.5', 'B365C<2.5', 'MaxC>2.5', 'MaxC<2.5', 'AvgC>2.5', 'AvgC<2.5', 'BFEC>2.5', 'BFEC<2.5', 'AHCh', 'B365CAHH', 'B365CAHA', 'MaxCAHH', 'MaxCAHA', 'AvgCAHH', 'AvgCAHA', 'BFECAHH', 'BFECAHA']
+ first ['E0', '21/08/2026', '20:00', 'Arsenal', 'Coventry', '3', '0', 'H', '2', '0', 'H', 'T Bramall', '1.88', '0.2', '20', '4', '6', '1', '10', '13', '8', '2', '1', '1', '0', '0', '1.2', '7', '13', '1.2', '6.5', '15', '1.18', '7', '15', '1.2', '6.5', '12', '1.17', '7', '15', '1.17', '7.5', '14', '1.23', '7.5', '16.5', '1.19', '6.77', '14.19', '1.23', '7.4', '18', '1.57', '2.38', '1.6', '2.45', '1.55', '2.38', '1.64', '2.54', '-2', '2.03', '1.78', '2.05', '1.8', '1.99', '1.76', '2.11', '1.86', '1.18', '7.5', '13', '1.22', '6.5', '13', '1.2', '6.5', '15', '1.2', '6.5', '11.5', '1.17', '7', '15', '1.17', '7.5', '14', '1.22', '7.5', '16', '1.2', '6.72', '14', '1.23', '7.4', '18', '1.57', '2.38', '1.58', '2.45', '1.55', '2.37', '1.63', '2.56', '-2', '2.05', '1.75', '2.05', '1.83', '2.02', '1.74', '2.14', '1.86']
+docs/probe/fd_fixtures.csv rows 13
+ header ['Div', 'Date', 'Time', 'HomeTeam', 'AwayTeam', 'Referee', 'B365H', 'B365D', 'B365A', 'BFDH', 'BFDD', 'BFDA', 'BVH', 'BVD', 'BVA', 'BWH', 'BWD', 'BWA', 'PPH', 'PPD', 'PPA', 'SKBH', 'SKBD', 'SKBA', 'MaxH', 'MaxD', 'MaxA', 'AvgH', 'AvgD', 'AvgA', 'BFEH', 'BFED', 'BFEA', 'B365>2.5', 'B365<2.5', 'Max>2.5', 'Max<2.5', 'Avg>2.5', 'Avg<2.5', 'BFE>2.5', 'BFE<2.5', 'AHh', 'B365AHH', 'B365AHA', 'MaxAHH', 'MaxAHA', 'AvgAHH', 'AvgAHA', 'BFEAHH', 'BFEAHA', 'B365CH', 'B365CD', 'B365CA', 'BFDCH', 'BFDCD', 'BFDCA', 'BVCH', 'BVCD', 'BVCA', 'BWCH', 'BWCD', 'BWCA', 'PPCH', 'PPCD', 'PPCA', 'SKBCH', 'SKBCD', 'SKBCA', 'MaxCH', 'MaxCD', 'MaxCA', 'AvgCH', 'AvgCD', 'AvgCA', 'BFECH', 'BFECD', 'BFECA', 'B365C>2.5', 'B365C<2.5', 'MaxC>2.5', 'MaxC<2.5', 'AvgC>2.5', 'AvgC<2.5', 'BFEC>2.5', 'BFEC<2.5', 'AHCh', 'B365CAHH', 'B365CAHA', 'MaxCAHH', 'MaxCAHA', 'AvgCAHH', 'AvgCAHA', 'BFECAHH', 'BFECAHA']
+ first ['EC', '29/09/2026', '19:00', 'Boreham Wood', 'Kidderminster', 'A Humphries', '1.33', '5', '7.5', '1.33', '5', '7.5', '1.33', '4.8', '7.5', '1.33', '4.5', '7.25', '1.3', '5', '7.5', '1.3', '4.75', '7', '1.36', '5', '8', '1.33', '4.72', '7.33', '1.4', '4.9', '8.6', '1.5', '2.5', '1.5', '2.7', '1.46', '2.52', '1.58', '2.66', '-1.5', '1.95', '1.85', '1.95', '1.85', '1.9', '1.79', '2.04', '1.84', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+ divs ['EC']
+docs/probe/espn_eng.1_20261010.json events 6 Leeds United at Arsenal
+   comp keys ['altGameNote', 'attendance', 'broadcast', 'broadcasts', 'competitors', 'date', 'details', 'format', 'geoBroadcasts', 'id', 'notes', 'odds', 'playByPlayAthletes', 'playByPlayAvailable', 'recent', 'startDate', 'status', 'tickets', 'timeValid', 'uid', 'venue', 'wasSuspended']
+   odds [{"overUnder": 2.5, "link": {"language": "en-US", "rel": ["game", "desktop", "bets"], "href": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34669424", "text": "Game", "shortText": "Game", "isExternal": true, "isPremium": false, "isHidden": false}, "provider": {"id": "100", "name": "DraftKings", "priority": 1, "displayName": "DraftKings", "logos": [{"href": "https://a.espncdn.com/i/betting/Draftkings_Light.svg", "rel": ["light"]}, {"hre
+docs/probe/espn_esp.1_20261010.json events 4 Athletic Club at Rayo Vallecano
+   comp keys ['altGameNote', 'attendance', 'broadcast', 'broadcasts', 'competitors', 'date', 'details', 'format', 'geoBroadcasts', 'id', 'notes', 'odds', 'playByPlayAthletes', 'playByPlayAvailable', 'recent', 'startDate', 'status', 'timeValid', 'uid', 'venue', 'wasSuspended']
+   odds [{"overUnder": 2.5, "link": {"language": "en-US", "rel": ["game", "desktop", "bets"], "href": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34700895", "text": "Game", "shortText": "Game", "isExternal": true, "isPremium": false, "isHidden": false}, "provider": {"id": "100", "name": "DraftKings", "priority": 1, "displayName": "DraftKings", "logos": [{"href": "https://a.espncdn.com/i/betting/Draftkings_Light.svg", "rel": ["light"]}, {"hre
+docs/probe/espn_fra.1_20261010.json events 5 Le Havre AC at Lille
+   comp keys ['altGameNote', 'attendance', 'broadcast', 'broadcasts', 'competitors', 'date', 'details', 'format', 'geoBroadcasts', 'id', 'notes', 'odds', 'playByPlayAthletes', 'playByPlayAvailable', 'recent', 'startDate', 'status', 'timeValid', 'uid', 'venue', 'wasSuspended']
+   odds [{"overUnder": 2.5, "link": {"language": "en-US", "rel": ["game", "desktop", "bets"], "href": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34701391", "text": "Game", "shortText": "Game", "isExternal": true, "isPremium": false, "isHidden": false}, "provider": {"id": "100", "name": "DraftKings", "priority": 1, "displayName": "DraftKings", "logos": [{"href": "https://a.espncdn.com/i/betting/Draftkings_Light.svg", "rel": ["light"]}, {"hre
+docs/probe/espn_ger.1_20261010.json events 6 SV Elversberg at 1. FC Union Berlin
+   comp keys ['altGameNote', 'attendance', 'broadcast', 'broadcasts', 'competitors', 'date', 'details', 'format', 'geoBroadcasts', 'id', 'notes', 'odds', 'playByPlayAthletes', 'playByPlayAvailable', 'recent', 'startDate', 'status', 'timeValid', 'uid', 'venue', 'wasSuspended']
+   odds [{"overUnder": 2.5, "link": {"language": "en-US", "rel": ["game", "desktop", "bets"], "href": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34683834", "text": "Game", "shortText": "Game", "isExternal": true, "isPremium": false, "isHidden": false}, "provider": {"id": "100", "name": "DraftKings", "priority": 1, "displayName": "DraftKings", "logos": [{"href": "https://a.espncdn.com/i/betting/Draftkings_Light.svg", "rel": ["light"]}, {"hre
+docs/probe/espn_ita.1_20261010.json events 3 Fiorentina at Genoa
+   comp keys ['altGameNote', 'attendance', 'broadcast', 'broadcasts', 'competitors', 'date', 'details', 'format', 'geoBroadcasts', 'id', 'notes', 'odds', 'playByPlayAthletes', 'playByPlayAvailable', 'recent', 'startDate', 'status', 'timeValid', 'uid', 'venue', 'wasSuspended']
+   odds [{"overUnder": 2.5, "link": {"language": "en-US", "rel": ["game", "desktop", "bets"], "href": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34683960", "text": "Game", "shortText": "Game", "isExternal": true, "isPremium": false, "isHidden": false}, "provider": {"id": "100", "name": "DraftKings", "priority": 1, "displayName": "DraftKings", "logos": [{"href": "https://a.espncdn.com/i/betting/Draftkings_Light.svg", "rel": ["light"]}, {"hre
+docs/probe/espn_uefa.champions_20260930.json events 0 
+docs/probe/espn_uefa.champions_20261001.json events 0 
+docs/probe/an_bundesliga_20261010.json games 6
+   game keys ['attendance', 'away_team_id', 'core_id', 'coverage', 'home_team_id', 'id', 'is_free', 'league_id', 'league_name', 'markets', 'meta', 'num_bets', 'real_status', 'season', 'start_time', 'status', 'status_display', 'teams', 'trending', 'type', 'week', 'winning_team_id']
+   teams ['VfB Stuttgart', 'Paderborn'] 2026-10-10T13:30:00.000Z bundesliga
+docs/probe/an_champions_20261001.json games 0
+docs/probe/an_epl_20261010.json games 6
+   game keys ['attendance', 'away_team_id', 'core_id', 'coverage', 'home_team_id', 'id', 'is_free', 'league_id', 'league_name', 'markets', 'meta', 'num_bets', 'real_status', 'season', 'start_time', 'status', 'status_display', 'teams', 'trending', 'type', 'week', 'winning_team_id']
+   teams ['Arsenal', 'Leeds United'] 2026-10-10T11:30:00.000Z epl
+docs/probe/an_laliga_20261010.json games 4
+   game keys ['attendance', 'away_team_id', 'core_id', 'coverage', 'home_team_id', 'id', 'is_free', 'league_id', 'league_name', 'markets', 'meta', 'num_bets', 'real_status', 'season', 'start_time', 'status', 'status_display', 'teams', 'trending', 'type', 'week', 'winning_team_id']
+   teams ['Athletic Bilbao', 'Rayo Vallecano'] 2026-10-10T12:00:00.000Z laliga
+docs/probe/an_ligue1_20261010.json games 5
+   game keys ['attendance', 'away_team_id', 'core_id', 'coverage', 'home_team_id', 'id', 'is_free', 'league_id', 'league_name', 'markets', 'meta', 'num_bets', 'real_status', 'season', 'start_time', 'status', 'status_display', 'teams', 'trending', 'type', 'week', 'winning_team_id']
+   teams ['Lille', 'Le Havre'] 2026-10-10T15:15:00.000Z ligue1
+docs/probe/an_seriea_20261010.json games 3
+   game keys ['attendance', 'away_team_id', 'core_id', 'coverage', 'home_team_id', 'id', 'is_free', 'league_id', 'league_name', 'markets', 'meta', 'num_bets', 'real_status', 'season', 'start_time', 'status', 'status_display', 'teams', 'trending', 'type', 'week', 'winning_team_id']
+   teams ['Fiorentina', 'Genoa'] 2026-10-10T13:00:00.000Z seriea
+docs/probe/an_soccer_20260930.json games 1
+   game keys ['attendance', 'away_team_id', 'core_id', 'coverage', 'home_team_id', 'id', 'is_free', 'league_id', 'league_name', 'markets', 'meta', 'num_bets', 'real_status', 'season', 'start_time', 'status', 'status_display', 'teams', 'trending', 'type', 'week', 'winning_team_id']
+   teams ['New York Red Bulls', 'St. Louis City'] 2026-09-30T23:30:00.000Z mls
+docs/probe/an_soccer_20261001.json games 1
+   game keys ['attendance', 'away_team_id', 'core_id', 'coverage', 'home_team_id', 'id', 'is_free', 'league_id', 'league_name', 'markets', 'meta', 'num_bets', 'real_status', 'season', 'start_time', 'status', 'status_display', 'teams', 'trending', 'type', 'week', 'winning_team_id']
+   teams ['Seattle Sounders FC', 'Sporting Kansas City'] 2026-10-02T01:30:00.000Z mls
