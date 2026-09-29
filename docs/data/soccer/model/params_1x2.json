@@ -1,0 +1,154 @@
+{
+ "generated_utc": "2026-09-29T15:46Z",
+ "features": [
+  "lm_h",
+  "lm_d",
+  "elo_diff"
+ ],
+ "classes": [
+  "A",
+  "D",
+  "H"
+ ],
+ "mean": [
+  0.388746,
+  -0.108717,
+  60.245873
+ ],
+ "scale": [
+  1.035811,
+  0.499275,
+  123.616862
+ ],
+ "coef": [
+  [
+   -0.469689,
+   -0.175757,
+   0.063746
+  ],
+  [
+   -0.419312,
+   0.344779,
+   0.069141
+  ],
+  [
+   0.889001,
+   -0.169022,
+   -0.132887
+  ]
+ ],
+ "intercept": [
+  -0.11374,
+  -0.168066,
+  0.281806
+ ],
+ "elo_home": 60,
+ "elo": {
+  "ligue1": {
+   "Paris SG": 1640.4,
+   "Lens": 1555.2,
+   "Toulouse": 1487.0,
+   "Brest": 1465.4,
+   "Lorient": 1481.5,
+   "Troyes": 1374.9,
+   "Lille": 1574.2,
+   "Monaco": 1583.1,
+   "Rennes": 1554.9,
+   "Nice": 1452.2,
+   "Auxerre": 1463.1,
+   "Angers": 1444.6,
+   "Marseille": 1517.2,
+   "Le Havre": 1434.0,
+   "Paris FC": 1531.8,
+   "Strasbourg": 1538.3,
+   "Lyon": 1584.4,
+   "Le Mans": 1439.0
+  },
+  "bundesliga": {
+   "Hamburg": 1430.2,
+   "Werder Bremen": 1460.9,
+   "Ein Frankfurt": 1497.6,
+   "Leverkusen": 1583.6,
+   "RB Leipzig": 1549.7,
+   "Augsburg": 1503.4,
+   "Schalke 04": 1444.4,
+   "Dortmund": 1644.9,
+   "Bayern Munich": 1711.0,
+   "Paderborn": 1434.8,
+   "Union Berlin": 1424.0,
+   "M'gladbach": 1431.6,
+   "Stuttgart": 1553.5,
+   "FC Koln": 1424.2,
+   "Elversberg": 1451.2,
+   "Freiburg": 1538.0,
+   "Mainz": 1510.0,
+   "Hoffenheim": 1503.7
+  },
+  "epl": {
+   "Everton": 1510.5,
+   "Hull": 1455.8,
+   "Newcastle": 1511.2,
+   "Arsenal": 1648.4,
+   "Liverpool": 1567.8,
+   "Ipswich": 1377.0,
+   "Brighton": 1562.6,
+   "Aston Villa": 1514.6,
+   "Man United": 1554.1,
+   "Sunderland": 1469.9,
+   "Brentford": 1541.9,
+   "Fulham": 1473.8,
+   "Crystal Palace": 1459.1,
+   "Coventry": 1407.5,
+   "Bournemouth": 1526.3,
+   "Chelsea": 1505.8,
+   "Man City": 1661.2,
+   "Leeds": 1512.2,
+   "Tottenham": 1424.0,
+   "Nott'm Forest": 1495.5
+  },
+  "laliga": {
+   "Celta": 1495.0,
+   "Levante": 1465.2,
+   "Villarreal": 1553.8,
+   "Espanol": 1450.9,
+   "La Coruna": 1453.0,
+   "Vallecano": 1500.0,
+   "Osasuna": 1446.9,
+   "Elche": 1446.5,
+   "Santander": 1418.9,
+   "Ath Bilbao": 1489.9,
+   "Sevilla": 1480.8,
+   "Valencia": 1463.5,
+   "Ath Madrid": 1598.4,
+   "Malaga": 1399.4,
+   "Barcelona": 1726.3,
+   "Betis": 1569.1,
+   "Real Madrid": 1647.5,
+   "Sociedad": 1485.3,
+   "Alaves": 1487.4,
+   "Getafe": 1471.6
+  },
+  "seriea": {
+   "Lecce": 1432.6,
+   "Sassuolo": 1477.8,
+   "Atalanta": 1537.5,
+   "Udinese": 1477.0,
+   "Fiorentina": 1475.0,
+   "Monza": 1366.6,
+   "Venezia": 1359.8,
+   "Juventus": 1589.5,
+   "Como": 1595.1,
+   "Genoa": 1425.7,
+   "Bologna": 1484.4,
+   "Lazio": 1558.1,
+   "Frosinone": 1473.8,
+   "Roma": 1636.9,
+   "Milan": 1582.1,
+   "Napoli": 1586.1,
+   "Parma": 1443.4,
+   "Cagliari": 1494.6,
+   "Inter": 1680.0,
+   "Torino": 1457.4
+  }
+ }
+}

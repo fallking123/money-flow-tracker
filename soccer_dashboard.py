@@ -8,6 +8,8 @@
 - eu：對應到的歐洲賠率（football-data.co.uk 最新一筆）
 """
 
+import json
+import math
 import os
 import re
 import unicodedata
@@ -70,7 +72,7 @@ FD_ALIAS = {
     "man united": "manchester united", "man city": "manchester city", "nott m forest": "nottingham forest",
     "wolves": "wolverhampton", "ath bilbao": "athletic bilbao", "ath madrid": "atletico madrid", "sociedad": "real sociedad",
     "vallecano": "rayo vallecano", "espanol": "espanyol", "ein frankfurt": "eintracht frankfurt",
-    "m gladbach": "monchengladbach", "fc koln": "koln", "paris sg": "paris saint germain", "st etienne": "saint etienne",
+    "m gladbach": "moenchengladbach", "fc koln": "koeln", "hamburg": "hamburger", "paris sg": "paris saint germain", "st etienne": "saint etienne",
     "betis": "real betis", "celta": "celta vigo", "sheffield weds": "sheffield wednesday", "st pauli": "pauli",
 }
 STOP = {"fc", "cf", "ac", "sc", "afc", "ssc", "as", "rc", "sv", "club", "de", "1", "calcio", "1913", "town", "city", "united", "real"}
@@ -97,6 +99,59 @@ def toks(s):
     t = set(norm(s).split())
     core = t - STOP
     return core or t
+
+
+def full_toks(s):
+    return set(norm(s).split())
+
+
+def match_score(a, b):
+    """兩個隊名有多像：先比去掉 FC、United 這些字以後的關鍵字，再用完整字數分高下"""
+    core = len(toks(a) & toks(b))
+    return (core, len(full_toks(a) & full_toks(b))) if core else (0, 0)
+
+
+def best_team(name, candidates):
+    best, sc = None, (0, 0)
+    for c in candidates:
+        s_ = match_score(name, c)
+        if s_ > sc:
+            best, sc = c, s_
+    return best
+
+
+# ---------------- 第一層模型（soccer_model.py 訓練好的參數）----------------
+_PARAMS = None
+
+
+def model_params():
+    global _PARAMS
+    if _PARAMS is None:
+        path = os.path.join(sport_dir("soccer"), "model", "params_1x2.json")
+        _PARAMS = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {}
+    return _PARAMS
+
+
+def predict(league, home, away, odds):
+    """回傳 [主, 和, 客] 機率；賠率不齊或對不到隊伍 Elo 就回傳 None"""
+    P = model_params()
+    if not P or not odds or any(o is None or o <= 1 for o in odds):
+        return None
+    elo = P["elo"].get(league) or {}
+    th, ta = best_team(home, elo), best_team(away, elo)
+    if not th or not ta or th == ta:
+        return None
+    inv = [1 / o for o in odds]
+    tot = sum(inv)
+    ph, pd_, pa = (x / tot for x in inv)
+    x = {"lm_h": math.log(ph / pa), "lm_d": math.log(pd_ / pa), "elo_diff": elo[th] + P["elo_home"] - elo[ta]}
+    z = [(x[f] - m) / sc for f, m, sc in zip(P["features"], P["mean"], P["scale"])]
+    logits = [sum(w * v for w, v in zip(ws, z)) + b for ws, b in zip(P["coef"], P["intercept"])]
+    mx = max(logits)
+    ex = [math.exp(v - mx) for v in logits]
+    prob = dict(zip(P["classes"], (e / sum(ex) for e in ex)))
+    return {"p": [round(prob["H"], 4), round(prob["D"], 4), round(prob["A"], 4)],
+            "elo": [elo[th], elo[ta]], "mkt": [round(ph, 4), round(pd_, 4), round(pa, 4)]}
 
 
 def color(c, team=""):
@@ -163,12 +218,11 @@ def eu_index():
 
 def match_eu(by_day, league, t, home, away):
     d = t.astimezone(LONDON).strftime("%d/%m/%Y")
-    best, score = None, 0
-    th, ta = toks(home), toks(away)
+    best, score = None, (0, 0, 0, 0)
     for r in by_day.get((league, d), []):
-        s = len(th & toks(r["home_team"])) + len(ta & toks(r["away_team"]))
-        if th & toks(r["home_team"]) and ta & toks(r["away_team"]) and s > score:
-            best, score = r, s
+        sh, sa = match_score(home, r["home_team"]), match_score(away, r["away_team"])
+        if sh[0] and sa[0] and sh + sa > score:
+            best, score = r, sh + sa
     if not best:
         return None
     f = lambda k: num(best.get(k))
@@ -194,6 +248,7 @@ def game_of(aid, rows, res, now, snaps_k=None):
         "away_ab": last.get("away_abbr") or away[:3].upper(), "home_ab": last.get("home_abbr") or home[:3].upper(),
         "away_c": [ac, ac] if ac else None, "home_c": [hc, hc] if hc else None,
         "status": status, "open": open_of(rows[0]),
+        "model": predict(last["league"], home, away, [num(last.get("ml_home_odds")), num(last.get("ml_draw_odds")), num(last.get("ml_away_odds"))]) if status != "final" else None,
         "snaps": [snap_of(r) for r in (thin(pre, snaps_k) if snaps_k else rows[-40:])],
         "result": None if status != "final" else {
             "away": num(res["away_score"]), "home": num(res["home_score"]), "winner": res["winner"],
@@ -241,4 +296,10 @@ def stats():
         for f in os.listdir(eu_dir):
             with open(os.path.join(eu_dir, f), encoding="utf-8-sig", errors="ignore") as fh:
                 hist += max(0, sum(1 for _ in fh) - 1)
-    return {"snaps": snaps, "games": len(ids), "finals": fin, "history_games": hist}
+    rep = {}
+    rp = os.path.join(sport_dir("soccer"), "model", "report_1x2.json")
+    if os.path.exists(rp):
+        r = json.load(open(rp, encoding="utf-8"))
+        rep = {k: r.get(k) for k in ("generated_utc", "train_games", "test_games", "test_seasons", "accuracy", "hit_rate",
+                                     "calibration", "betting", "base_rates", "base_rates_by_league", "by_league", "features")}
+    return {"snaps": snaps, "games": len(ids), "finals": fin, "history_games": hist, "model": rep}

@@ -1,0 +1,329 @@
+{
+ "generated_utc": "2026-09-29T15:46Z",
+ "train_games": 6926,
+ "test_games": 2002,
+ "train_seasons": [
+  "2122",
+  "2223",
+  "2324",
+  "2425"
+ ],
+ "test_seasons": [
+  "2526",
+  "2627"
+ ],
+ "base_rates": {
+  "H": 43.5,
+  "D": 25.4,
+  "A": 31.1
+ },
+ "base_rates_by_league": {
+  "bundesliga": {
+   "H": 44.3,
+   "D": 24.8,
+   "A": 31.0
+  },
+  "epl": {
+   "H": 43.9,
+   "D": 24.1,
+   "A": 31.9
+  },
+  "ligue1": {
+   "H": 43.4,
+   "D": 24.7,
+   "A": 32.0
+  },
+  "seriea": {
+   "H": 40.4,
+   "D": 27.0,
+   "A": 32.6
+  },
+  "laliga": {
+   "H": 45.7,
+   "D": 26.1,
+   "A": 28.2
+  }
+ },
+ "accuracy": {
+  "market": {
+   "logloss": 0.9785,
+   "brier": 0.5825
+  },
+  "team_only": {
+   "logloss": 0.9956,
+   "brier": 0.5932
+  },
+  "model": {
+   "logloss": 0.9774,
+   "brier": 0.582
+  },
+  "market_recal": {
+   "logloss": 0.9779,
+   "brier": 0.5823
+  },
+  "all_features": {
+   "logloss": 0.9807,
+   "brier": 0.5839
+  },
+  "closing": {
+   "logloss": 0.9775,
+   "brier": 0.5821,
+   "n": 2002
+  },
+  "uniform": {
+   "logloss": 1.0986
+  }
+ },
+ "hit_rate": {
+  "market": 53.1,
+  "team_only": 51.3,
+  "model": 53.5
+ },
+ "calibration": [
+  {
+   "pred": 11.8,
+   "real": 11.7,
+   "n": 751
+  },
+  {
+   "pred": 20.2,
+   "real": 19.7,
+   "n": 751
+  },
+  {
+   "pred": 24.8,
+   "real": 25.1,
+   "n": 750
+  },
+  {
+   "pred": 27.7,
+   "real": 28.9,
+   "n": 751
+  },
+  {
+   "pred": 30.9,
+   "real": 29.2,
+   "n": 751
+  },
+  {
+   "pred": 36.9,
+   "real": 36.8,
+   "n": 750
+  },
+  {
+   "pred": 47.7,
+   "real": 47.9,
+   "n": 751
+  },
+  {
+   "pred": 66.6,
+   "real": 67.4,
+   "n": 751
+  }
+ ],
+ "features": [
+  "lm_h",
+  "lm_d",
+  "elo_diff"
+ ],
+ "weights": {
+  "lm_h": 0.876,
+  "lm_d": -0.153,
+  "elo_diff": -0.131
+ },
+ "betting": {
+  "avg": {
+   "0.0": {
+    "n": 501,
+    "win": 172,
+    "pl": -20.54,
+    "roi": -4.1,
+    "avg_odds": 3.32,
+    "pick_share": {
+     "home": 43,
+     "draw": 357,
+     "away": 101
+    },
+    "clv": 0.67
+   },
+   "0.02": {
+    "n": 193,
+    "win": 50,
+    "pl": -9.95,
+    "roi": -5.2,
+    "avg_odds": 3.99,
+    "pick_share": {
+     "home": 11,
+     "draw": 179,
+     "away": 3
+    },
+    "clv": 0.74
+   },
+   "0.05": {
+    "n": 56,
+    "win": 17,
+    "pl": 12.13,
+    "roi": 21.7,
+    "avg_odds": 4.52,
+    "pick_share": {
+     "home": 4,
+     "draw": 51,
+     "away": 1
+    },
+    "clv": 1.97
+   },
+   "0.08": {
+    "n": 13,
+    "win": 3,
+    "pl": 3.69,
+    "roi": 28.4,
+    "avg_odds": 5.47,
+    "pick_share": {
+     "home": 1,
+     "draw": 12,
+     "away": 0
+    },
+    "clv": 5.49
+   }
+  },
+  "tw": {
+   "0.0": {
+    "n": 6,
+    "win": 3,
+    "pl": 9.02,
+    "roi": 150.3,
+    "avg_odds": 5.24,
+    "pick_share": {
+     "home": 1,
+     "draw": 5,
+     "away": 0
+    }
+   },
+   "0.02": {
+    "n": 4,
+    "win": 3,
+    "pl": 11.02,
+    "roi": 275.5,
+    "avg_odds": 5.71,
+    "pick_share": {
+     "home": 1,
+     "draw": 3,
+     "away": 0
+    }
+   },
+   "0.05": {
+    "n": 2,
+    "win": 2,
+    "pl": 10.24,
+    "roi": 512.0,
+    "avg_odds": 6.12,
+    "pick_share": {
+     "home": 0,
+     "draw": 2,
+     "away": 0
+    }
+   },
+   "0.08": {
+    "n": 1,
+    "win": 1,
+    "pl": 5.08,
+    "roi": 507.5,
+    "avg_odds": 6.08,
+    "pick_share": {
+     "home": 0,
+     "draw": 1,
+     "away": 0
+    }
+   }
+  },
+  "max": {
+   "0.0": {
+    "n": 1522,
+    "win": 565,
+    "pl": 15.3,
+    "roi": 1.0,
+    "avg_odds": 3.29,
+    "pick_share": {
+     "home": 215,
+     "draw": 947,
+     "away": 360
+    }
+   },
+   "0.02": {
+    "n": 932,
+    "win": 315,
+    "pl": 1.54,
+    "roi": 0.2,
+    "avg_odds": 3.57,
+    "pick_share": {
+     "home": 87,
+     "draw": 663,
+     "away": 182
+    }
+   },
+   "0.05": {
+    "n": 324,
+    "win": 84,
+    "pl": 7.12,
+    "roi": 2.2,
+    "avg_odds": 4.42,
+    "pick_share": {
+     "home": 22,
+     "draw": 288,
+     "away": 14
+    }
+   },
+   "0.08": {
+    "n": 144,
+    "win": 38,
+    "pl": 14.49,
+    "roi": 10.1,
+    "avg_odds": 4.91,
+    "pick_share": {
+     "home": 12,
+     "draw": 124,
+     "away": 8
+    }
+   }
+  },
+  "market_only_avg": {
+   "n": 1,
+   "win": 0,
+   "pl": -1.0,
+   "roi": -100.0,
+   "avg_odds": 6.37,
+   "pick_share": {
+    "home": 1,
+    "draw": 0,
+    "away": 0
+   }
+  }
+ },
+ "by_league": {
+  "bundesliga": {
+   "n": 342,
+   "market": 0.9535,
+   "model": 0.951
+  },
+  "epl": {
+   "n": 430,
+   "market": 1.0196,
+   "model": 1.0209
+  },
+  "ligue1": {
+   "n": 351,
+   "market": 0.9818,
+   "model": 0.981
+  },
+  "seriea": {
+   "n": 430,
+   "market": 0.9729,
+   "model": 0.9691
+  },
+  "laliga": {
+   "n": 449,
+   "market": 0.9609,
+   "model": 0.9609
+  }
+ }
+}

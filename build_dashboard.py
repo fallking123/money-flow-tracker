@@ -258,7 +258,8 @@ SPORT_FEATURES = {
             "plan": ["先發四分衛確認", "分區對戰", "跨時區移動"]},
     "soccer": {"name": "足球（五大聯賽＋歐冠）", "why": "有和局，所以獨贏是三選一；歐洲莊家的賠率最準，拿來跟美國的資金流向對照。",
                "have": ["1X2 人數%／金額%（含和局）", "讓球、大小、單隊大小的人數%／金額%", "歐洲各家平均／最高賠率", "Betfair 交易所賠率",
-                        "亞洲讓球盤", "上下半場比分", "過去五季完整賽果＋收盤賠率"],
+                        "亞洲讓球盤", "上下半場比分", "過去五季完整賽果＋收盤賠率", "Elo 強弱分數",
+                        "角球、黃紅牌、射門、射正、犯規（結果已收，賠率還沒有）"],
                "plan": ["先發陣容確認", "傷停名單", "歐冠／國內盃賽前後的輪換", "xG（預期進球）走勢"]},
     "nhl": {"name": "NHL 冰球", "why": "先發門將影響最大，背靠背時常換替補門將。",
             "have": ["先發門將", "門將本季成績（失分率、擋球率）", "背靠背", "休息天數", "傷兵名單"],
@@ -286,10 +287,12 @@ def data_stats():
     snaps += ss["snaps"]
     finals += ss["finals"]
     per["soccer"] = {"snaps": ss["snaps"], "games": ss["games"], "finals": ss["finals"], "history": ss["history_games"]}
+    soccer_model_report = ss["model"]
     games |= {"soccer" + str(i) for i in range(ss["games"])}
     return {"snaps": snaps, "games": len(games), "finals": finals, "since": first[:10] if first else None,
             "per": per, "features": [{"group": g, "items": it} for g, it in FEATURES],
             "sport_features": {k: v for k, v in SPORT_FEATURES.items() if k in active_sports() or k == "soccer"},
+            "soccer_model": soccer_model_report,
             "n_features": sum(len(it) for _, it in FEATURES)}
 
 

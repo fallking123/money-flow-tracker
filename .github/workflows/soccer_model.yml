@@ -1,0 +1,35 @@
+name: Train soccer model
+
+# 足球第一層模型：每週二、週五台灣時間早上重新訓練（週末、週中比賽打完、football-data 更新之後）
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "40 22 * * 1,4"
+
+permissions:
+  contents: write
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install pandas==3.0.2 numpy==2.4.4 scikit-learn==1.8.0
+      - name: Train
+        run: python soccer_model.py
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/soccer/model
+          if git diff --cached --quiet; then echo "沒有變化"; exit 0; fi
+          git commit -m "足球模型重新訓練"
+          for i in 1 2 3 4 5; do
+            git pull --rebase && git push && exit 0
+            sleep 15
+          done
+          exit 1
