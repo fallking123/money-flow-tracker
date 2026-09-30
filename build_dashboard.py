@@ -14,7 +14,7 @@ import os
 import sys
 from datetime import datetime, timezone, timedelta
 
-from sports_common import (active_sports, all_monthly_files, parse_time, read_rows,
+from sports_common import (_norm, active_sports, all_monthly_files, parse_time, read_rows,
                             recent_monthly_files, sport_dir)
 import record_tw_odds
 import soccer_dashboard
@@ -297,6 +297,34 @@ def data_stats():
             "n_features": sum(len(it) for _, it in FEATURES)}
 
 
+def extra_index(sport, now):
+    """其他玩法（scrape_extra.py）：每場留第一次和最新一次的賠率"""
+    by = {}
+    for path in recent_monthly_files(sport, "extra_odds"):
+        for r in read_rows(path):
+            t = parse_time(r["game_time_utc"])
+            if t < now - timedelta(days=RECENT_DAYS):
+                continue
+            g = by.setdefault(r["an_id"], {"away": r["away_team"], "home": r["home_team"], "t": t, "snaps": {}})
+            g["snaps"].setdefault(r["timestamp_utc"], []).append(
+                [r["period"], r["market"], r["side"], r["team"], num(r["line"]), num(r["odds"]), num(r["bets_pct"]), num(r["money_pct"])])
+    out = {}
+    for g in by.values():
+        ts = sorted(g["snaps"])
+        key = (_norm(g["away"]), _norm(g["home"]))
+        out.setdefault(key, []).append({"t": g["t"], "ts": ts[-1][:16] + "Z", "last": g["snaps"][ts[-1]], "first": g["snaps"][ts[0]]})
+    return out
+
+
+def match_extra(index, away, home, t):
+    for x in index.get((_norm(away), _norm(home)), []):
+        if abs((x["t"] - t).total_seconds()) < 3 * 3600:
+            first = {tuple(r[:4]): r for r in x["first"]}
+            return {"ts": x["ts"], "rows": [r + [(first.get(tuple(r[:4])) or [None] * 6)[5] if (first.get(tuple(r[:4])) or [None] * 5)[4] == r[4] else None]
+                                          for r in x["last"]]}
+    return None
+
+
 def team_ctx(ctx, side, k):
     """背景資料裡各隊的狀況（舊資料沒有這些欄位就回傳空值）"""
     col = {"record": f"{side}_record", "split": "away_road_record" if side == "away" else "home_home_record",
@@ -328,6 +356,7 @@ def build(now):
                 g = by_id.setdefault(r["sbd_id"], {"rows": []})
                 g["rows"].append(r)
 
+        extra = extra_index(sport, now)
         for sid, g in by_id.items():
             rows = sorted(g["rows"], key=lambda r: r["timestamp_utc"])
             last = rows[-1]
@@ -353,6 +382,7 @@ def build(now):
                 "away_c": team_color(sport, away), "home_c": team_color(sport, home),
                 "status": status,
                 "open": open_of(first),
+                "extra": match_extra(extra, away, home, t),
                 "snaps": [snap_of(r) for r in rows[-MAX_SNAPS:]],
                 "result": None if not res or res["status"] != "final" else {
                     "away": num(res["away_score"]), "home": num(res["home_score"]),

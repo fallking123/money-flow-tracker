@@ -222,6 +222,7 @@ table{border-collapse:collapse;width:100%}
 .leg-h{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:14px;margin-bottom:8px}
 .btn.ghost{background:var(--accent-soft);color:var(--accent)}
 .parts div{white-space:normal}
+.xg{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));column-gap:18px}
 .msg{font-size:13px;color:var(--muted)}
 .bl select{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:3px 6px;font-size:13px}
 
@@ -456,6 +457,38 @@ table{border-collapse:collapse;width:100%}
     const gs = ((DATA.tw && DATA.tw.by_group) || []).filter((x) => x.tw_margin_pct != null);
     return gs.length ? gs.reduce((s, x) => s + x.tw_margin_pct, 0) / gs.length / 100 : 0.15;
   };
+  // 其他玩法（單隊大小、前五局、第一節、上半場…）：data.json 的 g.extra.rows = [時段, 玩法, 邊, 隊, 盤口, 賠率, 人數%, 金額%, 開盤賠率]
+  const PERIOD = {event: "全場", firstfiveinnings: "前五局", firstinning: "第一局", firstperiod: "第一節", firstquarter: "第一節", firsthalf: "上半場"};
+  const XMK = {moneyline: "獨贏", spread: "讓分", total: "大小", team_total: "單隊大小"};
+  const XORDER = ["event|team_total", "firstfiveinnings|moneyline", "firstfiveinnings|spread", "firstfiveinnings|total", "firstinning|total",
+                  "firsthalf|moneyline", "firsthalf|spread", "firsthalf|total", "firsthalf|team_total",
+                  "firstquarter|moneyline", "firstquarter|spread", "firstquarter|total", "firstquarter|team_total",
+                  "firstperiod|moneyline", "firstperiod|spread", "firstperiod|total", "firstperiod|team_total"];
+  function extraGroups(g) {
+    const rows = (g.extra && g.extra.rows) || [], m = new Map();
+    const tn = (t) => (t === "away" ? g.away_zh || g.away_ab : t === "home" ? g.home_zh || g.home_ab : "");
+    for (const [per, mk, side, team, ln, od, , , op] of rows) {
+      if (od == null) continue;
+      const key = per + "|" + mk;
+      const label = key === "event|team_total" ? "單隊大小" : `${PERIOD[per] || per} ${XMK[mk] || mk}`;
+      const v = mk === "moneyline" ? (side === "draw" ? "和局" : tn(team || side))
+        : mk === "spread" ? `${tn(team || side)} ${line(ln)}`
+        : mk === "team_total" ? `${tn(team)} ${side === "over" ? "大" : "小"} ${ln}`
+        : `${side === "over" ? "大" : "小"} ${ln}`;
+      if (!m.has(key)) m.set(key, {key, label, opts: []});
+      m.get(key).opts.push({v, us: od, open: op, team, side});
+    }
+    const ord = (o) => (o.team === "away" ? 0 : o.team === "home" ? 2 : 1) * 10 + (o.side === "over" || o.side === "away" ? 0 : o.side === "draw" ? 1 : 2);
+    return [...m.values()].map((x) => ({...x, opts: x.opts.sort((a, b) => ord(a) - ord(b))}))
+      .sort((a, b) => (XORDER.indexOf(a.key) + 1 || 99) - (XORDER.indexOf(b.key) + 1 || 99));
+  }
+  function extraBlock(g) {
+    const gs = extraGroups(g); if (!gs.length) return "";
+    const mv = (o) => (o.open != null && Math.abs(o.open - o.us) >= 0.02 ? `<span class="mut" style="font-weight:400;font-size:11.5px">（開 ${odd(o.open)}）</span>` : "");
+    return `<div class="ts-wrap"><h4>其他玩法（美國賠率・最後更新 ${when(g.extra.ts)}）</h4><div class="xg">${gs.map((x) =>
+      `<div class="mrow"><span>${esc(x.label)}</span><span class="n">${x.opts.map((o) => `${esc(o.v)} <b>${odd(o.us)}</b>${mv(o)}`).join("<br>")}</span></div>`).join("")}</div>
+      <p class="mut" style="font-size:12px;margin:6px 0 0">這些玩法網站只給賠率，沒有下注人數／金額比例，所以沒有「錢比人多」訊號。跟台彩比：台彩賠率通常低很多。</p></div>`;
+  }
   const pickLabel = (sd, mkt) => (mkt === "ml" ? sd.nm : mkt === "sp" ? `${sd.nm} ${line(sd.ln)}` : `${sd.nm}（總分 ${sd.ln ?? "–"}）`);
 
   // ═════════ 圖表 ═════════
@@ -603,7 +636,7 @@ table{border-collapse:collapse;width:100%}
         </div><div class="twnote">押${esc(pickLabel(side, mkt))}：${fp == null ? "" : ok ? `照${who}的估計，這注在台彩<b class="good">划算</b>。` : `照${who}的估計，這注在台彩長期<b class="bad">會虧</b>（還差 ${Math.max(1, Math.round((be - fp) * 100))}%）。`}${td.est ? "（台彩賠率是估的）" : ""}</div>`;
       }
     }
-    h += `<button type="button" class="more" data-open="${esc(key)}" aria-expanded="${isOpen}">${isOpen ? "收起" : soc ? "看更多：歐洲賠率、單隊大小、變化" : "看更多：先發投手、其他玩法、變化"}</button>`;
+    h += `<button type="button" class="more" data-open="${esc(key)}" aria-expanded="${isOpen}">${isOpen ? "收起" : soc ? "看更多：歐洲賠率、單隊大小、變化" : "看更多：先發投手、單隊大小、前五局、變化"}</button>`;
     if (isOpen) h += detail(g);
     return h + `</article>`;
   }
@@ -623,6 +656,7 @@ table{border-collapse:collapse;width:100%}
     }).join("");
     parts.push(`<div><h4>三種玩法各押哪邊</h4>${rows}</div>`);
     if (soc) parts.push(teamTotals(g, s));
+    else { const xb = extraBlock(g); if (xb) parts.push(xb); }
     const ts = teamStatus(g);
     if (ts) parts.push(ts);
     const ss = sides(g, s, m), sg = signal(g, s, m, thr), tk = sg || ss[0];
@@ -816,7 +850,10 @@ table{border-collapse:collapse;width:100%}
   }
   const findGame = (gid) => [...(DATA ? DATA.games : []), ...((DATA && DATA.closed) || [])].find((g) => g.sport + "|" + g.id === gid);
   function pickOptions(g, market) {
-    const mk = MKCODE[market]; if (!g || !mk) return [];
+    if (!g) return [];
+    const xg = extraGroups(g).find((x) => x.label === market);
+    if (xg) return xg.opts.map((o) => ({v: o.v, us: o.us}));
+    const mk = MKCODE[market]; if (!mk) return [];
     const s = latest(g), ss = sides(g, s, mk);
     return ss.filter((x) => market !== "和局" || x.key === "draw").map((x) => ({v: pickLabel(x, mk), us: x.odds}));
   }
@@ -834,7 +871,7 @@ table{border-collapse:collapse;width:100%}
         <label>聯賽<select data-leg="${i}" data-f="league">${LEAGUES.map((x) => `<option${x === L.league ? " selected" : ""}>${x}</option>`).join("")}</select></label>
         ${gs.length ? `<label class="wide">比賽<select data-leg="${i}" data-f="gid"><option value="">選一場…</option>${gs.map((x) => `<option value="${esc(x.sport + "|" + x.id)}"${L.gid === x.sport + "|" + x.id ? " selected" : ""}>${fmtTime.format(new Date(x.t))}　${esc(matchName(x))}</option>`).join("")}<option value="__other"${L.gid === "__other" ? " selected" : ""}>清單裡沒有，自己填</option></select></label>` : ""}
         ${custom ? `<label class="wide">比賽${gs.length ? "" : `<span style="font-size:11.5px">（這天沒有 ${esc(L.league)} 的資料，自己填）</span>`}<input data-leg="${i}" data-f="match" value="${esc(L.match)}" placeholder="例如：洋基 vs 紅襪" maxlength="60"></label>` : ""}
-        <label>玩法<select data-leg="${i}" data-f="market">${BTYPES.map((x) => `<option${x === L.market ? " selected" : ""}>${x}</option>`).join("")}</select></label>
+        <label>玩法<select data-leg="${i}" data-f="market">${[...BTYPES, ...(g ? extraGroups(g).map((x) => x.label).filter((x) => !BTYPES.includes(x)) : [])].map((x) => `<option${x === L.market ? " selected" : ""}>${esc(x)}</option>`).join("")}</select></label>
         ${opts.length ? `<label class="wide">押什麼<select data-leg="${i}" data-f="pick"><option value="">選一邊…</option>${opts.map((o) => `<option${o.v === L.pick ? " selected" : ""}>${esc(o.v)}</option>`).join("")}<option value="__other"${L.pick === "__other" ? " selected" : ""}>其他，自己填</option></select></label>` : ""}
         ${customPick ? `<label class="wide">押什麼<input data-leg="${i}" data-f="pickCustom" value="${esc(L.pickCustom)}" placeholder="例如：洋基 -1.5、大 8.5" maxlength="60"></label>` : ""}
         <label>${multi ? "這關賠率" : "台彩賠率"}<input data-leg="${i}" data-f="odds" type="number" step="0.01" min="1.01" inputmode="decimal" value="${esc(L.odds)}" placeholder="${usOdds ? "美國 " + odd(usOdds) : "1.75"}"></label>
