@@ -5,6 +5,8 @@
 - 台彩：估計勝率 × 台彩賠率 − 1（你記錄過的實際台彩賠率優先，沒有就用「美國賠率 × 台彩平均折扣」估）
 - 美國：估計勝率 × 美國共識賠率 − 1
 任一種 ≥ +2% 就記一筆提醒；同一場、同一注、同一種只記一次（期望值之後又變更好也不重複）。
+提醒過的注之後每次都重算：開賽前期望值跌到 0 以下（或讓分／大小的盤口變了）就記一筆「取消」（status=cancel），
+推播會告訴你「之前說划算的這注現在不划算了」。取消之後如果又回到 +2% 以上，會再提醒一次。
 
 估計勝率跟看板一樣：獨贏用模型一（足球用足球模型），讓分／大小用 Pinnacle 去掉抽水（盤口要一樣）。
 只有美國莊家自己的賠率可以用時不算（拿美國賠率跟自己比，一定是負的）。
@@ -22,11 +24,12 @@ from sports_common import parse_time, read_rows, sport_dir
 from track_models import discount
 
 EV_MIN = 0.02        # 期望值至少 +2% 才提醒
+EV_CANCEL = 0.0      # 提醒過的注，期望值跌到這以下就發取消
 EV_MAX = 0.30        # 超過 30% 多半是資料有問題（某一邊賠率沒更新），不提醒
 HORIZON_H = 30
 KELLY_FRAC, KELLY_CAP = 0.25, 0.03
 FIELDS = ["created_utc", "sport", "league", "game_id", "game_time_utc", "away_zh", "home_zh", "market", "side", "line",
-          "pick_zh", "kind", "odds", "odds_src", "p", "p_src", "ev", "stake_pct"]
+          "pick_zh", "kind", "odds", "odds_src", "p", "p_src", "ev", "stake_pct", "status", "note"]
 MK = {"ml": "獨贏", "sp": "讓分", "ou": "大小"}
 
 
@@ -101,8 +104,8 @@ def pick_name(g, mkt, key, line):
     return nm
 
 
-def find(g, tw):
-    """這場比賽所有 ≥ +2% 的選項"""
+def find(g, tw, lo=EV_MIN, hi=EV_MAX):
+    """這場比賽期望值在 [lo, hi] 之間的選項（預設＝所有 ≥ +2% 的）"""
     snap = next((s for s in reversed(g.get("snaps") or []) if any(s.get(m) for m in ("ml", "sp", "ou"))), None)
     if not snap:
         return []
@@ -120,22 +123,57 @@ def find(g, tw):
             two, tsrc = tw_odds(g, mkt, key, line, us, tw)
             for kind, o, osrc in (("tw", two, tsrc), ("us", us, "us")):
                 ev = p * o - 1
-                if EV_MIN <= ev <= EV_MAX:
+                if lo <= ev <= hi:
                     out.append({"market": mkt, "side": key, "line": "" if line is None else line, "pick_zh": pick_name(g, mkt, key, line),
                                 "kind": kind, "odds": o, "odds_src": osrc, "p": round(p, 4), "p_src": src, "ev": round(ev, 4),
                                 "stake_pct": kelly(p, o) if kind == "tw" else ""})
     return out
 
 
+def okey(r):
+    return (r["game_id"], r["market"], r["side"], str(r["line"]), r["kind"])
+
+
 def run(sports, now=None):
     now = now or datetime.now(timezone.utc)
     data = B.build(now)
     tw = data["tw"]
+    games = {g["id"]: g for g in data["games"]}
+    stamp = now.strftime("%Y-%m-%dT%H:%MZ")
     for sport in sports:
         path = path_for(sport)
         rows = read_rows(path)
-        seen = {(r["game_id"], r["market"], r["side"], str(r["line"]), r["kind"]) for r in rows}
-        new = []
+        last = {}                       # 每個選項最後一筆記錄（提醒 or 取消）
+        for r in rows:
+            last[okey(r)] = r
+        new, cancels = [], []
+
+        # 1) 提醒過、還沒取消的注：重算，變不划算就取消
+        for k, r in last.items():
+            if r.get("status") == "cancel" or r["sport"] != sport:
+                continue
+            g = games.get(r["game_id"])
+            if not g or g["status"] != "upcoming" or parse_time(g["t"]) <= now:
+                continue
+            cur = {okey({"game_id": g["id"], **a}): a for a in find(g, tw, lo=-1, hi=10)}
+            if not cur:
+                continue                  # 這次整場都沒有賠率，下次再看
+            a = cur.get(k)
+            if a is None:
+                note = "盤口變了" if r["market"] != "ml" else "賠率暫時沒有"
+                if r["market"] == "ml":
+                    continue          # 獨贏只是這次沒抓到賠率，不算取消
+            elif a["ev"] < EV_CANCEL:
+                note = f"期望值變成 {a['ev'] * 100:+.1f}%"
+            else:
+                continue
+            c = {**r, "created_utc": stamp, "status": "cancel", "note": note}
+            if a:
+                c.update(odds=a["odds"], odds_src=a["odds_src"], p=a["p"], ev=a["ev"], stake_pct="")
+            cancels.append(c)
+            last[k] = c
+
+        # 2) 新的划算注（沒提醒過，或上次已取消、現在又划算）
         for g in data["games"]:
             if g["sport"] != sport or g["status"] != "upcoming":
                 continue
@@ -143,23 +181,25 @@ def run(sports, now=None):
             if not (now + timedelta(minutes=10) < t <= now + timedelta(hours=HORIZON_H)):
                 continue
             for a in find(g, tw):
-                k = (g["id"], a["market"], a["side"], str(a["line"]), a["kind"])
-                if k in seen:
+                k = okey({"game_id": g["id"], **a})
+                if k in last and last[k].get("status") != "cancel":
                     continue
-                seen.add(k)
-                new.append({"created_utc": now.strftime("%Y-%m-%dT%H:%MZ"), "sport": sport, "league": g.get("league", sport),
-                            "game_id": g["id"], "game_time_utc": g["t"], "away_zh": g.get("away_zh") or g["away"],
-                            "home_zh": g.get("home_zh") or g["home"], **a})
-        if new:
-            exists = os.path.exists(path)
+                r = {"created_utc": stamp, "sport": sport, "league": g.get("league", sport),
+                     "game_id": g["id"], "game_time_utc": g["t"], "away_zh": g.get("away_zh") or g["away"],
+                     "home_zh": g.get("home_zh") or g["home"], **a, "status": "", "note": ""}
+                new.append(r)
+                last[k] = r
+
+        if new or cancels:
             os.makedirs(os.path.dirname(path), exist_ok=True)
-            with open(path, "a", newline="", encoding="utf-8") as f:
-                w = csv.DictWriter(f, fieldnames=FIELDS)
-                if not exists:
-                    w.writeheader()
-                w.writerows(new)
-        print(f"  {sport}：新提醒 {len(new)} 筆" + "".join(f"\n    {r['away_zh']}@{r['home_zh']} {MK[r['market']]} {r['pick_zh']} "
-                                                       f"{'台彩' if r['kind'] == 'tw' else '美國'} {r['odds']} 期望值 {r['ev'] * 100:+.1f}%" for r in new))
+            with open(path, "w", newline="", encoding="utf-8") as f:     # 整個重寫：舊檔沒有 status 欄也能升級
+                w = csv.DictWriter(f, fieldnames=FIELDS, restval="", extrasaction="ignore")
+                w.writeheader()
+                w.writerows(rows + cancels + new)
+        print(f"  {sport}：新提醒 {len(new)} 筆、取消 {len(cancels)} 筆"
+              + "".join(f"\n    {r['away_zh']}@{r['home_zh']} {MK[r['market']]} {r['pick_zh']} "
+                        f"{'台彩' if r['kind'] == 'tw' else '美國'} {r['odds']} 期望值 {float(r['ev']) * 100:+.1f}%"
+                        + (f" → 取消（{r['note']}）" if r["status"] == "cancel" else "") for r in cancels + new))
 
 
 if __name__ == "__main__":

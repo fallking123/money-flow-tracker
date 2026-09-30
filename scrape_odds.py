@@ -66,6 +66,7 @@ class Blocked(Exception):
 MISSING_RETRY_MIN = 120
 # 手動「馬上更新」：改 force_update.txt（寫運動代碼，例如 mlb）推上去就會觸發，這些運動不管間隔、全部重抓一次
 FORCE_SPORTS = {s.strip() for s in os.environ.get("FORCE_SPORTS", "").replace("\n", ",").split(",") if s.strip()}
+NOTHING_DUE = ".nothing_due"
 SPLIT_KEY = {"ml": "ml_away_bets_pct", "sp": "sp_away_bets_pct", "ou": "ou_over_bets_pct"}
 
 
@@ -304,7 +305,7 @@ def process_sport(sport, games, now, state):
         due.append(g)
     if not due:
         print(f"  {cfg['name']}: 共 {len(games)} 場，這次沒有需要記錄的比賽")
-        return
+        return 0
 
     events = []
     try:
@@ -328,6 +329,7 @@ def process_sport(sport, games, now, state):
     append_rows(monthly_path(sport, "odds_books", now), BOOK_FIELDS, book_out)
     note = f"（{unmatched} 場沒對到 ESPN 編號）" if unmatched else ""
     print(f"  {cfg['name']}: 共 {len(games)} 場，寫入 {len(hist_rows)} 場快照、{len(book_out)} 筆莊家賠率變動{note}")
+    return len(hist_rows)
 
 
 def run(use_browser=False):
@@ -353,12 +355,17 @@ def run(use_browser=False):
             except Exception as e:
                 print(f"  {sport}: 讀取失敗 {e}")
 
+    total = 0
     for sport, games in fetched.items():
         try:
-            process_sport(sport, games, now, state)
+            total += process_sport(sport, games, now, state) or 0
         except Exception as e:
+            total += 1          # 出錯時照樣跑後面的步驟，不要靜靜跳過
             print(f"  {sport}: 處理失敗 {e}")
     save_state(state, now)
+    # 排程每 10 分鐘醒來一次；這次沒有任何比賽到了該記錄的時間 → 留記號，workflow 就跳過後面的步驟
+    if total == 0 and not blocked:
+        open(NOTHING_DUE, "w").close()
 
     if blocked:
         print(f"被網站擋下：{', '.join(blocked)}")
