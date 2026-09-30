@@ -39,6 +39,8 @@ jobs:
           elif [ $code -ne 0 ]; then
             exit $code
           fi
+      - name: Other markets (team totals, first 5 innings, periods)
+        run: python scrape_extra.py || echo "其他玩法抓取失敗，不影響主資料"
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
