@@ -14,6 +14,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: scrape-odds
+  cancel-in-progress: false
+
 jobs:
   scrape:
     runs-on: ubuntu-latest
@@ -43,6 +47,8 @@ jobs:
         run: python scrape_extra.py || echo "其他玩法抓取失敗，不影響主資料"
       - name: Pinnacle lines (sharp / Asian money direction)
         run: python scrape_pinnacle.py mlb,nba,nfl,nhl || echo "Pinnacle 抓取失敗，不影響主資料"
+      - name: Track model picks (every game, settle with 台彩 odds)
+        run: python track_models.py mlb,nba,nfl,nhl || echo "模型實戰記錄失敗，不影響主資料"
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"

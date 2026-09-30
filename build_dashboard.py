@@ -393,6 +393,38 @@ def team_ctx(ctx, side, k):
     return v or ""
 
 
+LIVE_STRATS = ["model1", "model2", "combo", "favorite", "underdog"]
+
+
+def live_summary():
+    """上線後實戰（track_models.py 記的）：每個策略每場都下 1 單位的成績，給「模型」頁用"""
+    rows = []
+    for sport in list(active_sports()) + ["soccer"]:
+        rows += read_rows(os.path.join(sport_dir(sport), "model_picks.csv"))
+
+    def agg(rs):
+        done = [r for r in rs if r["result"] in ("win", "loss", "push")]
+        n = len(done)
+        pl = sum(float(r["profit"]) for r in done)
+        return {"n": n, "win": sum(r["result"] == "win" for r in done), "push": sum(r["result"] == "push" for r in done),
+                "pl": round(pl, 3), "roi": round(pl / n * 100, 1) if n else None,
+                "actual": sum(r["settle_src"] == "actual" for r in done)}
+
+    strats = {}
+    for s in LIVE_STRATS:
+        rs = [r for r in rows if r["strategy"] == s]
+        strats[s] = {"all": agg(rs), "by_sport": {sp: agg([r for r in rs if r["sport"] == sp]) for sp in sorted({r["sport"] for r in rs})},
+                     "value": agg([r for r in rs if num(r["ev"]) is not None and num(r["ev"]) > 0])}
+    m1 = [r for r in rows if r["strategy"] == "model1"]
+    settled = sorted([r for r in m1 if r["result"] in ("win", "loss", "push")], key=lambda r: r["game_time_utc"], reverse=True)
+    pend = [r for r in m1 if not r["result"]]
+    slim = lambda r: {"sport": r["sport"], "t": r["game_time_utc"], "away": r["away_zh"] or r["away"], "home": r["home_zh"] or r["home"],
+                      "pick": r["pick_zh"], "p": num(r["p"]), "tw": num(r["settle_odds"]) or num(r["tw_odds"]),
+                      "src": r["settle_src"] or r["tw_src"], "ev": num(r["ev"]), "result": r["result"], "profit": num(r["profit"])}
+    return {"since": min((r["game_time_utc"] for r in m1), default=None), "strats": strats, "pending": len(pend),
+            "recent": [slim(r) for r in settled[:30]]}
+
+
 def build(now):
     games = []
     for sport in active_sports():
@@ -459,6 +491,13 @@ def build(now):
     sg, sclosed = soccer_dashboard.build_soccer(now, RECENT_DAYS, CLOSED_SNAPS)
     games += sg
     games.sort(key=lambda g: g["t"])
+    closed = build_closed() + sclosed
+    # 你記錄過的台彩實際賠率，接到每場比賽上（算期望值時優先用實際的）
+    twg = record_tw_odds.per_game()
+    for g in games + closed:
+        rec = twg.get((g["sport"], g["id"]))
+        if rec:
+            g["tw"] = rec
     tw = record_tw_odds.summary()
     for b in tw.get("best", []):
         if b["sport"] == "soccer":
@@ -472,8 +511,9 @@ def build(now):
         "generated_utc": now.strftime("%Y-%m-%dT%H:%MZ"),
         "sports": {**{k: v["name"] for k, v in active_sports().items()}, "soccer": "足球"},
         "games": games,
-        "closed": build_closed() + sclosed,
+        "closed": closed,
         "tw": tw,
+        "live": live_summary(),
     }
 
 

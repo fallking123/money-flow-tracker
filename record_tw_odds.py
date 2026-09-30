@@ -155,6 +155,17 @@ def _avg(vals):
     return round(sum(vals) / len(vals), 2) if vals else None
 
 
+def per_game():
+    """每場比賽記錄到的台彩賠率：{(運動, 比賽編號): {盤別: {邊: [賠率, 盤口]}}}（同一個選項記過好幾次就用最後一次）"""
+    out = {}
+    for r in read_rows(TW_ODDS_FILE):
+        o = _num(r["tw_odds"])
+        if not o:
+            continue
+        out.setdefault((r["sport"], r["sbd_id"]), {}).setdefault(r["market"], {})[r["side"]] = [o, _num(r["tw_line"])]
+    return out
+
+
 def summary():
     """
     依運動+盤別統計（給儀表板用）：

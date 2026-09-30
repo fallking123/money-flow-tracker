@@ -20,10 +20,24 @@ FMT = "%m/%d %H:%M"
 TZ = timezone(timedelta(hours=8))  # 台灣時間，只是用來顯示
 
 
+GOAL = 20  # 每個運動記到這麼多場就夠了（跟 App 台彩頁一樣），之後不再提醒
+
+
+def recorded_counts():
+    games = {(r["sport"], r["sbd_id"]) for r in read_rows(TW_ODDS_FILE)}
+    out = {}
+    for sport, _ in games:
+        out[sport] = out.get(sport, 0) + 1
+    return out
+
+
 def missing_games(now):
     recorded = {r["sbd_id"] for r in read_rows(TW_ODDS_FILE)}
+    counts = recorded_counts()
     out = {}
     for sport, cfg in active_sports().items():
+        if counts.get(sport, 0) >= GOAL:
+            continue
         rows = read_rows(os.path.join(sport_dir(sport), "results.csv"))
         games = []
         for r in rows:
@@ -39,6 +53,8 @@ def missing_games(now):
         if games:
             out[sport] = [(t, r) for t, r in games]
     # 足球（比賽編號是 an+Action Network 編號）
+    if counts.get("soccer", 0) >= GOAL:
+        return out
     games = []
     for r in read_rows(os.path.join(sport_dir("soccer"), "results.csv")):
         if r.get("status") != "final" or f"an{r['an_id']}" in recorded:
@@ -68,7 +84,9 @@ def format_report(missing):
             score = f"{r['away_score']}－{r['home_score']}" if r.get("away_score") else ""
             lines.append(f"  {local}　{r['away_team']} @ {r['home_team']}　{score}")
         lines.append("")
-    lines.append("没截图的场次跳过就好，不用每一场都补。")
+    counts = recorded_counts()
+    lines.append("進度：" + "、".join(f"{'足球' if k == 'soccer' else k.upper()} {v}/{GOAL}" for k, v in sorted(counts.items())) + f"（每個運動記到 {GOAL} 場就夠了）")
+    lines.append("沒截圖的場次跳過就好，不用每一場都補。App 的「台彩」頁也看得到這份清單。")
     return "\n".join(lines).strip()
 
 

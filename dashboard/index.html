@@ -56,7 +56,7 @@ button,input,select{font:inherit;color:inherit}
 main{max-width:1080px;margin:0 auto;padding:18px 16px 60px}
 @media (max-width:899px){
   .navtop{display:none}
-  .tabs{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+  .tabs{display:grid;grid-template-columns:repeat(6,1fr);position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
   .tabs button{appearance:none;border:0;background:none;height:var(--tabh);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:11px;color:var(--muted);cursor:pointer}
   .tabs button[aria-current="page"]{color:var(--accent);font-weight:700}
   main{padding-bottom:calc(var(--tabh) + 40px + env(safe-area-inset-bottom,0px))}
@@ -147,6 +147,34 @@ h1{font-size:24px;font-weight:900;margin:0;text-wrap:balance}
 .tile b{display:block;font-family:var(--num);font-weight:800;font-size:19px;color:var(--ink);margin-top:3px}
 .tile.bad b{color:var(--bad)} .tile.good b{color:var(--good)}
 .twnote{font-size:12.5px;color:var(--muted);margin-top:-4px}
+/* 每一注期望值 */
+.evg{border:1px solid var(--line);border-radius:14px;padding:10px 10px 8px;display:flex;flex-direction:column;gap:7px}
+.evh{font-size:13.5px;line-height:1.5;padding:0 2px}
+.evr{display:grid;grid-template-columns:3.1em 1fr;gap:8px;align-items:center}
+.evr .k{font-size:12px;color:var(--muted);line-height:1.2}
+.evo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.evo.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.evo.c3 .evc .ln{flex-direction:column;align-items:flex-start;gap:0}
+.evc{appearance:none;border:1px solid transparent;background:var(--soft);border-radius:10px;padding:5px 9px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:1px;min-width:0;color:var(--ink)}
+.evc .nm{font-size:12.5px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.evc .ln{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
+.evc .o{font-family:var(--num);font-weight:700;font-size:13px;color:var(--muted);white-space:nowrap}
+.evc .o i{font-style:normal;font-size:10.5px;margin-left:1px}
+.evc b{font-family:var(--num);font-weight:800;font-size:15px;color:var(--muted)}
+.evc.go{background:var(--good-soft);border-color:var(--good)} .evc.go b{color:var(--good)}
+.evc.edge b,.evc.look b{color:var(--warn)}
+.evc.no b{color:var(--bad);opacity:.8}
+.evc:hover{border-color:var(--accent)}
+.evf{font-size:11.5px;color:var(--muted);padding:0 2px}
+.evt{font-size:11.5px;font-weight:700;border-radius:999px;padding:1px 8px;white-space:nowrap}
+.evt.go{background:var(--good-soft);color:var(--good)} .evt.edge,.evt.look{background:var(--warn-soft);color:var(--warn)} .evt.no{background:var(--soft2);color:var(--muted)}
+.evtb small{font-weight:400}
+.evline{font-size:13px;margin-top:8px;padding:7px 10px;border-radius:10px;background:var(--soft)}
+.evline.go{background:var(--good-soft)} .evline.no{background:var(--bad-soft)}
+.ask{display:flex;align-items:center;gap:10px;background:var(--warn-soft);color:var(--ink);border-radius:14px;padding:10px 14px;margin-bottom:14px;font-size:14px;cursor:pointer;border:0;width:100%;text-align:left}
+.ask svg{flex:none;color:var(--warn)}
+.ask b{color:var(--warn)}
+.ask .go{margin-left:auto;color:var(--accent);font-weight:700;white-space:nowrap;font-size:13px}
 .more{appearance:none;border:0;background:none;color:var(--accent);font-size:13.5px;font-weight:700;cursor:pointer;padding:2px 0;align-self:flex-start}
 .det{border-top:1px solid var(--line);padding-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
 .det h4{margin:0 0 6px;font-size:12.5px;color:var(--muted);font-weight:500}
@@ -300,9 +328,15 @@ table{border-collapse:collapse;width:100%}
     <div id="bets" class="stack"></div>
   </section>
 
+  <section data-view="models" hidden>
+    <h1>模型比賽</h1>
+    <p class="intro">模型一（實力）、模型二（資金）、綜合：假設每一場都下注，誰的獲利率最高。從開賽前自動記下各自押哪邊，開獎後用台彩賠率結算。</p>
+    <div id="models" class="stack"></div>
+  </section>
+
   <section data-view="tw" hidden>
-    <h1>台彩抽多少</h1>
-    <p class="intro">用你傳的台彩截圖，跟同一場比賽的美國賠率比。抽成越高，你越難贏。</p>
+    <h1>台彩賠率</h1>
+    <p class="intro">需要你截圖的比賽，還有台彩跟美國賠率比抽多少。抽成越高，你越難贏。</p>
     <div id="tw" class="stack"></div>
   </section>
 
@@ -337,7 +371,8 @@ table{border-collapse:collapse;width:100%}
     {k: "board", n: "今日比賽", s: "比賽", i: '<rect x="3" y="4" width="16" height="14" rx="3" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M3 9h16M8 2.5v3M14 2.5v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>'},
     {k: "analysis", n: "訊號準不準", s: "準不準", i: '<path d="M3 16l5-5 3 3 7-8" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'},
     {k: "bets", n: "我的投注", s: "我的投注", i: '<rect x="4" y="3" width="14" height="16" rx="3" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M8 8h6M8 11.5h6M8 15h3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>'},
-    {k: "tw", n: "台彩抽多少", s: "台彩", i: '<circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M8.5 13.5l5-5M8.7 8.7h.01M13.3 13.3h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'},
+    {k: "models", n: "模型比賽", s: "模型", i: '<circle cx="5.5" cy="6" r="2.2" stroke="currentColor" stroke-width="1.7" fill="none"/><circle cx="16.5" cy="6" r="2.2" stroke="currentColor" stroke-width="1.7" fill="none"/><circle cx="11" cy="16.5" r="2.2" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M7.2 7.6l2.7 7M14.8 7.6l-2.7 7M7.8 6h6.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>'},
+    {k: "tw", n: "台彩賠率", s: "台彩", i: '<circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M8.5 13.5l5-5M8.7 8.7h.01M13.3 13.3h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'},
     {k: "method", n: "說明", s: "說明", i: '<circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M11 10v5M11 7h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'},
   ];
   const hashView = () => { const h = (location.hash || "").slice(1); return VIEWS.some((v) => v.k === h) ? h : null; };
@@ -539,6 +574,65 @@ table{border-collapse:collapse;width:100%}
   }
   const pickLabel = (sd, mkt) => (mkt === "ml" ? sd.nm : mkt === "sp" ? `${sd.nm} ${line(sd.ln)}` : `${sd.nm}（總分 ${sd.ln ?? "–"}）`);
 
+  // ═════════ 期望值：估計勝率 × 台彩賠率 − 1 ═════════
+  // 勝率：獨贏用模型一（足球用足球模型），其他玩法用 Pinnacle 去掉抽水，沒有 Pinnacle 才用美國莊家
+  // 台彩賠率：你記錄過的實際賠率優先，沒有就用「美國賠率 × 台彩平均折扣」估
+  const EV_GO = 0.02;   // 期望值至少 +2% 才說「可以下」（估計本身有誤差，留一點空間）
+  const EV_LOOK = -0.05; // 台彩賠率是估的、差不到 5%：台彩實際賠率高一點就可能划算
+  function probOf(g, mkt, ss, i) {
+    const sd = ss[i];
+    if (mkt === "ml" && g.sport === "soccer" && g.model) return {p: g.model.p[["home", "draw", "away"].indexOf(sd.key)], src: "模型一"};
+    if (mkt === "ml" && g.sport !== "soccer" && g.m1) return {p: g.m1.p[sd.key === "away" ? 0 : 1], src: "模型一"};
+    const pf = pinFairFor(g, mkt, sd); if (pf != null) return {p: pf, src: "Pinnacle"};
+    const f = fair(ss, i); return f == null ? null : {p: f, src: "美國莊家"};
+  }
+  function twOdds(g, mkt, sd) {
+    const rec = g.tw && g.tw[mkt] && g.tw[mkt][sd.key];
+    if (rec && rec[0] && (mkt === "ml" || rec[1] == null || rec[1] === sd.ln)) return {odds: rec[0], est: false};
+    const td = twDisc(g.sport, mkt); if (!td || !sd.odds) return null;
+    return {odds: Math.round(sd.odds * (1 + td.d / 100) * 100) / 100, est: true};
+  }
+  const optLabel = (g, mkt, sd) => (mkt === "ml" ? sd.nm : mkt === "sp" ? `${sd.nm} ${line(sd.ln)}` : `${sd.key === "over" ? "大" : "小"} ${sd.ln ?? ""}`);
+  function evOptions(g) {
+    const s = latest(g), out = [];
+    if (!s) return out;
+    for (const mkt of ["ml", "sp", "ou"]) {
+      const ss = sides(g, s, mkt);
+      if (!ss.length || ss.some((x) => !x.odds)) continue;
+      const opts = ss.map((sd, i) => {
+        const pr = probOf(g, mkt, ss, i), tw = twOdds(g, mkt, sd);
+        if (!pr || pr.p == null || !tw) return null;
+        return {mkt, sd, lab: optLabel(g, mkt, sd), pick: pickLabel(sd, mkt), p: pr.p, src: pr.src, us: sd.odds, tw: tw.odds, est: tw.est, ev: pr.p * tw.odds - 1};
+      }).filter(Boolean);
+      if (opts.length) out.push({mkt, opts});
+    }
+    return out;
+  }
+  // 其他玩法（單隊大小、前五局…）：只有美國賠率，用同一組兩邊去掉抽水當勝率
+  function evExtra(g) {
+    const out = [], MKT = {moneyline: "ml", spread: "sp", total: "ou", team_total: "ou"};
+    for (const grp of extraGroups(g)) {
+      const mk = MKT[grp.key.split("|")[1]] || "ou", td = twDisc(g.sport, mk); if (!td) continue;
+      const sets = grp.key.endsWith("team_total") ? ["away", "home"].map((t) => grp.opts.filter((o) => o.team === t)) : [grp.opts];
+      const opts = [];
+      for (const set of sets) {
+        if (set.length < 2 || set.some((o) => !o.us)) continue;
+        const inv = set.reduce((a, o) => a + 1 / o.us, 0);
+        for (const o of set) { const p = (1 / o.us) / inv, tw = Math.round(o.us * (1 + td.d / 100) * 100) / 100; opts.push({lab: o.v, pick: o.v, p, src: "美國莊家", us: o.us, tw, est: true, ev: p * tw - 1}); }
+      }
+      if (opts.length) out.push({label: grp.label, opts});
+    }
+    return out;
+  }
+  const needOdds = (o) => (1 + EV_GO) / o.p;
+  function evTag(o) {
+    if (o.ev >= EV_GO) return {c: "go", t: "可以下"};
+    if (o.ev >= 0) return {c: "edge", t: "差一點"};
+    if (o.est && o.ev >= EV_LOOK) return {c: "look", t: `台彩 ≥ ${odd(needOdds(o))} 才下`};
+    return {c: "no", t: "不下"};
+  }
+  const evTxt = (ev) => (ev == null ? "–" : sgn(ev * 100, 1) + "%");
+
   // ═════════ 圖表 ═════════
   function trend(g, mkt, key, thr, W, H) {
     const vals = g.snaps.map((s) => diffOf(sides(g, s, mkt).find((x) => x.key === key)));
@@ -621,6 +715,29 @@ table{border-collapse:collapse;width:100%}
   const chartW = (id) => Math.max(300, Math.min(1000, ($(id) && $(id).clientWidth) || 600));
 
   // ═════════ 今日比賽 ═════════
+  // 卡片上的「每一注期望值」：三種玩法、每一邊都算；點一下直接去記錄這注
+  function evGrid(g) {
+    if (g.status !== "upcoming") return "";
+    const groups = evOptions(g); if (!groups.length) return "";
+    const all = groups.flatMap((x) => x.opts), best = all.reduce((a, o) => (!a || o.ev > a.ev ? o : a), null);
+    const cls = (o) => evTag(o).c;
+    const rows = groups.map(({mkt, opts}) => `<div class="evr"><span class="k">${mkt === "ou" && opts[0].sd.ln != null ? `大小<br>${opts[0].sd.ln}` : MK[mkt]}</span><div class="evo c${opts.length}">${opts.map((o) =>
+      `<button type="button" class="evc ${cls(o)}" data-bet="${esc(g.sport + "|" + g.id)}" data-mk="${mkt}" data-pick="${esc(o.pick)}" aria-label="${esc(o.lab)}，台彩 ${odd(o.tw)}，期望值 ${evTxt(o.ev)}。點一下記錄這注"><span class="nm">${esc(mkt === "ou" ? (o.sd.key === "over" ? "大分" : "小分") : o.lab)}</span><span class="ln"><span class="o">${odd(o.tw)}${o.est ? "<i>估</i>" : ""}</span><b>${evTxt(o.ev)}</b></span></button>`).join("")}</div></div>`).join("");
+    const head = best.ev >= EV_GO ? `<b class="good">可以下：${esc(best.lab)}</b>（期望值 ${evTxt(best.ev)}${best.est ? "，先確認台彩實際賠率 ≥ " + odd(needOdds(best)) : ""}）`
+      : best.ev >= 0 ? `最好的是 <b>${esc(best.lab)}</b>，期望值只有 ${evTxt(best.ev)}，<b>不值得冒險</b>`
+      : best.est && best.ev >= EV_LOOK ? `<b>沒有划算的</b>。最接近：${esc(best.lab)}，台彩賠率要 ≥ <b>${odd(needOdds(best))}</b> 才下`
+      : `每一注在台彩都<b class="bad">不划算</b>，這場不下`;
+    return `<div class="evg"><div class="evh">${head}</div>${rows}<div class="evf">期望值＝估計勝率 × 台彩賠率 − 1，要是正的才值得下。${all.some((o) => o.est) ? "「估」＝用美國賠率推算的台彩賠率。" : ""}點一注可以直接記錄。</div></div>`;
+  }
+  // 「看更多」裡的完整期望值表（含單隊大小、前五局等其他玩法）
+  function evTable(g) {
+    const groups = evOptions(g), extra = g.sport === "soccer" ? [] : evExtra(g);
+    if (!groups.length && !extra.length) return "";
+    const row = (lab, o) => { const tg = evTag(o); return `<tr><td>${esc(lab)}</td><td>${esc(o.lab)}</td><td class="r n">${odd(o.tw)}${o.est ? '<small class="mut">估</small>' : ""}</td><td class="r n ${o.ev >= 0 ? "good" : "bad"}">${evTxt(o.ev)}</td><td><span class="evt ${tg.c}">${tg.t}</span></td><td class="r n hide-s">${(o.p * 100).toFixed(1)}%<small class="mut"> ${o.src}</small></td><td class="r n hide-s">${odd(needOdds(o))}</td></tr>`; };
+    const body = groups.map(({mkt, opts}) => opts.map((o, i) => row(i ? "" : MK[mkt], o)).join("")).join("") + extra.map((x) => x.opts.map((o, i) => row(i ? "" : x.label, o)).join("")).join("");
+    return `<div class="ts-wrap"><h4>每一注的期望值（含其他玩法）</h4><div class="scroll"><table class="tb mini evtb"><thead><tr><th>玩法</th><th>押什麼</th><th class="r">台彩</th><th class="r">期望值</th><th>判斷</th><th class="r hide-s">估計勝率</th><th class="r hide-s">至少要</th></tr></thead><tbody>${body}</tbody></table></div>
+      <p class="mut" style="font-size:12px;margin:6px 0 0">「台彩 ≥ X 才下」＝台彩實際賠率要到 X，期望值才有 +2%。其他玩法只有美國賠率，勝率和台彩賠率都是估的，參考就好。</p></div>`;
+  }
   function gameCard(g) {
     const mkt = state.mkt, thr = state.thr, s = latest(g), ss = sides(g, s, mkt), soc = g.sport === "soccer";
     const t = new Date(g.t), hrs = (t - Date.now()) / 36e5;
@@ -678,27 +795,15 @@ table{border-collapse:collapse;width:100%}
         ${os.length === 3 ? `<div class="t"><span class="mid">下注人數</span></div>` : ""}<div class="t">${lab(os, "bet")}</div>${bar("bet")}
         ${os.length === 3 ? `<div class="t"><span class="mid">下注金額</span></div>` : ""}<div class="t">${lab(os, "money")}</div>${bar("money")}
       </div>`;
-      // 台彩划不划算（看訊號那邊；沒訊號就看熱門那邊）
-      const td = twDisc(g.sport, mkt);
-      const side = sig || (() => { let i = 0; ss.forEach((x, j) => { if ((x.odds || 99) < (ss[i].odds || 99)) i = j; }); return {...ss[i], i}; })();
-      if (td && side.odds) {
-        const useModel = soc && mkt === "ml" && g.model, useM1 = !soc && mkt === "ml" && g.m1, pf = useModel || useM1 ? null : pinFairFor(g, mkt, side);
-        const est = side.odds * (1 + td.d / 100), be = 1 / est;
-        const fp = useModel ? g.model.p[["home", "draw", "away"].indexOf(side.key)] : useM1 ? g.m1.p[side.key === "away" ? 0 : 1] : pf ?? fair(ss, side.i), ok = fp != null && fp > be;
-        const who = useModel || useM1 ? "模型一" : pf != null ? "Pinnacle" : "美國莊家";
-        h += `<div class="tiles">
-          <div class="tile">台彩賠率<br>大約<b>${odd(est)}</b></div>
-          <div class="tile">要贏幾成<br>才不虧<b>${Math.round(be * 100)}%</b></div>
-          <div class="tile ${fp == null ? "" : ok ? "good" : "bad"}">${who}<br>估計會贏<b>${fp == null ? "–" : Math.round(fp * 100) + "%"}</b></div>
-        </div><div class="twnote">押${esc(pickLabel(side, mkt))}：${fp == null ? "" : ok ? `照${who}的估計，這注在台彩<b class="good">划算</b>。` : `照${who}的估計，這注在台彩長期<b class="bad">會虧</b>（還差 ${Math.max(1, Math.round((be - fp) * 100))}%）。`}${td.est ? "（台彩賠率是估的）" : ""}</div>`;
-      }
     }
+    h += evGrid(g);
     h += `<button type="button" class="more" data-open="${esc(key)}" aria-expanded="${isOpen}">${isOpen ? "收起" : soc ? "看更多：歐洲賠率、單隊大小、變化" : "看更多：先發投手、單隊大小、前五局、變化"}</button>`;
     if (isOpen) h += detail(g);
     return h + `</article>`;
   }
   function detail(g) {
     const thr = state.thr, s = latest(g), m = state.mkt, c = g.ctx, parts = [], soc = g.sport === "soccer";
+    if (g.status === "upcoming") { const et = evTable(g); if (et) parts.push(et); }
     if (c && (c.away_p || c.home_p)) {
       parts.push(`<div><h4>${g.sport === "nhl" ? "先發門將" : "先發投手"}</h4>
         <div class="pc">${dot(g.away_ab, g.away_c)}<div><div class="nm">${esc(c.away_p || "還沒公布")}</div><div class="st">${esc(c.away_ps || "本季成績還沒抓到")}</div></div></div>
@@ -789,7 +894,8 @@ table{border-collapse:collapse;width:100%}
     if (!list.length) { $("board").innerHTML = `<div class="empty">${state.only ? "目前沒有達到訊號的比賽。可以把「幾 % 算訊號」調低看看。" : "這個運動目前沒有即將開打的比賽（休賽期或還沒開始記錄）。"}</div>`; return; }
     const days = new Map();
     for (const g of list) { const d = fmtDay.format(new Date(g.t)); if (!days.has(d)) days.set(d, []); days.get(d).push(g); }
-    let h = "";
+    const need = twNeed().done.length;
+    let h = need ? `<button type="button" class="ask" data-v="tw">${CAM}<span>有 <b>${need} 場</b>剛打完的比賽需要台彩賠率截圖，記越多期望值越準</span><span class="go">看是哪幾場 →</span></button>` : "";
     for (const [d, gs] of days) {
       const n = gs.filter((g) => signal(g, latest(g), state.mkt, state.thr)).length;
       h += `<div class="day">${d}<span>${gs.length} 場${n ? `・<b class="good">${n} 場有訊號</b>` : ""}</span></div><div class="grid">${gs.map(gameCard).join("")}</div>`;
@@ -909,10 +1015,48 @@ table{border-collapse:collapse;width:100%}
   function pickOptions(g, market) {
     if (!g) return [];
     const xg = extraGroups(g).find((x) => x.label === market);
-    if (xg) return xg.opts.map((o) => ({v: o.v, us: o.us}));
+    if (xg) {
+      const ex = evExtra(g).find((x) => x.label === market);
+      return xg.opts.map((o) => { const e = ex && ex.opts.find((y) => y.lab === o.v); return {v: o.v, us: o.us, p: e ? e.p : null, src: e ? e.src : null}; });
+    }
     const mk = MKCODE[market]; if (!mk) return [];
     const s = latest(g), ss = sides(g, s, mk);
-    return ss.filter((x) => market !== "和局" || x.key === "draw").map((x) => ({v: pickLabel(x, mk), us: x.odds}));
+    return ss.map((x, i) => ({x, i})).filter(({x}) => market !== "和局" || x.key === "draw").map(({x, i}) => {
+      const pr = probOf(g, mk, ss, i), tw = twOdds(g, mk, x);
+      return {v: pickLabel(x, mk), us: x.odds, p: pr ? pr.p : null, src: pr ? pr.src : null, tw: tw ? tw.odds : null, twEst: tw ? tw.est : true};
+    });
+  }
+  // 下注表單：每一關的估計勝率（選了比賽和押什麼才有）
+  function legProb(L) {
+    const g = L.gid && L.gid !== "__other" ? findGame(L.gid) : null;
+    const o = g ? pickOptions(g, L.market).find((x) => x.v === L.pick) : null;
+    return o && o.p != null ? o : null;
+  }
+  function legEvHtml(i) {
+    const L = FORM.legs[i], o = legProb(L), od = parseFloat(L.odds);
+    if (!o) return L.gid && L.pick && L.pick !== "__other" ? `<div class="evline">這個選項沒有足夠資料估勝率，算不出期望值。</div>` : "";
+    const need = (1 + EV_GO) / o.p;
+    if (!(od > 1)) return `<div class="evline">估計勝率 <b class="n">${(o.p * 100).toFixed(1)}%</b>（${o.src}）。台彩賠率要 ≥ <b class="n">${odd(need)}</b> 才值得下${o.tw ? `（${o.twEst ? "估計台彩大約" : "台彩記錄"} ${odd(o.tw)}）` : ""}。填上台彩賠率就會算期望值。</div>`;
+    const ev = o.p * od - 1, ok = ev >= EV_GO;
+    return `<div class="evline ${ok ? "go" : ev < 0 ? "no" : ""}">期望值 <b class="n ${ev >= 0 ? "good" : "bad"}">${evTxt(ev)}</b>：${ok ? "<b class=\"good\">可以下</b>" : ev >= 0 ? "差一點，<b>不值得冒險</b>" : "<b class=\"bad\">不划算，長期會虧</b>"}。估計勝率 ${(o.p * 100).toFixed(1)}%（${o.src}），台彩賠率要 ≥ ${odd(need)} 才值得下。</div>`;
+  }
+  function parlayEv() {
+    if (FORM.legs.length < 2 || FORM.legs.some((L) => !L.gid || !legPick(L))) return null;
+    const ps = FORM.legs.map(legProb);
+    if (ps.some((o) => !o)) return {missing: true};
+    const prod = FORM.legs.every((L) => parseFloat(L.odds) > 1) ? FORM.legs.reduce((p, L) => p * parseFloat(L.odds), 1) : null;
+    const total = parseFloat(FORM.total) || prod, p = ps.reduce((a, o) => a * o.p, 1);
+    return {p, total, ev: total ? p * total - 1 : null};
+  }
+  function parlayEvHtml() {
+    const x = parlayEv(); if (!x) return "";
+    if (x.missing) return `<div class="evline">有一關沒有資料估勝率，串關期望值算不出來。</div>`;
+    if (x.ev == null) return `<div class="evline">全部猜中的機率大約 <b class="n">${(x.p * 100).toFixed(1)}%</b>，總賠率要 ≥ <b class="n">${odd((1 + EV_GO) / x.p)}</b> 才值得下。</div>`;
+    return `<div class="evline ${x.ev >= EV_GO ? "go" : x.ev < 0 ? "no" : ""}">串關期望值 <b class="n ${x.ev >= 0 ? "good" : "bad"}">${evTxt(x.ev)}</b>：全部猜中的機率大約 ${(x.p * 100).toFixed(1)}%，總賠率 ${odd(x.total)}。${x.ev < 0 ? "每多串一關就多被抽一次，<b class=\"bad\">長期會虧</b>。" : ""}</div>`;
+  }
+  function updEv() {
+    FORM.legs.forEach((_, i) => { const el = document.querySelector(`[data-ev="${i}"]`); if (el) el.innerHTML = legEvHtml(i); });
+    const el = document.querySelector('[data-ev="total"]'); if (el) el.innerHTML = parlayEvHtml();
   }
   const legPick = (L) => (L.pick === "__other" || !L.pick ? L.pickCustom.trim() : L.pick);
   const legMatch = (L) => { if (L.gid && L.gid !== "__other") { const g = findGame(L.gid); return g ? matchName(g) : L.match; } return L.match.trim(); };
@@ -931,12 +1075,12 @@ table{border-collapse:collapse;width:100%}
         <label>玩法<select data-leg="${i}" data-f="market">${[...BTYPES, ...(g ? extraGroups(g).map((x) => x.label).filter((x) => !BTYPES.includes(x)) : [])].map((x) => `<option${x === L.market ? " selected" : ""}>${esc(x)}</option>`).join("")}</select></label>
         ${opts.length ? `<label class="wide">押什麼<select data-leg="${i}" data-f="pick"><option value="">選一邊…</option>${opts.map((o) => `<option${o.v === L.pick ? " selected" : ""}>${esc(o.v)}</option>`).join("")}<option value="__other"${L.pick === "__other" ? " selected" : ""}>其他，自己填</option></select></label>` : ""}
         ${customPick ? `<label class="wide">押什麼<input data-leg="${i}" data-f="pickCustom" value="${esc(L.pickCustom)}" placeholder="例如：洋基 -1.5、大 8.5" maxlength="60"></label>` : ""}
-        <label>${multi ? "這關賠率" : "台彩賠率"}<input data-leg="${i}" data-f="odds" type="number" step="0.01" min="1.01" inputmode="decimal" value="${esc(L.odds)}" placeholder="${usOdds ? "美國 " + odd(usOdds) : "1.75"}"></label>
-      </div></div>`;
+        <label>${multi ? "這關台彩賠率" : "台彩賠率"}<input data-leg="${i}" data-f="odds" type="number" step="0.01" min="1.01" inputmode="decimal" value="${esc(L.odds)}" placeholder="${usOdds ? "美國 " + odd(usOdds) : "1.75"}"></label>
+      </div><div data-ev="${i}">${legEvHtml(i)}</div></div>`;
     }).join("");
     if (multi) {
       const prod = FORM.legs.every((L) => parseFloat(L.odds) > 1) ? FORM.legs.reduce((p, L) => p * parseFloat(L.odds), 1) : null;
-      h += `<div class="form" style="margin-top:10px"><label>串關總賠率<input data-top="total" type="number" step="0.01" min="1.01" inputmode="decimal" value="${esc(FORM.total)}" placeholder="${prod ? "自動算 " + prod.toFixed(2) : "每關賠率填完會自動算"}"></label></div>`;
+      h += `<div class="form" style="margin-top:10px"><label>串關總賠率<input data-top="total" type="number" step="0.01" min="1.01" inputmode="decimal" value="${esc(FORM.total)}" placeholder="${prod ? "自動算 " + prod.toFixed(2) : "每關賠率填完會自動算"}"></label></div><div data-ev="total">${parlayEvHtml()}</div>`;
     }
     return h;
   }
@@ -945,6 +1089,7 @@ table{border-collapse:collapse;width:100%}
     const t = e.target;
     if (t.dataset && t.dataset.top) {
       const k = t.dataset.top; FORM[k] = t.type === "checkbox" ? t.checked : t.value;
+      if (k === "total") updEv();
       if (k === "date" && e.type === "change" && FORM.legs.length === 1 && !FORM.legs[0].gid) { FORM.legs[0].date = FORM.date; redrawLegs(); }
       return true;
     }
@@ -957,12 +1102,18 @@ table{border-collapse:collapse;width:100%}
         redrawLegs();
       }
       if (f === "odds" && FORM.legs.length > 1 && e.type === "change") redrawLegs();
+      else if (f === "odds") updEv();
       return true;
     }
     return false;
   }
   document.addEventListener("input", onFormEdit);
 
+  function evSummary() {
+    const xs = BETS.filter((b) => b.ev != null && b.stake > 0); if (!xs.length) return "";
+    const st = xs.reduce((a, b) => a + b.stake, 0), avg = xs.reduce((a, b) => a + b.ev * b.stake, 0) / st;
+    return `<div class="verdict ${avg >= 0 ? "good" : "bad"}"><b>你下的注，平均期望值 ${evTxt(avg)}</b><span style="color:var(--ink2)">${xs.length} 注有算期望值（下注當時的估計勝率 × 你填的台彩賠率，依金額加權）。${avg < 0 ? "平均是負的＝照估計長期會虧，之後只挑期望值是正的再下。" : "平均是正的，繼續只挑划算的下。"}</span></div>`;
+  }
   function renderBets() {
     let h = "";
     if (dbState === "loading") h += `<div class="empty">連線中…</div>`;
@@ -983,7 +1134,7 @@ table{border-collapse:collapse;width:100%}
     const m = twMargin();
     const series = luckSeries(done.filter((b) => b.result === "win" || b.result === "loss").map((b) => ({pl: betPL(b), p: Math.min(0.99, (1 / b.odds) / Math.pow(1 + m, b.legs || 1)), odds: b.odds, stake: b.stake, lab: b.date.slice(5).replace("-", "/")})));
     h += `<div class="card hero"><div class="big">${n ? `你已經開獎 <span class="n">${n}</span> 注，贏 <span class="n">${w}</span> 輸 <span class="n">${l}</span>，總共 <span class="n ${gb(pl)}">${ntd(pl)}</span> 元${stake ? `（投報率 <span class="n ${gb(pl)}">${sgn(pl / stake * 100, 1)}%</span>）` : ""}。` : BETS.length ? `還有 ${pend} 注沒開獎，開獎後把結果改一下就會算進來。` : "還沒有注單。下了注就在上面記一筆。"}</div>
-      ${verdict(series, (v) => ntd(v) + " 元")}</div>`;
+      ${verdict(series, (v) => ntd(v) + " 元")}${evSummary()}</div>`;
     h += `<div class="kp">
       <div class="tile">總共下注<b>${stake.toLocaleString("en-US")}</b>元${pend ? `・還有 ${pend} 注沒開獎` : ""}</div>
       <div class="tile">贏的比例<b>${w + l ? Math.round(w / (w + l) * 100) + "%" : "–"}</b></div>
@@ -999,12 +1150,12 @@ table{border-collapse:collapse;width:100%}
     h += `<div class="card"><h3>你的強項和漏洞<small>自動找出來的，只當參考</small></h3>${healthCheck([["聯賽", gL.list], ["玩法", gT.list], ["注型", gP.list], ["訊號", gS.list], ["星期", gW.list]], stake ? pl / stake * 100 : null, 5)}</div>`;
     h += `<details class="more-sec"><summary>詳細拆解（聯賽、玩法、串關…）</summary><div><div class="grid">${gL.html}${gT.html}${gP.html}${gS.html}${gW.html}</div></div></details>`;
     const all = [...BETS].sort((a, b) => (a.date + a.created < b.date + b.created ? 1 : -1));
-    h += `<div class="card"><h3>注單<small>${BETS.length} 筆，結果可以直接改</small></h3><div class="scroll"><table class="tb bl"><thead><tr><th>日期</th><th>比賽・押什麼</th><th>玩法</th><th class="r">賠率</th><th class="r">金額</th><th>結果</th><th class="r">賺賠</th><th></th></tr></thead><tbody>`;
+    h += `<div class="card"><h3>注單<small>${BETS.length} 筆，結果可以直接改</small></h3><div class="scroll"><table class="tb bl"><thead><tr><th>日期</th><th>比賽・押什麼</th><th>玩法</th><th class="r">賠率・期望值</th><th class="r">金額</th><th>結果</th><th class="r">賺賠</th><th></th></tr></thead><tbody>`;
     if (!all.length) h += `<tr><td colspan="8" class="mut">還沒有注單</td></tr>`;
     for (const b of all) {
       const p = betPL(b);
       h += `<tr data-id="${esc(b.id)}"><td class="n">${esc(b.date.slice(5).replace("-", "/"))}</td><td>${b.parts && b.parts.length > 1 ? `<div class="parts">${b.parts.map((p, i) => `<div>${i + 1}. <span class="pill lg">${esc(p.league)}</span> ${esc(p.match)}<span class="mut">・${esc(p.pick)}${p.odds ? " @" + odd(p.odds) : ""}</span></div>`).join("")}</div>` : `<span class="pill lg">${esc(b.league)}</span> ${esc(b.match)}${b.pick ? `<span class="mut">・${esc(b.pick)}</span>` : ""}`}${b.signal ? ` <span class="pill sig">訊號</span>` : ""}</td>
-        <td>${esc(b.market)}${(b.legs || 1) > 1 ? `<span class="mut">・串${b.legs}</span>` : ""}</td><td class="r n">${odd(b.odds)}</td><td class="r n">${Number(b.stake).toLocaleString("en-US")}</td>
+        <td>${esc(b.market)}${(b.legs || 1) > 1 ? `<span class="mut">・串${b.legs}</span>` : ""}</td><td class="r n">${odd(b.odds)}${b.ev != null ? `<small class="${b.ev >= 0 ? "good" : "bad"}" style="display:block;font-size:11px">${evTxt(b.ev)}</small>` : ""}</td><td class="r n">${Number(b.stake).toLocaleString("en-US")}</td>
         <td><select data-act="res" aria-label="結果"${dbState === "on" ? "" : " disabled"}>${Object.entries(RES).map(([k, v]) => `<option value="${k}"${b.result === k ? " selected" : ""}>${v}</option>`).join("")}</select></td>
         <td class="r n ${gb(p)}">${b.result === "pending" ? "–" : ntd(p)}</td><td>${dbState === "on" ? `<button type="button" class="btn sm del" data-act="del">刪除</button>` : ""}</td></tr>`;
     }
@@ -1026,7 +1177,9 @@ table{border-collapse:collapse;width:100%}
   document.addEventListener("submit", async (e) => {
     if (e.target.id !== "bf") return;
     e.preventDefault(); if (!DB) return;
-    const stake = parseFloat(FORM.stake), legs = FORM.legs.map((L) => ({league: L.league, match: legMatch(L), market: L.market, pick: legPick(L), odds: parseFloat(L.odds) || null}));
+    const probs = FORM.legs.map(legProb);
+    const stake = parseFloat(FORM.stake), legs = FORM.legs.map((L, i) => ({league: L.league, match: legMatch(L), market: L.market, pick: legPick(L), odds: parseFloat(L.odds) || null,
+      p: probs[i] ? Math.round(probs[i].p * 10000) / 10000 : null}));
     const bad = legs.findIndex((L) => !L.match || !L.pick);
     if (bad >= 0) { $("bmsg").textContent = `${legs.length > 1 ? `第 ${bad + 1} 關` : ""}還沒選比賽或押什麼`; return; }
     const prod = legs.every((L) => L.odds > 1) ? legs.reduce((p, L) => p * L.odds, 1) : null;
@@ -1036,6 +1189,9 @@ table{border-collapse:collapse;width:100%}
     const b = {date: FORM.date, league: same("league") ? legs[0].league : "混合", match: legs.map((L) => L.match).join(" ＋ "),
                market: same("market") ? legs[0].market : "混合", pick: legs.map((L) => L.pick).join("／"), legs: legs.length,
                parts: legs, odds: Math.round(odds * 100) / 100, stake, result: FORM.result, signal: !!FORM.signal, created: new Date().toISOString()};
+    const pAll = probs.every(Boolean) ? probs.reduce((a, o) => a * o.p, 1) : null;
+    b.p = pAll == null ? null : Math.round(pAll * 10000) / 10000;
+    b.ev = pAll == null ? null : Math.round((pAll * b.odds - 1) * 10000) / 10000;
     $("bsave").disabled = true; $("bmsg").textContent = "儲存中…";
     try {
       await DB.collection("bets").add(b);
@@ -1051,16 +1207,49 @@ table{border-collapse:collapse;width:100%}
   });
 
   // ═════════ 台彩抽多少 ═════════
+  // 需要台彩截圖的比賽：每個運動先湊到 TW_GOAL 場，App 估的台彩賠率（和期望值）才會準
+  const TW_GOAL = 20;
+  const CAM = '<svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5h3.2l1.6-2.5h6.4l1.6 2.5H19v10H3z"/><circle cx="11" cy="12" r="3.2"/></svg>';
+  function twNeed() {
+    const now = Date.now(), by = (DATA.tw && DATA.tw.by_group) || [];
+    const sports = [...new Set(DATA.games.map((g) => g.sport))];
+    const prog = sports.map((sp) => ({sport: sp, n: Math.max(0, ...by.filter((x) => x.sport === sp).map((x) => x.games || 0))}))
+      .sort((a, b) => a.n - b.n);
+    const have = Object.fromEntries(prog.map((x) => [x.sport, x.n]));
+    const recent = DATA.games.filter((g) => g.status === "final" && !g.tw && now - new Date(g.t) < 36 * 36e5);
+    const done = recent.filter((g) => (have[g.sport] || 0) < TW_GOAL).sort((a, b) => (have[a.sport] || 0) - (have[b.sport] || 0) || (a.t < b.t ? 1 : -1));
+    const extra = recent.length - done.length;
+    const soon = DATA.games.filter((g) => g.status === "upcoming" && new Date(g.t) - now < 24 * 36e5).map((g) => {
+      const best = evOptions(g).flatMap((x) => x.opts).filter((o) => o.est).reduce((a, o) => (!a || o.ev > a.ev ? o : a), null);
+      return best && best.ev >= EV_LOOK && best.ev < EV_GO ? {g, o: best} : null;
+    }).filter(Boolean).sort((a, b) => b.o.ev - a.o.ev);
+    return {prog, done, extra, soon};
+  }
+  function twAskCard() {
+    const {prog, done, extra, soon} = twNeed();
+    const bar = prog.map((x) => `<div class="prog"><span style="min-width:3.2em">${esc(spLabel(x.sport))}</span><span class="track"><i style="width:${Math.min(100, x.n / TW_GOAL * 100)}%;${x.n >= TW_GOAL ? "background:var(--good)" : ""}"></i></span><span class="n" style="min-width:4.2em;text-align:right">${x.n >= TW_GOAL ? "夠了 ✓" : `${x.n}／${TW_GOAL} 場`}</span></div>`).join("");
+    const score = (g) => (g.result ? (g.sport === "soccer" ? `${g.result.home}－${g.result.away}` : `${g.result.away}－${g.result.home}`) : "");
+    const doneRows = done.slice(0, 15).map((g) => `<tr><td class="n">${fmtMD.format(new Date(g.t))} ${fmtTime.format(new Date(g.t))}</td><td><span class="pill lg">${esc(lgLabel(g))}</span> ${esc(matchName(g))}</td><td class="r n">${score(g)}</td></tr>`).join("");
+    const soonRows = soon.slice(0, 10).map(({g, o}) => `<tr><td class="n">${fmtTime.format(new Date(g.t))}</td><td><span class="pill lg">${esc(lgLabel(g))}</span> ${esc(matchName(g))}<div class="mut" style="font-size:12px">${esc(MK[o.mkt] || "")}・${esc(o.lab)}</div></td><td class="r"><span class="n">≥ ${odd(needOdds(o))}</span><div class="mut" style="font-size:11.5px">估計 ${odd(o.tw)}</div></td></tr>`).join("");
+    return `<div class="card"><h3>請幫我截這些比賽的台彩賠率<small>截好直接傳到跟 Claude 的對話</small></h3>
+      <p class="mut" style="margin:0 0 10px;font-size:13px">台彩每個運動抽的不一樣。每個運動先記到 ${TW_GOAL} 場，App 估的台彩賠率和期望值就會準很多。每場截 <b>不讓分、讓分、大小</b> 三種（賽前最後的賠率）。</p>
+      <div class="stack" style="gap:6px;margin-bottom:12px">${bar}</div>
+      <h4 style="margin:0 0 4px;font-size:13.5px">剛打完、還沒有台彩賠率的比賽${done.length ? `（${done.length} 場）` : ""}</h4>
+      ${done.length ? `<div class="scroll"><table class="tb"><tbody>${doneRows}</tbody></table></div>${done.length > 15 ? `<p class="mut" style="font-size:12px;margin:4px 0 0">還有 ${done.length - 15} 場，截上面這些就夠了。</p>` : ""}` : `<p class="mut" style="margin:0;font-size:13px">最近 36 小時打完的比賽，都不用截了。</p>`}
+      ${extra > 0 ? `<p class="mut" style="font-size:12px;margin:6px 0 0">另外 ${extra} 場是已經記夠的運動，不用截。</p>` : ""}
+      ${soon.length ? `<h4 style="margin:14px 0 4px;font-size:13.5px">下注前看一下台彩賠率（差一點就划算）</h4><div class="scroll"><table class="tb"><thead><tr><th>開賽</th><th>比賽・押什麼</th><th class="r">台彩要</th></tr></thead><tbody>${soonRows}</tbody></table></div><p class="mut" style="font-size:12px;margin:4px 0 0">台彩實際賠率到右邊的數字就划算。這些不用截圖，下注時在「我的投注」填上台彩賠率，就會幫你算期望值。</p>` : ""}
+    </div>`;
+  }
   function renderTw() {
     const tw = DATA.tw;
-    if (!tw || !tw.n_total) { $("tw").innerHTML = `<div class="empty">還沒有記錄。把台彩賠率截圖傳給 Claude，就會開始累積。</div>`; return; }
+    if (!tw || !tw.n_total) { $("tw").innerHTML = twAskCard() + `<div class="empty">還沒有記錄。把台彩賠率截圖傳給 Claude，就會開始累積。</div>`; return; }
     const groups = tw.by_group.filter((g) => state.sport === "all" || g.sport === state.sport);
     const best = (tw.best || []).filter((b) => state.sport === "all" || b.sport === state.sport);
     const tm = groups.filter((g) => g.tw_margin_pct != null), um = groups.filter((g) => g.us_margin_pct != null), dm = groups.filter((g) => g.avg_discount_pct != null);
     const aT = tm.length ? tm.reduce((s, g) => s + g.tw_margin_pct, 0) / tm.length : null, aU = um.length ? um.reduce((s, g) => s + g.us_margin_pct, 0) / um.length : null;
     const aD = dm.length ? dm.reduce((s, g) => s + g.avg_discount_pct, 0) / dm.length : null;
     const two = aT == null ? null : (1 - Math.pow(1 / (1 + aT / 100), 2)) * 100;
-    let h = `<div class="card hero"><div class="big">${aT == null ? "這個運動還沒有台彩記錄。" : `台彩平均抽 <span class="n bad">${aT.toFixed(1)}%</span>，美國莊家只抽 <span class="n">${aU == null ? "–" : aU.toFixed(1) + "%"}</span>。同一注在台彩，賠率平均低 <span class="n bad">${aD == null ? "–" : Math.abs(aD).toFixed(1) + "%"}</span>。`}</div>
+    let h = twAskCard() + `<div class="card hero"><div class="big">${aT == null ? "這個運動還沒有台彩記錄。" : `台彩平均抽 <span class="n bad">${aT.toFixed(1)}%</span>，美國莊家只抽 <span class="n">${aU == null ? "–" : aU.toFixed(1) + "%"}</span>。同一注在台彩，賠率平均低 <span class="n bad">${aD == null ? "–" : Math.abs(aD).toFixed(1) + "%"}</span>。`}</div>
       ${two == null ? "" : `<div class="verdict bad"><b>串兩關，大約等於被抽 ${two.toFixed(0)}%</b>每多串一關，抽成就再疊一次。串越多關，要贏回來越難。</div>`}
       <p class="mut" style="margin:0;font-size:13px">目前記錄 ${tw.n_total} 筆台彩賠率。記越多，這些數字越準。</p></div>`;
     h += `<div class="card"><h3>各玩法抽多少</h3><div class="scroll"><table class="tb"><thead><tr><th>運動</th><th>玩法</th><th class="r">台彩抽</th><th class="r">美國抽</th><th class="r">台彩賠率低多少</th><th class="r hide-s">記錄場數</th></tr></thead><tbody>`;
@@ -1076,6 +1265,70 @@ table{border-collapse:collapse;width:100%}
       h += `</tbody></table></div></div>`;
     }
     $("tw").innerHTML = h;
+  }
+
+  // ═════════ 模型比賽 ═════════
+  const STRAT = {model1: ["模型一・實力", "賠率＋休息天數"], model2: ["模型二・資金", "下注比例＋盤口移動"], combo: ["綜合", "模型一＋模型二"],
+                 favorite: ["都押熱門", "不用模型"], underdog: ["都押冷門", "不用模型"]};
+  const READY = {model1: true, favorite: true, underdog: true};
+  function renderModels() {
+    const L = DATA.live || {strats: {}}, S = L.strats || {};
+    const agg = (k) => ((S[k] || {}).all) || {};
+    const done = agg("model1").n || 0;
+    const live = Object.keys(STRAT).filter((k) => READY[k]);
+    const top = live.filter((k) => agg(k).n).sort((a, b) => agg(b).roi - agg(a).roi)[0];
+    const wr = (a) => (a.n - a.push > 0 ? Math.round(a.win / (a.n - a.push) * 100) + "%" : "–");
+    const row = (k) => {
+      const [nm, sub] = STRAT[k], a = agg(k), ref = k === "favorite" || k === "underdog";
+      const name = `<td><b style="${ref ? "font-weight:500;color:var(--ink2)" : ""}">${nm}</b>${top === k && done ? ' <span class="pill sig">目前最高</span>' : ""}<div class="mut" style="font-size:11.5px">${sub}</div></td>`;
+      if (!READY[k]) return `<tr>${name}<td colspan="4" class="mut" style="white-space:normal;font-size:12.5px">累積中：資金流向 9/27 才開始收，大約一整季後上線，上線那天起跟模型一比同一批比賽</td></tr>`;
+      return `<tr>${name}<td class="r n">${a.n || 0}</td><td class="r n">${wr(a)}</td><td class="r n ${gb(a.roi)}">${a.roi == null ? "–" : sgn(a.roi, 1) + "%"}</td><td class="r n ${gb(a.pl)}">${a.n ? ntd(a.pl * 100) : "–"}</td></tr>`;
+    };
+    const head = `<thead><tr><th>策略</th><th class="r">已開獎</th><th class="r">猜中</th><th class="r">獲利率</th><th class="r">賺賠</th></tr></thead>`;
+    const actual = agg("model1").actual || 0;
+    let h = `<div class="card"><h3>每一場都下注，誰的獲利率最高<small>上線後實戰・${L.since ? `從 ${fmtMD.format(new Date(L.since))} 開始` : "今天開始"}・每場 100 元</small></h3>
+      <div class="scroll"><table class="tb">${head}<tbody>${row("model1")}${row("model2")}${row("combo")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">參考</td></tr>${row("favorite")}${row("underdog")}</tbody></table></div>
+      <p class="mut" style="font-size:12.5px;margin:8px 0 0">${done ? `結算用台彩賠率：${actual} 場用你記錄的實際賠率，其他用估的。` : `第一批比賽還沒開獎（${L.pending || 0} 場等開獎），開獎後自動結算。`}每個策略都押「開賽前最後一次判斷」的那一邊，不能事後改。場數少於 200 場時，差幾 % 多半是運氣。</p></div>`;
+    // 只下划算的
+    const v = (S.model1 || {}).value || {};
+    h += `<div class="card"><h3>只下划算的<small>開賽前期望值 > 0 才下</small></h3>
+      <div class="scroll"><table class="tb">${head}<tbody>
+      <tr><td><b>模型一・實力</b></td><td class="r n">${v.n || 0}</td><td class="r n">${wr(v)}</td><td class="r n ${gb(v.roi)}">${v.roi == null ? "–" : sgn(v.roi, 1) + "%"}</td><td class="r n ${gb(v.pl)}">${v.n ? ntd(v.pl * 100) : "–"}</td></tr>
+      <tr><td><b>模型二・資金</b></td><td colspan="4" class="mut">累積中</td></tr><tr><td><b>綜合</b></td><td colspan="4" class="mut">累積中</td></tr></tbody></table></div>
+      <p class="mut" style="font-size:12.5px;margin:8px 0 0">每場都下一定會被台彩抽成吃掉（約 13%）；真正看得出哪個模型有用的是這張表。</p></div>`;
+    // 各運動
+    const sports = [...new Set(live.flatMap((k) => Object.keys((S[k] || {}).by_sport || {})))];
+    if (sports.length && done) {
+      h += `<details class="more-sec"><summary>各運動拆開看（實戰）</summary><div><div class="scroll"><table class="tb"><thead><tr><th>策略</th>${sports.map((sp) => `<th class="r">${esc(spLabel(sp))}</th>`).join("")}</tr></thead><tbody>${live.map((k) => `<tr><td>${STRAT[k][0]}</td>${sports.map((sp) => { const a = ((S[k] || {}).by_sport || {})[sp] || {}; return `<td class="r n ${gb(a.roi)}">${a.n ? sgn(a.roi, 1) + "%" : "–"}<div class="mut" style="font-size:11px;font-weight:400">${a.n || 0} 場</div></td>`; }).join("")}</tr>`).join("")}</tbody></table></div></div></details>`;
+    }
+    // 模型一今天怎麼押
+    const soon = DATA.games.filter((g) => g.status === "upcoming" && new Date(g.t) - Date.now() < 36 * 36e5).map((g) => {
+      const ml = evOptions(g).find((x) => x.mkt === "ml"); if (!ml || ml.opts[0].src !== "模型一") return null;
+      return {g, o: ml.opts.reduce((a, o) => (!a || o.ev > a.ev ? o : a), null)};
+    }).filter(Boolean);
+    if (soon.length) {
+      h += `<div class="card"><h3>模型一接下來怎麼押<small>獨贏・押台彩期望值比較高的那一邊</small></h3><div class="scroll"><table class="tb"><thead><tr><th>開賽</th><th>比賽・模型一押</th><th class="r">台彩</th><th class="r">期望值</th><th class="hide-s">判斷</th></tr></thead><tbody>${soon.map(({g, o}) => { const tg = evTag(o); return `<tr><td class="n" style="line-height:1.3">${fmtTime.format(new Date(g.t))}<div class="mut" style="font-size:11px;font-weight:400">${fmtMD.format(new Date(g.t))}</div></td><td style="white-space:normal;line-height:1.35"><span class="pill lg">${esc(lgLabel(g))}</span> ${esc(matchName(g))}<div style="font-size:12.5px">押 <b>${esc(o.lab)}</b><span class="mut">・勝率 ${(o.p * 100).toFixed(1)}%</span></div></td><td class="r n">${odd(o.tw)}${o.est ? '<small class="mut">估</small>' : ""}</td><td class="r n ${o.ev >= 0 ? "good" : "bad"}">${evTxt(o.ev)}</td><td class="hide-s"><span class="evt ${tg.c}">${tg.t}</span></td></tr>`; }).join("")}</tbody></table></div>
+        <p class="mut" style="font-size:12.5px;margin:8px 0 0">「每一場都下注」就是照這張表押；大部分是負的，所以實際只下「可以下」的。</p></div>`;
+    }
+    // 歷史回測
+    const um = (DATA.stats || {}).us_models || {}, ks = Object.keys(um).filter((k) => ((um[k].betting || {}).every_tw));
+    if (ks.length) {
+      const N = ks.reduce((a, k) => a + um[k].test_games, 0);
+      const tot = (s) => ks.reduce((a, k) => a + um[k].test_games * um[k].betting.every_tw[s].roi, 0) / N;
+      const best = Object.fromEntries([...ks, "all"].map((k) => [k, ["model1", "favorite", "underdog"].reduce((a, s) => ((k === "all" ? tot(s) : um[k].betting.every_tw[s].roi) > (k === "all" ? tot(a) : um[k].betting.every_tw[a].roi) ? s : a), "model1")]));
+      const c = (k, s) => { const e = um[k].betting.every_tw[s]; return `<td class="r n bad" style="${best[k] === s ? "background:var(--warn-soft)" : ""}">${sgn(e.roi, 1)}%<div class="mut" style="font-size:11px;font-weight:400">±${e.se}</div></td>`; };
+      const r = (s, nm) => `<tr><td>${nm}</td>${ks.map((k) => c(k, s)).join("")}<td class="r n bad" style="${best.all === s ? "background:var(--warn-soft)" : ""}">${sgn(tot(s), 1)}%</td></tr>`;
+      h += `<div class="card"><h3>歷史回測：每一場都下注<small>最近兩季 ${N.toLocaleString("en-US")} 場，模型沒看過</small></h3><div class="scroll"><table class="tb"><thead><tr><th>策略</th>${ks.map((k) => `<th class="r">${k.toUpperCase()}</th>`).join("")}<th class="r">全部</th></tr></thead><tbody>
+        ${r("model1", "<b>模型一・實力</b>")}<tr><td><b>模型二・資金</b></td><td colspan="${ks.length + 1}" class="mut">沒辦法回測：要用我們自己收的資金流向，只能從現在開始記</td></tr>${r("favorite", "都押熱門")}${r("underdog", "都押冷門")}</tbody></table></div>
+        <p class="mut" style="font-size:12.5px;margin:8px 0 0">底色＝該欄最高。±＝誤差範圍，差距比它小就是運氣。三種押法都虧 13% 左右，剛好差不多是台彩的抽成：每場都下，誰都贏不了抽成。</p></div>`;
+    }
+    // 最近開獎
+    const rec = L.recent || [];
+    if (rec.length) {
+      const RS = {win: ["贏", "w"], loss: ["輸", "l"], push: ["平", "p"]};
+      h += `<div class="card"><h3>模型一最近開獎<small>每場 100 元</small></h3><div class="scroll"><table class="tb"><thead><tr><th>日期</th><th>比賽</th><th>押</th><th class="r">台彩</th><th>結果</th><th class="r">賺賠</th></tr></thead><tbody>${rec.map((x) => `<tr><td class="n">${fmtMD.format(new Date(x.t))}</td><td>${x.sport === "soccer" ? `${esc(x.home)} vs ${esc(x.away)}` : `${esc(x.away)} @ ${esc(x.home)}`}</td><td>${esc(x.pick)}</td><td class="r n">${odd(x.tw)}${x.src === "actual" ? "" : '<small class="mut">估</small>'}</td><td><span class="res ${(RS[x.result] || ["", "p"])[1]}">${(RS[x.result] || [x.result])[0]}</span></td><td class="r n ${gb(x.profit)}">${ntd((x.profit || 0) * 100)}</td></tr>`).join("")}</tbody></table></div></div>`;
+    }
+    $("models").innerHTML = h;
   }
 
   // ═════════ 說明 ═════════
@@ -1165,7 +1418,7 @@ table{border-collapse:collapse;width:100%}
     $("navtop").innerHTML = VIEWS.map((v) => `<button type="button" data-v="${v.k}"${state.view === v.k ? ' aria-current="page"' : ""}>${v.n}</button>`).join("");
     $("tabs").innerHTML = VIEWS.map((v) => `<button type="button" data-v="${v.k}"${state.view === v.k ? ' aria-current="page"' : ""}>${icon(v)}${v.s}</button>`).join("");
     $$("[data-view]").forEach((s) => { s.hidden = s.dataset.view !== state.view; });
-    $("sports").hidden = state.view === "method" || state.view === "bets";
+    $("sports").hidden = state.view === "method" || state.view === "bets" || state.view === "models";
   }
   function renderSports() {
     const up = (k) => DATA.games.filter((g) => (k === "all" || g.sport === k) && (g.status === "upcoming" || g.status === "started")).length;
@@ -1190,6 +1443,7 @@ table{border-collapse:collapse;width:100%}
     else if (state.view === "analysis") renderAnalysis();
     else if (state.view === "bets") renderBets();
     else if (state.view === "tw") renderTw();
+    else if (state.view === "models") renderModels();
     else renderMethod();
   }
   function go(v) { state.view = v; store.set("view", v); try { history.replaceState(null, "", "#" + v); } catch (e) {} render(); window.scrollTo(0, 0); }
@@ -1203,6 +1457,13 @@ table{border-collapse:collapse;width:100%}
     if (t.dataset.am) { state.amkt = t.dataset.am; store.set("amkt", state.amkt); return render(); }
     if (t.dataset.sort) { const k = t.dataset.sort; state.sort = {k, dir: state.sort.k === k ? -state.sort.dir : -1, open: true}; store.set("sort", state.sort); return renderAnalysis(); }
     if (t.dataset.open) { const k = t.dataset.open; state.open.has(k) ? state.open.delete(k) : state.open.add(k); return renderBoard(); }
+    if (t.dataset.bet) {   // 從期望值格子直接去記錄這注
+      const g = findGame(t.dataset.bet); if (!g) return;
+      const market = {ml: "獨贏", sp: "讓分", ou: "大小分"}[t.dataset.mk] || t.dataset.mk;
+      FORM.date = fmtISO.format(new Date());
+      FORM.legs = [{...newLeg(fmtISO.format(new Date(g.t))), league: leagueOf(g), gid: g.sport + "|" + g.id, market, pick: t.dataset.pick}];
+      return go("bets");
+    }
     if (t.id === "only") { state.only = !state.only; store.set("only", state.only); return render(); }
     if (t.id === "addleg") { { const last = FORM.legs[FORM.legs.length - 1]; FORM.legs.push({...newLeg(last.date), league: last.league}); } return redrawLegs(); }
     if (t.dataset.rmleg != null) { FORM.legs.splice(+t.dataset.rmleg, 1); if (!FORM.legs.length) FORM.legs.push(newLeg()); return redrawLegs(); }
