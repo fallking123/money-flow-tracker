@@ -217,7 +217,11 @@ table{border-collapse:collapse;width:100%}
 .btn:disabled{opacity:.5}
 .btn.sm{padding:4px 10px;font-size:12.5px;border-radius:8px}
 .btn.del{background:var(--bad-soft);color:var(--bad)}
-.formbar{display:flex;gap:12px;align-items:center;margin-top:12px}
+.formbar{display:flex;gap:12px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.leg{border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-top:10px;background:var(--card)}
+.leg-h{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:14px;margin-bottom:8px}
+.btn.ghost{background:var(--accent-soft);color:var(--accent)}
+.parts div{white-space:normal}
 .msg{font-size:13px;color:var(--muted)}
 .bl select{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:3px 6px;font-size:13px}
 
@@ -790,27 +794,94 @@ table{border-collapse:collapse;width:100%}
 
   // ═════════ 我的投注（存在這個看板自己的資料庫）═════════
   const LEAGUES = ["MLB", "NBA", "NFL", "NHL", "英超", "西甲", "義甲", "德甲", "法甲", "歐冠", "KBO", "NPB", "CPBL", "其他足球", "其他"];
-  const BTYPES = ["獨贏", "讓分", "大小分", "單隊大小", "合局", "其他"];
+  const BTYPES = ["獨贏", "讓分", "大小分", "單隊大小", "和局", "其他"];
   const RES = {pending: "還沒開獎", win: "贏", loss: "輸", push: "走水", void: "退款"};
   const betPL = (b) => (b.result === "win" ? b.stake * (b.odds - 1) : b.result === "loss" ? -b.stake : 0);
+  // ── 新增注單的表單狀態（重畫畫面時不會不見）──
+  const MKCODE = {"獨贏": "ml", "讓分": "sp", "大小分": "ou", "和局": "ml"};
+  const newLeg = (date) => ({date: date || FORM.date, league: "MLB", gid: "", match: "", market: "獨贏", pick: "", pickCustom: "", odds: ""});
+  const FORM = {date: fmtISO.format(new Date()), stake: "", result: "pending", signal: false, total: "", legs: []};
+  FORM.legs.push(newLeg());
+  const leagueOf = (g) => (g.sport === "soccer" ? g.league_zh || "其他足球" : g.sport.toUpperCase());
+  const matchName = (g) => (g.sport === "soccer" ? `${g.home_zh || g.home} vs ${g.away_zh || g.away}` : `${g.away_zh || g.away} @ ${g.home_zh || g.home}`);
+  function gamesOn(date, league) {
+    if (!DATA) return [];
+    const seen = new Set(), out = [];
+    for (const g of [...DATA.games, ...(DATA.closed || [])]) {
+      const k = g.sport + "|" + g.id;
+      if (seen.has(k) || fmtISO.format(new Date(g.t)) !== date || leagueOf(g) !== league) continue;
+      seen.add(k); out.push(g);
+    }
+    return out.sort((a, b) => (a.t < b.t ? -1 : 1));
+  }
+  const findGame = (gid) => [...(DATA ? DATA.games : []), ...((DATA && DATA.closed) || [])].find((g) => g.sport + "|" + g.id === gid);
+  function pickOptions(g, market) {
+    const mk = MKCODE[market]; if (!g || !mk) return [];
+    const s = latest(g), ss = sides(g, s, mk);
+    return ss.filter((x) => market !== "和局" || x.key === "draw").map((x) => ({v: pickLabel(x, mk), us: x.odds}));
+  }
+  const legPick = (L) => (L.pick === "__other" || !L.pick ? L.pickCustom.trim() : L.pick);
+  const legMatch = (L) => { if (L.gid && L.gid !== "__other") { const g = findGame(L.gid); return g ? matchName(g) : L.match; } return L.match.trim(); };
+  function legsHtml() {
+    const multi = FORM.legs.length > 1;
+    let h = FORM.legs.map((L, i) => {
+      const gs = gamesOn(L.date, L.league), g = L.gid && L.gid !== "__other" ? findGame(L.gid) : null;
+      const opts = pickOptions(g, L.market), usOdds = (opts.find((o) => o.v === L.pick) || {}).us;
+      const custom = !gs.length || L.gid === "__other";
+      const customPick = !opts.length || L.pick === "__other";
+      return `<div class="leg"><div class="leg-h"><span>${multi ? `第 ${i + 1} 關` : "押什麼"}</span>${multi ? `<button type="button" class="btn sm del" data-rmleg="${i}">移除這關</button>` : ""}</div><div class="form">
+        <label>比賽日期<input type="date" data-leg="${i}" data-f="date" value="${esc(L.date)}"></label>
+        <label>聯賽<select data-leg="${i}" data-f="league">${LEAGUES.map((x) => `<option${x === L.league ? " selected" : ""}>${x}</option>`).join("")}</select></label>
+        ${gs.length ? `<label class="wide">比賽<select data-leg="${i}" data-f="gid"><option value="">選一場…</option>${gs.map((x) => `<option value="${esc(x.sport + "|" + x.id)}"${L.gid === x.sport + "|" + x.id ? " selected" : ""}>${fmtTime.format(new Date(x.t))}　${esc(matchName(x))}</option>`).join("")}<option value="__other"${L.gid === "__other" ? " selected" : ""}>清單裡沒有，自己填</option></select></label>` : ""}
+        ${custom ? `<label class="wide">比賽${gs.length ? "" : `<span style="font-size:11.5px">（這天沒有 ${esc(L.league)} 的資料，自己填）</span>`}<input data-leg="${i}" data-f="match" value="${esc(L.match)}" placeholder="例如：洋基 vs 紅襪" maxlength="60"></label>` : ""}
+        <label>玩法<select data-leg="${i}" data-f="market">${BTYPES.map((x) => `<option${x === L.market ? " selected" : ""}>${x}</option>`).join("")}</select></label>
+        ${opts.length ? `<label class="wide">押什麼<select data-leg="${i}" data-f="pick"><option value="">選一邊…</option>${opts.map((o) => `<option${o.v === L.pick ? " selected" : ""}>${esc(o.v)}</option>`).join("")}<option value="__other"${L.pick === "__other" ? " selected" : ""}>其他，自己填</option></select></label>` : ""}
+        ${customPick ? `<label class="wide">押什麼<input data-leg="${i}" data-f="pickCustom" value="${esc(L.pickCustom)}" placeholder="例如：洋基 -1.5、大 8.5" maxlength="60"></label>` : ""}
+        <label>${multi ? "這關賠率" : "台彩賠率"}<input data-leg="${i}" data-f="odds" type="number" step="0.01" min="1.01" inputmode="decimal" value="${esc(L.odds)}" placeholder="${usOdds ? "美國 " + odd(usOdds) : "1.75"}"></label>
+      </div></div>`;
+    }).join("");
+    if (multi) {
+      const prod = FORM.legs.every((L) => parseFloat(L.odds) > 1) ? FORM.legs.reduce((p, L) => p * parseFloat(L.odds), 1) : null;
+      h += `<div class="form" style="margin-top:10px"><label>串關總賠率<input data-top="total" type="number" step="0.01" min="1.01" inputmode="decimal" value="${esc(FORM.total)}" placeholder="${prod ? "自動算 " + prod.toFixed(2) : "每關賠率填完會自動算"}"></label></div>`;
+    }
+    return h;
+  }
+  const redrawLegs = () => { const el = $("legs"); if (el) el.innerHTML = legsHtml(); };
+  function onFormEdit(e) {
+    const t = e.target;
+    if (t.dataset && t.dataset.top) {
+      const k = t.dataset.top; FORM[k] = t.type === "checkbox" ? t.checked : t.value;
+      if (k === "date" && e.type === "change" && FORM.legs.length === 1 && !FORM.legs[0].gid) { FORM.legs[0].date = FORM.date; redrawLegs(); }
+      return true;
+    }
+    if (t.dataset && t.dataset.leg != null) {
+      const L = FORM.legs[+t.dataset.leg], f = t.dataset.f; if (!L) return true;
+      L[f] = t.value;
+      if (e.type === "change" && (f === "date" || f === "league" || f === "gid" || f === "market" || f === "pick")) {
+        if (f === "league" || f === "date") { L.gid = ""; L.pick = ""; }
+        if (f === "gid" || f === "market") L.pick = "";
+        redrawLegs();
+      }
+      if (f === "odds" && FORM.legs.length > 1 && e.type === "change") redrawLegs();
+      return true;
+    }
+    return false;
+  }
+  document.addEventListener("input", onFormEdit);
+
   function renderBets() {
     let h = "";
     if (dbState === "loading") h += `<div class="empty">連線中…</div>`;
     else if (dbState === "off") h += `<div class="empty">這個畫面沒辦法存投注紀錄。請在 Claude App 或 claude.ai 裡打開這個看板。</div>`;
     else h += `<div class="card"><h3>新增一注<small>手機和 iPad 看到的是同一份</small></h3>
       <form id="bf" class="form" autocomplete="off">
-        <label>日期<input type="date" name="date" value="${fmtISO.format(new Date())}" required></label>
-        <label>聯賽<select name="league">${LEAGUES.map((x) => `<option>${x}</option>`).join("")}</select></label>
-        <label class="wide">比賽<input name="match" placeholder="例如：洋基 vs 紅襪" maxlength="60"></label>
-        <label>玩法<select name="market">${BTYPES.map((x) => `<option>${x}</option>`).join("")}</select></label>
-        <label class="wide">押什麼<input name="pick" placeholder="例如：洋基 -1.5、大 8.5" maxlength="60"></label>
-        <label>單注還是串關<select name="legs"><option value="1">單注</option>${[2, 3, 4, 5, 6, 7, 8].map((x) => `<option value="${x}">串 ${x} 關</option>`).join("")}</select></label>
-        <label>賠率（串關填總賠率）<input name="odds" type="number" step="0.01" min="1.01" inputmode="decimal" placeholder="1.75" required></label>
-        <label>下注金額<input name="stake" type="number" step="1" min="1" inputmode="numeric" placeholder="1000" required></label>
-        <label>結果<select name="result">${Object.entries(RES).map(([k, v]) => `<option value="${k}">${v}</option>`).join("")}</select></label>
-        <label class="chk"><input type="checkbox" name="signal"> 這注有跟看板的訊號</label>
+        <label>下注日期<input type="date" name="date" data-top="date" value="${esc(FORM.date)}" required></label>
+        <label>下注金額<input name="stake" data-top="stake" type="number" step="1" min="1" inputmode="numeric" placeholder="1000" value="${esc(FORM.stake)}" required></label>
+        <label>結果<select name="result" data-top="result">${Object.entries(RES).map(([k, v]) => `<option value="${k}"${FORM.result === k ? " selected" : ""}>${v}</option>`).join("")}</select></label>
+        <label class="chk"><input type="checkbox" name="signal" data-top="signal"${FORM.signal ? " checked" : ""}> 這注有跟看板的訊號</label>
       </form>
-      <div class="formbar"><button class="btn" id="bsave" type="submit" form="bf">新增</button><span class="msg" id="bmsg"></span></div></div>`;
+      <div id="legs">${legsHtml()}</div>
+      <div class="formbar"><button class="btn" id="bsave" type="submit" form="bf">新增</button><button type="button" class="btn ghost" id="addleg">＋ 再加一關（串關）</button><span class="msg" id="bmsg"></span></div></div>`;
     const done = BETS.filter((b) => b.result !== "pending").sort((a, b) => (a.date + a.created < b.date + b.created ? -1 : 1));
     const n = done.length, pl = done.reduce((s, b) => s + betPL(b), 0), stake = done.reduce((s, b) => s + b.stake, 0);
     const w = done.filter((b) => b.result === "win").length, l = done.filter((b) => b.result === "loss").length, pend = BETS.length - n;
@@ -838,7 +909,7 @@ table{border-collapse:collapse;width:100%}
     if (!all.length) h += `<tr><td colspan="8" class="mut">還沒有注單</td></tr>`;
     for (const b of all) {
       const p = betPL(b);
-      h += `<tr data-id="${esc(b.id)}"><td class="n">${esc(b.date.slice(5).replace("-", "/"))}</td><td><span class="pill lg">${esc(b.league)}</span> ${esc(b.match)}${b.pick ? `<span class="mut">・${esc(b.pick)}</span>` : ""}${b.signal ? ` <span class="pill sig">訊號</span>` : ""}</td>
+      h += `<tr data-id="${esc(b.id)}"><td class="n">${esc(b.date.slice(5).replace("-", "/"))}</td><td>${b.parts && b.parts.length > 1 ? `<div class="parts">${b.parts.map((p, i) => `<div>${i + 1}. <span class="pill lg">${esc(p.league)}</span> ${esc(p.match)}<span class="mut">・${esc(p.pick)}${p.odds ? " @" + odd(p.odds) : ""}</span></div>`).join("")}</div>` : `<span class="pill lg">${esc(b.league)}</span> ${esc(b.match)}${b.pick ? `<span class="mut">・${esc(b.pick)}</span>` : ""}`}${b.signal ? ` <span class="pill sig">訊號</span>` : ""}</td>
         <td>${esc(b.market)}${(b.legs || 1) > 1 ? `<span class="mut">・串${b.legs}</span>` : ""}</td><td class="r n">${odd(b.odds)}</td><td class="r n">${Number(b.stake).toLocaleString("en-US")}</td>
         <td><select data-act="res" aria-label="結果"${dbState === "on" ? "" : " disabled"}>${Object.entries(RES).map(([k, v]) => `<option value="${k}"${b.result === k ? " selected" : ""}>${v}</option>`).join("")}</select></td>
         <td class="r n ${gb(p)}">${b.result === "pending" ? "–" : ntd(p)}</td><td>${dbState === "on" ? `<button type="button" class="btn sm del" data-act="del">刪除</button>` : ""}</td></tr>`;
@@ -853,7 +924,7 @@ table{border-collapse:collapse;width:100%}
     dbState = "on";
     DB.collection("bets").onSnapshot((snap) => {
       BETS = snap.docs.map((d) => ({id: d.id, ...d.data()}));
-      const typing = document.activeElement && document.activeElement.closest && document.activeElement.closest("#bf");
+      const typing = document.activeElement && document.activeElement.closest && document.activeElement.closest("#bf, #legs");
       if (DATA && state.view === "bets" && !typing) renderBets();
     }, () => { dbState = "off"; if (DATA && state.view === "bets") renderBets(); });
     if (DATA && state.view === "bets") renderBets();
@@ -861,16 +932,25 @@ table{border-collapse:collapse;width:100%}
   document.addEventListener("submit", async (e) => {
     if (e.target.id !== "bf") return;
     e.preventDefault(); if (!DB) return;
-    const f = new FormData(e.target), odds = parseFloat(f.get("odds")), stake = parseFloat(f.get("stake"));
-    if (!(odds > 1) || !(stake > 0)) { $("bmsg").textContent = "賠率要大於 1、金額要大於 0"; return; }
-    const b = {date: f.get("date"), league: f.get("league"), match: (f.get("match") || "").trim(), market: f.get("market"),
-               pick: (f.get("pick") || "").trim(), legs: parseInt(f.get("legs"), 10) || 1, odds, stake, result: f.get("result"),
-               signal: f.get("signal") === "on", created: new Date().toISOString()};
+    const stake = parseFloat(FORM.stake), legs = FORM.legs.map((L) => ({league: L.league, match: legMatch(L), market: L.market, pick: legPick(L), odds: parseFloat(L.odds) || null}));
+    const bad = legs.findIndex((L) => !L.match || !L.pick);
+    if (bad >= 0) { $("bmsg").textContent = `${legs.length > 1 ? `第 ${bad + 1} 關` : ""}還沒選比賽或押什麼`; return; }
+    const prod = legs.every((L) => L.odds > 1) ? legs.reduce((p, L) => p * L.odds, 1) : null;
+    const odds = legs.length > 1 ? (parseFloat(FORM.total) || prod) : legs[0].odds;
+    if (!(odds > 1) || !(stake > 0)) { $("bmsg").textContent = legs.length > 1 ? "要填每關賠率（或串關總賠率），金額要大於 0" : "賠率要大於 1、金額要大於 0"; return; }
+    const same = (k) => legs.every((L) => L[k] === legs[0][k]);
+    const b = {date: FORM.date, league: same("league") ? legs[0].league : "混合", match: legs.map((L) => L.match).join(" ＋ "),
+               market: same("market") ? legs[0].market : "混合", pick: legs.map((L) => L.pick).join("／"), legs: legs.length,
+               parts: legs, odds: Math.round(odds * 100) / 100, stake, result: FORM.result, signal: !!FORM.signal, created: new Date().toISOString()};
     $("bsave").disabled = true; $("bmsg").textContent = "儲存中…";
-    try { await DB.collection("bets").add(b); if (document.activeElement) document.activeElement.blur(); renderBets(); $("bmsg").textContent = "已新增"; }
-    catch (err) { $("bmsg").textContent = err && err.code === "quota_exceeded" ? "紀錄滿了，請刪掉一些舊注單" : "儲存失敗，等一下再試"; const s = $("bsave"); if (s) s.disabled = false; }
+    try {
+      await DB.collection("bets").add(b);
+      Object.assign(FORM, {stake: "", result: "pending", signal: false, total: "", legs: [{...newLeg(FORM.date), league: legs[0].league}]});
+      if (document.activeElement) document.activeElement.blur(); renderBets(); $("bmsg").textContent = "已新增";
+    } catch (err) { $("bmsg").textContent = err && err.code === "quota_exceeded" ? "紀錄滿了，請刪掉一些舊注單" : "儲存失敗，等一下再試"; const sb = $("bsave"); if (sb) sb.disabled = false; }
   });
   document.addEventListener("change", async (e) => {
+    if (onFormEdit(e)) return;
     const sel = e.target.closest && e.target.closest('[data-act="res"]'); if (!sel || !DB) return;
     const id = sel.closest("tr").dataset.id;
     try { await DB.collection("bets").doc(id).update({result: sel.value}); } catch (err) { sel.value = (BETS.find((b) => b.id === id) || {}).result; }
@@ -1005,6 +1085,8 @@ table{border-collapse:collapse;width:100%}
     if (t.dataset.sort) { const k = t.dataset.sort; state.sort = {k, dir: state.sort.k === k ? -state.sort.dir : -1, open: true}; store.set("sort", state.sort); return renderAnalysis(); }
     if (t.dataset.open) { const k = t.dataset.open; state.open.has(k) ? state.open.delete(k) : state.open.add(k); return renderBoard(); }
     if (t.id === "only") { state.only = !state.only; store.set("only", state.only); return render(); }
+    if (t.id === "addleg") { { const last = FORM.legs[FORM.legs.length - 1]; FORM.legs.push({...newLeg(last.date), league: last.league}); } return redrawLegs(); }
+    if (t.dataset.rmleg != null) { FORM.legs.splice(+t.dataset.rmleg, 1); if (!FORM.legs.length) FORM.legs.push(newLeg()); return redrawLegs(); }
     if (t.dataset.act === "del" && DB) {
       if (t.dataset.confirm !== "1") { t.dataset.confirm = "1"; t.textContent = "確定刪除？"; setTimeout(() => { if (t.isConnected) { t.dataset.confirm = ""; t.textContent = "刪除"; } }, 3500); return; }
       try { await DB.collection("bets").doc(t.closest("tr").dataset.id).delete(); } catch (err) { t.textContent = "刪除失敗"; }
