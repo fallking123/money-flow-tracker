@@ -1627,9 +1627,13 @@ table{border-collapse:collapse;width:100%}
   });
 
   renderNav();
-  fetch("data.json", {cache: "no-store"}).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
+  // 看板剛好在更新（換新版本）或手機網路不穩時，第一次常讀不到 → 自動重試幾次
+  const loadData = (n) => fetch("data.json", {cache: "no-store"})
+    .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .catch((e) => { if (n <= 1) throw e; $("upd").textContent = "資料讀取中…"; return new Promise((ok) => setTimeout(ok, 2500)).then(() => loadData(n - 1)); });
+  loadData(5)
     .then((d) => { DATA = d; render(); })
-    .catch(() => { $("upd").textContent = "資料讀取失敗"; $("board").innerHTML = `<div class="empty">讀不到資料。重新整理一次；還是不行就跟 Claude 說「更新看板」。</div>`; });
+    .catch(() => { $("upd").textContent = "資料讀取失敗"; $("board").innerHTML = `<div class="empty">讀不到資料。可能看板剛好在更新，等 1～2 分鐘後關掉重開；還是不行就跟 Claude 說「更新看板」。</div>`; });
   initDb();
 })();
 </script>
