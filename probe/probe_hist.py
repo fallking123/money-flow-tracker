@@ -1,6 +1,6 @@
 """探測：各運動歷史比賽的收盤賠率從哪裡拿得到、涵蓋哪幾季"""
 import json, requests
-H = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124 Safari/537.36"}
+H = {"User-Agent": "Mozilla/5.0"}
 out = {"espn": {}, "espn_summary": {}, "other": {}}
 PATH = {"nba": "basketball/nba", "nhl": "hockey/nhl", "mlb": "baseball/mlb", "nfl": "football/nfl"}
 DATES = {"nba": ["20100115", "20140115", "20170115", "20190115", "20210215", "20230115", "20250115"],
@@ -34,16 +34,16 @@ for sp, ds in DATES.items():
                                                 "keys": list(j.keys())}
         except Exception as ex:
             out["espn_summary"][f"{sp}_{d}"] = str(ex)[:200]
-for k, u in {"nflverse": "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv",
-             "sbro_nba_page": "https://www.sportsbookreviewsonline.com/scoresoddsarchives/nba/nbaoddsarchives.htm",
-             "sbro_nba_xlsx": "https://www.sportsbookreviewsonline.com/scoresoddsarchives/nba/nba%20odds%202019-20.xlsx",
-             "sbro_nhl_xlsx": "https://www.sportsbookreviewsonline.com/scoresoddsarchives/nhl/nhl%20odds%202018-19.xlsx",
-             "sbro_mlb_xlsx": "https://www.sportsbookreviewsonline.com/scoresoddsarchives/mlb/mlb%20odds%202019.xlsx",
-             "moneypuck": "https://moneypuck.com/moneypuck/playerData/seasonSummary/2023/regular/teams.csv",
-             "retrosheet_gl": "https://www.retrosheet.org/gamelogs/gl2023.zip"}.items():
+import re
+for sp in ["nba", "nhl", "mlb"]:
     try:
-        r = requests.get(u, headers=H, timeout=40)
-        out["other"][k] = {"status": r.status_code, "len": len(r.content), "type": r.headers.get("content-type"), "head": r.text[:600] if "text" in (r.headers.get("content-type") or "") or k == "nflverse" else ""}
+        r = requests.get(f"https://www.sportsbookreviewsonline.com/scoresoddsarchives/{sp}/{sp}oddsarchives.htm", headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124 Safari/537.36"}, timeout=40)
+        links = re.findall(r'href="([^"]+\.xlsx?)"', r.text, re.I)
+        out["other"][f"sbro_{sp}_links"] = links[:40]
+        if links:
+            u = links[0] if links[0].startswith("http") else "https://www.sportsbookreviewsonline.com/scoresoddsarchives/" + sp + "/" + links[0]
+            r2 = requests.get(u, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124 Safari/537.36"}, timeout=40)
+            out["other"][f"sbro_{sp}_first"] = {"url": u, "status": r2.status_code, "len": len(r2.content), "type": r2.headers.get("content-type")}
     except Exception as ex:
-        out["other"][k] = str(ex)[:200]
+        out["other"][f"sbro_{sp}"] = str(ex)[:200]
 json.dump(out, open("probe/hist_result.json", "w"), ensure_ascii=False, indent=1)
