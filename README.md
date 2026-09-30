@@ -25,6 +25,7 @@
 |---|---|
 | `odds_history_YYYY-MM.csv` | 每場比賽的資金流向快照：三種盤（獨贏 `ml_`、讓分 `sp_`、大小分 `ou_`）的 bet%、money%、共識賠率（目前＋開盤）、盤口線、去水機率。按月分檔 |
 | `odds_books_YYYY-MM.csv` | 各家莊家的賠率明細，只在賠率有變動時才記。按月分檔 |
+| `extra_odds_YYYY-MM.csv` | 其他玩法賠率（長格式，一個選項一列；賠率有變才記） |
 | `results.csv` | 賽果：比分、勝方、讓分差（`margin`）、總分（`total_points`）、賽季階段 |
 | `context.csv` | 背景資料：球場、城市、是否室內、天氣、MLB 先發投手 |
 | `raw/日期.json.gz` | 每天第一次抓到的原始資料備份 |
@@ -44,6 +45,7 @@
 | `backfill_results.py` | `backfill_results.yml` | 到 ESPN 查比分回填 | 每天台灣時間 20:17 |
 | `scrape_context.py` | `scrape_context.yml` | 球場、天氣、先發投手 | 每天 4 次 |
 | `sports_common.py` | — | 共用設定：運動清單、ESPN 賽程、隊名比對 | — |
+| `scrape_extra.py` | `scrape_odds.yml`（同一個排程） | 其他玩法賠率：單隊大小、MLB 前五局、NHL 第一節、NBA/NFL 上半場與第一節（只有賠率，網站沒有下注比例） | 跟資金流向一起 |
 | `scrape_soccer.py` | `scrape_soccer.yml` | 足球資金流向、歐洲賠率、賽果 | 每小時（程式依距離開賽決定要不要記） |
 
 資料來源：SportsBettingDime（資金流向與賠率）、ESPN（賽程、比分、傷兵、戰績）、Open-Meteo（天氣）。
