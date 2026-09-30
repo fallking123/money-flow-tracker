@@ -10,6 +10,7 @@
 """
 
 import json
+import math
 import os
 import sys
 from datetime import datetime, timezone, timedelta
@@ -269,6 +270,46 @@ SPORT_FEATURES = {
 }
 
 
+_M1 = {}
+
+
+def model1_params(sport):
+    if sport not in _M1:
+        p = os.path.join(sport_dir(sport), "model", "params_ml.json")
+        _M1[sport] = json.load(open(p, encoding="utf-8")) if os.path.exists(p) else None
+    return _M1[sport]
+
+
+def model1_predict(sport, g):
+    """模型一（實力）即時預測：用 Pinnacle 最新獨贏（沒有就用美國共識）＋休息天數。回傳 {p: [客, 主], src}"""
+    P = model1_params(sport)
+    if not P or g["status"] == "final":
+        return None
+    pin = ((g.get("pin") or {}).get("l") or {}).get("ml") or {}
+    if pin.get("away") and pin.get("home"):
+        oa, oh, src = pin["away"], pin["home"], "pin"
+    else:
+        ml = (g["snaps"][-1] if g["snaps"] else {}).get("ml") or []
+        oa, oh, src = (ml[4] if len(ml) > 5 else None), (ml[5] if len(ml) > 5 else None), "us"
+    if not oa or not oh or oa <= 1 or oh <= 1:
+        return None
+    ph = (1 / oh) / (1 / oa + 1 / oh)
+    c = g.get("ctx") or {}
+    cap = P.get("rest_cap", 4)
+    ra = min(c.get("away_rest") if c.get("away_rest") is not None else cap, cap)
+    rh = min(c.get("home_rest") if c.get("home_rest") is not None else cap, cap)
+    x = {"lm": math.log(ph / (1 - ph)), "rest_diff": rh - ra, "b2b_home": 1.0 if c.get("home_b2b") else 0.0,
+         "b2b_away": 1.0 if c.get("away_b2b") else 0.0, "rest_home": rh, "rest_away": ra, "b2b_diff": 0.0, "elo_diff": None, "sp_diff": 0.0}
+    if "elo_diff" in P["features"]:
+        ea, eh = P["elo"].get(g["away"]), P["elo"].get(g["home"])
+        if ea is None or eh is None:
+            return None
+        x["elo_diff"] = eh + P["elo_home"] - ea
+    z = sum(w * (x[f] - m) / sc for f, w, m, sc in zip(P["features"], P["coef"], P["mean"], P["scale"])) + P["intercept"]
+    p_home = 1 / (1 + math.exp(-z))
+    return {"p": [round(1 - p_home, 4), round(p_home, 4)], "mkt": [round(1 - ph, 4), round(ph, 4)], "src": src}
+
+
 def us_model_reports():
     """美國四大「模型一・實力」的成績（us_model.py 產生）"""
     out = {}
@@ -276,7 +317,7 @@ def us_model_reports():
         p = os.path.join(sport_dir(sp), "model", "report_ml.json")
         if os.path.exists(p):
             r = json.load(open(p, encoding="utf-8"))
-            out[sp] = {k: r.get(k) for k in ("seasons", "test_seasons", "train_games", "test_games", "chosen", "accuracy",
+            out[sp] = {k: r.get(k) for k in ("seasons", "test_seasons", "train_games", "test_games", "chosen", "accuracy", "features",
                                              "hit_rate", "calibration", "betting", "open_vs_close", "generated_utc")}
     return out
 
@@ -412,6 +453,9 @@ def build(now):
                     **{f"{side}_{k}": team_ctx(ctx, side, k) for side in ("away", "home")
                        for k in ("record", "split", "rest", "b2b", "g7", "last_away", "out_n", "inj")}},
             })
+    for g in games:
+        if g["sport"] in ("nba", "nhl", "nfl", "mlb"):
+            g["m1"] = model1_predict(g["sport"], g)
     sg, sclosed = soccer_dashboard.build_soccer(now, RECENT_DAYS, CLOSED_SNAPS)
     games += sg
     games.sort(key=lambda g: g["t"])

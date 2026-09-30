@@ -641,8 +641,13 @@ table{border-collapse:collapse;width:100%}
         ${mid}
         <div class="tm r">${dot(g[R + "_ab"], g[R + "_c"])}<div><div class="nm">${esc(g[R + "_zh"] || g[R])}</div><div class="od">${mkt === "ou" ? "" : esc(oddTxt(sdOf(R))) + "　"}${tag(R)}${rec(R)}</div></div></div>
       </div>`;
+    const m1Html = !soc && mkt === "ml" && g.m1 ? (() => {
+      const P = g.m1.p, f = (v) => Math.round(v * 100) + "%";
+      return `<div class="mdl"><b>模型一・實力</b>${esc(g.away_zh || g.away_ab)} ${f(P[0])}・${esc(g.home_zh || g.home_ab)} ${f(P[1])}<small>用${g.m1.src === "pin" ? " Pinnacle 最新賠率" : "美國共識賠率"}＋休息天數算的真實勝率；模型二（資金）還在累積資料</small></div>`;
+    })() : "";
     if (!has) {
       h += `<div class="say">${MK[mkt]}的下注比例，網站還沒出來（最後截圖 ${when(s.ts)}）。出來後會自動補抓。</div>`;
+      h += m1Html;
     } else {
       if (sig) {
         const strong = sig.diff >= thr + 10 ? "強" : "中等";
@@ -655,6 +660,7 @@ table{border-collapse:collapse;width:100%}
       }
       if (soc && sig) h = h.replace(/<\/div>$/, `<span class="x mut">足球在美國的下注量小，這個比例只當參考，以下面 Pinnacle 的動向為主。</span></div>`);
       h += pinBlock(g, mkt, sig);
+      h += m1Html;
       if (soc && mkt === "ml" && g.model) {
         const P = g.model.p, Mk = g.model.mkt, f = (v) => Math.round(v * 100) + "%";
         const SRC = {eu: ["賽前版", "歐洲各家平均賠率"], pin: ["賽前版", "Pinnacle 賠率（歐洲平均還沒出）"], pin_live: ["臨場版", "Pinnacle 最新賠率"], live: ["臨場版", "開賽前最新賠率（美國）"], us: ["賽前版", "美國莊家賠率（歐洲、Pinnacle 都還沒有，先代用）"]}[g.model.src] || ["", "莊家"];
@@ -676,9 +682,10 @@ table{border-collapse:collapse;width:100%}
       const td = twDisc(g.sport, mkt);
       const side = sig || (() => { let i = 0; ss.forEach((x, j) => { if ((x.odds || 99) < (ss[i].odds || 99)) i = j; }); return {...ss[i], i}; })();
       if (td && side.odds) {
-        const useModel = soc && mkt === "ml" && g.model, pf = useModel ? null : pinFairFor(g, mkt, side);
-        const est = side.odds * (1 + td.d / 100), be = 1 / est, fp = useModel ? g.model.p[["home", "draw", "away"].indexOf(side.key)] : pf ?? fair(ss, side.i), ok = fp != null && fp > be;
-        const who = useModel ? "模型" : pf != null ? "Pinnacle" : "美國莊家";
+        const useModel = soc && mkt === "ml" && g.model, useM1 = !soc && mkt === "ml" && g.m1, pf = useModel || useM1 ? null : pinFairFor(g, mkt, side);
+        const est = side.odds * (1 + td.d / 100), be = 1 / est;
+        const fp = useModel ? g.model.p[["home", "draw", "away"].indexOf(side.key)] : useM1 ? g.m1.p[side.key === "away" ? 0 : 1] : pf ?? fair(ss, side.i), ok = fp != null && fp > be;
+        const who = useModel || useM1 ? "模型一" : pf != null ? "Pinnacle" : "美國莊家";
         h += `<div class="tiles">
           <div class="tile">台彩賠率<br>大約<b>${odd(est)}</b></div>
           <div class="tile">要贏幾成<br>才不虧<b>${Math.round(be * 100)}%</b></div>
@@ -1112,14 +1119,15 @@ table{border-collapse:collapse;width:100%}
       const g = (A, k) => (A[k] ? (A.uniform.logloss - A[k].logloss) / A.uniform.logloss * 100 : null);
       const rowsU = Object.entries(um).map(([k, r]) => {
         const A = r.accuracy, gm = g(A, "market"), gd = g(A, "model"), gt = g(A, "team_only");
-        return `<tr><td><b>${NM[k]}</b></td><td class="r n">${(r.train_games || 0).toLocaleString("en-US")}</td><td class="r n">${(r.test_games || 0).toLocaleString("en-US")}</td><td class="r n">${gt?.toFixed(2)}%</td><td class="r n">${gm?.toFixed(2)}%</td><td class="r n" style="color:var(--accent)">${gd?.toFixed(2)}%</td><td class="r n">${(r.hit_rate || {}).model ?? "–"}%</td></tr>`;
+        const ev = ((r.betting || {}).every_tw || {}).model1 || {}, pos = ((r.betting || {}).tw || {})["0.0"] || {};
+        return `<tr><td><b>${NM[k]}</b></td><td class="r n">${(r.train_games || 0).toLocaleString("en-US")}</td><td class="r n">${(r.test_games || 0).toLocaleString("en-US")}</td><td class="r n">${gt?.toFixed(2)}%</td><td class="r n">${gm?.toFixed(2)}%</td><td class="r n" style="color:var(--accent)">${gd?.toFixed(2)}%</td><td class="r n bad">${ev.roi == null ? "–" : sgn(ev.roi, 1) + "%"}</td><td class="r n">${pos.n ? pos.n + " 注" : "0 注"}</td></tr>`;
       }).join("");
       h += `<div class="card"><h3>美國四大・模型一（實力）<small>用 2006–2010 年起的歷史比賽訓練，最後兩季當測試</small></h3>
-        <div class="scroll"><table class="tb"><thead><tr><th>運動</th><th class="r">訓練場數</th><th class="r">測試場數</th><th class="r">只看球隊數據</th><th class="r">收盤賠率</th><th class="r">模型一</th><th class="r">猜中率</th></tr></thead><tbody>${rowsU}</tbody></table></div>
-        <p class="mut" style="font-size:13px;margin:8px 0 0">數字是「比亂猜準多少」，越大越準。</p>
+        <div class="scroll"><table class="tb"><thead><tr><th>運動</th><th class="r">訓練場數</th><th class="r">測試場數</th><th class="r">只看球隊數據</th><th class="r">收盤賠率</th><th class="r">模型一</th><th class="r">每場都下<br>（台彩）</th><th class="r">台彩划算的</th></tr></thead><tbody>${rowsU}</tbody></table></div>
+        <p class="mut" style="font-size:13px;margin:8px 0 0">前三欄是「比亂猜準多少」，越大越準。「每場都下」＝測試季每場都照模型一押期望值比較高的那邊，在台彩賠率下每 100 元平均賺賠。「台彩划算的」＝模型一勝率 × 台彩賠率 > 1 的注有幾注。台彩賠率先用美國賠率 × 0.91 估。</p>
         <div class="gl" style="margin-top:10px">
           <div><b>結論：收盤賠率已經把公開資料都算進去了</b>四個運動都一樣：加上 Elo 強弱、休息天數、背靠背、先發投手，最多只比收盤賠率準一點點，有時還差一點。只看球隊數據明顯比較差。</div>
-          <div><b>所以模型一 ≈ 市場的公平價</b>它最大的用處是：告訴你「這隊真正的勝率大約多少」，拿來跟台彩賠率比。台彩賠率更新慢、抽得多，偶爾會開出比市場好的價，那才是機會。</div>
+          <div><b>所以模型一 ≈ 市場的公平價</b>每場都下，在台彩大約每 100 元虧 11–16 元，就是台彩的抽成。它的用處是告訴你「這隊真正的勝率大約多少」，拿來找台彩開得特別好、期望值是正的那幾注；大部分比賽兩邊都不划算，就不下。</div>
           <div><b>真正可能多出來的東西</b>要靠市場還沒完全反映的資訊：開盤到收盤之間的資金流向（模型二）、台彩跟國際盤的時間差。</div>
         </div></div>`;
     }

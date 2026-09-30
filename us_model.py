@@ -225,6 +225,14 @@ def simulate(p, y, dec_a, dec_h, edge):
             "win": int((bet > 0).sum())}
 
 
+def flat(pick_home, y, dec_a, dec_h):
+    """每場都下 1 單位：pick_home＝True 押主隊，否則押客隊"""
+    pl = np.where(pick_home, np.where(y == 1, dec_h - 1, -1.0), np.where(y == 0, dec_a - 1, -1.0))
+    n = len(pl)
+    return {"n": int(n), "roi": round(float(pl.mean() * 100), 1), "se": round(float(pl.std(ddof=1) / math.sqrt(n) * 100), 1),
+            "win": int((pl > 0).sum())}
+
+
 def fitter(tr, cols, C=1.0):
     tr = tr.dropna(subset=cols + ["y"])
     sc = StandardScaler().fit(tr[cols])
@@ -277,6 +285,13 @@ def run(sport):
     has_open = test["dec_open_home"].notna().values
     bet = {"close": {str(e): simulate(p_model, y, test["dec_close_away"].values, test["dec_close_home"].values, e) for e in EDGES},
            "tw": {str(e): simulate(p_model, y, test["dec_close_away"].values * TW_DISCOUNT, test["dec_close_home"].values * TW_DISCOUNT, e) for e in EDGES}}
+    # 每一場都下（台彩估計賠率）：各自押「期望值比較高的那一邊」；另外列「都押熱門」「都押冷門」當參考
+    ta, th = test["dec_close_away"].values * TW_DISCOUNT, test["dec_close_home"].values * TW_DISCOUNT
+    ev_pick = lambda p: (p * th) >= ((1 - p) * ta)
+    fav_home = test["p_mkt"].values >= 0.5
+    bet["every_tw"] = {"model1": flat(ev_pick(p_model), y, ta, th), "market": flat(ev_pick(p_mkt), y, ta, th),
+                       "favorite": flat(fav_home, y, ta, th), "underdog": flat(~fav_home, y, ta, th)}
+    bet["every_us"] = {"model1": flat(ev_pick(p_model), y, test["dec_close_away"].values, test["dec_close_home"].values)}
     if has_open.sum() > 200:
         # 在開盤就下注：模型只能看到開盤賠率（不能偷看收盤），用開盤賠率算特徵再比開盤賠率
         t2 = test[has_open].copy()
