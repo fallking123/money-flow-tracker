@@ -523,6 +523,13 @@ if __name__ == "__main__":
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
+    # 看板網頁：把資料直接塞進 index.html（手機 App 有時讀不到旁邊的 data.json），範本是 page.html
+    d = os.path.dirname(OUT)
+    with open(os.path.join(d, "page.html"), encoding="utf-8") as f:
+        page = f.read()
+    blob = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+    with open(os.path.join(d, "index.html"), "w", encoding="utf-8") as f:
+        f.write(page.replace("__EMBEDDED_DATA__", blob, 1))
     n_up = sum(g["status"] in ("upcoming", "started") for g in data["games"])
     n_fin = sum(g["status"] == "final" for g in data["games"])
     print(f"儀表板資料：{len(data['games'])} 場（即將開賽 {n_up}、已完賽 {n_fin}），"
