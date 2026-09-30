@@ -1,0 +1,158 @@
+{
+ "generated_utc": "2026-09-30T05:28Z",
+ "sport": "mlb",
+ "seasons": [
+  "2010",
+  "2026"
+ ],
+ "warmup": "2010",
+ "validation_season": "2024",
+ "test_seasons": [
+  "2025",
+  "2026"
+ ],
+ "train_games": 33002,
+ "test_games": 4917,
+ "all_games": 40396,
+ "validation": {
+  "市場重新校正": 0.67072,
+  "市場＋Elo": 0.67081,
+  "市場＋Elo＋休息": 0.67072,
+  "市場＋休息": 0.67063,
+  "市場＋先發投手": 0.67071,
+  "市場＋Elo＋先發投手": 0.67079
+ },
+ "chosen": "市場＋休息",
+ "features": [
+  "lm",
+  "rest_diff",
+  "b2b_home",
+  "b2b_away"
+ ],
+ "weights": {
+  "lm": 0.394,
+  "rest_diff": -0.014,
+  "b2b_home": 0.007,
+  "b2b_away": -0.006
+ },
+ "accuracy": {
+  "market": {
+   "logloss": 0.6775,
+   "brier": 0.2424
+  },
+  "model": {
+   "logloss": 0.6778,
+   "brier": 0.2425
+  },
+  "team_only": {
+   "logloss": 0.6818,
+   "brier": 0.2444
+  },
+  "uniform": {
+   "logloss": 0.6931
+  }
+ },
+ "hit_rate": {
+  "market": 56.3,
+  "model": 56.2
+ },
+ "calibration": [
+  {
+   "pred": 34.9,
+   "real": 34.6,
+   "n": 1214
+  },
+  {
+   "pred": 41.7,
+   "real": 44.3,
+   "n": 1244
+  },
+  {
+   "pred": 45.4,
+   "real": 47.1,
+   "n": 1210
+  },
+  {
+   "pred": 48.5,
+   "real": 48.9,
+   "n": 1249
+  },
+  {
+   "pred": 51.4,
+   "real": 50.7,
+   "n": 1216
+  },
+  {
+   "pred": 54.5,
+   "real": 53.0,
+   "n": 1214
+  },
+  {
+   "pred": 58.2,
+   "real": 55.9,
+   "n": 1244
+  },
+  {
+   "pred": 65.0,
+   "real": 65.0,
+   "n": 1243
+  }
+ ],
+ "betting": {
+  "close": {
+   "0.0": {
+    "n": 15,
+    "roi": -38.1,
+    "se": 23.7,
+    "win": 5
+   },
+   "0.02": {
+    "n": 0
+   },
+   "0.04": {
+    "n": 0
+   }
+  },
+  "tw": {
+   "0.0": {
+    "n": 0
+   },
+   "0.02": {
+    "n": 0
+   },
+   "0.04": {
+    "n": 0
+   }
+  },
+  "open": {
+   "0.0": {
+    "n": 0
+   },
+   "0.02": {
+    "n": 0
+   },
+   "0.04": {
+    "n": 0
+   }
+  }
+ },
+ "open_vs_close": {
+  "open_logloss": 0.6804,
+  "close_logloss_same_games": 0.6775,
+  "n": 4917
+ },
+ "home_win_rate": 53.4,
+ "unmapped_teams": [],
+ "by_season": {
+  "2025": {
+   "n": 2482,
+   "market": 0.676,
+   "model": 0.6763
+  },
+  "2026": {
+   "n": 2435,
+   "market": 0.6791,
+   "model": 0.6793
+  }
+ }
+}

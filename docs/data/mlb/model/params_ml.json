@@ -1,0 +1,67 @@
+{
+ "generated_utc": "2026-09-30T05:28Z",
+ "sport": "mlb",
+ "features": [
+  "lm",
+  "rest_diff",
+  "b2b_home",
+  "b2b_away"
+ ],
+ "mean": [
+  0.137923,
+  0.005802,
+  0.765157,
+  0.764762
+ ],
+ "scale": [
+  0.378377,
+  0.530927,
+  0.4239,
+  0.424148
+ ],
+ "coef": [
+  0.385716,
+  -0.007818,
+  0.002389,
+  -7.1e-05
+ ],
+ "intercept": 0.134758,
+ "elo_home": 24,
+ "elo_regress": 0.5,
+ "rest_cap": 4,
+ "elo": {
+  "Boston Red Sox": 1532.7,
+  "New York Yankees": 1552.5,
+  "San Francisco Giants": 1460.5,
+  "Seattle Mariners": 1473.5,
+  "Philadelphia Phillies": 1524.6,
+  "Milwaukee Brewers": 1585.0,
+  "Miami Marlins": 1499.0,
+  "Cincinnati Reds": 1460.2,
+  "St. Louis Cardinals": 1480.3,
+  "Pittsburgh Pirates": 1507.8,
+  "Los Angeles Dodgers": 1568.6,
+  "Colorado Rockies": 1403.5,
+  "Atlanta Braves": 1529.8,
+  "Chicago Cubs": 1540.0,
+  "Athletics": 1414.7,
+  "Houston Astros": 1495.5,
+  "Chicago White Sox": 1511.5,
+  "Texas Rangers": 1483.4,
+  "Toronto Blue Jays": 1499.4,
+  "Kansas City Royals": 1460.4,
+  "Los Angeles Angels": 1438.6,
+  "Minnesota Twins": 1472.2,
+  "Tampa Bay Rays": 1543.9,
+  "Baltimore Orioles": 1503.5,
+  "Detroit Tigers": 1507.0,
+  "Cleveland Guardians": 1511.1,
+  "San Diego Padres": 1546.6,
+  "Arizona Diamondbacks": 1513.0,
+  "New York Mets": 1500.2,
+  "Washington Nationals": 1481.3,
+  "National All-Stars": 1496.9,
+  "American All-Stars": 1503.1
+ },
+ "last_season": "2026"
+}

@@ -41,10 +41,14 @@ TW_DISCOUNT = 0.91   # 台彩賠率大約是美國的 9 成（用你記的台彩
 SBRO_ALIAS = {
     "nba": {"NewJersey": "Brooklyn Nets", "Seattle": "Oklahoma City Thunder", "NewOrleans": "New Orleans Pelicans",
             "Charlotte": "Charlotte Hornets", "LAClippers": "LA Clippers", "LAClipper": "LA Clippers"},
+    "mlb": {"BRS": "Boston Red Sox", "LOS": "Los Angeles Dodgers", "SFG": "San Francisco Giants", "CHC": "Chicago Cubs",
+            "FLA": "Miami Marlins", "FLO": "Miami Marlins", "ANA": "Los Angeles Angels", "CUB": "Chicago Cubs"},
     "nhl": {"Atlanta": "Winnipeg Jets", "Phoenix": "Arizona Coyotes", "Arizona": "Arizona Coyotes", "Arizonas": "Arizona Coyotes"},
 }
 # ESPN 時代的改名／搬家（接到同一支）
-ESPN_ALIAS = {"nhl": {"Utah Hockey Club": "Arizona Coyotes", "Utah Mammoth": "Arizona Coyotes"}}
+ESPN_ALIAS = {"nhl": {"Utah Hockey Club": "Arizona Coyotes", "Utah Mammoth": "Arizona Coyotes"},
+              "nfl": {"OAK": "LV", "SD": "LAC", "STL": "LA"},
+              "mlb": {"Oakland Athletics": "Athletics", "Cleveland Indians": "Cleveland Guardians"}}
 
 
 def squash(s):
@@ -102,7 +106,7 @@ def load(sport):
     df = df.dropna(subset=["away_score", "home_score"])
     df["date"] = pd.to_datetime(df["date"])
     df = df.sort_values(["date"]).reset_index(drop=True)
-    unmapped = sorted({n for n in set(df["away"]) | set(df["home"]) if n not in espn_names})
+    unmapped = sorted({n for n in set(df["away"]) | set(df["home"]) if n not in espn_names}) if espn_names else []
     return df, unmapped
 
 
@@ -120,8 +124,19 @@ def build_features(df, sport):
         except ValueError:
             return None
 
+    def pkey(name):
+        """投手名統一：SBRO「MSCHERZER-R」、ESPN「Max Scherzer」都變成 MSCHERZER"""
+        if not isinstance(name, str) or not name.strip():
+            return ""
+        n = re.sub(r"-[LR]$", "", name.strip())
+        if " " in n:
+            parts = n.split()
+            n = parts[0][0] + "".join(parts[1:])
+        return re.sub(r"[^A-Z]", "", n.upper())
+
     def sp_rating(name):
-        if not has_sp or not isinstance(name, str) or not name:
+        name = pkey(name)
+        if not has_sp or not name:
             return np.nan
         hs = sp_hist.get(name, [])[-SP_N:]
         lg = np.mean(lg_f5[-3000:]) if lg_f5 else 2.5
@@ -144,8 +159,8 @@ def build_features(df, sport):
                      "sp_diff": (sp_rating(getattr(r, "away_pitcher", "")) - sp_rating(getattr(r, "home_pitcher", ""))) if has_sp else np.nan})
         if has_sp:
             ra5, rh5 = f5(r.periods_home), f5(r.periods_away)   # 客隊投手的失分＝主隊前五局得分
-            for nm, v in ((getattr(r, "away_pitcher", ""), ra5), (getattr(r, "home_pitcher", ""), rh5)):
-                if isinstance(nm, str) and nm and v is not None:
+            for nm, v in ((pkey(getattr(r, "away_pitcher", "")), ra5), (pkey(getattr(r, "home_pitcher", "")), rh5)):
+                if nm and v is not None:
                     sp_hist.setdefault(nm, []).append(v)
                     lg_f5.append(v)
         # 賽後更新 Elo（比分差乘數：538 的作法，強隊大勝打折）
@@ -230,7 +245,11 @@ def run(sport):
     raw, unmapped = load(sport)
     df, elo = build_features(raw, sport)
     seasons = sorted(df["season"].unique())
-    warm, test_seasons, val_season = seasons[0], seasons[-2:], seasons[-3]
+    counts = df.groupby("season").size()
+    if counts[seasons[-1]] < 0.5 * counts.median():   # 最新一季才剛開始：跟前兩季一起當測試
+        warm, test_seasons, val_season = seasons[0], seasons[-3:], seasons[-4]
+    else:
+        warm, test_seasons, val_season = seasons[0], seasons[-2:], seasons[-3]
     usable = df[df["p_mkt"].notna() & (df["season"] != warm)]
     train_v = usable[usable["season"] < val_season]
     val = usable[usable["season"] == val_season]

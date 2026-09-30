@@ -26,16 +26,18 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install requests==2.32.3 pandas==3.0.2 openpyxl==3.1.5
+      - run: pip install requests==2.32.3 pandas==3.0.2 openpyxl==3.1.5 numpy==2.4.4 scikit-learn==1.8.0
       - name: Download
         run: python download_history.py nba,nhl,nfl,mlb
+      - name: Retrain model 1 (US sports)
+        run: python us_model.py nba,nhl,nfl,mlb || echo "模型一重練失敗，不影響資料"
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/data
           if git diff --cached --quiet; then echo "沒有新資料"; exit 0; fi
-          git commit -m "歷史比賽資料更新"
+          git commit -m "歷史比賽資料更新＋模型一重練"
           for i in 1 2 3 4 5; do
             git pull --rebase && git push && exit 0
             sleep 15

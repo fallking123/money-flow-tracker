@@ -1,0 +1,138 @@
+{
+ "generated_utc": "2026-09-30T05:27Z",
+ "sport": "nfl",
+ "seasons": [
+  "2006",
+  "2026"
+ ],
+ "warmup": "2006",
+ "validation_season": "2023",
+ "test_seasons": [
+  "2024",
+  "2025",
+  "2026"
+ ],
+ "train_games": 4492,
+ "test_games": 617,
+ "all_games": 5465,
+ "validation": {
+  "市場重新校正": 0.62808,
+  "市場＋Elo": 0.62892,
+  "市場＋Elo＋休息": 0.62892,
+  "市場＋休息": 0.62808
+ },
+ "chosen": "市場重新校正",
+ "features": [
+  "lm"
+ ],
+ "weights": {
+  "lm": 0.883
+ },
+ "accuracy": {
+  "market": {
+   "logloss": 0.6029,
+   "brier": 0.208
+  },
+  "model": {
+   "logloss": 0.6024,
+   "brier": 0.2079
+  },
+  "team_only": {
+   "logloss": 0.6257,
+   "brier": 0.218
+  },
+  "uniform": {
+   "logloss": 0.6931
+  }
+ },
+ "hit_rate": {
+  "market": 68.2,
+  "model": 68.1
+ },
+ "calibration": [
+  {
+   "pred": 19.4,
+   "real": 21.9,
+   "n": 155
+  },
+  {
+   "pred": 30.3,
+   "real": 25.9,
+   "n": 147
+  },
+  {
+   "pred": 38.2,
+   "real": 31.8,
+   "n": 154
+  },
+  {
+   "pred": 45.4,
+   "real": 47.2,
+   "n": 161
+  },
+  {
+   "pred": 54.3,
+   "real": 53.0,
+   "n": 149
+  },
+  {
+   "pred": 61.4,
+   "real": 68.2,
+   "n": 157
+  },
+  {
+   "pred": 69.5,
+   "real": 72.4,
+   "n": 156
+  },
+  {
+   "pred": 80.6,
+   "real": 78.1,
+   "n": 155
+  }
+ ],
+ "betting": {
+  "close": {
+   "0.0": {
+    "n": 0
+   },
+   "0.02": {
+    "n": 0
+   },
+   "0.04": {
+    "n": 0
+   }
+  },
+  "tw": {
+   "0.0": {
+    "n": 0
+   },
+   "0.02": {
+    "n": 0
+   },
+   "0.04": {
+    "n": 0
+   }
+  }
+ },
+ "open_vs_close": null,
+ "home_win_rate": 55.8,
+ "unmapped_teams": [],
+ "by_season": {
+  "2024": {
+   "n": 285,
+   "market": 0.5892,
+   "model": 0.5879
+  },
+  "2025": {
+   "n": 284,
+   "market": 0.607,
+   "model": 0.6069
+  },
+  "2026": {
+   "n": 48,
+   "market": 0.6596,
+   "model": 0.6618
+  }
+ }
+}

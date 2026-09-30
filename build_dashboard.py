@@ -269,6 +269,18 @@ SPORT_FEATURES = {
 }
 
 
+def us_model_reports():
+    """美國四大「模型一・實力」的成績（us_model.py 產生）"""
+    out = {}
+    for sp in ("nba", "nhl", "nfl", "mlb"):
+        p = os.path.join(sport_dir(sp), "model", "report_ml.json")
+        if os.path.exists(p):
+            r = json.load(open(p, encoding="utf-8"))
+            out[sp] = {k: r.get(k) for k in ("seasons", "test_seasons", "train_games", "test_games", "chosen", "accuracy",
+                                             "hit_rate", "calibration", "betting", "open_vs_close", "generated_utc")}
+    return out
+
+
 def data_stats():
     """資料量統計：方法說明頁的進度用"""
     snaps, games, finals, first, per = 0, set(), 0, None, {}
@@ -295,6 +307,7 @@ def data_stats():
             "per": per, "features": [{"group": g, "items": it} for g, it in FEATURES],
             "sport_features": {k: v for k, v in SPORT_FEATURES.items() if k in active_sports() or k == "soccer"},
             "soccer_model": soccer_model_report,
+            "us_models": us_model_reports(),
             "n_features": sum(len(it) for _, it in FEATURES)}
 
 

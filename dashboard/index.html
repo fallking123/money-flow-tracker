@@ -1078,7 +1078,7 @@ table{border-collapse:collapse;width:100%}
       {s: "done", t: "收集資料", l: "進行中", p: `自動抓每場比賽的下注人數和金額、賠率、比分、天氣、先發投手。目前 ${st.snaps ?? 0} 次截圖、${st.games ?? 0} 場比賽。`},
       {s: "done", t: "整理資料", l: "進行中", p: "隊名對照、比分自動回填、讓分正負號校正、缺的盤自動補抓。"},
       {s: "doing", t: "整理成模型用的格式", l: "累積中", p: `每場比賽記下 ${st.n_features ?? "–"} 種每個運動都有的資料，再加上各運動自己特別要看的（投手、門將、背靠背、傷兵…），這些就是「特徵值」。清單在下面。`},
-      {s: "doing", t: "訓練模型", l: "足球第一層完成", p: `足球用 2014 年起的歷史（含次級聯賽）做好第一層（成績在下面）。美國四大運動每個至少要 ${goal} 場打完的比賽，現在 ${fin} 場。`, prog: fin / goal},
+      {s: "doing", t: "訓練模型", l: "模型一完成", p: `模型一（實力）：足球、NBA、NHL、NFL、MLB 都用歷史資料訓練好了（成績在下面）。模型二（資金）要等我們自己收的比賽，每個運動至少 ${goal} 場，現在 ${fin} 場。`, prog: fin / goal},
       {s: "wait", t: "找划算的注", l: "等模型", p: `模型估的勝率 × 台彩賠率 > 1 才建議下。還需要更多台彩賠率記錄（目前 ${twN} 筆）。`},
     ];
     let h = `<div class="card"><h3>我們走到哪一步了</h3><div class="steps">${steps.map((x, i) => `<div class="step ${x.s}"><div class="no">${x.s === "done" ? "✓" : i + 1}</div><div><h4>${x.t}<span class="st">${x.l}</span></h4><p>${x.p}</p>${x.prog != null ? `<div class="track"><i style="width:${Math.min(100, x.prog * 100)}%"></i></div>` : ""}</div></div>`).join("")}</div></div>`;
@@ -1104,6 +1104,23 @@ table{border-collapse:collapse;width:100%}
           <div><b>在台彩：幾乎沒有注可以下</b>台彩賠率大約只有歐洲的 9 成，扣掉之後兩季只剩 ${t0.n ?? "–"} 注划算。單靠這一層，在台彩獨贏很難賺。</div>
           <div><b>這一版改了什麼</b>歷史從 5 季加到 ${S.history_from ? "20" + S.history_from.slice(0, 2) + " 年起" : "更多季"}，加入英冠、西乙、義乙、德乙、法乙，升級隊一上來就有合理的強弱分數；多一個看淨勝球的分數（pi-rating）；多一個臨場版。</div>
           <div><b>下一步</b>第二層：等足球資金流向累積，看「錢比人多」能不能再多加一點準度。也要用你記的台彩足球賠率，校正「台彩約歐洲 9 成」這個估計。</div>
+        </div></div>`;
+    }
+    const um = st.us_models || {};
+    if (Object.keys(um).length) {
+      const NM = {nba: "NBA", nhl: "NHL", nfl: "NFL", mlb: "MLB"};
+      const g = (A, k) => (A[k] ? (A.uniform.logloss - A[k].logloss) / A.uniform.logloss * 100 : null);
+      const rowsU = Object.entries(um).map(([k, r]) => {
+        const A = r.accuracy, gm = g(A, "market"), gd = g(A, "model"), gt = g(A, "team_only");
+        return `<tr><td><b>${NM[k]}</b></td><td class="r n">${(r.train_games || 0).toLocaleString("en-US")}</td><td class="r n">${(r.test_games || 0).toLocaleString("en-US")}</td><td class="r n">${gt?.toFixed(2)}%</td><td class="r n">${gm?.toFixed(2)}%</td><td class="r n" style="color:var(--accent)">${gd?.toFixed(2)}%</td><td class="r n">${(r.hit_rate || {}).model ?? "–"}%</td></tr>`;
+      }).join("");
+      h += `<div class="card"><h3>美國四大・模型一（實力）<small>用 2006–2010 年起的歷史比賽訓練，最後兩季當測試</small></h3>
+        <div class="scroll"><table class="tb"><thead><tr><th>運動</th><th class="r">訓練場數</th><th class="r">測試場數</th><th class="r">只看球隊數據</th><th class="r">收盤賠率</th><th class="r">模型一</th><th class="r">猜中率</th></tr></thead><tbody>${rowsU}</tbody></table></div>
+        <p class="mut" style="font-size:13px;margin:8px 0 0">數字是「比亂猜準多少」，越大越準。</p>
+        <div class="gl" style="margin-top:10px">
+          <div><b>結論：收盤賠率已經把公開資料都算進去了</b>四個運動都一樣：加上 Elo 強弱、休息天數、背靠背、先發投手，最多只比收盤賠率準一點點，有時還差一點。只看球隊數據明顯比較差。</div>
+          <div><b>所以模型一 ≈ 市場的公平價</b>它最大的用處是：告訴你「這隊真正的勝率大約多少」，拿來跟台彩賠率比。台彩賠率更新慢、抽得多，偶爾會開出比市場好的價，那才是機會。</div>
+          <div><b>真正可能多出來的東西</b>要靠市場還沒完全反映的資訊：開盤到收盤之間的資金流向（模型二）、台彩跟國際盤的時間差。</div>
         </div></div>`;
     }
     h += `<div class="card"><h3>每個運動看哪個市場<small>錢最多的地方，盤口最準</small></h3><div class="gl">
