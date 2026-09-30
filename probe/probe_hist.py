@@ -11,7 +11,7 @@ for sp, ds in DATES.items():
     out["espn"][sp] = {}
     for d in ds:
         try:
-            j = requests.get(f"https://site.api.espn.com/apis/site/v2/sports/{PATH[sp]}/scoreboard", params={"dates": d}, headers=H, timeout=25).json()
+            j = requests.get(f"https://site.api.espn.com/apis/site/v2/sports/{PATH[sp]}/scoreboard", params={"dates": d, "limit": "300"}, timeout=25).json()
             evs = j.get("events") or []
             with_odds = 0; sample = None; eid = None
             for e in evs:
@@ -29,19 +29,19 @@ for sp, ds in DATES.items():
         if not eid:
             continue
         try:
-            j = requests.get(f"https://site.api.espn.com/apis/site/v2/sports/{PATH[sp]}/summary", params={"event": eid}, headers=H, timeout=25).json()
+            j = requests.get(f"https://site.api.espn.com/apis/site/v2/sports/{PATH[sp]}/summary", params={"event": eid}, timeout=25).json()
             out["espn_summary"][f"{sp}_{d}"] = {"pickcenter": (j.get("pickcenter") or [])[:2], "odds": (j.get("odds") or [])[:1],
                                                 "keys": list(j.keys())}
         except Exception as ex:
             out["espn_summary"][f"{sp}_{d}"] = str(ex)[:200]
 import re
-for sp in ["nba", "nhl", "mlb"]:
+for sp in ["nba", "nhl", "mlb", "nfl"]:
     try:
         r = requests.get(f"https://www.sportsbookreviewsonline.com/scoresoddsarchives/{sp}/{sp}oddsarchives.htm", headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124 Safari/537.36"}, timeout=40)
         links = re.findall(r'href="([^"]+\.xlsx?)"', r.text, re.I)
         out["other"][f"sbro_{sp}_links"] = links[:40]
         if links:
-            u = links[0] if links[0].startswith("http") else "https://www.sportsbookreviewsonline.com/scoresoddsarchives/" + sp + "/" + links[0]
+            u = links[0] if links[0].startswith("http") else "https://www.sportsbookreviewsonline.com" + links[0]
             r2 = requests.get(u, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124 Safari/537.36"}, timeout=40)
             out["other"][f"sbro_{sp}_first"] = {"url": u, "status": r2.status_code, "len": len(r2.content), "type": r2.headers.get("content-type")}
     except Exception as ex:
