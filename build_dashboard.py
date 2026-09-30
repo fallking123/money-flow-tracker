@@ -18,6 +18,7 @@ from sports_common import (_norm, active_sports, all_monthly_files, parse_time, 
                             recent_monthly_files, sport_dir)
 import record_tw_odds
 import soccer_dashboard
+import pinnacle_dashboard
 
 RECENT_DAYS = 14
 MAX_SNAPS = 40
@@ -357,6 +358,7 @@ def build(now):
                 g["rows"].append(r)
 
         extra = extra_index(sport, now)
+        pins = pinnacle_dashboard.load(sport, now, RECENT_DAYS)
         for sid, g in by_id.items():
             rows = sorted(g["rows"], key=lambda r: r["timestamp_utc"])
             last = rows[-1]
@@ -383,6 +385,7 @@ def build(now):
                 "status": status,
                 "open": open_of(first),
                 "extra": match_extra(extra, away, home, t),
+                "pin": pinnacle_dashboard.find(pins, home, away, t),
                 "snaps": [snap_of(r) for r in rows[-MAX_SNAPS:]],
                 "result": None if not res or res["status"] != "final" else {
                     "away": num(res["away_score"]), "home": num(res["home_score"]),

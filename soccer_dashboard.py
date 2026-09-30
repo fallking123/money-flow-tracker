@@ -16,6 +16,7 @@ import unicodedata
 from datetime import timedelta
 from zoneinfo import ZoneInfo
 
+import pinnacle_dashboard
 from sports_common import all_monthly_files, parse_time, read_rows, recent_monthly_files, sport_dir
 
 LONDON = ZoneInfo("Europe/London")
@@ -162,18 +163,24 @@ def predict(league, home, away, odds, version="pre"):
             "elo": [elo[th], elo[ta]], "mkt": [round(ph, 4), round(pd_, 4), round(pa, 4)], "teams": [th, ta]}
 
 
-def model_for(league, home, away, last, eu):
-    """挑模型版本和賠率來源（要跟訓練時用的賠率一致）：
-    - 開賽前 3 小時內：臨場版＋Action Network 即時共識賠率（最接近收盤）
+def model_for(league, home, away, last, eu, pin=None):
+    """挑模型版本和賠率來源（足球的主場在歐洲和亞洲，所以優先用歐洲／亞洲的盤）：
+    - 開賽前 3 小時內：臨場版＋Pinnacle 最新賠率（歐洲／亞洲大戶都在這裡下，最接近收盤）；沒有才用美國即時共識
     - 其他時候有歐洲賠率：賽前版＋歐洲各家平均（跟訓練資料同一種）
-    - 歐洲賠率還沒出：賽前版＋美國共識賠率（暫代）"""
+    - 歐洲賠率還沒出：賽前版＋Pinnacle；再沒有才用美國共識賠率（暫代）"""
     an = [num(last.get("ml_home_odds")), num(last.get("ml_draw_odds")), num(last.get("ml_away_odds"))]
+    pml = ((pin or {}).get("l") or {}).get("ml") or {}
+    pn = [pml.get("home"), pml.get("draw"), pml.get("away")] if pml else None
     hrs = num(last.get("hours_until_game"))
     tries = []
     if hrs is not None and 0 <= hrs <= CLOSE_HOURS:
+        if pn:
+            tries.append(("close", pn, "pin_live"))
         tries.append(("close", an, "live"))
     if eu and all(eu.get("avg") or [None]):
         tries.append(("pre", eu["avg"], "eu"))
+    if pn:
+        tries.append(("pre", pn, "pin"))
     tries.append(("pre", an, "us"))
     for version, odds, src in tries:
         r = predict(league, home, away, odds, version)
@@ -291,6 +298,7 @@ def build_soccer(now, recent_days=14, closed_snaps=8):
     d = sport_dir("soccer")
     results = {r["an_id"]: r for r in read_rows(os.path.join(d, "results.csv"))}
     by_day = eu_index()
+    pins = pinnacle_dashboard.load("soccer", now, recent_days)
     games, closed = [], []
     recent = {}
     for path in recent_monthly_files("soccer", "odds_history"):
@@ -300,9 +308,11 @@ def build_soccer(now, recent_days=14, closed_snaps=8):
     for aid, rows in recent.items():
         g = game_of(aid, rows, results.get(aid), now)
         g["eu"] = match_eu(by_day, g["league"], parse_time(rows[-1]["game_time_utc"]), g["home"], g["away"])
+        g["pin"] = pinnacle_dashboard.find(pins, g["home"], g["away"], parse_time(rows[-1]["game_time_utc"]),
+                                           score=match_score, league=g["league"])
         if g["status"] != "final":
             last = max(rows, key=lambda r: r["timestamp_utc"])
-            g["model"] = model_for(g["league"], g["home"], g["away"], last, g["eu"])
+            g["model"] = model_for(g["league"], g["home"], g["away"], last, g["eu"], g["pin"])
         games.append(g)
     allrows = {}
     for path in all_monthly_files("soccer", "odds_history"):

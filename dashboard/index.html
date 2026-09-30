@@ -130,6 +130,9 @@ h1{font-size:24px;font-weight:900;margin:0;text-wrap:balance}
 .mdl{border:1px dashed var(--line);border-radius:12px;padding:8px 12px;font-size:14px}
 .mdl b{color:var(--accent);margin-right:8px}
 .mdl small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.pin{border-radius:12px;padding:8px 12px;font-size:14px;background:var(--accent-soft)}
+.pin>b:first-child{display:block;font-size:12px;color:var(--accent);margin-bottom:1px}
+.pin .x{display:block;font-size:12.5px;margin-top:2px}
 .mbar{display:grid;grid-template-columns:9.5em 1fr 4.2em;gap:8px;align-items:center;font-size:13.5px;margin:5px 0}
 .mbar .tr{height:10px;border-radius:999px;background:var(--soft2);overflow:hidden}
 .mbar .tr i{display:block;height:100%;border-radius:999px}
@@ -489,6 +492,51 @@ table{border-collapse:collapse;width:100%}
       `<div class="mrow"><span>${esc(x.label)}</span><span class="n">${x.opts.map((o) => `${esc(o.v)} <b>${odd(o.us)}</b>${mv(o)}`).join("<br>")}</span></div>`).join("")}</div>
       <p class="mut" style="font-size:12px;margin:6px 0 0">這些玩法網站只給賠率，沒有下注人數／金額比例，所以沒有「錢比人多」訊號。跟台彩比：台彩賠率通常低很多。</p></div>`;
   }
+  // ── Pinnacle（職業／亞洲大錢）：g.pin = {o: 第一次記錄, l: 最新, n: 變動次數, first_ts, ts} ──
+  const keyName = (g, k) => (k === "away" ? g.away_zh || g.away_ab : k === "home" ? g.home_zh || g.home_ab : k === "draw" ? "和局" : k === "over" ? "大分" : "小分");
+  function pinSides(snap, mkt) {
+    const x = snap && snap[mkt]; if (!x) return [];
+    if (mkt === "ml") return (x.draw ? ["home", "draw", "away"] : ["away", "home"]).filter((k) => x[k]).map((key) => ({key, odds: x[key]}));
+    if (mkt === "sp") return ["away", "home"].filter((k) => x[k]).map((k) => ({key: k, ln: x[k][0], odds: x[k][1]}));
+    return [{key: "over", ln: x.line, odds: x.over}, {key: "under", ln: x.line, odds: x.under}];
+  }
+  const pinFair = (arr, key) => { if (!arr.length || arr.some((x) => !x.odds)) return null; const t = arr.reduce((a, x) => a + 1 / x.odds, 0), s = arr.find((x) => x.key === key); return s ? (1 / s.odds) / t : null; };
+  function pinMove(g, mkt) {
+    const p = g.pin; if (!p || !p.l || !p.l[mkt]) return null;
+    const o = pinSides(p.o, mkt), l = pinSides(p.l, mkt);
+    if (mkt === "sp") {
+      const a0 = o.find((x) => x.key === "home"), a1 = l.find((x) => x.key === "home");
+      if (a0 && a1 && a0.ln != null && a1.ln != null && a0.ln !== a1.ln) return {kind: "line", key: a1.ln < a0.ln ? "home" : "away", from: a0.ln, to: a1.ln};
+    }
+    if (mkt === "ou") {
+      const a0 = o[0], a1 = l[0];
+      if (a0 && a1 && a0.ln != null && a1.ln != null && a0.ln !== a1.ln) return {kind: "line", key: a1.ln > a0.ln ? "over" : "under", from: a0.ln, to: a1.ln};
+    }
+    let best = null;
+    for (const x of l) { const f1 = pinFair(l, x.key), f0 = pinFair(o, x.key); if (f1 == null || f0 == null) continue; if (!best || f1 - f0 > best.d) best = {kind: "prob", key: x.key, from: f0, to: f1, d: f1 - f0}; }
+    if (best && best.d >= 0.015) return best;
+    return {kind: "flat"};
+  }
+  function pinBlock(g, mkt, sig) {
+    const pm = pinMove(g, mkt); if (!pm) return "";
+    const p = g.pin, l = pinSides(p.l, mkt);
+    const now = mkt === "ml" ? l.map((x) => `${esc(keyName(g, x.key))} ${Math.round(pinFair(l, x.key) * 100)}%`).join("・")
+      : mkt === "sp" ? l.map((x) => `${esc(keyName(g, x.key))} ${line(x.ln)} ${odd(x.odds)}`).join("・")
+      : `${l[0].ln}：大 ${odd(l[0].odds)}・小 ${odd(l[1].odds)}`;
+    let txt;
+    if (pm.kind === "line") txt = mkt === "sp" ? `主隊讓分 ${line(pm.from)} → ${line(pm.to)}，大錢往 <b>${esc(keyName(g, pm.key))}</b>` : `總分 ${pm.from} → ${pm.to}，大錢往 <b>${keyName(g, pm.key)}</b>`;
+    else if (pm.kind === "prob") txt = `${esc(keyName(g, pm.key))} ${Math.round(pm.from * 100)}% → ${Math.round(pm.to * 100)}%，大錢往 <b>${esc(keyName(g, pm.key))}</b>`;
+    else txt = `從 ${when(p.first_ts)} 開始記錄到現在，盤口沒什麼動`;
+    let agree = "";
+    if (sig && pm.key) agree = pm.key === sig.key ? `<span class="x good">＋ 跟上面的大戶訊號同方向，更可信。</span>` : `<span class="x bad">！ 跟上面的大戶訊號反方向，要小心。</span>`;
+    return `<div class="pin"><b>Pinnacle（職業／亞洲大錢）</b>${txt}<span class="x mut">現在：${now}</span>${agree}</div>`;
+  }
+  function pinFairFor(g, mkt, sd) {
+    const l = g.pin && g.pin.l ? pinSides(g.pin.l, mkt) : []; if (!l.length) return null;
+    const x = l.find((y) => y.key === sd.key); if (!x) return null;
+    if (mkt !== "ml" && x.ln !== sd.ln) return null;   // 盤口不同就不能直接比
+    return pinFair(l, sd.key);
+  }
   const pickLabel = (sd, mkt) => (mkt === "ml" ? sd.nm : mkt === "sp" ? `${sd.nm} ${line(sd.ln)}` : `${sd.nm}（總分 ${sd.ln ?? "–"}）`);
 
   // ═════════ 圖表 ═════════
@@ -605,9 +653,11 @@ table{border-collapse:collapse;width:100%}
         const d = Math.max(...ss.map((x) => diffOf(x) ?? -99));
         h += `<div class="say">錢跟人差不多，<b>沒有明顯訊號</b>。<span class="sub">${ss.length > 2 ? "三個選項" : "兩邊"}「錢比人多」最多 ${Math.round(d)}%，還沒到你設的 ${thr}%。</span>${rev ? `<span class="x">盤口有逆向移動，錢可能在 ${esc(pickLabel(rev, mkt))}。</span>` : ""}</div>`;
       }
+      if (soc && sig) h = h.replace(/<\/div>$/, `<span class="x mut">足球在美國的下注量小，這個比例只當參考，以下面 Pinnacle 的動向為主。</span></div>`);
+      h += pinBlock(g, mkt, sig);
       if (soc && mkt === "ml" && g.model) {
         const P = g.model.p, Mk = g.model.mkt, f = (v) => Math.round(v * 100) + "%";
-        const SRC = {eu: ["賽前版", "歐洲各家平均賠率"], live: ["臨場版", "開賽前最新賠率"], us: ["賽前版", "美國莊家賠率（歐洲賠率還沒出，先代用）"]}[g.model.src] || ["", "莊家"];
+        const SRC = {eu: ["賽前版", "歐洲各家平均賠率"], pin: ["賽前版", "Pinnacle 賠率（歐洲平均還沒出）"], pin_live: ["臨場版", "Pinnacle 最新賠率"], live: ["臨場版", "開賽前最新賠率（美國）"], us: ["賽前版", "美國莊家賠率（歐洲、Pinnacle 都還沒有，先代用）"]}[g.model.src] || ["", "莊家"];
         h += `<div class="mdl"><b>模型估計${SRC[0] ? "・" + SRC[0] : ""}</b>主 ${f(P[0])}・和 ${f(P[1])}・客 ${f(P[2])}<small>${SRC[1]}：主 ${f(Mk[0])}・和 ${f(Mk[1])}・客 ${f(Mk[2])}（第一層模型，還沒加資金流向）</small></div>`;
       }
       // 拉鋸條：兩選一或三選一（足球獨贏有和局）
@@ -626,9 +676,9 @@ table{border-collapse:collapse;width:100%}
       const td = twDisc(g.sport, mkt);
       const side = sig || (() => { let i = 0; ss.forEach((x, j) => { if ((x.odds || 99) < (ss[i].odds || 99)) i = j; }); return {...ss[i], i}; })();
       if (td && side.odds) {
-        const useModel = soc && mkt === "ml" && g.model;
-        const est = side.odds * (1 + td.d / 100), be = 1 / est, fp = useModel ? g.model.p[["home", "draw", "away"].indexOf(side.key)] : fair(ss, side.i), ok = fp != null && fp > be;
-        const who = useModel ? "模型" : "美國莊家";
+        const useModel = soc && mkt === "ml" && g.model, pf = useModel ? null : pinFairFor(g, mkt, side);
+        const est = side.odds * (1 + td.d / 100), be = 1 / est, fp = useModel ? g.model.p[["home", "draw", "away"].indexOf(side.key)] : pf ?? fair(ss, side.i), ok = fp != null && fp > be;
+        const who = useModel ? "模型" : pf != null ? "Pinnacle" : "美國莊家";
         h += `<div class="tiles">
           <div class="tile">台彩賠率<br>大約<b>${odd(est)}</b></div>
           <div class="tile">要贏幾成<br>才不虧<b>${Math.round(be * 100)}%</b></div>
@@ -1056,6 +1106,13 @@ table{border-collapse:collapse;width:100%}
           <div><b>下一步</b>第二層：等足球資金流向累積，看「錢比人多」能不能再多加一點準度。也要用你記的台彩足球賠率，校正「台彩約歐洲 9 成」這個估計。</div>
         </div></div>`;
     }
+    h += `<div class="card"><h3>每個運動看哪個市場<small>錢最多的地方，盤口最準</small></h3><div class="gl">
+      <div><b>足球：看歐洲和亞洲</b>足球的主要市場在歐洲和亞洲，美國人下足球的量很小。所以模型用歐洲各家平均賠率；開賽前 3 小時內改用 Pinnacle 最新賠率（亞洲大戶和職業玩家都在這裡下）。美國的下注比例只當參考。</div>
+      <div><b>NBA：美國＋亞洲一起看</b>美國下注比例看美國的散戶和大戶；Pinnacle 盤口看亞洲和職業大錢。兩邊方向一樣最可信，方向相反要小心。</div>
+      <div><b>NFL、MLB、NHL：以美國為主</b>主要市場在美國，美國下注比例最有代表性；Pinnacle 盤口用來確認職業玩家是不是也站同一邊。</div>
+      <div><b>「估計會贏」用哪個</b>有 Pinnacle 就用 Pinnacle 去掉抽成後的勝率（最準的莊家）；沒有才用美國共識盤。足球獨贏用我們的模型。</div>
+      <div><b>為什麼看不到亞洲的下注比例</b>中國體彩擋海外連線，而且也不公布每邊比例；亞洲的莊家和地下盤都不公開金流。Pinnacle 盤口怎麼動，是目前看得到亞洲大錢方向最好的辦法。</div>
+    </div></div>`;
     h += `<div class="card"><h3>名詞白話說明</h3><div class="gl">
       <div><b>錢比人多</b>下注金額的 % 減掉下注人數的 %。押的人少、錢卻多，代表下大注的人（常是職業玩家）在這邊。</div>
       <div><b>訊號</b>「錢比人多」超過你設的 %（預設 15%）就算有訊號；再多 10% 以上算「強」。</div>
