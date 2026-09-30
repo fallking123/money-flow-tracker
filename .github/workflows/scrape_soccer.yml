@@ -33,6 +33,8 @@ jobs:
         run: python scrape_pinnacle.py soccer || echo "Pinnacle 抓取失敗，不影響主資料"
       - name: Track model picks (every game, settle with 台彩 odds)
         run: python track_models.py soccer || echo "模型實戰記錄失敗，不影響主資料"
+      - name: Value bet alerts (台彩 or US odds EV >= +2%)
+        run: python alerts.py soccer || echo "划算注提醒失敗，不影響主資料"
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
