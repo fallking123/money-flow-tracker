@@ -311,11 +311,23 @@ def download_nflverse():
 
 
 def run(sports):
+    import traceback
     for sport in sports:
         print(f"== {sport} ==")
+        try:
+            run_one(sport)
+        except Exception:
+            msg = traceback.format_exc()
+            print(msg)
+            with open(os.path.join(out_dir(sport), "_error.txt"), "w") as f:
+                f.write(msg)
+
+
+def run_one(sport):
+    if True:
         if sport == "nfl":
             download_nflverse()
-            continue
+            return
         if sport == "mlb":
             download_mlb_sbro()
         else:

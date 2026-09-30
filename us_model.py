@@ -30,7 +30,9 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 # 每個運動的 Elo 設定（K、主場分、換季拉回比例、比分差的尺度）
 ELO = {"nba": {"k": 20, "home": 70, "regress": 0.25, "mov": 1.0},
        "nhl": {"k": 8, "home": 35, "regress": 0.35, "mov": 1.0},
-       "nfl": {"k": 20, "home": 48, "regress": 0.33, "mov": 1.0}}
+       "nfl": {"k": 20, "home": 48, "regress": 0.33, "mov": 1.0},
+       "mlb": {"k": 4, "home": 24, "regress": 0.5, "mov": 1.0}}
+SP_N, SP_PRIOR = 10, 5   # 先發投手：看最近 10 場先發的前五局失分，往聯盟平均拉（相當於 5 場平均）
 REST_CAP = 4
 EDGES = [0.0, 0.02, 0.04]
 TW_DISCOUNT = 0.91   # 台彩賠率大約是美國的 9 成（用你記的台彩賠率估的；之後自動更新）
@@ -108,7 +110,22 @@ def load(sport):
 def build_features(df, sport):
     cfg = ELO[sport]
     elo, last_game, cur_season = {}, {}, None
+    sp_hist, lg_f5 = {}, []   # 投手 → 最近先發的前五局失分
+    has_sp = "away_pitcher" in df.columns and df["away_pitcher"].notna().any()
     rows = []
+
+    def f5(periods):
+        try:
+            return sum(float(x) for x in str(periods).split("|")[:5] if x not in ("", "x", "X", "nan"))
+        except ValueError:
+            return None
+
+    def sp_rating(name):
+        if not has_sp or not isinstance(name, str) or not name:
+            return np.nan
+        hs = sp_hist.get(name, [])[-SP_N:]
+        lg = np.mean(lg_f5[-3000:]) if lg_f5 else 2.5
+        return (sum(hs) + SP_PRIOR * lg) / (len(hs) + SP_PRIOR) - lg
     for r in df.itertuples(index=False):
         if r.season != cur_season:
             if cur_season is not None:
@@ -122,7 +139,15 @@ def build_features(df, sport):
         rh = (r.date - last_game[h]).days if h in last_game else REST_CAP
         rows.append({"elo_away": ea, "elo_home": eh, "elo_diff": eh + home_adv - ea,
                      "rest_away": min(ra, REST_CAP), "rest_home": min(rh, REST_CAP),
-                     "b2b_away": float(ra == 1), "b2b_home": float(rh == 1)})
+                     "b2b_away": float(ra == 1), "b2b_home": float(rh == 1),
+                     # 先發投手：前五局平均失分比聯盟多幾分（正＝比較爛）；主隊減客隊的差
+                     "sp_diff": (sp_rating(getattr(r, "away_pitcher", "")) - sp_rating(getattr(r, "home_pitcher", ""))) if has_sp else np.nan})
+        if has_sp:
+            ra5, rh5 = f5(r.periods_home), f5(r.periods_away)   # 客隊投手的失分＝主隊前五局得分
+            for nm, v in ((getattr(r, "away_pitcher", ""), ra5), (getattr(r, "home_pitcher", ""), rh5)):
+                if isinstance(nm, str) and nm and v is not None:
+                    sp_hist.setdefault(nm, []).append(v)
+                    lg_f5.append(v)
         # 賽後更新 Elo（比分差乘數：538 的作法，強隊大勝打折）
         diff = r.home_score - r.away_score
         exp_h = 1 / (1 + 10 ** (-(eh + home_adv - ea) / 400))
@@ -198,6 +223,7 @@ CANDIDATES = {
     "市場＋Elo＋休息": ["lm", "elo_diff", "rest_diff", "b2b_home", "b2b_away"],
     "市場＋休息": ["lm", "rest_diff", "b2b_home", "b2b_away"],
 }
+MLB_EXTRA = {"市場＋先發投手": ["lm", "sp_diff"], "市場＋Elo＋先發投手": ["lm", "elo_diff", "sp_diff"]}
 
 
 def run(sport):
@@ -210,11 +236,12 @@ def run(sport):
     val = usable[usable["season"] == val_season]
     # 1) 在驗證季挑特徵
     val_scores = {}
-    for name, cols in CANDIDATES.items():
+    cands = {**CANDIDATES, **(MLB_EXTRA if sport == "mlb" else {})}
+    for name, cols in cands.items():
         f, _, _ = fitter(train_v, cols)
         val_scores[name] = round(logloss(f(val), val["y"].values), 5)
     best = min(val_scores, key=val_scores.get)
-    cols = CANDIDATES[best]
+    cols = cands[best]
     # 2) 用驗證季以前＋驗證季重練，測試季只拿來打分
     train = usable[~usable["season"].isin(test_seasons)]
     test = usable[usable["season"].isin(test_seasons)]
