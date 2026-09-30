@@ -30,6 +30,15 @@ jobs:
           from playwright.sync_api import sync_playwright
           out = []
           UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15"
+          for name in ["Pre/On.json", "Pre/on.json", "Prematch/On.json", "PreMatch/On.json", "Pre/All.json", "Pre/List.json", "Live/Off.json", "Pre/Today.json"]:
+              u = "https://blob.sportslottery.com.tw/apidata/" + name
+              try:
+                  r = requests.get(u, headers={"User-Agent": UA}, timeout=25)
+                  out.append(f"BLOB {name} -> {r.status_code} {len(r.content)} bytes | {r.text[:200]!r}")
+              except Exception as e:
+                  out.append(f"BLOB {name} -> ERR {e}")
+          r = requests.get("https://www.playsport.cc/predict/games?allianceid=1", headers={"User-Agent": UA}, timeout=25)
+          open("docs/debug/playsport_mlb.html", "w").write(r.text)
           for u in ["https://www.sportslottery.com.tw/zh-tw/game/pre", "https://www.sportslottery.com.tw/",
                     "https://blob.sportslottery.com.tw/apidata/Pre/ListByLeague.json", "https://blob.sportslottery.com.tw/apidata/Live/On.json",
                     "https://www.playsport.cc/predict/games?allianceid=1", "https://www.playsport.cc/predict/games?allianceid=3"]:
