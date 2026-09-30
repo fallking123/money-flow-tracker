@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/home/runner/work/money-flow-tracker/money-flow-tracker/download_history.py", line 318, in run
+    run_one(sport)
+  File "/home/runner/work/money-flow-tracker/money-flow-tracker/download_history.py", line 332, in run_one
+    download_mlb_sbro()
+  File "/home/runner/work/money-flow-tracker/money-flow-tracker/download_history.py", line 282, in download_mlb_sbro
+    "spread_close_home": num(h[fin + 3]), "total_close": num(a[fin + 7]) or num(h[fin + 7]), "source": "sbro"})
+                                                             ~^^^^^^^^^
+IndexError: list index out of range
