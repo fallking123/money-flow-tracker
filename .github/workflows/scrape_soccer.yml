@@ -29,6 +29,8 @@ jobs:
         run: pip install requests==2.32.3
       - name: Run soccer scraper
         run: python scrape_soccer.py
+      - name: Pinnacle lines (Europe / Asia sharp money)
+        run: python scrape_pinnacle.py soccer || echo "Pinnacle 抓取失敗，不影響主資料"
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
