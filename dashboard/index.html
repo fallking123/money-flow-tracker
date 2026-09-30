@@ -1209,14 +1209,15 @@ table{border-collapse:collapse;width:100%}
   // ═════════ 台彩抽多少 ═════════
   // 需要台彩截圖的比賽：每個運動先湊到 TW_GOAL 場，App 估的台彩賠率（和期望值）才會準
   const TW_GOAL = 20;
+  const TW_SRC = ["mlb", "nba"];   // 玩運彩只有 MLB、NBA 附台彩賠率；其他運動先借用這兩個的折扣估
   const CAM = '<svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5h3.2l1.6-2.5h6.4l1.6 2.5H19v10H3z"/><circle cx="11" cy="12" r="3.2"/></svg>';
   function twNeed() {
     const now = Date.now(), by = (DATA.tw && DATA.tw.by_group) || [];
-    const sports = [...new Set(DATA.games.map((g) => g.sport))];
+    const sports = [...new Set(DATA.games.map((g) => g.sport))].filter((sp) => TW_SRC.includes(sp));
     const prog = sports.map((sp) => ({sport: sp, n: Math.max(0, ...by.filter((x) => x.sport === sp).map((x) => x.games || 0))}))
       .sort((a, b) => a.n - b.n);
     const have = Object.fromEntries(prog.map((x) => [x.sport, x.n]));
-    const recent = DATA.games.filter((g) => g.status === "final" && !g.tw && now - new Date(g.t) < 36 * 36e5);
+    const recent = DATA.games.filter((g) => TW_SRC.includes(g.sport) && g.status === "final" && !g.tw && now - new Date(g.t) < 36 * 36e5);
     const done = recent.filter((g) => (have[g.sport] || 0) < TW_GOAL).sort((a, b) => (have[a.sport] || 0) - (have[b.sport] || 0) || (a.t < b.t ? 1 : -1));
     const extra = recent.length - done.length;
     const soon = DATA.games.filter((g) => g.status === "upcoming" && new Date(g.t) - now < 24 * 36e5).map((g) => {
@@ -1232,7 +1233,7 @@ table{border-collapse:collapse;width:100%}
     const doneRows = done.slice(0, 15).map((g) => `<tr><td class="n">${fmtMD.format(new Date(g.t))} ${fmtTime.format(new Date(g.t))}</td><td><span class="pill lg">${esc(lgLabel(g))}</span> ${esc(matchName(g))}</td><td class="r n">${score(g)}</td></tr>`).join("");
     const soonRows = soon.slice(0, 10).map(({g, o}) => `<tr><td class="n">${fmtTime.format(new Date(g.t))}</td><td><span class="pill lg">${esc(lgLabel(g))}</span> ${esc(matchName(g))}<div class="mut" style="font-size:12px">${esc(MK[o.mkt] || "")}・${esc(o.lab)}</div></td><td class="r"><span class="n">≥ ${odd(needOdds(o))}</span><div class="mut" style="font-size:11.5px">估計 ${odd(o.tw)}</div></td></tr>`).join("");
     return `<div class="card"><h3>請幫我截這些比賽的台彩賠率<small>截好直接傳到跟 Claude 的對話</small></h3>
-      <p class="mut" style="margin:0 0 10px;font-size:13px">台彩每個運動抽的不一樣。每個運動先記到 ${TW_GOAL} 場，App 估的台彩賠率和期望值就會準很多。每場截 <b>不讓分、讓分、大小</b> 三種（賽前最後的賠率）。</p>
+      <p class="mut" style="margin:0 0 10px;font-size:13px">台彩每個運動抽的不一樣。每個運動先記到 ${TW_GOAL} 場，App 估的台彩賠率和期望值就會準很多。每場截 <b>不讓分、讓分、大小</b> 三種。玩運彩只有 MLB、NBA 附台彩賠率，所以只列這兩個；NHL、NFL、足球先借用它們的折扣來估。</p>
       <div class="stack" style="gap:6px;margin-bottom:12px">${bar}</div>
       <h4 style="margin:0 0 4px;font-size:13.5px">剛打完、還沒有台彩賠率的比賽${done.length ? `（${done.length} 場）` : ""}</h4>
       ${done.length ? `<div class="scroll"><table class="tb"><tbody>${doneRows}</tbody></table></div>${done.length > 15 ? `<p class="mut" style="font-size:12px;margin:4px 0 0">還有 ${done.length - 15} 場，截上面這些就夠了。</p>` : ""}` : `<p class="mut" style="margin:0;font-size:13px">最近 36 小時打完的比賽，都不用截了。</p>`}

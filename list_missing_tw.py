@@ -36,7 +36,7 @@ def missing_games(now):
     counts = recorded_counts()
     out = {}
     for sport, cfg in active_sports().items():
-        if counts.get(sport, 0) >= GOAL:
+        if sport not in ("mlb", "nba") or counts.get(sport, 0) >= GOAL:   # 玩運彩只有 MLB、NBA 附台彩賠率
             continue
         rows = read_rows(os.path.join(sport_dir(sport), "results.csv"))
         games = []
@@ -53,7 +53,7 @@ def missing_games(now):
         if games:
             out[sport] = [(t, r) for t, r in games]
     # 足球（比賽編號是 an+Action Network 編號）
-    if counts.get("soccer", 0) >= GOAL:
+    if True:   # 足球：玩運彩沒有附台彩賠率，不提醒
         return out
     games = []
     for r in read_rows(os.path.join(sport_dir("soccer"), "results.csv")):
