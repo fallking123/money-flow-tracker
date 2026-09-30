@@ -1,0 +1,176 @@
+{
+ "generated_utc": "2026-09-30T05:00Z",
+ "sport": "nhl",
+ "seasons": [
+  "2007-08",
+  "2025-26"
+ ],
+ "warmup": "2007-08",
+ "validation_season": "2023-24",
+ "test_seasons": [
+  "2024-25",
+  "2025-26"
+ ],
+ "train_games": 17496,
+ "test_games": 2799,
+ "all_games": 21822,
+ "validation": {
+  "市場重新校正": 0.65649,
+  "市場＋Elo": 0.65756,
+  "市場＋Elo＋休息": 0.65743,
+  "市場＋休息": 0.65648
+ },
+ "chosen": "市場＋休息",
+ "features": [
+  "lm",
+  "rest_diff",
+  "b2b_home",
+  "b2b_away"
+ ],
+ "weights": {
+  "lm": 0.378,
+  "rest_diff": -0.005,
+  "b2b_home": -0.054,
+  "b2b_away": 0.042
+ },
+ "accuracy": {
+  "market": {
+   "logloss": 0.6687,
+   "brier": 0.2382
+  },
+  "model": {
+   "logloss": 0.6686,
+   "brier": 0.2381
+  },
+  "team_only": {
+   "logloss": 0.6766,
+   "brier": 0.2419
+  },
+  "uniform": {
+   "logloss": 0.6931
+  }
+ },
+ "hit_rate": {
+  "market": 58.3,
+  "model": 58.2
+ },
+ "calibration": [
+  {
+   "pred": 32.5,
+   "real": 31.5,
+   "n": 699
+  },
+  {
+   "pred": 39.9,
+   "real": 42.1,
+   "n": 700
+  },
+  {
+   "pred": 44.1,
+   "real": 44.5,
+   "n": 697
+  },
+  {
+   "pred": 48.0,
+   "real": 49.1,
+   "n": 703
+  },
+  {
+   "pred": 52.0,
+   "real": 51.2,
+   "n": 697
+  },
+  {
+   "pred": 55.9,
+   "real": 55.2,
+   "n": 699
+  },
+  {
+   "pred": 60.1,
+   "real": 57.8,
+   "n": 702
+  },
+  {
+   "pred": 67.5,
+   "real": 68.5,
+   "n": 701
+  }
+ ],
+ "betting": {
+  "close": {
+   "0.0": {
+    "n": 438,
+    "roi": -0.3,
+    "se": 5.3,
+    "win": 208
+   },
+   "0.02": {
+    "n": 204,
+    "roi": 4.8,
+    "se": 8.3,
+    "win": 94
+   },
+   "0.04": {
+    "n": 91,
+    "roi": 9.7,
+    "se": 13.7,
+    "win": 39
+   }
+  },
+  "tw": {
+   "0.0": {
+    "n": 6,
+    "roi": 117.6,
+    "se": 69.3,
+    "win": 4
+   },
+   "0.02": {
+    "n": 0
+   },
+   "0.04": {
+    "n": 0
+   }
+  },
+  "open": {
+   "0.0": {
+    "n": 453,
+    "roi": 4.1,
+    "se": 5.2,
+    "win": 225
+   },
+   "0.02": {
+    "n": 221,
+    "roi": 9.7,
+    "se": 8.0,
+    "win": 106
+   },
+   "0.04": {
+    "n": 102,
+    "roi": 12.6,
+    "se": 13.0,
+    "win": 45
+   }
+  }
+ },
+ "open_vs_close": {
+  "open_logloss": 0.6719,
+  "close_logloss_same_games": 0.6687,
+  "n": 2799
+ },
+ "home_win_rate": 53.7,
+ "unmapped_teams": [
+  "Arizonas"
+ ],
+ "by_season": {
+  "2024-25": {
+   "n": 1405,
+   "market": 0.6568,
+   "model": 0.6559
+  },
+  "2025-26": {
+   "n": 1394,
+   "market": 0.6808,
+   "model": 0.6814
+  }
+ }
+}

@@ -36,15 +36,21 @@ SBRO_SEASONS = {
 }
 ESPN_PATH = {"nba": ("basketball", "nba"), "nhl": ("hockey", "nhl"), "nfl": ("football", "nfl"), "mlb": ("baseball", "mlb")}
 # ESPN 補的季：(季名, 起日, 迄日)
+MLB_SBRO = "https://www.sportsbookreviewsonline.com/wp-content/uploads/sportsbookreviewsonline_com_737/mlb-odds-{year}.xlsx"
+MLB_SBRO_YEARS = list(range(2010, 2022))
+NFLVERSE = "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv"
 ESPN_SEASONS = {
     "nba": [("2022-23", "2022-10-15", "2023-06-20"), ("2023-24", "2023-10-20", "2024-06-25"),
             ("2024-25", "2024-10-18", "2025-06-30"), ("2025-26", "2025-10-18", "2026-06-30")],
     "nhl": [("2022-23", "2022-10-05", "2023-06-20"), ("2023-24", "2023-10-08", "2024-06-30"),
             ("2024-25", "2024-10-02", "2025-06-30"), ("2025-26", "2025-10-05", "2026-06-30")],
+    "mlb": [("2021", "2021-04-01", "2021-11-05"), ("2022", "2022-04-07", "2022-11-06"), ("2023", "2023-03-30", "2023-11-02"),
+            ("2024", "2024-03-20", "2024-11-01"), ("2025", "2025-03-18", "2025-11-02"), ("2026", "2026-03-25", "2026-11-10")],
 }
 FIELDS = ["season", "date", "away", "home", "away_score", "home_score", "neutral", "periods_away", "periods_home",
           "ml_open_away", "ml_open_home", "ml_close_away", "ml_close_home", "spread_close_home", "total_close",
-          "source", "espn_id", "away_abbr", "home_abbr", "season_type"]
+          "source", "espn_id", "away_abbr", "home_abbr", "season_type", "away_pitcher", "home_pitcher", "away_qb", "home_qb",
+          "away_rest", "home_rest", "div_game", "roof", "temp", "wind"]
 
 
 def out_dir(sport):
@@ -226,6 +232,8 @@ def download_espn(sport, only_missing=True):
                               "periods_away": "|".join(str(int(x.get("value", 0))) for x in a.get("linescores") or []),
                               "periods_home": "|".join(str(int(x.get("value", 0))) for x in h.get("linescores") or []),
                               "neutral": bool(comp.get("neutralSite")), "source": "espn",
+                              "away_pitcher": next((p.get("athlete", {}).get("displayName") for p in a.get("probables") or []), ""),
+                              "home_pitcher": next((p.get("athlete", {}).get("displayName") for p in h.get("probables") or []), ""),
                               "season_type": "post" if st == 3 else "regular"})
         with ThreadPoolExecutor(8) as ex:
             odds = list(ex.map(lambda g: espn_odds(sport, g["espn_id"]), games))
@@ -238,10 +246,80 @@ def download_espn(sport, only_missing=True):
         print(f"  ESPN {sport} {season}: {len(games)} 場，{n_odds} 場有收盤獨贏")
 
 
+# ---------------- MLB（SBRO Excel 檔，2010–2021）----------------
+def download_mlb_sbro():
+    import io
+    import pandas as pd
+    d = out_dir("mlb")
+    for year in MLB_SBRO_YEARS:
+        path = os.path.join(d, f"sbro_{year}.csv")
+        if os.path.exists(path):
+            continue
+        try:
+            r = requests.get(MLB_SBRO.format(year=year), headers=SBRO_UA, timeout=60)
+            r.raise_for_status()
+            x = pd.read_excel(io.BytesIO(r.content), header=None, dtype=str).fillna("")
+        except Exception as e:
+            print(f"  SBRO mlb {year}: 失敗 {e}")
+            continue
+        rows = [list(map(str.strip, map(str, row))) for row in x.values.tolist()]
+        rows = [c for c in rows if c and c[0].replace(".0", "").isdigit()]
+        out, prev = [], None
+        for i in range(0, len(rows) - 1, 2):
+            a, h = rows[i], rows[i + 1]
+            if a[2] not in ("V", "N") or h[2] not in ("H", "N"):
+                continue
+            mmdd = a[0].replace(".0", "")
+            dt = date(year, int(mmdd[:-2]), int(mmdd[-2:]))
+            # 欄位：日期 輪次 VH 隊 投手 1..9局 最終 開盤 收盤 讓分 讓分賠率 開盤大小 賠率 收盤大小 賠率
+            fin = 14
+            out.append({"season": str(year), "date": dt.isoformat(), "away": a[3], "home": h[3], "neutral": a[2] == "N",
+                        "away_pitcher": a[4], "home_pitcher": h[4],
+                        "periods_away": "|".join(a[5:fin]), "periods_home": "|".join(h[5:fin]),
+                        "away_score": num(a[fin]), "home_score": num(h[fin]),
+                        "ml_open_away": num(a[fin + 1]), "ml_open_home": num(h[fin + 1]),
+                        "ml_close_away": num(a[fin + 2]), "ml_close_home": num(h[fin + 2]),
+                        "spread_close_home": num(h[fin + 3]), "total_close": num(a[fin + 7]) or num(h[fin + 7]), "source": "sbro"})
+        write(path, out)
+        print(f"  SBRO mlb {year}: {len(out)} 場")
+
+
+# ---------------- NFL（nflverse：1999 年起每場的收盤讓分、大小、獨贏）----------------
+def download_nflverse():
+    import io
+    import pandas as pd
+    d = out_dir("nfl")
+    r = requests.get(NFLVERSE, timeout=60)
+    r.raise_for_status()
+    g = pd.read_csv(io.StringIO(r.text))
+    g = g[g["season"] >= 2006]
+    for season, x in g.groupby("season"):
+        rows = []
+        for _, e in x.iterrows():
+            if pd.isna(e["home_score"]):
+                continue
+            rows.append({"season": f"{season}", "date": e["gameday"], "away": e["away_team"], "home": e["home_team"],
+                         "away_score": e["away_score"], "home_score": e["home_score"], "neutral": e["location"] == "Neutral",
+                         "ml_close_away": e.get("away_moneyline"), "ml_close_home": e.get("home_moneyline"),
+                         "spread_close_home": -e["spread_line"] if pd.notna(e["spread_line"]) else None, "total_close": e.get("total_line"),
+                         "source": "nflverse", "espn_id": e.get("espn"), "season_type": "regular" if e["game_type"] == "REG" else "post",
+                         "away_qb": e.get("away_qb_name"), "home_qb": e.get("home_qb_name"), "away_rest": e.get("away_rest"),
+                         "home_rest": e.get("home_rest"), "div_game": e.get("div_game"), "roof": e.get("roof"),
+                         "temp": e.get("temp"), "wind": e.get("wind")})
+        write(os.path.join(d, f"nflverse_{season}.csv"), rows)
+    print(f"  nflverse：{g['season'].min()}–{g['season'].max()} 季")
+
+
 def run(sports):
     for sport in sports:
         print(f"== {sport} ==")
-        download_sbro(sport)
+        if sport == "nfl":
+            download_nflverse()
+            continue
+        if sport == "mlb":
+            download_mlb_sbro()
+        else:
+            download_sbro(sport)
         download_espn(sport)
 
 

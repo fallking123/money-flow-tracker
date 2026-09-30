@@ -1,0 +1,147 @@
+{
+ "generated_utc": "2026-09-30T05:00Z",
+ "sport": "nba",
+ "seasons": [
+  "2007-08",
+  "2025-26"
+ ],
+ "warmup": "2007-08",
+ "validation_season": "2023-24",
+ "test_seasons": [
+  "2024-25",
+  "2025-26"
+ ],
+ "train_games": 20470,
+ "test_games": 2627,
+ "all_games": 24424,
+ "validation": {
+  "市場重新校正": 0.58394,
+  "市場＋Elo": 0.58394,
+  "市場＋Elo＋休息": 0.58404,
+  "市場＋休息": 0.58404
+ },
+ "chosen": "市場重新校正",
+ "features": [
+  "lm"
+ ],
+ "weights": {
+  "lm": 0.975
+ },
+ "accuracy": {
+  "market": {
+   "logloss": 0.5799,
+   "brier": 0.1987
+  },
+  "model": {
+   "logloss": 0.5798,
+   "brier": 0.1986
+  },
+  "team_only": {
+   "logloss": 0.608,
+   "brier": 0.2105
+  },
+  "uniform": {
+   "logloss": 0.6931
+  }
+ },
+ "hit_rate": {
+  "market": 69.1,
+  "model": 69.1
+ },
+ "calibration": [
+  {
+   "pred": 15.4,
+   "real": 13.3,
+   "n": 652
+  },
+  {
+   "pred": 27.2,
+   "real": 28.7,
+   "n": 658
+  },
+  {
+   "pred": 36.3,
+   "real": 36.3,
+   "n": 659
+  },
+  {
+   "pred": 45.1,
+   "real": 45.3,
+   "n": 658
+  },
+  {
+   "pred": 54.7,
+   "real": 54.2,
+   "n": 633
+  },
+  {
+   "pred": 63.4,
+   "real": 63.9,
+   "n": 667
+  },
+  {
+   "pred": 72.6,
+   "real": 71.2,
+   "n": 667
+  },
+  {
+   "pred": 84.6,
+   "real": 86.4,
+   "n": 660
+  }
+ ],
+ "betting": {
+  "close": {
+   "0.0": {
+    "n": 0
+   },
+   "0.02": {
+    "n": 0
+   },
+   "0.04": {
+    "n": 0
+   }
+  },
+  "tw": {
+   "0.0": {
+    "n": 0
+   },
+   "0.02": {
+    "n": 0
+   },
+   "0.04": {
+    "n": 0
+   }
+  },
+  "open": {
+   "0.0": {
+    "n": 0
+   },
+   "0.02": {
+    "n": 0
+   },
+   "0.04": {
+    "n": 0
+   }
+  }
+ },
+ "open_vs_close": {
+  "open_logloss": 0.5912,
+  "close_logloss_same_games": 0.5799,
+  "n": 2627
+ },
+ "home_win_rate": 58.0,
+ "unmapped_teams": [],
+ "by_season": {
+  "2024-25": {
+   "n": 1317,
+   "market": 0.5852,
+   "model": 0.5851
+  },
+  "2025-26": {
+   "n": 1310,
+   "market": 0.5746,
+   "model": 0.5745
+  }
+ }
+}
