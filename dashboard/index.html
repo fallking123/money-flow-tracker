@@ -45,6 +45,10 @@ button,input,select{font:inherit;color:inherit}
 .logo i{width:30px;height:30px;border-radius:9px;background:var(--accent);display:grid;place-items:center}
 .upd{margin-left:auto;font-size:12.5px;color:var(--muted);text-align:right;line-height:1.35}
 .upd b{color:var(--ink2);font-weight:700}
+.rf{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--accent);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;flex:none}
+.rf:disabled{color:var(--muted);cursor:default}
+.rfmsg{max-width:1080px;margin:0 auto;padding:0 16px 8px;font-size:12.5px;color:var(--muted);text-align:right}
+.rfmsg.bad{color:var(--bad)}
 .navtop{display:flex;gap:4px;background:var(--soft2);padding:4px;border-radius:999px}
 .navtop button{appearance:none;border:0;background:none;padding:6px 15px;border-radius:999px;cursor:pointer;color:var(--ink2);font-weight:500;font-size:14px;white-space:nowrap}
 .navtop button[aria-current="page"]{background:var(--card);color:var(--ink);font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,.08)}
@@ -255,7 +259,8 @@ table{border-collapse:collapse;width:100%}
   <div class="logo"><i><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2.5 13 L7 8 L10 10.5 L15.5 4.5" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></i>資金流向</div>
   <nav class="navtop" id="navtop" aria-label="頁面"></nav>
   <div class="upd" id="upd">讀取中…</div>
-</div></header>
+  <button type="button" class="rf" id="rf" hidden>立即更新</button>
+</div><div class="rfmsg" id="rfmsg" hidden></div></header>
 
 <main>
   <div class="chips" id="sports" role="group" aria-label="運動"></div>
@@ -1013,6 +1018,51 @@ table{border-collapse:collapse;width:100%}
   });
   window.addEventListener("hashchange", () => { const v = hashView(); if (v && v !== state.view) go(v); });
   let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (DATA && (state.view === "analysis" || state.view === "bets")) render(); }, 250); });
+
+  // ═════════ 立即更新：觸發「更新資金流向看板」排程（Claude Code Remote 連接器）═════════
+  const RF_SERVER = "Claude Code Remote", RF_TRIGGER = "trig_01XweDYPo1nKoEys2Dc9BcfP", RF_WAIT = 3 * 60 * 1000;
+  let MCP = null;
+  function rfMsg(text, bad) { const m = $("rfmsg"); m.hidden = !text; m.textContent = text || ""; m.classList.toggle("bad", !!bad); }
+  function rfState() {
+    const b = $("rf"); if (!b) return;
+    b.hidden = !MCP;
+    const left = store.get("rf_at", 0) + RF_WAIT - Date.now();
+    b.disabled = left > 0;
+    b.textContent = left > 0 ? "更新中…" : "立即更新";
+    if (left > 0) setTimeout(rfState, Math.min(left, 30000) + 200);
+    else if (store.get("rf_at", 0) && Date.now() - store.get("rf_at", 0) < RF_WAIT + 10 * 60 * 1000) rfMsg("應該更新好了，往下拉重新整理（或重新打開看板）就會看到最新資料。");
+  }
+  (async () => {
+    try { MCP = window.claude && window.claude.use ? await window.claude.use("mcp") : null; } catch (e) { MCP = null; }
+    rfState();
+  })();
+  document.addEventListener("click", async (e) => {
+    const b = e.target.closest && e.target.closest("#rf"); if (!b || !MCP || b.disabled) return;
+    b.disabled = true; b.textContent = "送出中…"; rfMsg("");
+    try {
+      await MCP.callTool(RF_SERVER, "fire_trigger", {trigger_id: RF_TRIGGER});
+      store.set("rf_at", Date.now());
+      rfMsg("已送出。大約 2 分鐘後重新整理，就會看到最新資料。");
+      rfState();
+    } catch (err) {
+      const c = (err && err.code) || "upstream_error";
+      const M = {
+        not_in_manifest: "你沒有允許這個看板使用更新功能。重新打開看板，跳出詢問時選允許。",
+        consent_required: "你沒有允許這個看板使用更新功能。再按一次，跳出詢問時選允許。",
+        server_not_connected: "找不到 Claude Code Remote 連接器。請在 claude.ai 設定 → 連接器裡加上它。",
+        needs_reauth: "Claude Code Remote 連接器要重新登入。請到 claude.ai 設定 → 連接器重新連線。",
+        selection_required: "有兩個同名的連接器，請在跳出的視窗選一個，再按一次。",
+        blocked_by_policy: "你的帳號設定不允許從網頁觸發更新，請直接跟 Claude 說「更新看板」。",
+        approval_required: "這個動作需要額外核准，請直接跟 Claude 說「更新看板」。",
+        tool_error: "排程回報失敗：" + ((err && err.message) || "") + "。可以直接跟 Claude 說「更新看板」。",
+        server_unavailable: "連線逾時，不確定有沒有送出。等 3 分鐘重新整理看看，沒更新再按一次。",
+        upstream_error: "不確定有沒有送出。等 3 分鐘重新整理看看，沒更新再按一次。",
+      };
+      rfMsg(M[c] || M.upstream_error, true);
+      if (c === "server_unavailable" || c === "upstream_error") store.set("rf_at", Date.now());
+      rfState();
+    }
+  });
 
   renderNav();
   fetch("data.json", {cache: "no-store"}).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
