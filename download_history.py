@@ -262,24 +262,31 @@ def download_mlb_sbro():
         except Exception as e:
             print(f"  SBRO mlb {year}: 失敗 {e}")
             continue
-        rows = [list(map(str.strip, map(str, row))) for row in x.values.tolist()]
-        rows = [c for c in rows if c and c[0].replace(".0", "").isdigit()]
+        allrows = [list(map(str.strip, map(str, row))) for row in x.values.tolist()]
+        head = next((r for r in allrows if r and r[0].lower() == "date"), None)
+        hl = [h.lower().replace(" ", "") for h in head] if head else []
+        col = lambda *names: next((hl.index(n) for n in names if n in hl), None)
+        i_fin, i_open, i_close = col("final"), col("open"), col("close")
+        i_rl, i_ou = col("runline"), col("closeou", "close ou", "ou")
+        with open(os.path.join(d, "_mlb_header.txt"), "a") as f:
+            f.write(f"{year}: {head}\n")
+        rows = [c for c in allrows if c and c[0].replace(".0", "").isdigit()]
         out, prev = [], None
+        g = lambda row, i: row[i] if i is not None and i < len(row) else ""
         for i in range(0, len(rows) - 1, 2):
             a, h = rows[i], rows[i + 1]
             if a[2] not in ("V", "N") or h[2] not in ("H", "N"):
                 continue
             mmdd = a[0].replace(".0", "")
             dt = date(year, int(mmdd[:-2]), int(mmdd[-2:]))
-            # 欄位：日期 輪次 VH 隊 投手 1..9局 最終 開盤 收盤 讓分 讓分賠率 開盤大小 賠率 收盤大小 賠率
-            fin = 14
+            fin = i_fin if i_fin is not None else 14
             out.append({"season": str(year), "date": dt.isoformat(), "away": a[3], "home": h[3], "neutral": a[2] == "N",
                         "away_pitcher": a[4], "home_pitcher": h[4],
                         "periods_away": "|".join(a[5:fin]), "periods_home": "|".join(h[5:fin]),
-                        "away_score": num(a[fin]), "home_score": num(h[fin]),
-                        "ml_open_away": num(a[fin + 1]), "ml_open_home": num(h[fin + 1]),
-                        "ml_close_away": num(a[fin + 2]), "ml_close_home": num(h[fin + 2]),
-                        "spread_close_home": num(h[fin + 3]), "total_close": num(a[fin + 7]) or num(h[fin + 7]), "source": "sbro"})
+                        "away_score": num(g(a, fin)), "home_score": num(g(h, fin)),
+                        "ml_open_away": num(g(a, i_open)), "ml_open_home": num(g(h, i_open)),
+                        "ml_close_away": num(g(a, i_close)), "ml_close_home": num(g(h, i_close)),
+                        "spread_close_home": num(g(h, i_rl)), "total_close": num(g(a, i_ou)) or num(g(h, i_ou)), "source": "sbro"})
         write(path, out)
         print(f"  SBRO mlb {year}: {len(out)} 場")
 
@@ -324,15 +331,14 @@ def run(sports):
 
 
 def run_one(sport):
-    if True:
-        if sport == "nfl":
-            download_nflverse()
-            return
-        if sport == "mlb":
-            download_mlb_sbro()
-        else:
-            download_sbro(sport)
-        download_espn(sport)
+    if sport == "nfl":
+        download_nflverse()
+        return
+    if sport == "mlb":
+        download_mlb_sbro()
+    else:
+        download_sbro(sport)
+    download_espn(sport)
 
 
 if __name__ == "__main__":
