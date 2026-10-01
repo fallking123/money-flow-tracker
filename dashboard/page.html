@@ -32,6 +32,7 @@
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{background:var(--bg)}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{margin:0;color:var(--ink);font-family:var(--tc);font-size:15px;line-height:1.55}
 button,input,select{font:inherit;color:inherit}
 .n{font-family:var(--num);font-weight:800;font-variant-numeric:tabular-nums}
@@ -1042,83 +1043,82 @@ table{border-collapse:collapse;width:100%}
     $("analysis").innerHTML = h;
     if (n) $("anchart").innerHTML = plChart(series, chartW("anchart"), (v) => sgn(v, v % 1 ? 1 : 0));
   }
-  // ═════════ 資金流向區間統計：下注金額 %、下注人數 % 每 3% 一格，看押這一邊的長期成績 ═════════
-  const BIN = {f: store.get("bin_f", "both"), m: store.get("bin_m", "ml"), step: 3};
-  function binStats() {
-    const key = BIN.f === "money" ? "money" : "bet", out = new Map();
-    for (const g of allFinal()) {
-      if (!inSport(g)) continue;
-      const s = closing(g); if (!s) continue;
-      for (const sd of sides(g, s, BIN.m)) {
-        const v = sd[key]; if (v == null) continue;
-        const r = settle(g, sd, BIN.m); if (!r) continue;
-        const lo = Math.min(99, Math.floor(v / BIN.step) * BIN.step);
-        if (!out.has(lo)) out.set(lo, {lo, n: 0, w: 0, l: 0, pl: 0, odds: 0, fair: 0, nf: 0});
-        const b = out.get(lo); b.n++; b.pl += r.pl; b.odds += sd.odds;
-        if (r.o > 0) b.w++; else if (r.o < 0) b.l++;
-        const ss = sides(g, s, BIN.m), f = fair(ss, ss.findIndex((x) => x.key === sd.key)); if (f != null) { b.fair += f; b.nf++; }
-      }
-    }
-    return [...out.values()].sort((a, b) => b.lo - a.lo);
+  // ═════════ 資金流向區間統計：下注人數 %、下注金額 % 分格（每幾 % 一格自己調），看押這一邊的長期勝率 ═════════
+  // 每個運動／聯賽分開算（也有「全部」），獨贏、讓分、大小分各一張
+  const BIN = {f: store.get("bin_f", "both"), lg: store.get("bin_lg", "all"), w: store.get("bin_w", 3), min: store.get("bin_min", 10)};
+  const lgKey = (g) => (g.sport === "soccer" ? g.league || "soccer" : g.sport);
+  function binLeagues() {
+    const m = new Map();
+    for (const g of allFinal()) { const k = lgKey(g); if (!m.has(k)) m.set(k, {k, lab: lgLabel(g), n: 0}); m.get(k).n++; }
+    return [...m.values()].sort((a, b) => b.n - a.n);
   }
-  // 兩個一起：下注人數 % × 下注金額 % 每 3% 一格，找勝率（和投報率）最高的組合
-  function binStats2() {
-    const out = new Map();
+  // 一個玩法的所有「邊」：{bet, money, o（贏 1／輸 −1／和 0）, pl, fair}
+  function binItems(mkt) {
+    const out = [];
     for (const g of allFinal()) {
-      if (!inSport(g)) continue;
+      if (BIN.lg !== "all" && lgKey(g) !== BIN.lg) continue;
       const s = closing(g); if (!s) continue;
-      const ss = sides(g, s, BIN.m);
+      const ss = sides(g, s, mkt);
       ss.forEach((sd, i) => {
-        if (sd.bet == null || sd.money == null) return;
-        const r = settle(g, sd, BIN.m); if (!r) return;
-        const bl = Math.min(99, Math.floor(sd.bet / BIN.step) * BIN.step), ml = Math.min(99, Math.floor(sd.money / BIN.step) * BIN.step), k = bl + "|" + ml;
-        if (!out.has(k)) out.set(k, {bl, ml, n: 0, w: 0, l: 0, pl: 0, fair: 0, nf: 0});
-        const b = out.get(k); b.n++; b.pl += r.pl; if (r.o > 0) b.w++; else if (r.o < 0) b.l++;
-        const f = fair(ss, i); if (f != null) { b.fair += f; b.nf++; }
+        if (sd.bet == null && sd.money == null) return;
+        const r = settle(g, sd, mkt); if (!r) return;
+        out.push({bet: sd.bet, money: sd.money, o: r.o, pl: r.pl, fair: fair(ss, i)});
       });
     }
-    return [...out.values()].map((b) => ({...b, wr: b.w + b.l ? b.w / (b.w + b.l) : null, exp: b.nf ? b.fair / b.nf : null, roi: b.n ? b.pl / b.n * 100 : null}));
+    return out;
   }
-  function binBoth() {
-    const bs = binStats2(), tot = bs.reduce((a, b) => a + b.n, 0), MIN = 10;
-    if (!tot) return `<p class="mut" style="margin:0">還沒有已打完、有下注比例的比賽。</p>`;
-    const rng = (b) => `${b}–${Math.min(100, b + BIN.step)}%`;
-    const ok = bs.filter((b) => b.n >= MIN && b.wr != null), list = (ok.length ? ok : bs.filter((b) => b.wr != null));
-    const top = [...list].sort((a, b) => b.wr - a.wr || b.n - a.n).slice(0, 10);
-    const row = (b) => `<tr><td class="n">${rng(b.bl)}</td><td class="n">${rng(b.ml)}</td><td class="r n">${b.n}${b.n < MIN ? '<span class="few">太少</span>' : ""}</td><td class="r n">${Math.round(b.wr * 100)}%</td><td class="r n hide-s">${b.exp == null ? "–" : Math.round(b.exp * 100) + "%"}</td><td class="r n ${gb(b.roi)}">${sgn(b.roi, 1)}%</td></tr>`;
-    // 熱度圖：橫軸金額 %、直軸人數 %，格子顏色＝勝率，數字＝次數
-    const bets = [...new Set(bs.map((b) => b.bl))].sort((a, b) => b - a), mons = [...new Set(bs.map((b) => b.ml))].sort((a, b) => a - b);
-    const get = (bl, ml) => bs.find((b) => b.bl === bl && b.ml === ml);
-    const cell = (b) => { if (!b || b.wr == null) return `<td class="mut">·</td>`; const c = b.wr >= 0.5 ? "good" : "bad", a = Math.min(1, Math.abs(b.wr - 0.5) * 2 + 0.15); return `<td><span class="cell" title="${b.n} 次" style="background:color-mix(in srgb, var(--${c}-soft) ${Math.round(a * 100)}%, transparent);color:var(--${c})">${Math.round(b.wr * 100)}%<small>${b.n} 次</small></span></td>`; };
-    return `<p class="mut" style="font-size:13px;margin:0 0 8px">每場的每一邊都看「下注人數 %」和「下注金額 %」落在哪一格，統計那一邊最後贏的比例。${ok.length ? `下面只列至少 ${MIN} 次的組合。` : `每個組合都還不到 ${MIN} 次，先全部列出來，結果多半是運氣。`}</p>
-      <h4 style="margin:0 0 4px;font-size:13.5px">勝率最高的組合</h4>
-      <div class="scroll"><table class="tb"><thead><tr><th>下注人數</th><th>下注金額</th><th class="r">幾次</th><th class="r">實際贏</th><th class="r hide-s">莊家估</th><th class="r">投報率</th></tr></thead><tbody>${top.map(row).join("")}</tbody></table></div>
-      <p class="mut" style="font-size:12px;margin:6px 0 12px">注意：勝率高不一定賺錢。熱門本來就常贏、但賠率低；要「實際贏」比「莊家估」高、投報率是正的，才是真的有優勢。</p>
-      <details class="more-sec"><summary>全部格子（熱度圖：直的是人數 %、橫的是金額 %）</summary><div><div class="scroll"><table class="tb mx"><thead><tr><th>人數＼金額</th>${mons.map((m) => `<th>${m}%</th>`).join("")}</tr></thead><tbody>${bets.map((bl) => `<tr><td class="n">${bl}%</td>${mons.map((ml) => cell(get(bl, ml))).join("")}</tr>`).join("")}</tbody></table></div>
-      <p class="mut" style="font-size:12px;margin:6px 0 0">綠色＝勝率超過 50%，橘色＝不到 50%，顏色越深差越多。共 ${tot} 次。</p></div></details>`;
-  }
-  function binCard() {
-    if (BIN.f === "both") {
-      const seg = (k, opts) => `<div class="seg" role="group">${opts.map(([v, n]) => `<button type="button" data-bin="${k}" data-binv="${v}" aria-pressed="${BIN[k] === v}">${n}</button>`).join("")}</div>`;
-      return `<div class="card"><h3>資金流向區間統計<small>每 ${BIN.step}% 一格・開賽前最後一次截圖・已打完的比賽</small></h3>
-        <div class="ctl" style="margin-bottom:10px">${seg("f", [["both", "人數＋金額"], ["money", "只看金額 %"], ["bet", "只看人數 %"]])}${seg("m", [["ml", "獨贏"], ["sp", "讓分"], ["ou", "大小分"]])}</div>${binBoth()}</div>`;
+  const binLo = (v) => Math.floor(Math.min(v, 99.999) / BIN.w) * BIN.w;
+  const binRng = (lo) => `${lo}–${Math.min(100, lo + BIN.w)}%`;
+  function binGroup(items, keyFn) {
+    const m = new Map();
+    for (const it of items) {
+      const k = keyFn(it); if (k == null) continue;
+      if (!m.has(k)) m.set(k, {k, n: 0, w: 0, l: 0, pl: 0, fs: 0, nf: 0});
+      const c = m.get(k); c.n++; c.pl += it.pl; if (it.o > 0) c.w++; else if (it.o < 0) c.l++;
+      if (it.fair != null) { c.fs += it.fair; c.nf++; }
     }
-    const seg = (k, opts) => `<div class="seg" role="group">${opts.map(([v, n]) => `<button type="button" data-bin="${k}" data-binv="${v}" aria-pressed="${BIN[k] === v}">${n}</button>`).join("")}</div>`;
-    const bs = binStats(), tot = bs.reduce((a, b) => a + b.n, 0);
-    const name = BIN.f === "money" ? "下注金額" : "下注人數";
-    const rowsH = bs.map((b) => {
-      const wr = b.w + b.l ? b.w / (b.w + b.l) : null, roi = b.n ? b.pl / b.n * 100 : null, exp = b.nf ? b.fair / b.nf : null;
-      const diff = wr != null && exp != null ? (wr - exp) * 100 : null;
-      return `<tr><td class="n">${b.lo}–${Math.min(100, b.lo + BIN.step)}%</td><td class="r n">${b.n}${b.n < 30 ? '<span class="few">太少</span>' : ""}</td>
-        <td class="r n">${wr == null ? "–" : Math.round(wr * 100) + "%"}</td><td class="r n hide-s">${exp == null ? "–" : Math.round(exp * 100) + "%"}</td>
-        <td class="r n ${gb(diff)}">${diff == null ? "–" : sgn(diff, 1)}</td><td class="r n hide-s">${odd(b.odds / b.n)}</td><td class="r n ${gb(roi)}">${roi == null ? "–" : sgn(roi, 1) + "%"}</td></tr>`;
-    }).join("");
-    return `<div class="card"><h3>資金流向區間統計<small>每 ${BIN.step}% 一格・開賽前最後一次截圖・已打完的比賽</small></h3>
-      <div class="ctl" style="margin-bottom:10px">${seg("f", [["both", "人數＋金額"], ["money", "只看金額 %"], ["bet", "只看人數 %"]])}${seg("m", [["ml", "獨贏"], ["sp", "讓分"], ["ou", "大小分"]])}</div>
-      <p class="mut" style="font-size:13px;margin:0 0 8px">每一場的每一邊都算一次：這一邊拿到 ${name}的幾 %，最後有沒有贏。「實際贏」比「莊家估」高、投報率是正的格子，就是押這邊長期有賺的區間。投報率用美國收盤賠率、每注 1 單位。</p>
-      ${tot ? `<div class="scroll"><table class="tb"><thead><tr><th>${name}</th><th class="r">幾次</th><th class="r">實際贏</th><th class="r hide-s">莊家估</th><th class="r">差</th><th class="r hide-s">平均賠率</th><th class="r">投報率</th></tr></thead><tbody>${rowsH}</tbody></table></div>
-      <p class="mut" style="font-size:12px;margin:6px 0 0">共 ${tot} 次（${state.sport === "all" ? "全部運動" : spLabel(state.sport)}）。一格少於 30 次多半是運氣，資料越多越準；上面的運動標籤可以切換。</p>` : `<p class="mut" style="margin:0">還沒有已打完、有${name}比例的比賽。</p>`}</div>`;
+    return [...m.values()].map((c) => ({...c, wr: c.w + c.l ? c.w / (c.w + c.l) : null, exp: c.nf ? c.fs / c.nf : null, roi: c.n ? c.pl / c.n * 100 : null}));
   }
+  const binCells = (c) => `<td class="r n">${c.n}${c.n < BIN.min ? '<span class="few">太少</span>' : ""}</td><td class="r n">${c.wr == null ? "–" : Math.round(c.wr * 100) + "%"}</td><td class="r n hide-s">${c.exp == null ? "–" : Math.round(c.exp * 100) + "%"}</td><td class="r n ${gb(c.roi)}">${c.roi == null ? "–" : sgn(c.roi, 1) + "%"}</td>`;
+  const binHead = (cols) => `<thead><tr>${cols.map((x) => `<th>${x}</th>`).join("")}<th class="r">幾次</th><th class="r">實際贏</th><th class="r hide-s">莊家估</th><th class="r">投報率</th></tr></thead>`;
+  function binSection(mkt) {
+    const items = binItems(mkt), title = `<h4 style="margin:14px 0 6px;font-size:15px">${MK[mkt]}<span class="mut" style="font-weight:400;font-size:12.5px">・${items.length} 次</span></h4>`;
+    if (!items.length) return title + `<p class="mut" style="margin:0;font-size:13px">還沒有資料。</p>`;
+    if (BIN.f !== "both") {
+      const f = BIN.f, cs = binGroup(items, (it) => (it[f] == null ? null : binLo(it[f]))).sort((a, b) => b.k - a.k);
+      return title + `<div class="scroll"><table class="tb">${binHead([f === "money" ? "下注金額" : "下注人數"])}<tbody>${cs.map((c) => `<tr><td class="n">${binRng(c.k)}</td>${binCells(c)}</tr>`).join("")}</tbody></table></div>`;
+    }
+    const cs = binGroup(items, (it) => (it.bet == null || it.money == null ? null : binLo(it.bet) + "|" + binLo(it.money)))
+      .map((c) => { const [b, m] = c.k.split("|").map(Number); return {...c, b, m}; });
+    const ok = cs.filter((c) => c.n >= BIN.min && c.wr != null).sort((a, b) => b.wr - a.wr || b.n - a.n).slice(0, 8);
+    const maxN = Math.max(0, ...cs.map((c) => c.n));
+    const top = ok.length ? `<div class="scroll"><table class="tb">${binHead(["下注人數", "下注金額"])}<tbody>${ok.map((c) => `<tr><td class="n">${binRng(c.b)}</td><td class="n">${binRng(c.m)}</td>${binCells(c)}</tr>`).join("")}</tbody></table></div>`
+      : `<p class="mut" style="margin:0;font-size:13px">還沒有組合累積到 ${BIN.min} 次（目前最多 ${maxN} 次）。把「每幾 % 一格」調大，或「至少幾次」調小，就會列出來。</p>`;
+    const bets = [...new Set(cs.map((c) => c.b))].sort((a, b) => b - a), mons = [...new Set(cs.map((c) => c.m))].sort((a, b) => a - b);
+    const cell = (c) => {
+      if (!c || c.wr == null) return `<td class="mut">·</td>`;
+      const col = c.wr >= 0.5 ? "good" : "bad", a = Math.round(Math.min(1, Math.abs(c.wr - 0.5) * 2 + 0.15) * 100);
+      return `<td><span class="cell" style="background:color-mix(in srgb, var(--${col}-soft) ${a}%, transparent);color:var(--${col})">${Math.round(c.wr * 100)}%<small>${c.n} 次</small></span></td>`;
+    };
+    const heat = `<details class="more-sec" style="margin-top:8px"><summary>全部格子（直＝人數 %，橫＝金額 %）</summary><div><div class="scroll"><table class="tb mx"><thead><tr><th>人數＼金額</th>${mons.map((m) => `<th>${m}%</th>`).join("")}</tr></thead><tbody>${bets.map((b) => `<tr><td class="n">${b}%</td>${mons.map((m) => cell(cs.find((c) => c.b === b && c.m === m))).join("")}</tr>`).join("")}</tbody></table></div>
+      <p class="mut" style="font-size:12px;margin:6px 0 0">綠色＝勝率超過 50%，橘色＝不到 50%，顏色越深差越多。</p></div></details>`;
+    return title + `<div class="mut" style="font-size:12.5px;margin:-2px 0 4px">勝率最高的組合（至少 ${BIN.min} 次）</div>` + top + heat;
+  }
+  const binBody = () => ["ml", "sp", "ou"].map(binSection).join("");
+  function binCard() {
+    const seg = (k, opts) => `<div class="seg" role="group">${opts.map(([v, n]) => `<button type="button" data-bin="${k}" data-binv="${v}" aria-pressed="${BIN[k] === v}">${n}</button>`).join("")}</div>`;
+    const lgs = binLeagues(), all = lgs.reduce((a, x) => a + x.n, 0);
+    if (BIN.lg !== "all" && !lgs.some((x) => x.k === BIN.lg)) BIN.lg = "all";
+    const chip = (k, lab, n) => `<button type="button" class="chip" data-bin="lg" data-binv="${esc(k)}" aria-pressed="${BIN.lg === k}">${esc(lab)}<span class="c">${n}</span></button>`;
+    return `<div class="card" id="bincard"><h3>資金流向區間統計<small>開賽前最後一次截圖・已打完的比賽・每一場的每一邊都算一次</small></h3>
+      <div class="ctl" style="margin-bottom:8px">${seg("f", [["both", "人數＋金額"], ["money", "只看金額 %"], ["bet", "只看人數 %"]])}
+        <div class="thr"><label>每幾 %<br>一格</label><input type="range" id="binw" min="1" max="20" step="1" value="${BIN.w}" aria-label="每幾 % 一格"><output id="binwv">${BIN.w}%</output></div>
+        <div class="thr"><label>至少<br>幾次</label><input type="range" id="binmin" min="1" max="50" step="1" value="${BIN.min}" aria-label="至少幾次才列出"><output id="binminv">${BIN.min}</output></div></div>
+      <div class="chips" style="flex-wrap:wrap">${chip("all", "全部", all)}${lgs.map((x) => chip(x.k, x.lab, x.n)).join("")}</div>
+      <p class="mut" style="font-size:12.5px;margin:0">數字是場數。這張表用自己的聯賽標籤，不受最上面的運動標籤影響。勝率高不一定賺錢：熱門本來就常贏但賠率低，要「實際贏」比「莊家估」高、投報率是正的，才是真的有優勢（投報率用美國收盤賠率、每注 1 單位）。</p>
+      <div id="binbody">${binBody()}</div></div>`;
+  }
+  const binRefresh = () => { const el = $("bincard"); if (el) el.outerHTML = binCard(); };
   function matrix(rows) {
     if (!rows.length) return `<p class="mut" style="margin:0">還沒有資料</p>`;
     const sports = [...new Set(rows.map((r) => r.g.sport))].sort(), mk = ["ml", "sp", "ou"], days = new Map();
@@ -1731,7 +1731,7 @@ table{border-collapse:collapse;width:100%}
     if (t.dataset.mc) { MC[t.dataset.mc] = t.dataset.mcv; store.set("mc_" + t.dataset.mc, t.dataset.mcv); return renderModels(); }
     if (t.dataset.s) { state.sport = t.dataset.s; store.set("sport", state.sport); return render(); }
     if (t.dataset.m) { state.mkt = t.dataset.m; store.set("mkt", state.mkt); return render(); }
-    if (t.dataset.bin) { BIN[t.dataset.bin] = t.dataset.binv; store.set("bin_" + t.dataset.bin, t.dataset.binv); return renderAnalysis(); }
+    if (t.dataset.bin) { BIN[t.dataset.bin] = t.dataset.binv; store.set("bin_" + t.dataset.bin, t.dataset.binv); return binRefresh(); }
     if (t.dataset.am) { state.amkt = t.dataset.am; store.set("amkt", state.amkt); return render(); }
     if (t.dataset.sort) { const k = t.dataset.sort; state.sort = {k, dir: state.sort.k === k ? -state.sort.dir : -1, open: true}; store.set("sort", state.sort); return renderAnalysis(); }
     if (t.dataset.open) { const k = t.dataset.open; state.open.has(k) ? state.open.delete(k) : state.open.add(k); return renderBoard(); }
@@ -1761,6 +1761,10 @@ table{border-collapse:collapse;width:100%}
     }
   });
   document.addEventListener("input", (e) => {
+    if (e.target.id === "binw" || e.target.id === "binmin") {   // 拉滑桿時只重算表格，滑桿本身不重畫（才拉得動）
+      const k = e.target.id === "binw" ? "w" : "min"; BIN[k] = +e.target.value; store.set("bin_" + k, BIN[k]);
+      $(e.target.id + "v").textContent = BIN[k] + (k === "w" ? "%" : ""); $("binbody").innerHTML = binBody(); return;
+    }
     if (!e.target.classList.contains("thrin")) return;
     state.thr = +e.target.value; store.set("thr", state.thr);
     $$(".thrv").forEach((o) => { o.textContent = state.thr + "%"; });
