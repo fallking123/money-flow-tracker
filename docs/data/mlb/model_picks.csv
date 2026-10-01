@@ -1,17 +1,17 @@
 sport,league,game_id,game_time_utc,away,home,away_zh,home_zh,strategy,pick,pick_zh,p,mkt_p,us_odds,tw_odds,tw_src,ev,hours_before,updated_utc,result,settle_odds,settle_src,profit
-mlb,mlb,sr:match:75060826,2026-09-30T18:00Z,Philadelphia Phillies,Atlanta Braves,費城人,勇士,favorite,away,費城人,0.5083,0.5071,1.8475,1.678,est,-0.1471,0.07,2026-09-30T17:56Z,,,,
-mlb,mlb,sr:match:75060826,2026-09-30T18:00Z,Philadelphia Phillies,Atlanta Braves,費城人,勇士,model1,home,勇士,0.4917,0.4929,1.9804,1.799,est,-0.1154,0.07,2026-09-30T17:56Z,,,,
-mlb,mlb,sr:match:75060826,2026-09-30T18:00Z,Philadelphia Phillies,Atlanta Braves,費城人,勇士,underdog,home,勇士,0.4917,0.4929,1.9804,1.799,est,-0.1154,0.07,2026-09-30T17:56Z,,,,
-mlb,mlb,sr:match:75060844,2026-09-30T21:00Z,Chicago White Sox,Houston Astros,白襪,太空人,favorite,home,太空人,0.5776,0.5772,1.6579,1.506,est,-0.1301,0.04,2026-09-30T20:58Z,,,,
-mlb,mlb,sr:match:75060844,2026-09-30T21:00Z,Chicago White Sox,Houston Astros,白襪,太空人,model1,away,白襪,0.4224,0.4228,2.28,2.071,est,-0.1252,0.04,2026-09-30T20:58Z,,,,
-mlb,mlb,sr:match:75060844,2026-09-30T21:00Z,Chicago White Sox,Houston Astros,白襪,太空人,underdog,away,白襪,0.4224,0.4228,2.28,2.071,est,-0.1252,0.04,2026-09-30T20:58Z,,,,
-mlb,mlb,sr:match:75060834,2026-10-01T00:00Z,Boston Red Sox,New York Yankees,紅襪,洋基,favorite,home,洋基,0.5522,0.5523,1.7299,1.571,est,-0.1325,0.07,2026-09-30T23:55Z,,,,
-mlb,mlb,sr:match:75060834,2026-10-01T00:00Z,Boston Red Sox,New York Yankees,紅襪,洋基,model1,away,紅襪,0.4478,0.4477,2.18,1.98,est,-0.1134,0.07,2026-09-30T23:55Z,,,,
-mlb,mlb,sr:match:75060834,2026-10-01T00:00Z,Boston Red Sox,New York Yankees,紅襪,洋基,underdog,away,紅襪,0.4478,0.4477,2.18,1.98,est,-0.1134,0.07,2026-09-30T23:55Z,,,,
-mlb,mlb,sr:match:75060866,2026-10-01T02:00Z,Chicago Cubs,San Diego Padres,小熊,教士,favorite,home,教士,0.5685,0.5683,1.7117,1.555,est,-0.116,0.02,2026-10-01T01:59Z,,,,
-mlb,mlb,sr:match:75060866,2026-10-01T02:00Z,Chicago Cubs,San Diego Padres,小熊,教士,model1,home,教士,0.5685,0.5683,1.7117,1.555,est,-0.116,0.02,2026-10-01T01:59Z,,,,
-mlb,mlb,sr:match:75060866,2026-10-01T02:00Z,Chicago Cubs,San Diego Padres,小熊,教士,underdog,away,小熊,0.4315,0.4317,2.2,1.998,est,-0.1379,0.02,2026-10-01T01:59Z,,,,
-mlb,mlb,sr:match:75060828,2026-10-02T00:00Z,Philadelphia Phillies,Atlanta Braves,費城人,勇士,favorite,away,費城人,0.5059,0.5047,1.8696,1.698,est,-0.141,11.51,2026-10-01T12:29Z,,,,
-mlb,mlb,sr:match:75060828,2026-10-02T00:00Z,Philadelphia Phillies,Atlanta Braves,費城人,勇士,model1,home,勇士,0.4941,0.4953,1.9804,1.799,est,-0.1111,11.51,2026-10-01T12:29Z,,,,
-mlb,mlb,sr:match:75060828,2026-10-02T00:00Z,Philadelphia Phillies,Atlanta Braves,費城人,勇士,model1_us,home,勇士,0.4941,0.4953,1.9804,1.9804,us,-0.0215,11.51,2026-10-01T12:29Z,,,,
-mlb,mlb,sr:match:75060828,2026-10-02T00:00Z,Philadelphia Phillies,Atlanta Braves,費城人,勇士,underdog,home,勇士,0.4941,0.4953,1.9804,1.799,est,-0.1111,11.51,2026-10-01T12:29Z,,,,
+mlb,mlb,sr:match:75060826,2026-09-30T18:00Z,Philadelphia Phillies,Atlanta Braves,費城人,勇士,favorite,away,費城人,0.5083,0.5071,1.8475,1.678,est,-0.1471,0.07,2026-09-30T17:56Z,win,1.678,est,0.678
+mlb,mlb,sr:match:75060826,2026-09-30T18:00Z,Philadelphia Phillies,Atlanta Braves,費城人,勇士,model1,home,勇士,0.4917,0.4929,1.9804,1.799,est,-0.1154,0.07,2026-09-30T17:56Z,loss,1.799,est,-1.0
+mlb,mlb,sr:match:75060826,2026-09-30T18:00Z,Philadelphia Phillies,Atlanta Braves,費城人,勇士,underdog,home,勇士,0.4917,0.4929,1.9804,1.799,est,-0.1154,0.07,2026-09-30T17:56Z,loss,1.799,est,-1.0
+mlb,mlb,sr:match:75060844,2026-09-30T21:00Z,Chicago White Sox,Houston Astros,白襪,太空人,favorite,home,太空人,0.5776,0.5772,1.6579,1.506,est,-0.1301,0.04,2026-09-30T20:58Z,loss,1.506,est,-1.0
+mlb,mlb,sr:match:75060844,2026-09-30T21:00Z,Chicago White Sox,Houston Astros,白襪,太空人,model1,away,白襪,0.4224,0.4228,2.28,2.071,est,-0.1252,0.04,2026-09-30T20:58Z,win,2.071,est,1.071
+mlb,mlb,sr:match:75060844,2026-09-30T21:00Z,Chicago White Sox,Houston Astros,白襪,太空人,underdog,away,白襪,0.4224,0.4228,2.28,2.071,est,-0.1252,0.04,2026-09-30T20:58Z,win,2.071,est,1.071
+mlb,mlb,sr:match:75060834,2026-10-01T00:00Z,Boston Red Sox,New York Yankees,紅襪,洋基,favorite,home,洋基,0.5522,0.5523,1.7299,1.571,est,-0.1325,0.07,2026-09-30T23:55Z,win,1.571,est,0.571
+mlb,mlb,sr:match:75060834,2026-10-01T00:00Z,Boston Red Sox,New York Yankees,紅襪,洋基,model1,away,紅襪,0.4478,0.4477,2.18,1.98,est,-0.1134,0.07,2026-09-30T23:55Z,loss,1.98,est,-1.0
+mlb,mlb,sr:match:75060834,2026-10-01T00:00Z,Boston Red Sox,New York Yankees,紅襪,洋基,underdog,away,紅襪,0.4478,0.4477,2.18,1.98,est,-0.1134,0.07,2026-09-30T23:55Z,loss,1.98,est,-1.0
+mlb,mlb,sr:match:75060866,2026-10-01T02:00Z,Chicago Cubs,San Diego Padres,小熊,教士,favorite,home,教士,0.5685,0.5683,1.7117,1.555,est,-0.116,0.02,2026-10-01T01:59Z,win,1.555,est,0.555
+mlb,mlb,sr:match:75060866,2026-10-01T02:00Z,Chicago Cubs,San Diego Padres,小熊,教士,model1,home,教士,0.5685,0.5683,1.7117,1.555,est,-0.116,0.02,2026-10-01T01:59Z,win,1.555,est,0.555
+mlb,mlb,sr:match:75060866,2026-10-01T02:00Z,Chicago Cubs,San Diego Padres,小熊,教士,underdog,away,小熊,0.4315,0.4317,2.2,1.998,est,-0.1379,0.02,2026-10-01T01:59Z,loss,1.998,est,-1.0
+mlb,mlb,sr:match:75060828,2026-10-02T00:00Z,Philadelphia Phillies,Atlanta Braves,費城人,勇士,favorite,away,費城人,0.5059,0.5047,1.8696,1.698,est,-0.141,11.51,2026-10-01T12:50Z,,,,
+mlb,mlb,sr:match:75060828,2026-10-02T00:00Z,Philadelphia Phillies,Atlanta Braves,費城人,勇士,model1,home,勇士,0.4941,0.4953,1.9804,1.799,est,-0.1111,11.51,2026-10-01T12:50Z,,,,
+mlb,mlb,sr:match:75060828,2026-10-02T00:00Z,Philadelphia Phillies,Atlanta Braves,費城人,勇士,model1_us,home,勇士,0.4941,0.4953,1.9804,1.9804,us,-0.0215,11.51,2026-10-01T12:50Z,,,,
+mlb,mlb,sr:match:75060828,2026-10-02T00:00Z,Philadelphia Phillies,Atlanta Braves,費城人,勇士,underdog,home,勇士,0.4941,0.4953,1.9804,1.799,est,-0.1111,11.51,2026-10-01T12:50Z,,,,
