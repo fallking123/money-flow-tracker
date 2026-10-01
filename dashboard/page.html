@@ -1037,9 +1037,46 @@ table{border-collapse:collapse;width:100%}
     h += `<div class="card"><h3>哪裡比較好、哪裡比較差<small>自動找出來的，只當參考</small></h3>${healthCheck([["運動", gS.list], ["玩法", gM.list], ["賠率", gO.list], ["訊號強度", gD.list], ["盤口", gR.list], ["星期", gW.list]], roi, 5)}</div>`;
     h += `<details class="more-sec"><summary>詳細拆解（依運動、玩法、賠率…）</summary><div><div class="grid">${gS.html}${gM.html}${gO.html}${gD.html}${gR.html}${gW.html}</div></div></details>`;
     h += `<details class="more-sec"><summary>每天的成績</summary><div>${matrix(rows)}</div></details>`;
+    h += binCard();
     h += `<details class="more-sec"${state.sort.open ? " open" : ""}><summary>每一注的明細</summary><div>${detailTable(rows, avgClv, cv.length)}</div></details>`;
     $("analysis").innerHTML = h;
     if (n) $("anchart").innerHTML = plChart(series, chartW("anchart"), (v) => sgn(v, v % 1 ? 1 : 0));
+  }
+  // ═════════ 資金流向區間統計：下注金額 %、下注人數 % 每 3% 一格，看押這一邊的長期成績 ═════════
+  const BIN = {f: store.get("bin_f", "money"), m: store.get("bin_m", "ml"), step: 3};
+  function binStats() {
+    const key = BIN.f === "money" ? "money" : "bet", out = new Map();
+    for (const g of allFinal()) {
+      if (!inSport(g)) continue;
+      const s = closing(g); if (!s) continue;
+      for (const sd of sides(g, s, BIN.m)) {
+        const v = sd[key]; if (v == null) continue;
+        const r = settle(g, sd, BIN.m); if (!r) continue;
+        const lo = Math.min(99, Math.floor(v / BIN.step) * BIN.step);
+        if (!out.has(lo)) out.set(lo, {lo, n: 0, w: 0, l: 0, pl: 0, odds: 0, fair: 0, nf: 0});
+        const b = out.get(lo); b.n++; b.pl += r.pl; b.odds += sd.odds;
+        if (r.o > 0) b.w++; else if (r.o < 0) b.l++;
+        const ss = sides(g, s, BIN.m), f = fair(ss, ss.findIndex((x) => x.key === sd.key)); if (f != null) { b.fair += f; b.nf++; }
+      }
+    }
+    return [...out.values()].sort((a, b) => b.lo - a.lo);
+  }
+  function binCard() {
+    const seg = (k, opts) => `<div class="seg" role="group">${opts.map(([v, n]) => `<button type="button" data-bin="${k}" data-binv="${v}" aria-pressed="${BIN[k] === v}">${n}</button>`).join("")}</div>`;
+    const bs = binStats(), tot = bs.reduce((a, b) => a + b.n, 0);
+    const name = BIN.f === "money" ? "下注金額" : "下注人數";
+    const rowsH = bs.map((b) => {
+      const wr = b.w + b.l ? b.w / (b.w + b.l) : null, roi = b.n ? b.pl / b.n * 100 : null, exp = b.nf ? b.fair / b.nf : null;
+      const diff = wr != null && exp != null ? (wr - exp) * 100 : null;
+      return `<tr><td class="n">${b.lo}–${Math.min(100, b.lo + BIN.step)}%</td><td class="r n">${b.n}${b.n < 30 ? '<span class="few">太少</span>' : ""}</td>
+        <td class="r n">${wr == null ? "–" : Math.round(wr * 100) + "%"}</td><td class="r n hide-s">${exp == null ? "–" : Math.round(exp * 100) + "%"}</td>
+        <td class="r n ${gb(diff)}">${diff == null ? "–" : sgn(diff, 1)}</td><td class="r n hide-s">${odd(b.odds / b.n)}</td><td class="r n ${gb(roi)}">${roi == null ? "–" : sgn(roi, 1) + "%"}</td></tr>`;
+    }).join("");
+    return `<div class="card"><h3>資金流向區間統計<small>每 ${BIN.step}% 一格・開賽前最後一次截圖・已打完的比賽</small></h3>
+      <div class="ctl" style="margin-bottom:10px">${seg("f", [["money", "下注金額 %"], ["bet", "下注人數 %"]])}${seg("m", [["ml", "獨贏"], ["sp", "讓分"], ["ou", "大小分"]])}</div>
+      <p class="mut" style="font-size:13px;margin:0 0 8px">每一場的每一邊都算一次：這一邊拿到 ${name}的幾 %，最後有沒有贏。「實際贏」比「莊家估」高、投報率是正的格子，就是押這邊長期有賺的區間。投報率用美國收盤賠率、每注 1 單位。</p>
+      ${tot ? `<div class="scroll"><table class="tb"><thead><tr><th>${name}</th><th class="r">幾次</th><th class="r">實際贏</th><th class="r hide-s">莊家估</th><th class="r">差</th><th class="r hide-s">平均賠率</th><th class="r">投報率</th></tr></thead><tbody>${rowsH}</tbody></table></div>
+      <p class="mut" style="font-size:12px;margin:6px 0 0">共 ${tot} 次（${state.sport === "all" ? "全部運動" : spLabel(state.sport)}）。一格少於 30 次多半是運氣，資料越多越準；上面的運動標籤可以切換。</p>` : `<p class="mut" style="margin:0">還沒有已打完、有${name}比例的比賽。</p>`}</div>`;
   }
   function matrix(rows) {
     if (!rows.length) return `<p class="mut" style="margin:0">還沒有資料</p>`;
@@ -1653,6 +1690,7 @@ table{border-collapse:collapse;width:100%}
     if (t.dataset.mc) { MC[t.dataset.mc] = t.dataset.mcv; store.set("mc_" + t.dataset.mc, t.dataset.mcv); return renderModels(); }
     if (t.dataset.s) { state.sport = t.dataset.s; store.set("sport", state.sport); return render(); }
     if (t.dataset.m) { state.mkt = t.dataset.m; store.set("mkt", state.mkt); return render(); }
+    if (t.dataset.bin) { BIN[t.dataset.bin] = t.dataset.binv; store.set("bin_" + t.dataset.bin, t.dataset.binv); return renderAnalysis(); }
     if (t.dataset.am) { state.amkt = t.dataset.am; store.set("amkt", state.amkt); return render(); }
     if (t.dataset.sort) { const k = t.dataset.sort; state.sort = {k, dir: state.sort.k === k ? -state.sort.dir : -1, open: true}; store.set("sort", state.sort); return renderAnalysis(); }
     if (t.dataset.open) { const k = t.dataset.open; state.open.has(k) ? state.open.delete(k) : state.open.add(k); return renderBoard(); }
