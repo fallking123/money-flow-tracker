@@ -606,19 +606,41 @@ table{border-collapse:collapse;width:100%}
     return {odds: Math.round(sd.odds * (1 + td.d / 100) * 100) / 100, est: true};
   }
   const optLabel = (g, mkt, sd) => (mkt === "ml" ? sd.nm : mkt === "sp" ? `${sd.nm} ${line(sd.ln)}` : `${sd.key === "over" ? "大" : "小"} ${sd.ln ?? ""}`);
+  // 冰球：台彩只算 60 分鐘（正規時間）。獨贏是三選一（客／和／主）；讓分是三選一的歐式讓分（2:0、1:0…），跟美國 ±1.5 不同，不估；
+  // 大小也只算 60 分鐘：正規時間打平、延長賽多 1 分剛好跨過盤口時結果不同（歷史比例 NHL_TIE_AT）
+  const NHL_TIE_AT = {0: 0.0049, 1: 0.0393, 2: 0.0727, 3: 0.0683, 4: 0.0309, 5: 0.0082, 6: 0.0016}, NHL_OU_MARGIN = 0.15;
+  const nhlRegOver = (p, ln) => { if (ln == null || Math.abs((ln % 1) - 0.5) > 1e-9) return p; const k = Math.floor(ln); return k % 2 === 0 ? p - (NHL_TIE_AT[k / 2] || 0) : p; };
+  const r2 = (v) => Math.round(v * 100) / 100;
+  function nhlMl(g) {
+    const r3 = g.r3; if (!r3) return null;
+    const rec = (g.tw && g.tw.ml) || {};
+    const opts = ["away", "draw", "home"].map((key, i) => {
+      const nm = key === "draw" ? "和局" : g[key + "_zh"] || g[key + "_ab"], act = rec[key], p = r3.p[i];
+      const tw = act && act[0] ? act[0] : r2(1 / (r3.q[i] * (1 + r3.margin)));
+      return {mkt: "ml", sd: {key, nm, ln: null, odds: null}, lab: nm, pick: nm, p, src: "模型一", us: null, tw, est: !(act && act[0]), ev: p * tw - 1, evUs: null};
+    });
+    return {mkt: "ml", opts, reg: true};
+  }
   function evOptions(g) {
-    const s = latest(g), out = [];
+    const s = latest(g), out = [], nhl = g.sport === "nhl";
     if (!s) return out;
     for (const mkt of ["ml", "sp", "ou"]) {
+      if (nhl && mkt === "ml") { const x = nhlMl(g); if (x) out.push(x); continue; }
+      if (nhl && mkt === "sp") continue;
       const ss = sides(g, s, mkt);
       if (!ss.length || ss.some((x) => !x.odds)) continue;
       const opts = ss.map((sd, i) => {
-        const pr = probOf(g, mkt, ss, i), tw = twOdds(g, mkt, sd);
+        const pr = probOf(g, mkt, ss, i); let tw = twOdds(g, mkt, sd);
         if (!pr || pr.p == null || !tw) return null;
-        return {mkt, sd, lab: optLabel(g, mkt, sd), pick: pickLabel(sd, mkt), p: pr.p, src: pr.src, us: sd.odds, tw: tw.odds, est: tw.est, ev: pr.p * tw.odds - 1,
+        let p = pr.p;
+        if (nhl && mkt === "ou") {   // 60 分鐘的大小機率；台彩賠率沒記錄就用 60 分鐘機率 + 抽成估
+          p = sd.key === "over" ? nhlRegOver(pr.p, sd.ln) : 1 - nhlRegOver(1 - pr.p, sd.ln);
+          if (tw.est) tw = {odds: r2(1 / (p * (1 + NHL_OU_MARGIN))), est: true};
+        }
+        return {mkt, sd, lab: optLabel(g, mkt, sd), pick: pickLabel(sd, mkt), p, src: pr.src, us: sd.odds, tw: tw.odds, est: tw.est, ev: p * tw.odds - 1,
                 evUs: pr.src === "美國莊家" ? null : pr.p * sd.odds - 1};
       }).filter(Boolean);
-      if (opts.length) out.push({mkt, opts});
+      if (opts.length) out.push({mkt, opts, reg: nhl});
     }
     return out;
   }
@@ -777,7 +799,7 @@ table{border-collapse:collapse;width:100%}
     const groups = evOptions(g); if (!groups.length) return "";
     const all = groups.flatMap((x) => x.opts), best = all.reduce((a, o) => (!a || o.ev > a.ev ? o : a), null);
     const cls = (o) => evTag(o).c;
-    const rows = groups.map(({mkt, opts}) => `<div class="evr"><span class="k">${mkt === "ou" && opts[0].sd.ln != null ? `大小<br>${opts[0].sd.ln}` : MK[mkt]}</span><div class="evo c${opts.length}">${opts.map((o) =>
+    const rows = groups.map(({mkt, opts, reg}) => `<div class="evr"><span class="k">${mkt === "ou" && opts[0].sd.ln != null ? `大小<br>${opts[0].sd.ln}` : MK[mkt]}${reg ? "<br>60分" : ""}</span><div class="evo c${opts.length}">${opts.map((o) =>
       `<button type="button" class="evc ${cls(o)}" data-bet="${esc(g.sport + "|" + g.id)}" data-mk="${mkt}" data-pick="${esc(o.pick)}" aria-label="${esc(o.lab)}，台彩 ${odd(o.tw)}，期望值 ${evTxt(o.ev)}。點一下記錄這注"><span class="nm">${esc(mkt === "ou" ? (o.sd.key === "over" ? "大分" : "小分") : o.lab)}</span><span class="ln"><span class="o">${odd(o.tw)}${o.est ? "<i>估</i>" : ""}</span><b>${evTxt(o.ev)}</b></span>${(() => { const st = o.ev >= EV_GO ? stakeFor(o.p, o.tw) : null; return st && st.amt ? `<span class="stk">下 ${ntdAmt(st.amt)}</span>` : ""; })()}</button>`).join("")}</div></div>`).join("");
     const bst = best.ev >= EV_GO ? stakeFor(best.p, best.tw) : null;
     const usBest = all.filter((o) => o.evUs != null && o.evUs >= EV_GO).reduce((a, o) => (!a || o.evUs > a.evUs ? o : a), null);
@@ -786,7 +808,8 @@ table{border-collapse:collapse;width:100%}
       : best.est && best.ev >= EV_LOOK ? `<b>沒有划算的</b>。最接近：${esc(best.lab)}，台彩賠率要 ≥ <b>${odd(needOdds(best))}</b> 才下`
       : `每一注在台彩都<b class="bad">不划算</b>，這場不下`)
       + (usBest ? `<span class="evus">美國賠率划算：${esc(MK[usBest.mkt])} ${esc(usBest.lab)} ${odd(usBest.us)}，期望值 ${evTxt(usBest.evUs)}</span>` : "");
-    return `<div class="evg"><div class="evh">${head}</div>${rows}<div class="evf">期望值＝估計勝率 × 台彩賠率 − 1，要是正的才值得下。${all.some((o) => o.est) ? "「估」＝用美國賠率推算的台彩賠率。" : ""}點一注可以直接記錄。</div></div>`;
+    const nhlNote = g.sport === "nhl" ? "台彩冰球只算 60 分鐘（延長賽不算），獨贏有和局；讓分是三選一，這裡不估。" : "";
+    return `<div class="evg"><div class="evh">${head}</div>${rows}<div class="evf">期望值＝估計勝率 × 台彩賠率 − 1，要是正的才值得下。${nhlNote}${all.some((o) => o.est) ? "「估」＝推算的台彩賠率。" : ""}點一注可以直接記錄。</div></div>`;
   }
   // 「看更多」裡的完整期望值表（含單隊大小、前五局等其他玩法）
   function evTable(g) {
@@ -819,7 +842,7 @@ table{border-collapse:collapse;width:100%}
       </div>`;
     const m1Html = !soc && mkt === "ml" && g.m1 ? (() => {
       const P = g.m1.p, f = (v) => Math.round(v * 100) + "%";
-      return `<div class="mdl"><b>模型一・實力</b>${esc(g.away_zh || g.away_ab)} ${f(P[0])}・${esc(g.home_zh || g.home_ab)} ${f(P[1])}<small>用${g.m1.src === "pin" ? " Pinnacle 最新賠率" : "美國共識賠率"}＋休息天數算的真實勝率；模型二（資金）還在累積資料</small></div>`;
+      return `<div class="mdl"><b>模型一・實力</b>${esc(g.away_zh || g.away_ab)} ${f(P[0])}・${esc(g.home_zh || g.home_ab)} ${f(P[1])}${g.r3 ? `<small>60 分鐘（台彩算法）：${esc(g.away_zh || g.away_ab)} ${f(g.r3.p[0])}・和局 ${f(g.r3.p[1])}・${esc(g.home_zh || g.home_ab)} ${f(g.r3.p[2])}</small>` : ""}<small>用${g.m1.src === "pin" ? " Pinnacle 最新賠率" : "美國共識賠率"}＋休息天數算的真實勝率（含延長賽）；模型二（資金）還在累積資料</small></div>`;
     })() : "";
     if (!has) {
       h += `<div class="say">${MK[mkt]}的下注比例，網站還沒出來（最後截圖 ${when(s.ts)}）。出來後會自動補抓。</div>`;
@@ -1080,9 +1103,13 @@ table{border-collapse:collapse;width:100%}
       return xg.opts.map((o) => { const e = ex && ex.opts.find((y) => y.lab === o.v); return {v: o.v, us: o.us, p: e ? e.p : null, src: e ? e.src : null}; });
     }
     const mk = MKCODE[market]; if (!mk) return [];
+    if (g.sport === "nhl" && mk !== "sp") {
+      const grp = evOptions(g).find((x) => x.mkt === mk);
+      return grp ? grp.opts.filter((o) => market !== "和局" || o.sd.key === "draw").map((o) => ({v: o.pick, us: o.us, p: o.p, src: o.src, tw: o.tw, twEst: o.est})) : [];
+    }
     const s = latest(g), ss = sides(g, s, mk);
     return ss.map((x, i) => ({x, i})).filter(({x}) => market !== "和局" || x.key === "draw").map(({x, i}) => {
-      const pr = probOf(g, mk, ss, i), tw = twOdds(g, mk, x);
+      const pr = g.sport === "nhl" ? null : probOf(g, mk, ss, i), tw = g.sport === "nhl" ? null : twOdds(g, mk, x);
       return {v: pickLabel(x, mk), us: x.odds, p: pr ? pr.p : null, src: pr ? pr.src : null, tw: tw ? tw.odds : null, twEst: tw ? tw.est : true};
     });
   }

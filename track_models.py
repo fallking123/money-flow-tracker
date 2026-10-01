@@ -58,6 +58,13 @@ def ml_options(g):
         if not mdl or len(ml) < 9:
             return [], snap
         keys, us = ["home", "draw", "away"], [ml[6], ml[7], ml[8]]
+    elif g["sport"] == "nhl":
+        # 台彩冰球獨贏＝60 分鐘三選一（客／和／主）
+        r3 = g.get("r3")
+        if not r3 or len(ml) < 6 or not ml[4] or not ml[5]:
+            return [], snap
+        return [{"key": k, "us": o, "p": p, "m": m, "est": round(1 / (m * (1 + r3["margin"])), 3)}
+                for k, o, p, m in zip(["away", "draw", "home"], [ml[4], None, ml[5]], r3["p"], r3["q"])], snap
     else:
         mdl = g.get("m1")
         if not mdl or len(ml) < 6:
@@ -83,7 +90,7 @@ def picks(g, tw):
         if act and act[0]:
             o["tw"], o["src"] = act[0], "actual"
         else:
-            o["tw"], o["src"] = round(o["us"] * (1 + d / 100), 3), "est"
+            o["tw"], o["src"] = (o["est"] if "est" in o else round(o["us"] * (1 + d / 100), 3)), "est"
         o["ev"] = o["p"] * o["tw"] - 1
     two = [o for o in opts if o["key"] != "draw"]
     return {"model1": max(opts, key=lambda o: o["ev"]),
@@ -95,7 +102,12 @@ def settle(row, g):
     """回傳 (result, 結算賠率, 賠率來源, 賺賠)"""
     res = g["result"]
     w, pick = res.get("winner"), row["pick"]
-    if g["sport"] == "soccer":
+    if g["sport"] == "nhl":
+        w = res.get("reg")        # 台彩冰球只算 60 分鐘
+        if w is None:
+            return "void", "", "", 0.0
+        won = (w == "tie") if pick == "draw" else (w == pick)
+    elif g["sport"] == "soccer":
         won = (w == "tie") if pick == "draw" else (w == pick)
     else:
         if w == "tie":

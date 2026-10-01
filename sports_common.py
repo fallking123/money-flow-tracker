@@ -250,3 +250,41 @@ def match_event(sbd_game, events, college=False, max_gap_h=8):
 
 def is_college(sport):
     return sport in ("ncaaf", "ncaab")
+
+
+# ---------------- 冰球：台彩只算 60 分鐘（正規時間），有和局 ----------------
+# 用 2007–2026 年 16,177 場 NHL 算的：正規時間打平 k:k 的比例（打平合計約 22.6%）
+NHL_TIE_AT = {0: 0.0049, 1: 0.0393, 2: 0.0727, 3: 0.0683, 4: 0.0309, 5: 0.0082, 6: 0.0016}
+NHL3_MARGIN = 0.19   # 台彩冰球三選一（客／和／主）抽成；第一次看到 3.00／3.70／1.70 ≈ 19%，記錄夠了再換成實際平均
+
+
+def nhl_reg3(p_home, total=None):
+    """含延長賽的主隊勝率 → 60 分鐘三選一 [客, 和, 主]
+    打平機率：總分盤 ≤5.5 約 23.5%，≥6 約 21.4%；實力差很多時打平比較少。
+    延長賽誰贏：實力強的稍微佔優（歷史：主隊勝率 70% 時延長賽贏 60%）。"""
+    tie = 0.235 if total is None or total <= 5.5 else 0.214
+    tie -= 0.5 * max(0.0, abs(p_home - 0.5) - 0.2)
+    s = 0.5 + 0.5 * (p_home - 0.5)
+    return [round((1 - p_home) - tie * (1 - s), 4), round(tie, 4), round(p_home - tie * s, 4)]
+
+
+def nhl_reg_over(p_over_full, line):
+    """含延長賽的「大」機率 → 只算 60 分鐘的「大」機率。
+    差別只在正規時間打平、延長賽多 1 分剛好跨過盤口的情況（例如 3:3 → 7 分，大 6.5 就不一樣）。"""
+    if line is None or p_over_full is None or abs(line % 1 - 0.5) > 1e-9:
+        return p_over_full
+    k = int(line)
+    return p_over_full - NHL_TIE_AT.get(k // 2, 0.0) if k % 2 == 0 else p_over_full
+
+
+def reg_winner(away_periods, home_periods):
+    """各節比分（例如 1-0-2-1）→ 60 分鐘結果 away/home/tie；沒有各節比分回傳 None"""
+    try:
+        a = [float(x) for x in str(away_periods).replace("|", "-").split("-") if x != ""]
+        h = [float(x) for x in str(home_periods).replace("|", "-").split("-") if x != ""]
+    except ValueError:
+        return None
+    if len(a) < 3 or len(h) < 3:
+        return None
+    sa, sh = sum(a[:3]), sum(h[:3])
+    return "tie" if sa == sh else ("away" if sa > sh else "home")

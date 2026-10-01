@@ -20,11 +20,12 @@ import sys
 from datetime import datetime, timedelta, timezone
 
 import build_dashboard as B
-from sports_common import parse_time, read_rows, sport_dir
+from sports_common import nhl_reg_over, parse_time, read_rows, sport_dir
 from track_models import discount
 
 EV_MIN = 0.02        # 期望值至少 +2% 才提醒
-EV_CANCEL = 0.0      # 提醒過的注，期望值跌到這以下就發取消
+EV_CANCEL = 0.0
+NHL_OU_MARGIN = 0.15  # 台彩冰球大小抽成（還沒有記錄，先用 MLB 大小的約 15%）      # 提醒過的注，期望值跌到這以下就發取消
 EV_MAX = 0.30        # 超過 30% 多半是資料有問題（某一邊賠率沒更新），不提醒
 HORIZON_H = 30
 KELLY_FRAC, KELLY_CAP = 0.25, 0.03
@@ -104,12 +105,33 @@ def pick_name(g, mkt, key, line):
     return nm
 
 
+def nhl_ml(g, tw, lo, hi):
+    """冰球獨贏：台彩是 60 分鐘三選一（客／和／主），用模型一換算；台彩賠率有記錄用實際，沒有用「市場機率 + 台彩抽成」估。
+    美國沒有 60 分鐘三選一的賠率可比，所以只算台彩。"""
+    r3 = g.get("r3")
+    if not r3:
+        return []
+    rec = ((g.get("tw") or {}).get("ml") or {})
+    out = []
+    for i, key in enumerate(("away", "draw", "home")):
+        p, q = r3["p"][i], r3["q"][i]
+        act = rec.get(key)
+        o, src = (act[0], "actual") if act and act[0] else (round(1 / (q * (1 + r3["margin"])), 2), "est")
+        ev = p * o - 1
+        if lo <= ev <= hi:
+            out.append({"market": "ml", "side": key, "line": "", "pick_zh": pick_name(g, "ml", key, None) + "（60分鐘）",
+                        "kind": "tw", "odds": o, "odds_src": src, "p": round(p, 4), "p_src": "模型一", "ev": round(ev, 4),
+                        "stake_pct": kelly(p, o)})
+    return out
+
+
 def find(g, tw, lo=EV_MIN, hi=EV_MAX):
     """這場比賽期望值在 [lo, hi] 之間的選項（預設＝所有 ≥ +2% 的）"""
+    nhl = g["sport"] == "nhl"
     snap = next((s for s in reversed(g.get("snaps") or []) if any(s.get(m) for m in ("ml", "sp", "ou"))), None)
     if not snap:
         return []
-    out = []
+    out = nhl_ml(g, tw, lo, hi) if nhl else []
     for mkt in ("ml", "sp", "ou"):
         ss = us_sides(g, snap, mkt)
         if not ss or any(not o or o <= 1 for _, o, _ in ss):
@@ -121,12 +143,20 @@ def find(g, tw, lo=EV_MIN, hi=EV_MAX):
             if not p or not (0.02 < p < 0.98):
                 continue
             two, tsrc = tw_odds(g, mkt, key, line, us, tw)
-            for kind, o, osrc in (("tw", two, tsrc), ("us", us, "us")):
-                ev = p * o - 1
+            kinds = [("tw", two, tsrc), ("us", us, "us")]
+            if nhl and mkt in ("ml", "sp"):
+                kinds = kinds[1:]     # 台彩冰球獨贏另外算（三選一），讓分是三選一的歐式讓分，跟美國 ±1.5 不能比
+            for kind, o, osrc in kinds:
+                pp = p
+                if nhl and kind == "tw" and mkt == "ou":   # 台彩冰球大小只算 60 分鐘
+                    pp = nhl_reg_over(p, line) if key == "over" else 1 - nhl_reg_over(1 - p, line)
+                    if osrc == "est":     # 美國盤含延長賽，不能直接打折；用 60 分鐘機率 + 台彩抽成估
+                        o = round(1 / (pp * (1 + NHL_OU_MARGIN)), 2)
+                ev = pp * o - 1
                 if lo <= ev <= hi:
                     out.append({"market": mkt, "side": key, "line": "" if line is None else line, "pick_zh": pick_name(g, mkt, key, line),
-                                "kind": kind, "odds": o, "odds_src": osrc, "p": round(p, 4), "p_src": src, "ev": round(ev, 4),
-                                "stake_pct": kelly(p, o) if kind == "tw" else ""})
+                                "kind": kind, "odds": o, "odds_src": osrc, "p": round(pp, 4), "p_src": src, "ev": round(ev, 4),
+                                "stake_pct": kelly(pp, o) if kind == "tw" else ""})
     return out
 
 

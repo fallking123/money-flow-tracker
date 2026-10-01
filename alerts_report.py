@@ -80,7 +80,8 @@ def report(now, since):
                     parts.append(f"美國賠率 {float(x['odds']):.2f} 期望值 {ev:+.1f}%")
             need = 1.02 / float(r["p"])
             lines.append(f"・{title(r)}｜" + "；".join(parts)
-                         + ("" if any(x["kind"] == "tw" for x in rs) else f"（台彩要 ≥ {need:.2f} 才划算）"))
+                         + ("" if any(x["kind"] == "tw" for x in rs) else "（台彩冰球是 60 分鐘三選一，不能直接比）" if r["sport"] == "nhl" and r["market"] in ("ml", "sp")
+                            else f"（台彩要 ≥ {need:.2f} 才划算）"))
     if gone:
         items = sorted(gone.values(), key=lambda rs: rs[0]["game_time_utc"])
         lines.append(f"⚠️ 之前推播的 {len(items)} 注現在不划算了，還沒下就先別下")

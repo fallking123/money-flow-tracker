@@ -55,8 +55,14 @@ MARKET_FIELDS_SOCCER = {
 }
 
 
+# 冰球：台彩「不讓分」只算 60 分鐘、有和局（三選一），美國獨贏含延長賽（二選一），兩個不能直接比折扣；
+# 台彩冰球讓分也是三選一（2:0、1:0、0:1），跟美國 ±1.5 不同。這兩種只記實際賠率（給期望值和結算用），不算折扣。
+NO_DISCOUNT = {("nhl", "ml"), ("nhl", "sp")}
+MARKET_FIELDS_NHL = {**MARKET_FIELDS, "ml": {"away": (None, None), "draw": (None, None), "home": (None, None)}}
+
+
 def fields_for(sport):
-    return MARKET_FIELDS_SOCCER if sport == SOCCER else MARKET_FIELDS
+    return MARKET_FIELDS_SOCCER if sport == SOCCER else MARKET_FIELDS_NHL if sport == "nhl" else MARKET_FIELDS
 
 
 def valid_sports():
@@ -115,15 +121,15 @@ def add_tw_bet(sport, away_team, home_team, game_date, market, side, tw_odds, tw
         return {"ok": False, "error": f"找不到 {game_date} {away_team}@{home_team} 這場比賽的資料"}
 
     odds_field, line_field = mf[market][side]
-    us_odds = _num(row.get(odds_field))
+    us_odds = _num(row.get(odds_field)) if odds_field else None
     us_line = _num(row.get(line_field)) if line_field else None
     flip = "away" if sport == SOCCER else "home"  # 資料裡存的是哪一隊的讓分，另一隊要反過來
     if market == "sp" and side == flip and us_line is not None:
         us_line = -us_line
-    if us_odds is None:
+    if us_odds is None and (sport, market) not in NO_DISCOUNT:
         return {"ok": False, "error": "找到比賽了，但美國賠率資料是空的（可能太早記錄、賠率還沒抓到）"}
 
-    discount = round((tw_odds - us_odds) / us_odds * 100, 2)
+    discount = "" if us_odds is None or (sport, market) in NO_DISCOUNT else round((tw_odds - us_odds) / us_odds * 100, 2)
 
     sbd_id = game_id(row)
     existing = read_rows(TW_ODDS_FILE)
@@ -137,7 +143,7 @@ def add_tw_bet(sport, away_team, home_team, game_date, market, side, tw_odds, tw
         "away_team": row["away_team"], "home_team": row["home_team"],
         "market": market, "side": side,
         "tw_odds": tw_odds, "tw_line": tw_line if tw_line is not None else "",
-        "us_odds": us_odds, "us_line": us_line if us_line is not None else "",
+        "us_odds": us_odds if us_odds is not None else "", "us_line": us_line if us_line is not None else "",
         "discount_pct": discount, "note": note,
     }
     exists = os.path.exists(TW_ODDS_FILE)
@@ -177,12 +183,14 @@ def summary():
     groups, pairs = {}, {}
     for r in rows:
         # 盤口不同（例如台彩讓 2.5、美國讓 1.5）的賠率不能直接比，不算進平均折扣
-        if r["market"] == "ml" or _num(r["tw_line"]) == _num(r["us_line"]):
+        if (r["sport"], r["market"]) in NO_DISCOUNT:
+            groups.setdefault((r["sport"], r["market"]), []).append(None)   # 只算抽成，不算折扣
+        elif r["market"] == "ml" or _num(r["tw_line"]) == _num(r["us_line"]):
             groups.setdefault((r["sport"], r["market"]), []).append(_num(r["discount_pct"]))
         pairs.setdefault((r["sport"], r["market"], r["sbd_id"]), []).append(r)
     tw_m, us_m = {}, {}
     for (sport, market, _), ps in pairs.items():
-        need = 3 if sport == SOCCER and market == "ml" else 2  # 足球獨贏要主／和／客三個都有才算得出抽成
+        need = 3 if market == "ml" and sport in (SOCCER, "nhl") else 2  # 足球獨贏要主／和／客三個都有才算得出抽成
         if len({p["side"] for p in ps}) != need or len(ps) != need:
             continue
         tw = [_num(p["tw_odds"]) for p in ps]
@@ -194,7 +202,7 @@ def summary():
     out = []
     for (sport, market), vals in sorted(groups.items()):
         vals = [v for v in vals if v is not None]
-        if not vals:
+        if not vals and (sport, market) not in NO_DISCOUNT:
             continue
         out.append({"sport": sport, "market": market, "n": len(vals),
                     "games": len(tw_m.get((sport, market), [])),
@@ -202,7 +210,7 @@ def summary():
                     "tw_margin_pct": _avg(tw_m.get((sport, market), [])),
                     "us_margin_pct": _avg(us_m.get((sport, market), []))})
     # 同盤口才能比，盤口不同的（例如台彩讓 2.5、美國讓 1.5）不算
-    same = [r for r in rows if r["market"] == "ml" or _num(r["tw_line"]) == _num(r["us_line"])]
+    same = [r for r in rows if (r["sport"], r["market"]) not in NO_DISCOUNT and _num(r["discount_pct"]) is not None and (r["market"] == "ml" or _num(r["tw_line"]) == _num(r["us_line"]))]
     same.sort(key=lambda r: -(_num(r["discount_pct"]) or -999))
     best = [{"sport": r["sport"], "t": r["game_time_utc"], "away": r["away_team"], "home": r["home_team"],
              "market": r["market"], "side": r["side"], "line": _num(r["tw_line"]),

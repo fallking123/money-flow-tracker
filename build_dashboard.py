@@ -15,7 +15,7 @@ import os
 import sys
 from datetime import datetime, timezone, timedelta
 
-from sports_common import (_norm, active_sports, all_monthly_files, parse_time, read_rows,
+from sports_common import (NHL3_MARGIN, nhl_reg3, reg_winner, _norm, active_sports, all_monthly_files, parse_time, read_rows,
                             recent_monthly_files, sport_dir)
 import record_tw_odds
 import soccer_dashboard
@@ -232,7 +232,8 @@ def build_closed():
                 "open": open_of(rows[0]),
                 "snaps": [snap_of(r) for r in thin(pre)],
                 "result": {"away": num(res["away_score"]), "home": num(res["home_score"]),
-                           "winner": res["winner"], "margin": num(res["margin"]), "total": num(res["total_points"])},
+                           "winner": res["winner"], "margin": num(res["margin"]), "total": num(res["total_points"]),
+                           "reg": reg_winner(res.get("away_periods"), res.get("home_periods")) if sport == "nhl" else None},
             })
     closed.sort(key=lambda g: g["t"], reverse=True)
     return closed[:MAX_CLOSED]
@@ -278,6 +279,15 @@ def model1_params(sport):
         p = os.path.join(sport_dir(sport), "model", "params_ml.json")
         _M1[sport] = json.load(open(p, encoding="utf-8")) if os.path.exists(p) else None
     return _M1[sport]
+
+
+def nhl_r3(g):
+    """冰球：台彩獨贏是 60 分鐘三選一。p＝模型一換算、q＝市場（Pinnacle／美國去抽水）換算，順序 [客, 和, 主]"""
+    pin_ou = ((g.get("pin") or {}).get("l") or {}).get("ou") or {}
+    ou = (g["snaps"][-1] if g["snaps"] else {}).get("ou") or []
+    total = pin_ou.get("line") or (ou[4] if len(ou) > 4 else None)
+    m1 = g["m1"]
+    return {"p": nhl_reg3(m1["p"][1], total), "q": nhl_reg3(m1["mkt"][1], total), "total": total, "margin": NHL3_MARGIN}
 
 
 def model1_predict(sport, g):
@@ -475,7 +485,8 @@ def build(now):
                 "snaps": [snap_of(r) for r in rows[-MAX_SNAPS:]],
                 "result": None if not res or res["status"] != "final" else {
                     "away": num(res["away_score"]), "home": num(res["home_score"]),
-                    "winner": res["winner"], "margin": num(res["margin"]), "total": num(res["total_points"])},
+                    "winner": res["winner"], "margin": num(res["margin"]), "total": num(res["total_points"]),
+                    "reg": reg_winner(res.get("away_periods"), res.get("home_periods")) if sport == "nhl" else None},
                 "ctx": None if not ctx else {
                     "venue": ctx["venue"], "indoor": ctx["indoor"] == "True",
                     "temp_f": num(ctx["temp_f"]), "wind_mph": num(ctx["wind_mph"]),
@@ -488,6 +499,8 @@ def build(now):
     for g in games:
         if g["sport"] in ("nba", "nhl", "nfl", "mlb"):
             g["m1"] = model1_predict(g["sport"], g)
+        if g["sport"] == "nhl" and g.get("m1"):
+            g["r3"] = nhl_r3(g)
     sg, sclosed = soccer_dashboard.build_soccer(now, RECENT_DAYS, CLOSED_SNAPS)
     games += sg
     games.sort(key=lambda g: g["t"])
