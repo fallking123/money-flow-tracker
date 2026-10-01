@@ -403,7 +403,7 @@ def team_ctx(ctx, side, k):
     return v or ""
 
 
-LIVE_STRATS = ["model1", "model2", "combo", "favorite", "underdog"]
+LIVE_STRATS = ["model1", "model1_us", "model2", "combo", "favorite", "underdog"]
 
 
 def live_summary():
@@ -431,8 +431,11 @@ def live_summary():
     slim = lambda r: {"sport": r["sport"], "t": r["game_time_utc"], "away": r["away_zh"] or r["away"], "home": r["home_zh"] or r["home"],
                       "pick": r["pick_zh"], "p": num(r["p"]), "tw": num(r["settle_odds"]) or num(r["tw_odds"]),
                       "src": r["settle_src"] or r["tw_src"], "ev": num(r["ev"]), "result": r["result"], "profit": num(r["profit"])}
+    # 每一筆開獎的注（畫獲利曲線、算凱利用）：[時間, 策略, 運動, 結算賠率, 開賽前勝率, 開賽前期望值, 賺賠(每 1 單位)]
+    series = sorted([[r["game_time_utc"], r["strategy"], r["sport"], num(r["settle_odds"]) or num(r["tw_odds"]), num(r["p"]), num(r["ev"]),
+                      num(r["profit"])] for r in rows if r["result"] in ("win", "loss", "push")], key=lambda x: x[0])
     return {"since": min((r["game_time_utc"] for r in m1), default=None), "strats": strats, "pending": len(pend),
-            "recent": [slim(r) for r in settled[:30]]}
+            "recent": [slim(r) for r in settled[:30]], "series": series}
 
 
 def build(now):

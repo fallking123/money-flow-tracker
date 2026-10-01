@@ -233,6 +233,37 @@ def flat(pick_home, y, dec_a, dec_h):
             "win": int((pl > 0).sum())}
 
 
+def curves(dates, p, pm, y, dec_a, dec_h, n_pts=120):
+    """回測獲利曲線（測試季照時間順序）：每條是 [[日期, 累積], ...]，抽樣到 n_pts 個點
+    - m1_us / m1_tw：每場都下 1 單位，押期望值比較高的那邊（美國收盤賠率／台彩估計賠率）
+    - m1_us_value：只下美國賠率期望值 ≥ +2% 的
+    - m1_us_kelly：同上，用 1/4 凱利（每注最多 3%）下注，數字是本金倍數（從 1 開始）
+    - fav_us：都押熱門（參考）"""
+    ta, th = dec_a * TW_DISCOUNT, dec_h * TW_DISCOUNT
+    def pl_of(home, da, dh):
+        return np.where(home, np.where(y == 1, dh - 1, -1.0), np.where(y == 0, da - 1, -1.0))
+    ev_h, ev_a = p * dec_h - 1, (1 - p) * dec_a - 1
+    home_us = ev_h >= ev_a
+    pl_us = pl_of(home_us, dec_a, dec_h)
+    pl_tw = pl_of((p * th) >= ((1 - p) * ta), ta, th)
+    pl_fav = pl_of(pm >= 0.5, dec_a, dec_h)
+    best_ev = np.maximum(ev_h, ev_a)
+    val = best_ev >= 0.02
+    pl_val = np.where(val, pl_us, 0.0)
+    o = np.where(home_us, dec_h, dec_a)
+    pp = np.where(home_us, p, 1 - p)
+    f = np.where(val, np.minimum(0.25 * best_ev / (o - 1), 0.03), 0.0)
+    bank, kel = 1.0, []
+    for i in range(len(y)):
+        bank *= 1 + f[i] * pl_us[i]
+        kel.append(bank)
+    idx = np.unique(np.linspace(0, len(y) - 1, n_pts).astype(int))
+    ds = [str(d)[:10] for d in dates]
+    pick = lambda arr: [[ds[i], round(float(arr[i]), 3)] for i in idx]
+    return {"m1_us": pick(np.cumsum(pl_us)), "m1_tw": pick(np.cumsum(pl_tw)), "m1_us_value": pick(np.cumsum(pl_val)),
+            "m1_us_kelly": pick(np.array(kel)), "fav_us": pick(np.cumsum(pl_fav)), "n_value": int(val.sum()), "n": int(len(y))}
+
+
 def fitter(tr, cols, C=1.0):
     tr = tr.dropna(subset=cols + ["y"])
     sc = StandardScaler().fit(tr[cols])
@@ -292,6 +323,9 @@ def run(sport):
     bet["every_tw"] = {"model1": flat(ev_pick(p_model), y, ta, th), "market": flat(ev_pick(p_mkt), y, ta, th),
                        "favorite": flat(fav_home, y, ta, th), "underdog": flat(~fav_home, y, ta, th)}
     bet["every_us"] = {"model1": flat(ev_pick(p_model), y, test["dec_close_away"].values, test["dec_close_home"].values)}
+    order = np.argsort(test["date"].values, kind="stable")
+    bet["curves"] = curves(test["date"].values[order], p_model[order], p_mkt[order], y[order],
+                           test["dec_close_away"].values[order], test["dec_close_home"].values[order])
     if has_open.sum() > 200:
         # 在開盤就下注：模型只能看到開盤賠率（不能偷看收盤），用開盤賠率算特徵再比開盤賠率
         t2 = test[has_open].copy()

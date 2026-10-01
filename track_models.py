@@ -12,6 +12,7 @@
 - combo    綜合：等模型二
 - favorite 都押熱門（參考）
 - underdog 都押冷門（參考）
+- model1_us 模型一・美國賠率：同一個模型，押「美國賠率期望值比較高」的那一邊，用美國賠率結算（看模型本身準不準）
 每場都當作押 1 單位；profit＝賺賠（贏：賠率−1，輸：−1，平手退款：0）。
 ev＝開賽前估的期望值，看板用它算「只下划算的（ev > 0）」。
 
@@ -75,6 +76,28 @@ def ml_options(g):
     return [{"key": k, "us": o, "p": p, "m": m} for k, o, p, m in zip(keys, us, mdl["p"], mdl["mkt"])], snap
 
 
+def us_options(g):
+    """用美國賠率下注：含延長賽的二選一（足球三選一），勝率用模型一（足球用足球模型）"""
+    snap = next((s for s in reversed(g.get("snaps") or []) if s.get("ml")), None)
+    if not snap:
+        return []
+    ml = snap["ml"]
+    if g["sport"] == "soccer":
+        mdl = g.get("model")
+        if not mdl or len(ml) < 9:
+            return []
+        keys, us = ["home", "draw", "away"], [ml[6], ml[7], ml[8]]
+    else:
+        mdl = g.get("m1")
+        if not mdl or len(ml) < 6:
+            return []
+        keys, us = ["away", "home"], [ml[4], ml[5]]
+    if not all(us) or any(o <= 1 for o in us):
+        return []
+    return [{"key": k, "us": o, "p": p, "m": m, "tw": o, "src": "us", "ev": p * o - 1}
+            for k, o, p, m in zip(keys, us, mdl["p"], mdl["mkt"])]
+
+
 def pick_name(g, key):
     return "和局" if key == "draw" else (g.get(key + "_zh") or g[key])
 
@@ -93,15 +116,28 @@ def picks(g, tw):
             o["tw"], o["src"] = (o["est"] if "est" in o else round(o["us"] * (1 + d / 100), 3)), "est"
         o["ev"] = o["p"] * o["tw"] - 1
     two = [o for o in opts if o["key"] != "draw"]
-    return {"model1": max(opts, key=lambda o: o["ev"]),
-            "favorite": max(two, key=lambda o: o["m"]),
-            "underdog": min(two, key=lambda o: o["m"])}, snap
+    out = {"model1": max(opts, key=lambda o: o["ev"]),
+           "favorite": max(two, key=lambda o: o["m"]),
+           "underdog": min(two, key=lambda o: o["m"])}
+    us = us_options(g)
+    if us:   # 同一個模型，改用美國賠率下：看得出模型本身準不準（不被台彩抽成蓋掉）
+        out["model1_us"] = max(us, key=lambda o: o["ev"])
+    return out, snap
 
 
 def settle(row, g):
     """回傳 (result, 結算賠率, 賠率來源, 賺賠)"""
     res = g["result"]
     w, pick = res.get("winner"), row["pick"]
+    if row["strategy"].endswith("_us"):   # 美國賠率：含延長賽，用開賽前最後記到的美國賠率結算
+        if g["sport"] == "soccer":
+            won = (w == "tie") if pick == "draw" else (w == pick)
+        else:
+            if w == "tie":
+                return "push", "", "", 0.0
+            won = w == pick
+        odds = float(row["tw_odds"])
+        return ("win" if won else "loss"), odds, "us", round(odds - 1, 4) if won else -1.0
     if g["sport"] == "nhl":
         w = res.get("reg")        # 台彩冰球只算 60 分鐘
         if w is None:
