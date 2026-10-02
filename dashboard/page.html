@@ -50,14 +50,14 @@ button,input,select{font:inherit;color:inherit}
 .rf:disabled{color:var(--muted);cursor:default}
 .rfmsg{max-width:1080px;margin:0 auto;padding:0 16px 8px;font-size:12.5px;color:var(--muted);text-align:right}
 .rfmsg.bad{color:var(--bad)}
-.navtop{display:flex;gap:4px;background:var(--soft2);padding:4px;border-radius:999px}
+.navtop{display:flex;gap:4px;background:var(--soft2);padding:4px;border-radius:999px;overflow-x:auto;scrollbar-width:none}
 .navtop button{appearance:none;border:0;background:none;padding:6px 15px;border-radius:999px;cursor:pointer;color:var(--ink2);font-weight:500;font-size:14px;white-space:nowrap}
 .navtop button[aria-current="page"]{background:var(--card);color:var(--ink);font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,.08)}
 .tabs{display:none}
 main{max-width:1080px;margin:0 auto;padding:18px 16px 60px}
 @media (max-width:899px){
   .navtop{display:none}
-  .tabs{display:grid;grid-template-columns:repeat(6,1fr);position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+  .tabs{display:grid;grid-template-columns:repeat(7,1fr);position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
   .tabs button{appearance:none;border:0;background:none;height:var(--tabh);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:11px;color:var(--muted);cursor:pointer}
   .tabs button[aria-current="page"]{color:var(--accent);font-weight:700}
   main{padding-bottom:calc(var(--tabh) + 40px + env(safe-area-inset-bottom,0px))}
@@ -270,6 +270,20 @@ table{border-collapse:collapse;width:100%}
 .msg{font-size:13px;color:var(--muted)}
 .bl select{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:3px 6px;font-size:13px}
 
+/* ── 計算機 ── */
+.cpick{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.cbtn{appearance:none;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:8px 11px;text-align:left;cursor:pointer;color:var(--ink);display:flex;flex-direction:column;gap:1px;min-width:0}
+.cbtn b{font-size:14px}
+.cbtn span{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cbtn[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.cbtn[aria-pressed="true"] b{color:var(--accent)}
+.crow{display:flex;gap:8px;align-items:flex-end;margin-bottom:8px}
+.crow .form{flex:1;grid-template-columns:repeat(auto-fit,minmax(110px,1fr))}
+.crow .btn.del{margin-bottom:6px}
+.ctiles{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
+#ccard .form label{min-width:0}
+@media (max-width:640px){.cpick{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.cbtn{padding:7px 8px}.cbtn b{font-size:13px}.cbtn span{display:none}}
+
 /* ── 說明 ── */
 .steps{display:flex;flex-direction:column;gap:12px}
 .step{display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:start}
@@ -353,6 +367,12 @@ table{border-collapse:collapse;width:100%}
     <div id="tw" class="stack"></div>
   </section>
 
+  <section data-view="calc" hidden>
+    <h1>計算機</h1>
+    <p class="intro">13 種投注計算機。賠率都用小數（跟台彩一樣，例如 1.85），金額以 10 元為單位。輸入的數字會記在這台裝置上，下次打開還在。</p>
+    <div id="calc" class="stack"></div>
+  </section>
+
   <section data-view="method" hidden>
     <h1>說明</h1>
     <p class="intro">這個看板在做什麼、名詞是什麼意思、離「用模型推薦」還有多遠。</p>
@@ -387,6 +407,7 @@ table{border-collapse:collapse;width:100%}
     {k: "bets", n: "我的投注", s: "我的投注", i: '<rect x="4" y="3" width="14" height="16" rx="3" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M8 8h6M8 11.5h6M8 15h3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>'},
     {k: "models", n: "模型比賽", s: "模型", i: '<circle cx="5.5" cy="6" r="2.2" stroke="currentColor" stroke-width="1.7" fill="none"/><circle cx="16.5" cy="6" r="2.2" stroke="currentColor" stroke-width="1.7" fill="none"/><circle cx="11" cy="16.5" r="2.2" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M7.2 7.6l2.7 7M14.8 7.6l-2.7 7M7.8 6h6.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>'},
     {k: "tw", n: "台彩賠率", s: "台彩", i: '<circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M8.5 13.5l5-5M8.7 8.7h.01M13.3 13.3h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'},
+    {k: "calc", n: "計算機", s: "計算機", i: '<rect x="4" y="2.5" width="14" height="17" rx="3" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M7.5 6.5h7M7.5 11h.01M11 11h.01M14.5 11h.01M7.5 15h.01M11 15h.01M14.5 15h.01" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>'},
     {k: "method", n: "說明", s: "說明", i: '<circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M11 10v5M11 7h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'},
   ];
   const hashView = () => { const h = (location.hash || "").slice(1); return VIEWS.some((v) => v.k === h) ? h : null; };
@@ -1688,13 +1709,299 @@ table{border-collapse:collapse;width:100%}
     $("method").innerHTML = h;
   }
 
+  // ═════════ 計算機（13 種）：賠率都用小數（台彩格式），金額以 10 元為單位；輸入的數字記在這台裝置上 ═════════
+  const CALCS = [
+    ["kelly", "凱利公式", "該下本金的幾 %"],
+    ["ev", "期望值", "這注長期賺還是賠"],
+    ["parlay", "串關", "總賠率、獎金、全中機率"],
+    ["rr", "過關組合", "例如 4 選 3、2～4 串全餐"],
+    ["implied", "隱含機率", "賠率換成機率"],
+    ["vig", "抽水", "兩邊賠率，莊家抽多少"],
+    ["margin", "多選項抽成", "三選一以上的抽成"],
+    ["novig", "去水公平賠率", "拿掉抽水後的真實機率"],
+    ["conv", "賠率換算", "小數／美國／分數／香港"],
+    ["arb", "套利／對沖", "保證賺、或鎖住已下的注"],
+    ["bonus", "免費注轉現金", "用對沖把贈金換成現金"],
+    ["spread", "讓分換算", "讓分盤兩邊的勝率"],
+    ["poisson", "Poisson 大小分", "用預期進球估機率"],
+  ];
+  const CDEF = {
+    kelly: {odds: "1.90", p: "55", bank: "", frac: "0.25", cap: "3"},
+    ev: {odds: "1.90", p: "55", stake: "1000"},
+    parlay: {stake: "100", legs: [{o: "1.80", p: ""}, {o: "1.90", p: ""}]},
+    rr: {stake: "100", sizes: {"2": true}, legs: [{o: "1.80", hit: true}, {o: "1.90", hit: true}, {o: "2.10", hit: false}]},
+    implied: {rows: [{n: "A", o: "1.90"}, {n: "B", o: "1.90"}]},
+    vig: {a: "1.90", b: "1.90"},
+    margin: {rows: [{n: "主", o: "2.50"}, {n: "和", o: "3.20"}, {n: "客", o: "2.80"}]},
+    novig: {method: "mult", rows: [{n: "A", o: "1.75", my: ""}, {n: "B", o: "2.10", my: ""}]},
+    conv: {fmt: "dec", v: "1.90"},
+    arb: {mode: "arb", total: "10000", rows: [{n: "A", o: "1.65"}, {n: "B", o: "6.00"}], stake: "1000", odds: "3.50", hedge: "1.60", goal: "equal"},
+    bonus: {free: "1000", fo: "4.00", ho: "1.30", sr: false},
+    spread: {line: "-1.5", a: "2.10", b: "1.75", push: "", ta: "", tb: ""},
+    poisson: {h: "1.6", a: "1.1", line: "2.5", tov: "", tun: "", t1: "", tx: "", t2: ""},
+  };
+  const clone = (x) => JSON.parse(JSON.stringify(x));
+  const CALC = {cur: store.get("calc_cur", "kelly"), s: store.get("calc_s", {})};
+  const cst = (k) => (CALC.s[k] && CALC.s[k].__v ? CALC.s[k] : (CALC.s[k] = {...clone(CDEF[k]), ...(CALC.s[k] || {}), __v: 1}));
+  const csave = () => store.set("calc_s", CALC.s);
+  // ── 小工具 ──
+  const F = (v) => { const x = parseFloat(String(v ?? "").replace("−", "-")); return isFinite(x) ? x : null; };
+  const pc = (x, dp = 1) => (x == null || !isFinite(x) ? "–" : (x * 100).toFixed(dp) + "%");
+  const d2 = (x) => (x == null || !isFinite(x) || x <= 0 ? "–" : x.toFixed(2));
+  const rnd10 = (x) => Math.round(x / 10) * 10;
+  const money = (x) => (x == null || !isFinite(x) ? "–" : (x < 0 ? "−" : "") + "NT$ " + Math.abs(Math.round(x)).toLocaleString("en-US"));
+  const pmny = (x) => (x == null || !isFinite(x) ? "–" : (x > 0.5 ? "+" : x < -0.5 ? "−" : "") + "NT$ " + Math.abs(Math.round(x)).toLocaleString("en-US"));
+  const okO = (o) => o != null && o > 1;
+  const inp = (path, lab, v, o = {}) => {
+    const txt = o.type === "text";
+    return `<label${o.wide ? ' class="wide"' : ""}>${lab}<input data-c="${path}" type="${txt ? "text" : "number"}" ${txt ? `inputmode="${o.im || "text"}"` : `step="${o.step || "0.01"}" inputmode="decimal"`} value="${esc(v ?? "")}" placeholder="${esc(o.ph || "")}" autocomplete="off"></label>`;
+  };
+  const sel = (path, lab, v, opts) => `<label>${lab}<select data-c="${path}">${opts.map(([k, n]) => `<option value="${k}"${String(v) === k ? " selected" : ""}>${n}</option>`).join("")}</select></label>`;
+  const chk = (path, lab, v) => `<label class="chk"><input type="checkbox" data-c="${path}"${v ? " checked" : ""}> ${lab}</label>`;
+  const ctile = (lab, val, cls = "") => `<div class="tile ${cls}">${lab}<b>${val}</b></div>`;
+  const ctiles = (arr) => `<div class="tiles ctiles">${arr.join("")}</div>`;
+  const cnote = (t) => `<p class="mut" style="font-size:12.5px;margin:10px 0 0">${t}</p>`;
+  const cverd = (cls, title, body = "") => `<div class="verdict ${cls}" style="margin-top:10px"><b>${title}</b>${body}</div>`;
+  const ctable = (head, rows) => `<div class="scroll" style="margin-top:10px"><table class="tb"><thead><tr>${head.map((h, i) => `<th${i ? ' class="r"' : ""}>${h}</th>`).join("")}</tr></thead><tbody>${rows.map((r) => `<tr>${r.map((c, i) => `<td${i ? ' class="r n"' : ""}>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+  const evCls = (ev) => (ev >= EV_GO ? "good" : ev < 0 ? "bad" : "");
+  const evWord = (ev) => (ev >= EV_GO ? "值得下" : ev >= 0 ? "差一點，不值得冒險" : "不划算，長期會虧");
+  function rowsUI(key, s, cols, {min = 1, max = 10, add = "＋ 再加一個"} = {}) {
+    const arr = s[key];
+    return arr.map((r, i) => `<div class="crow"><div class="form">${cols.map((c) => (c.chk ? chk(`${key}.${i}.${c.f}`, c.lab, r[c.f])
+      : inp(`${key}.${i}.${c.f}`, typeof c.lab === "function" ? c.lab(i) : c.lab, r[c.f], c))).join("")}</div>${arr.length > min ? `<button type="button" class="btn sm del" data-crm="${key}|${i}" data-cmin="${min}" aria-label="移除這一列">✕</button>` : ""}</div>`).join("")
+      + (arr.length < max ? `<button type="button" class="btn sm ghost" data-cadd="${key}">${add}</button>` : "");
+  }
+  const validRows = (rows) => rows.map((r) => ({...r, o: F(r.o)})).filter((r) => okO(r.o));
+  // 去水：比例法／平均扣除法／次方法
+  function noVig(os, method) {
+    const inv = os.map((o) => 1 / o), S = inv.reduce((a, b) => a + b, 0), n = os.length;
+    if (method === "add") return inv.map((x) => Math.max(0, x - (S - 1) / n));
+    if (method === "pow") {
+      let lo = 0.01, hi = 50;
+      for (let i = 0; i < 80; i++) { const k = (lo + hi) / 2, f = inv.reduce((a, x) => a + Math.pow(x, k), 0) - 1; if (f > 0) lo = k; else hi = k; }
+      const k = (lo + hi) / 2; return inv.map((x) => Math.pow(x, k));
+    }
+    return inv.map((x) => x / S);
+  }
+  // 賠率換算
+  function toDec(fmt, v) {
+    v = String(v ?? "").trim().replace("−", "-").replace("＋", "+");
+    if (fmt === "dec") { const x = F(v); return x > 1 ? x : null; }
+    if (fmt === "us") { const x = F(v.replace("+", "")); if (x == null) return null; if (x >= 100) return 1 + x / 100; if (x <= -100) return 1 + 100 / -x; return null; }
+    if (fmt === "frac") { const m = v.match(/^(\d+(?:\.\d+)?)\s*(?:[\/:]\s*(\d+(?:\.\d+)?))?$/); if (!m) return null; const a = +m[1], b = m[2] ? +m[2] : 1; return b > 0 && a > 0 ? 1 + a / b : null; }
+    if (fmt === "hk") { const x = F(v); return x > 0 ? 1 + x : null; }
+    if (fmt === "prob") { const x = F(v.replace("%", "")); return x > 0 && x < 100 ? 100 / x : null; }
+    return null;
+  }
+  function toFrac(x) {
+    let h1 = 1, h0 = 0, k1 = 0, k0 = 1, b = x;
+    for (let i = 0; i < 25; i++) {
+      const a = Math.floor(b), h2 = a * h1 + h0, k2 = a * k1 + k0;
+      if (k2 > 100) break;
+      h0 = h1; h1 = h2; k0 = k1; k1 = k2;
+      if (Math.abs(b - a) < 1e-9) break;
+      b = 1 / (b - a);
+    }
+    return k1 ? `${h1}/${k1}` : "–";
+  }
+  const usOdds = (d) => (d >= 2 ? "+" + Math.round((d - 1) * 100) : "−" + Math.round(100 / (d - 1)));
+  function combos(n, k) { const out = [], c = []; const go = (st) => { if (c.length === k) { out.push([...c]); return; } for (let i = st; i < n; i++) { c.push(i); go(i + 1); c.pop(); } }; go(0); return out; }
+  const pois = (k, l) => { let p = Math.exp(-l); for (let i = 1; i <= k; i++) p *= l / i; return p; };
+
+  // ── 各計算機：表單（CF）＋結果（CO）──
+  const CF = {
+    kelly: (s) => `<div class="form">${inp("odds", "賠率", s.odds)}${inp("p", "你估的勝率 %", s.p, {step: "0.1"})}${inp("bank", "本金（元）", s.bank, {step: "100", ph: bankNow() ? "用你的本金 " + Math.round(bankNow()).toLocaleString("en-US") : "例如 50000"})}
+      ${sel("frac", "保守程度", s.frac, [["1", "全凱利"], ["0.5", "1/2 凱利"], ["0.25", "1/4 凱利（建議）"], ["0.125", "1/8 凱利"]])}${inp("cap", "每注最多（本金 %）", s.cap, {step: "0.5"})}</div>`,
+    ev: (s) => `<div class="form">${inp("odds", "賠率", s.odds)}${inp("p", "你估的勝率 %", s.p, {step: "0.1"})}${inp("stake", "下注金額", s.stake, {step: "10"})}</div>`,
+    parlay: (s) => `<div class="form" style="margin-bottom:8px">${inp("stake", "下注金額", s.stake, {step: "10"})}</div>${rowsUI("legs", s, [{f: "o", lab: (i) => `第 ${i + 1} 關賠率`}, {f: "p", lab: "勝率 %（選填）", step: "0.1"}], {min: 2, max: 10, add: "＋ 再加一關"})}`,
+    rr: (s) => {
+      const n = validRows(s.legs).length;
+      const sz = [];
+      for (let k = 2; k <= Math.max(2, n); k++) sz.push(chk(`sizes.${k}`, `${k} 串 1（${n >= k ? combos(n, k).length : 0} 組）`, s.sizes[k]));
+      return `<div class="form" style="margin-bottom:8px">${inp("stake", "每組金額", s.stake, {step: "10"})}</div>${rowsUI("legs", s, [{f: "o", lab: (i) => `第 ${i + 1} 關賠率`}, {f: "hit", lab: "這關中了", chk: true}], {min: 2, max: 8, add: "＋ 再加一關"})}
+        <div style="margin-top:10px"><div class="mut" style="font-size:12.5px;margin-bottom:4px">要買哪幾種串法</div><div class="form" style="grid-template-columns:repeat(auto-fill,minmax(130px,1fr))">${sz.join("")}</div></div>`;
+    },
+    implied: (s) => rowsUI("rows", s, [{f: "n", lab: "名稱", type: "text"}, {f: "o", lab: "賠率"}], {min: 1, max: 8}),
+    vig: (s) => `<div class="form">${inp("a", "A 邊賠率", s.a)}${inp("b", "B 邊賠率", s.b)}</div>`,
+    margin: (s) => rowsUI("rows", s, [{f: "n", lab: "選項", type: "text"}, {f: "o", lab: "賠率"}], {min: 2, max: 12, add: "＋ 再加一個選項"}),
+    novig: (s) => `<div class="form" style="margin-bottom:8px">${sel("method", "去水方法", s.method, [["mult", "比例法（最常用）"], ["pow", "次方法（冷門扣多一點）"], ["add", "平均扣除法"]])}</div>${rowsUI("rows", s, [{f: "n", lab: "選項", type: "text"}, {f: "o", lab: "莊家賠率（例如 Pinnacle）"}, {f: "my", lab: "你要下的賠率（選填）"}], {min: 2, max: 8, add: "＋ 再加一個選項"})}`,
+    conv: (s) => `<div class="form">${sel("fmt", "我手上的是", s.fmt, [["dec", "小數（台彩／歐洲）"], ["us", "美國盤（+150、−200）"], ["frac", "分數（5/2）"], ["hk", "香港盤（0.90）"], ["prob", "機率 %"]])}${inp("v", "數值", s.v, {type: "text", im: "text"})}</div>`,
+    arb: (s) => `<div class="seg" role="group" style="margin-bottom:10px"><button type="button" data-cset="mode" data-cv="arb" aria-pressed="${s.mode === "arb"}">套利</button><button type="button" data-cset="mode" data-cv="hedge" aria-pressed="${s.mode === "hedge"}">對沖</button></div>`
+      + (s.mode === "arb" ? `<div class="form" style="margin-bottom:8px">${inp("total", "總共要下（元）", s.total, {step: "100"})}</div>${rowsUI("rows", s, [{f: "n", lab: "結果／平台", type: "text"}, {f: "o", lab: "賠率"}], {min: 2, max: 4, add: "＋ 再加一個結果（三選一用）"})}`
+        : `<div class="form">${inp("stake", "原本下注金額", s.stake, {step: "10"})}${inp("odds", "原本的賠率（串關填總賠率）", s.odds)}${inp("hedge", "對沖那一邊的賠率", s.hedge)}${sel("goal", "想要", s.goal, [["equal", "不管哪邊都一樣賺"], ["breakeven", "原本的輸了也保本"]])}</div>`),
+    bonus: (s) => `<div class="form">${inp("free", "免費注金額", s.free, {step: "10"})}${inp("fo", "免費注押的賠率", s.fo)}${inp("ho", "另一邊（用現金對沖）的賠率", s.ho)}${chk("sr", "贏了連免費注本金也還（少見）", s.sr)}</div>`,
+    spread: (s) => `<div class="form">${inp("line", "A 邊的讓分（例如 −1.5）", s.line, {type: "text", im: "text"})}${inp("a", "A 邊賠率", s.a)}${inp("b", "B 邊賠率", s.b)}${inp("push", "走水機率 %（整數盤才填）", s.push, {step: "0.1"})}${inp("ta", "A 邊你要下的賠率（選填）", s.ta)}${inp("tb", "B 邊你要下的賠率（選填）", s.tb)}</div>`,
+    poisson: (s) => `<div class="form">${inp("h", "主隊預期進球", s.h, {step: "0.05"})}${inp("a", "客隊預期進球", s.a, {step: "0.05"})}${inp("line", "大小盤口", s.line, {step: "0.25"})}${inp("tov", "大 的賠率（選填）", s.tov)}${inp("tun", "小 的賠率（選填）", s.tun)}${inp("t1", "主勝賠率（選填）", s.t1)}${inp("tx", "和局賠率（選填）", s.tx)}${inp("t2", "客勝賠率（選填）", s.t2)}</div>`,
+  };
+  const CO = {
+    kelly(s) {
+      const o = F(s.odds), p = F(s.p) / 100, bank = F(s.bank) || bankNow(), fr = F(s.frac) || 0.25, cap = (F(s.cap) || 100) / 100;
+      if (!okO(o) || !(p > 0 && p < 1)) return cnote("請填賠率（大於 1）和勝率（0～100%）。");
+      const ev = p * o - 1, full = ev / (o - 1);
+      if (full <= 0) return ctiles([ctile("期望值", sgn(ev * 100, 1) + "%", "bad"), ctile("凱利建議", "0%")]) + cverd("bad", "不要下", `勝率要超過 ${pc(1 / o)} 這注才有正的期望值。`);
+      const pick = Math.min(full * fr, cap), amt = (f) => (bank ? money(Math.floor(bank * f / 10) * 10) : "填本金");
+      return ctiles([ctile("期望值", sgn(ev * 100, 1) + "%", evCls(ev)), ctile("全凱利", pc(full)), ctile("你的比例", pc(pick) + (full * fr > cap ? "<small> 到上限</small>" : "")), ctile("建議下注", amt(pick), "good")])
+        + ctable(["比例", "本金 %", "金額"], [[1, "全凱利"], [0.5, "1/2 凱利"], [0.25, "1/4 凱利"], [0.125, "1/8 凱利"]].map(([f, n]) => { const x = Math.min(full * f, cap); return [n, pc(x), amt(x)]; }))
+        + cnote(`凱利公式＝(勝率 × 賠率 − 1) ÷ (賠率 − 1)。全凱利長期成長最快，但起伏非常大、勝率估錯就容易大虧，所以一般只下 1/4。金額無條件捨去到 10 元。${bank ? "" : "本金沒填時會用「我的投注」設定的本金。"}`);
+    },
+    ev(s) {
+      const o = F(s.odds), p = F(s.p) / 100, st = F(s.stake) || 0;
+      if (!okO(o) || !(p > 0 && p < 1)) return cnote("請填賠率（大於 1）和勝率（0～100%）。");
+      const ev = p * o - 1;
+      return ctiles([ctile("期望值", sgn(ev * 100, 1) + "%", evCls(ev)), ctile("每注平均賺賠", pmny(st * ev), evCls(ev)), ctile("損益兩平要贏", pc(1 / o)), ctile("你的勝率對應的公平賠率", d2(1 / p))])
+        + cverd(evCls(ev), evWord(ev), `下 100 次、每次 ${money(st)}，長期大約 ${pmny(st * ev * 100)}。`)
+        + cnote("期望值＝勝率 × 賠率 − 1。勝率是「你估的」，估得準不準才是關鍵；可以用「去水公平賠率」把 Pinnacle 的賠率換成勝率再填進來。看板上 +2% 以上才說「可以下」，留一點估錯的空間。");
+    },
+    parlay(s) {
+      const L = s.legs.map((l) => ({o: F(l.o), p: F(l.p)})).filter((l) => okO(l.o));
+      if (L.length < 2) return cnote("至少要兩關的賠率。");
+      const tot = L.reduce((a, l) => a * l.o, 1), st = F(s.stake) || 0, allP = L.every((l) => l.p > 0 && l.p < 100);
+      const pAll = allP ? L.reduce((a, l) => a * l.p / 100, 1) : null, pImp = L.reduce((a, l) => a / l.o, 1);
+      let h = ctiles([ctile("總賠率", d2(tot)), ctile("全中拿回", money(st * tot), "good"), ctile("淨賺", pmny(st * (tot - 1))), ctile(allP ? "全中機率（你估的）" : "全中機率（照賠率）", pc(allP ? pAll : pImp, 2))]);
+      if (allP) { const ev = pAll * tot - 1; h += cverd(evCls(ev), `串關期望值 ${sgn(ev * 100, 1)}%：${evWord(ev)}`); }
+      return h + cnote(`總賠率＝每關賠率相乘。「照賠率」的機率含莊家抽水，真實機率通常高一點。每多串一關抽水就多疊一次：台彩每關約抽 15%，串 2 關約等於被抽 ${pc(1 - Math.pow(1 / 1.15, 2), 0)}、串 3 關約 ${pc(1 - Math.pow(1 / 1.15, 3), 0)}。`);
+    },
+    rr(s) {
+      const L = s.legs.map((l) => ({o: F(l.o), hit: !!l.hit})).filter((l) => okO(l.o)), n = L.length, st = F(s.stake) || 0;
+      const ks = Object.keys(s.sizes).filter((k) => s.sizes[k]).map(Number).filter((k) => k >= 2 && k <= n).sort((a, b) => a - b);
+      if (n < 2) return cnote("至少要兩關的賠率。");
+      if (!ks.length) return cnote("勾選要買的串法（例如 2 串 1）。");
+      let cnt = 0, cost = 0, maxPay = 0, pay = 0;
+      const rows = ks.map((k) => {
+        const cs = combos(n, k), all = cs.reduce((a, c) => a + c.reduce((m, i) => m * L[i].o, 1), 0) * st;
+        const now = cs.filter((c) => c.every((i) => L[i].hit)).reduce((a, c) => a + c.reduce((m, i) => m * L[i].o, 1), 0) * st;
+        cnt += cs.length; cost += cs.length * st; maxPay += all; pay += now;
+        return [`${k} 串 1`, cs.length, money(cs.length * st), money(all), money(now)];
+      });
+      const hits = L.filter((l) => l.hit).length;
+      return ctiles([ctile("總組數", cnt + " 組"), ctile("總成本", money(cost)), ctile(`中 ${hits} 關時`, pmny(pay - cost), pay - cost >= 0 ? "good" : "bad"), ctile("全中淨賺", pmny(maxPay - cost), "good")])
+        + ctable(["串法", "組數", "成本", "全中拿回", "照勾選拿回"], rows.concat([["合計", cnt, money(cost), money(maxPay), money(pay)]]))
+        + cnote(`勾「這關中了」可以模擬只中幾關時拿回多少。例如 ${Math.max(3, n)} 關只勾 ${Math.max(3, n) - 1} 串 1，就是「${Math.max(3, n)} 選 ${Math.max(3, n) - 1}」；2 串到 ${n} 串全勾就是全餐。每一組都各自被抽一次水，組數越多，抽水吃掉越多。`);
+    },
+    implied(s) {
+      const R = validRows(s.rows); if (!R.length) return cnote("請填賠率（大於 1）。");
+      const S = R.reduce((a, r) => a + 1 / r.o, 0);
+      const rows = R.map((r) => [esc(r.n || ""), d2(r.o), pc(1 / r.o), R.length > 1 ? pc(1 / r.o / S) : "–"]);
+      if (R.length > 1) rows.push(["<b>加總</b>", "", `<b>${pc(S)}</b>`, "100%"]);
+      return ctable(["選項", "賠率", "隱含機率", "去水後"], rows)
+        + (R.length > 1 ? ctiles([ctile("加起來", pc(S)), ctile("多出來的＝抽水", pc(S - 1), S > 1 ? "bad" : "good")]) : "")
+        + cnote("隱含機率＝1 ÷ 賠率，代表莊家開的價「含抽水」的機率。同一場所有結果加起來會超過 100%，多出來的就是抽水；按比例縮回 100% 就是「去水後」，比較接近莊家心中的真實機率。");
+    },
+    vig(s) {
+      const a = F(s.a), b = F(s.b); if (!okO(a) || !okO(b)) return cnote("請填兩邊的賠率（大於 1）。");
+      const S = 1 / a + 1 / b, q = [1 / a / S, 1 / b / S];
+      return ctiles([ctile("兩邊加起來", pc(S)), ctile("抽水", pc(S - 1), S > 1 ? "bad" : "good"), ctile("每收 100 元莊家留下", (100 * (1 - 1 / S)).toFixed(1) + " 元"), ctile("公平賠率 A／B", `${d2(1 / q[0])}／${d2(1 / q[1])}`)])
+        + ctable(["", "賠率", "隱含機率", "去水機率", "公平賠率"], [["A", d2(a), pc(1 / a), pc(q[0]), d2(1 / q[0])], ["B", d2(b), pc(1 / b), pc(q[1]), d2(1 / q[1])]])
+        + cnote("抽水＝兩邊賠率倒數相加 − 1，越低越好。參考（我們的記錄）：Pinnacle 約 2～3%、美國大莊家約 4～5%、台彩約 15%（MLB 21 場平均）。兩邊加起來低於 100% 就是套利。");
+    },
+    margin(s) {
+      const R = validRows(s.rows); if (R.length < 2) return cnote("至少要兩個選項的賠率。");
+      const S = R.reduce((a, r) => a + 1 / r.o, 0);
+      return ctiles([ctile("全部加起來", pc(S)), ctile("抽成", pc(S - 1), S > 1 ? "bad" : "good"), ctile("每收 100 元莊家留下", (100 * (1 - 1 / S)).toFixed(1) + " 元")])
+        + ctable(["選項", "賠率", "隱含機率", "去水機率", "公平賠率"], R.map((r) => [esc(r.n || ""), d2(r.o), pc(1 / r.o), pc(1 / r.o / S), d2(S * r.o)]))
+        + cnote("三選一（足球主／和／客、台彩冰球 60 分鐘）或更多選項（例如冠軍盤）都適用。選項越多，莊家通常抽越多。例如台彩冰球國王 3.00／和 3.70／雪崩 1.70，加起來 119%，抽約 19%。");
+    },
+    novig(s) {
+      const R = validRows(s.rows); if (R.length < 2) return cnote("至少要兩個選項的賠率。");
+      const q = noVig(R.map((r) => r.o), s.method), S = R.reduce((a, r) => a + 1 / r.o, 0);
+      const rows = R.map((r, i) => { const my = F(r.my), ev = okO(my) ? q[i] * my - 1 : null; return [esc(r.n || ""), d2(r.o), pc(q[i]), d2(1 / q[i]), ev == null ? "–" : `<span class="${evCls(ev)}">${sgn(ev * 100, 1)}%</span>`]; });
+      const best = R.map((r, i) => (okO(F(r.my)) ? {n: r.n, ev: q[i] * F(r.my) - 1} : null)).filter(Boolean).sort((a, b) => b.ev - a.ev)[0];
+      return ctiles([ctile("原本加起來", pc(S)), ctile("抽水", pc(S - 1))]) + ctable(["選項", "莊家賠率", "公平機率", "公平賠率", "你的賠率期望值"], rows)
+        + (best ? cverd(evCls(best.ev), `${esc(best.n || "")}：期望值 ${sgn(best.ev * 100, 1)}%，${evWord(best.ev)}`) : "")
+        + cnote("用最準的莊家（Pinnacle）的賠率去水，得到的就是「真實機率」，再拿去跟台彩或別家的賠率比，算期望值。比例法：每邊按比例縮。次方法：冷門的抽水扣比較多（莊家通常在冷門抽得多），比較準。平均扣除法：每邊扣一樣多。看板用的是比例法。");
+    },
+    conv(s) {
+      const d = toDec(s.fmt, s.v);
+      if (!d) return cnote({dec: "小數賠率要大於 1，例如 1.85。", us: "美國盤要 ≥ +100 或 ≤ −100，例如 +150、−200。", frac: "分數例如 5/2、1/2。", hk: "香港盤要大於 0，例如 0.85。", prob: "機率填 0～100 之間，例如 52.4。"}[s.fmt]);
+      return ctable(["格式", "數值"], [["小數（台彩／歐洲）", d.toFixed(3).replace(/0$/, "")], ["美國盤", usOdds(d)], ["分數（英國）", toFrac(d - 1)], ["香港盤", (d - 1).toFixed(3).replace(/0$/, "")], ["隱含機率", pc(1 / d, 2)], ["押 1,000 元贏了拿回", money(1000 * d)]])
+        + cnote("台彩用小數賠率（含本金）。美國盤 +150＝押 100 贏 150；−200＝押 200 贏 100。分數 5/2＝押 2 贏 5。香港盤只算淨贏的部分（小數 − 1）。分數只取分母 100 以內的近似值。");
+    },
+    arb(s) {
+      if (s.mode === "hedge") {
+        const st = F(s.stake), o = F(s.odds), h = F(s.hedge);
+        if (!(st > 0) || !okO(o) || !okO(h)) return cnote("請填原本的金額、賠率，和對沖那邊的賠率。");
+        const raw = s.goal === "breakeven" ? st / (h - 1) : st * o / h, x = s.goal === "breakeven" ? Math.ceil(raw / 10) * 10 : rnd10(raw);
+        const w1 = st * (o - 1) - x, w2 = x * (h - 1) - st;
+        return ctiles([ctile("對沖要下", money(x), "good"), ctile("原本那注中", pmny(w1), w1 >= 0 ? "good" : "bad"), ctile("對沖那邊中", pmny(w2), w2 >= 0 ? "good" : "bad")])
+          + ctable(["結果", "不對沖", "對沖後"], [["原本那注中", pmny(st * (o - 1)), pmny(w1)], ["對沖那邊中", pmny(-st), pmny(w2)]])
+          + cnote("常見用法：串關前面幾關都中了，只剩最後一關——「原本的賠率」填串關總賠率，「對沖那一邊」填最後一關另一邊的賠率，就能把獲利先鎖住。對沖等於花一部分可能的獎金買保險，兩邊都被抽水，所以鎖住的會比全中少很多。");
+      }
+      const R = validRows(s.rows), T0 = F(s.total);
+      if (R.length < 2 || !(T0 > 0)) return cnote("請填總金額，和至少兩個結果的賠率。");
+      const S = R.reduce((a, r) => a + 1 / r.o, 0);
+      if (S >= 1) return ctiles([ctile("加起來", pc(S), "bad")]) + cverd("bad", "沒有套利", `所有結果「1 ÷ 賠率」加起來要低於 100% 才有；現在是 ${pc(S)}。`);
+      const xs = R.map((r) => rnd10(T0 * (1 / r.o) / S)), T = xs.reduce((a, b) => a + b, 0), prof = R.map((r, i) => xs[i] * r.o - T), mn = Math.min(...prof);
+      return ctiles([ctile("加起來", pc(S), "good"), ctile("總共下", money(T)), ctile("保證最少賺", pmny(mn), mn >= 0 ? "good" : "bad"), ctile("報酬率", pc(mn / T))])
+        + ctable(["結果／平台", "賠率", "要下", "這個結果中了拿回", "賺"], R.map((r, i) => [esc(r.n || ""), d2(r.o), money(xs[i]), money(xs[i] * r.o), pmny(prof[i])]))
+        + cnote("金額按「1 ÷ 賠率」的比例分配，四捨五入到 10 元，所以各結果賺的會差一點點。<b>風險</b>：賠率開錯時莊家可以取消注單（只剩一邊就變成單押）；兩邊規則（延期、腰斬、延長賽）要完全一樣；賠率常幾分鐘就變；常套利的帳號會被限額。在台灣用海外網站下注違法。");
+    },
+    bonus(s) {
+      const fb = F(s.free), fo = F(s.fo), ho = F(s.ho);
+      if (!(fb > 0) || !okO(fo) || !okO(ho)) return cnote("請填免費注金額和兩邊賠率。");
+      const win = s.sr ? fb * fo : fb * (fo - 1), x = rnd10(win / ho), c1 = win - x, c2 = x * (ho - 1), mn = Math.min(c1, c2);
+      return ctiles([ctile("對沖要下（現金）", money(x)), ctile("保證拿到", pmny(mn), "good"), ctile("轉換率", pc(mn / fb))])
+        + ctable(["結果", "拿到"], [["免費注那邊中", pmny(c1)], ["對沖那邊中", pmny(c2)]])
+        + cnote("免費注贏了通常只給淨贏、不還本金，所以要挑賠率高一點（3～6）的來押，轉換率比較好，一般能拿回 60～75%。台彩沒有贈金，這是給有送免費注的平台用的。");
+    },
+    spread(s) {
+      const a = F(s.a), b = F(s.b), ln = F(s.line), p0 = (F(s.push) || 0) / 100;
+      if (!okO(a) || !okO(b)) return cnote("請填兩邊的賠率。");
+      const S = 1 / a + 1 / b, qa = (1 / a / S) * (1 - p0), qb = (1 / b / S) * (1 - p0), fo = (q) => (1 - p0) / q;
+      const lab = (x) => (x == null ? "" : `（${x > 0 ? "+" : x < 0 ? "−" : ""}${Math.abs(x)}）`);
+      const evOf = (q, o) => (okO(o) ? q * o + p0 - 1 : null), ea = evOf(qa, F(s.ta)), eb = evOf(qb, F(s.tb));
+      const rows = [[`A${lab(ln)}`, d2(a), pc(qa), d2(fo(qa)), ea == null ? "–" : `<span class="${evCls(ea)}">${sgn(ea * 100, 1)}%</span>`],
+                    [`B${lab(ln == null ? null : -ln)}`, d2(b), pc(qb), d2(fo(qb)), eb == null ? "–" : `<span class="${evCls(eb)}">${sgn(eb * 100, 1)}%</span>`]];
+      return ctiles([ctile("A 贏盤機率", pc(qa)), ctile("B 贏盤機率", pc(qb)), ctile("走水", pc(p0)), ctile("抽水", pc(S - 1))])
+        + ctable(["", "賠率", "贏盤機率", "公平賠率", "你的賠率期望值"], rows)
+        + cnote("把讓分盤兩邊的賠率去水，就是兩邊「過盤」的機率。整數盤（例如讓 1 分）打平會退錢，知道走水機率就填（例如 NFL 讓 3 分大約 9%），不知道就留空。用 Pinnacle 的讓分賠率算出機率，再填台彩的賠率，就能算台彩讓分值不值得下（盤口要一樣）。");
+    },
+    poisson(s) {
+      const lh = F(s.h), la = F(s.a), L = F(s.line);
+      if (!(lh > 0) || !(la > 0)) return cnote("請填兩隊預期進球（例如 1.6、1.1）。");
+      const N = 15, ph = [...Array(N + 1)].map((_, k) => pois(k, lh)), pa = [...Array(N + 1)].map((_, k) => pois(k, la));
+      let H = 0, D = 0, A = 0; const tot = Array(2 * N + 1).fill(0), sc = [];
+      for (let i = 0; i <= N; i++) for (let j = 0; j <= N; j++) { const p = ph[i] * pa[j]; if (i > j) H += p; else if (i === j) D += p; else A += p; tot[i + j] += p; if (i <= 6 && j <= 6) sc.push([i, j, p]); }
+      const ouHalf = (l) => { let o = 0, u = 0, pu = 0; tot.forEach((p, t) => { if (t > l + 1e-9) o += p; else if (t < l - 1e-9) u += p; else pu += p; }); return {o, u, pu}; };
+      const quarter = L != null && Math.abs(Math.round(L * 4)) % 2 === 1, halves = L == null ? [] : quarter ? [L - 0.25, L + 0.25] : [L];
+      const ou = halves.map(ouHalf), avg = (f) => ou.reduce((a, x) => a + f(x), 0) / ou.length;
+      const evOU = (side, odds) => (okO(odds) && ou.length ? avg((x) => (side === "o" ? x.o : x.u) * odds + x.pu - 1) : null);
+      const pOver = ou.length ? avg((x) => x.o) : null, pUnder = ou.length ? avg((x) => x.u) : null, pPush = ou.length ? avg((x) => x.pu) : 0;
+      const ev = (p, o) => (okO(F(o)) ? p * F(o) - 1 : null), evS = (e) => (e == null ? "–" : `<span class="${evCls(e)}">${sgn(e * 100, 1)}%</span>`);
+      const btts = (1 - ph[0]) * (1 - pa[0]);
+      sc.sort((x, y) => y[2] - x[2]);
+      return ctiles([ctile("主勝", pc(H)), ctile("和局", pc(D)), ctile("客勝", pc(A)), ctile(`大 ${L ?? ""}`, pc(pOver)), ctile(`小 ${L ?? ""}`, pc(pUnder)), ctile("兩隊都進球", pc(btts))])
+        + ctable(["", "機率", "公平賠率", "你的賠率期望值"], [["主勝", pc(H), d2(1 / H), evS(ev(H, s.t1))], ["和局", pc(D), d2(1 / D), evS(ev(D, s.tx))], ["客勝", pc(A), d2(1 / A), evS(ev(A, s.t2))],
+          [`大 ${L ?? ""}`, pc(pOver), pOver ? d2((1 - pPush) / pOver) : "–", evS(evOU("o", F(s.tov)))], [`小 ${L ?? ""}`, pc(pUnder), pUnder ? d2((1 - pPush) / pUnder) : "–", evS(evOU("u", F(s.tun)))]])
+        + `<h4 style="margin:12px 0 4px;font-size:13.5px">最可能的比分</h4><div class="feat"><ul>${sc.slice(0, 8).map(([i, j, p]) => `<li>${i}：${j}　${pc(p)}</li>`).join("")}</ul></div>`
+        + cnote(`${quarter ? `${L} 是四分之一盤：一半押 ${L - 0.25}、一半押 ${L + 0.25}，期望值已經照這樣算。` : pPush > 0.001 ? `整數盤剛好 ${L} 分會退錢（走水 ${pc(pPush)}）。` : ""}預期進球可以用兩隊近 10 場平均進球、失球估（主隊的進球 × 客隊的失球 ÷ 聯賽平均）。Poisson 常低估 0:0、1:1 這種和局，只當參考。冰球也能用，但台彩冰球只算 60 分鐘。`);
+    },
+  };
+  function calcOut(k, s) { try { return CO[k](s); } catch (e) { return cnote("算不出來，檢查一下輸入的數字。"); } }
+  function renderCalc() {
+    const k = CALCS.some((c) => c[0] === CALC.cur) ? CALC.cur : "kelly", s = cst(k), meta = CALCS.find((c) => c[0] === k);
+    $("calc").innerHTML = `<div class="cpick">${CALCS.map(([kk, n, d]) => `<button type="button" class="cbtn" data-cpick="${kk}" aria-pressed="${kk === k}"><b>${n}</b><span>${d}</span></button>`).join("")}</div>
+      <div class="card" id="ccard"><h3>${meta[1]}<small>${meta[2]}</small></h3>${CF[k](s)}<div id="cout" style="margin-top:14px">${calcOut(k, s)}</div>
+      <div class="formbar"><button type="button" class="btn sm ghost" data-creset="1">恢復預設</button></div></div>`;
+  }
+  function calcInput(e) {
+    const t = e.target; if (!t.dataset || t.dataset.c == null || !t.closest || !t.closest("#calc")) return;
+    const s = cst(CALC.cur), ks = t.dataset.c.split("."); let o = s;
+    for (let i = 0; i < ks.length - 1; i++) { if (o[ks[i]] == null) o[ks[i]] = {}; o = o[ks[i]]; }
+    o[ks[ks.length - 1]] = t.type === "checkbox" ? t.checked : t.value;
+    csave();
+    if (CALC.cur === "rr" && /^legs\.\d+\.o$/.test(t.dataset.c) && e.type === "change") return renderCalc();   // 關數變了，串法的組數要重算
+    const out = $("cout"); if (out) out.innerHTML = calcOut(CALC.cur, s);
+  }
+  document.addEventListener("input", calcInput);
+  document.addEventListener("change", calcInput);
+
   // ═════════ 外框 ═════════
   function renderNav() {
     const icon = (v) => `<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">${v.i}</svg>`;
     $("navtop").innerHTML = VIEWS.map((v) => `<button type="button" data-v="${v.k}"${state.view === v.k ? ' aria-current="page"' : ""}>${v.n}</button>`).join("");
     $("tabs").innerHTML = VIEWS.map((v) => `<button type="button" data-v="${v.k}"${state.view === v.k ? ' aria-current="page"' : ""}>${icon(v)}${v.s}</button>`).join("");
     $$("[data-view]").forEach((s) => { s.hidden = s.dataset.view !== state.view; });
-    $("sports").hidden = state.view === "method" || state.view === "bets" || state.view === "models";
+    $("sports").hidden = state.view === "method" || state.view === "bets" || state.view === "models" || state.view === "calc";
   }
   function renderSports() {
     const up = (k) => DATA.games.filter((g) => (k === "all" || g.sport === k) && (g.status === "upcoming" || g.status === "started")).length;
@@ -1720,6 +2027,7 @@ table{border-collapse:collapse;width:100%}
     else if (state.view === "bets") renderBets();
     else if (state.view === "tw") renderTw();
     else if (state.view === "models") renderModels();
+    else if (state.view === "calc") renderCalc();
     else renderMethod();
   }
   function go(v) { state.view = v; store.set("view", v); try { history.replaceState(null, "", "#" + v); } catch (e) {} render(); window.scrollTo(0, 0); }
@@ -1728,6 +2036,12 @@ table{border-collapse:collapse;width:100%}
     const t = e.target.closest && e.target.closest("button");
     if (!t || !DATA) return;
     if (t.dataset.v) return go(t.dataset.v);
+    // 計算機
+    if (t.dataset.cpick) { CALC.cur = t.dataset.cpick; store.set("calc_cur", CALC.cur); renderCalc(); const c = $("ccard"); if (c && c.getBoundingClientRect().top > window.innerHeight * 0.6) c.scrollIntoView({behavior: "smooth", block: "start"}); return; }
+    if (t.dataset.cadd) { const arr = cst(CALC.cur)[t.dataset.cadd]; if (arr && arr.length < 12) arr.push({...arr[arr.length - 1]}); csave(); return renderCalc(); }
+    if (t.dataset.crm) { const [key, i] = t.dataset.crm.split("|"), arr = cst(CALC.cur)[key]; if (arr && arr.length > (+t.dataset.cmin || 1)) arr.splice(+i, 1); csave(); return renderCalc(); }
+    if (t.dataset.cset) { cst(CALC.cur)[t.dataset.cset] = t.dataset.cv; csave(); return renderCalc(); }
+    if (t.dataset.creset) { CALC.s[CALC.cur] = null; cst(CALC.cur); csave(); return renderCalc(); }
     if (t.dataset.mc) { MC[t.dataset.mc] = t.dataset.mcv; store.set("mc_" + t.dataset.mc, t.dataset.mcv); return renderModels(); }
     if (t.dataset.s) { state.sport = t.dataset.s; store.set("sport", state.sport); return render(); }
     if (t.dataset.m) { state.mkt = t.dataset.m; store.set("mkt", state.mkt); return render(); }
