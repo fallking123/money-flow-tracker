@@ -2,8 +2,10 @@ name: Backfill results
 
 on:
   workflow_dispatch: {}
+  # 台灣時間 20:17 主要一次；07:17 備用一次（GitHub 排程常延遲好幾小時，晚上那次太晚時隔天早上補上）
   schedule:
     - cron: "17 12 * * *"
+    - cron: "17 23 * * *"
 
 permissions:
   contents: write
