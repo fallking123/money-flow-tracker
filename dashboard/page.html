@@ -7,6 +7,7 @@
 :root{
   --bg:#F2F5F9; --card:#FFFFFF; --soft:#F4F7FB; --soft2:#EAEFF5; --ink:#1D2433; --ink2:#46526A; --muted:#6B7A90; --line:#E3E8EF;
   --accent:#2F6FEB; --accent-soft:#E7EFFE;
+  --sig:#0F6B5C; --sig-soft:#E1F0EA; --sig-ink:#FFFFFF;
   --good:#137A43; --good-soft:#E6F5EC; --bad:#C2410C; --bad-soft:#FDEEE6; --warn:#9A5B00; --warn-soft:#FFF1D6;
   --band:#8A97AB; --shadow:0 6px 20px rgba(40,60,90,.07);
   --num:"Nunito","Noto Sans TC",system-ui,sans-serif;
@@ -18,6 +19,7 @@
     color-scheme:dark;
     --bg:#0E131A; --card:#171E28; --soft:#1D2531; --soft2:#243040; --ink:#E8EDF4; --ink2:#BBC5D3; --muted:#8B98AD; --line:#2A3442;
     --accent:#6EA2FF; --accent-soft:#1B2A45;
+    --sig:#3FC19C; --sig-soft:#15302A; --sig-ink:#0B1A16;
     --good:#4CCB85; --good-soft:#16301F; --bad:#F2905F; --bad-soft:#3A2217; --warn:#F2B24C; --warn-soft:#3A2C12;
     --band:#7C8AA0; --shadow:none;
   }
@@ -26,6 +28,7 @@
   color-scheme:dark;
   --bg:#0E131A; --card:#171E28; --soft:#1D2531; --soft2:#243040; --ink:#E8EDF4; --ink2:#BBC5D3; --muted:#8B98AD; --line:#2A3442;
   --accent:#6EA2FF; --accent-soft:#1B2A45;
+  --sig:#3FC19C; --sig-soft:#15302A; --sig-ink:#0B1A16;
   --good:#4CCB85; --good-soft:#16301F; --bad:#F2905F; --bad-soft:#3A2217; --warn:#F2B24C; --warn-soft:#3A2C12;
   --band:#7C8AA0; --shadow:none;
 }
@@ -263,6 +266,34 @@ details.gbin[open]>summary::after{content:"－"}
 .gbx b{font-size:16px}
 .gbx small{font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gbx.few-n b{color:var(--muted)!important}
+.bhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:14px}
+.bhead span{font-size:13px}
+.btiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.bt{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.bt span{font-size:12.5px;color:var(--muted)}
+.bt b{font-size:28px;line-height:1.1}
+.bt b.sm{font-size:17px;line-height:1.6;white-space:nowrap}
+.bt small{font-size:11px;color:var(--muted)}
+.bt.on{background:var(--sig);border-color:var(--sig)} .bt.on span{color:var(--sig-ink);opacity:.85} .bt.on b{color:var(--sig-ink)}
+.bt-link{appearance:none;border:0;background:none;padding:4px 0;color:var(--sig);font-weight:700;font-size:15px;cursor:pointer;text-align:left}
+.bsec{font-size:14px;font-weight:700;color:var(--ink2);margin:6px 2px 10px;display:flex;gap:8px;align-items:baseline}
+.bsec span{font-weight:400;font-size:12.5px;color:var(--muted)}
+.sigc{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:13px 14px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow);min-width:0}
+.sc-top{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px;color:var(--muted)}
+.sc-tag{border-radius:999px;padding:1px 9px;font-weight:700;background:var(--sig-soft);color:var(--sig);white-space:nowrap}
+.sc-tag.on{background:var(--sig);color:var(--sig-ink)}
+.sc-pick{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:17px;font-weight:700}
+.sc-pick b{color:var(--sig)}
+.sc-pick .n{font-size:15px;color:var(--muted)}
+.sc-match{font-size:12.5px;margin-top:-6px}
+.sc-bar{display:grid;grid-template-columns:4.2em 1fr 3em;gap:10px;align-items:center;font-size:12px;color:var(--muted)}
+.sc-bar .track{height:8px;border-radius:999px;background:var(--soft2);overflow:hidden}
+.sc-bar .track i{display:block;height:100%;border-radius:999px;background:var(--sig)}
+.sc-bar b{text-align:right;color:var(--ink);font-size:14px}
+.sc-note{font-size:13px;color:var(--ink2);line-height:1.6}
+.sc-full{border-top:1px solid var(--line);padding-top:12px}
+.others{appearance:none;width:100%;margin-top:14px;border:1px dashed var(--line);background:transparent;border-radius:14px;padding:13px 14px;font-size:14px;color:var(--ink2);display:flex;justify-content:space-between;cursor:pointer}
+.others .go{color:var(--sig);font-weight:700}
 .qin{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted)}
 .qin input{width:110px;font:inherit;font-size:16px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:7px 10px}
 .few{font-size:11px;color:var(--muted);background:var(--soft2);border-radius:6px;padding:0 5px;margin-left:5px}
@@ -352,12 +383,10 @@ details.gbin[open]>summary::after{content:"－"}
   <div class="chips" id="sports" role="group" aria-label="運動"></div>
 
   <section data-view="board">
-    <h1>今日比賽</h1>
-    <p class="intro">每場比賽告訴你：<b>大戶的錢押哪一邊</b>（押的人少、錢卻多的那邊），以及在台彩下注划不划算。時間都是台灣時間。</p>
+    <div class="bhead"><h1>今天的重點</h1><span id="bsub" class="mut"></span></div>
+    <div id="btop"></div>
     <div class="ctl">
-      <div class="seg mkt" role="group" aria-label="玩法"></div>
       <div class="thr"><label>錢比人多<br>幾 % 算訊號</label><input type="range" class="thrin" min="5" max="30" step="1" aria-label="訊號門檻"><output class="thrv">15%</output></div>
-      <button type="button" class="tog" id="only" aria-pressed="false">只看有訊號</button>
     </div>
     <div id="board"></div>
   </section>
@@ -436,7 +465,7 @@ details.gbin[open]>summary::after{content:"－"}
   const hashView = () => { const h = (location.hash || "").slice(1); return VIEWS.some((v) => v.k === h) ? h : null; };
   const state = {view: hashView() || store.get("view", "board"), sport: store.get("sport", "all"), thr: store.get("thr", 15),
                  mkt: store.get("mkt", "ml"), amkt: store.get("amkt", "all"), only: store.get("only", false),
-                 sort: store.get("sort", {k: "t", dir: -1}), open: new Set()};
+                 sort: store.get("sort", {k: "t", dir: -1}), open: new Set(), others: store.get("others", false), sigOpen: new Set()};
   let DATA = null, BETS = [], DB = null, dbState = "loading";
 
   const pct = (v) => (v == null ? "–" : Math.round(v) + "%");
@@ -846,7 +875,7 @@ details.gbin[open]>summary::after{content:"－"}
   // ═════════ 今日比賽 ═════════
   // 卡片上的「每一注期望值」：三種玩法、每一邊都算；點一下直接去記錄這注
   // 比賽頁最上面：現在所有划算的注（台彩期望值或美國賠率期望值 ≥ +2%），跟推播用同一個標準
-  function valueBlock(list) {
+  function valueItems(list) {
     const items = [];
     for (const g of list) {
       if (g.status !== "upcoming") continue;
@@ -854,6 +883,10 @@ details.gbin[open]>summary::after{content:"－"}
         if (o.ev >= EV_GO || (o.evUs != null && o.evUs >= EV_GO)) items.push({g, o});
       }
     }
+    return items;
+  }
+  function valueBlock(list) {
+    const items = valueItems(list);
     if (!items.length) return `<p class="mut" style="font-size:13px;margin:0 0 12px">目前沒有划算的注（台彩或美國賠率期望值 ≥ +2%）。出現的時候會推播通知你。</p>`;
     items.sort((a, b) => Math.max(b.o.ev, b.o.evUs ?? -1) - Math.max(a.o.ev, a.o.evUs ?? -1));
     const row = ({g, o}) => {
@@ -892,8 +925,8 @@ details.gbin[open]>summary::after{content:"－"}
     return `<div class="ts-wrap"><h4>每一注的期望值（含其他玩法）</h4><div class="scroll"><table class="tb mini evtb"><thead><tr><th>玩法</th><th>押什麼</th><th class="r">台彩</th><th class="r">期望值</th><th>判斷</th><th class="r hide-s">估計勝率</th><th class="r hide-s">至少要</th><th class="r hide-s">美國賠率・期望值</th></tr></thead><tbody>${body}</tbody></table></div>
       <p class="mut" style="font-size:12px;margin:6px 0 0">「台彩 ≥ X 才下」＝台彩實際賠率要到 X，期望值才有 +2%。其他玩法只有美國賠率，勝率和台彩賠率都是估的，參考就好。</p></div>`;
   }
-  function gameCard(g) {
-    const mkt = state.mkt, thr = state.thr, s = latest(g), ss = sides(g, s, mkt), soc = g.sport === "soccer";
+  function gameCard(g, mk) {
+    const mkt = mk || state.mkt, thr = state.thr, s = latest(g), ss = sides(g, s, mkt), soc = g.sport === "soccer";
     const t = new Date(g.t), hrs = (t - Date.now()) / 36e5;
     const rel = g.status === "started" ? "比賽中" : hrs < 1 ? `${Math.max(1, Math.round(hrs * 60))} 分鐘後開打` : hrs < 48 ? `${Math.round(hrs)} 小時後開打` : `${Math.round(hrs / 24)} 天後開打`;
     const sig = signal(g, s, mkt, thr), rev = rlm(g, mkt), has = ss.some((x) => x.bet != null);
@@ -1043,18 +1076,63 @@ details.gbin[open]>summary::after{content:"－"}
       <div class="mrow"><span>傷兵</span><span>${c[side + "_inj"] ? esc(c[side + "_inj"]) : '<span class="mut">沒有名單</span>'}</span></div></div>`;
     return `<div class="ts-wrap"><h4>兩隊狀況</h4><div class="ts">${one("away", g.away_zh || g.away_ab, "客場")}${one("home", g.home_zh || g.home_ab, "主場")}</div></div>`;
   }
+  // ═════════ 比賽頁（B 版：重點優先）═════════
+  // 每場三種玩法裡有訊號的都抓出來，依「錢比人多」排
+  function boardSigs(list) {
+    const out = [];
+    for (const g of list) for (const mkt of ["ml", "sp", "ou"]) {
+      const sig = signal(g, latest(g), mkt, state.thr); if (!sig) continue;
+      const grp = g.status === "upcoming" ? evOptions(g).find((x) => x.mkt === mkt) : null;
+      const o = grp ? grp.opts.find((x) => x.sd.key === sig.key) : null;
+      out.push({g, mkt, sig, rv: rlm(g, mkt), o});
+    }
+    return out.sort((a, b) => b.sig.diff - a.sig.diff);
+  }
+  function sigCard({g, mkt, sig, rv, o}) {
+    const t = new Date(g.t), hrs = (t - Date.now()) / 36e5, strong = sig.diff >= state.thr + 10, key = g.sport + "|" + g.id + "|" + mkt, open = state.sigOpen.has(key);
+    const when = g.status === "started" ? "比賽中" : `${fmtTime.format(t)}${hrs < 24 ? "" : "・" + fmtMD.format(t)}`;
+    let note = "";
+    if (o) {
+      const need = needOdds(o);
+      if (o.ev >= EV_GO) { const st = stakeFor(o.p, o.tw); note = `<b class="good">期望值 ${evTxt(o.ev)}</b>，台彩 ≥ ${odd(need)} 可以下${st && st.amt ? `，建議 <b>${ntdAmt(st.amt)}</b>` : st && st.stop ? `（${st.stop}已到停損）` : ""}。`; }
+      else note = `台彩${o.est ? "估" : ""} ${odd(o.tw)}，要 ≥ ${odd(need)} 才划算${o.est ? "，可以看一下台彩實際賠率" : ""}。`;
+    }
+    if (rv) note += rv.key === sig.key ? ` 盤口也往這邊動，更可信。` : ` 但盤口往另一邊動，要小心。`;
+    return `<article class="sigc">
+      <div class="sc-top"><span>${when}・${esc(lgLabel(g))}・${MK[mkt]}</span><span class="sc-tag${strong ? " on" : ""}">訊號 ${strong ? "強" : "中等"}</span></div>
+      <div class="sc-pick"><span>錢押 <b>${esc(pickLabel(sig, mkt))}</b></span><span class="n">${odd(sig.odds)}</span></div>
+      <div class="sc-match mut">${esc(matchName(g))}</div>
+      <div class="sc-bar"><span>錢比人多</span><div class="track"><i style="width:${Math.min(100, sig.diff * 1.6)}%"></i></div><b class="n">+${Math.round(sig.diff)}%</b></div>
+      <div class="sc-note">押的人只有 ${pct(sig.bet)}，錢卻有 ${pct(sig.money)}。${note}</div>
+      <button type="button" class="more" data-sigopen="${esc(key)}" aria-expanded="${open}">${open ? "收起" : "看這場完整資料"}</button>
+      ${open ? `<div class="sc-full">${gameCard(g, mkt).replace(/^<article class="card game">/, '<div class="game">').replace(/<\/article>$/, "</div>")}</div>` : ""}
+    </article>`;
+  }
   function renderBoard() {
-    const list = DATA.games.filter((g) => inSport(g) && (g.status === "upcoming" || g.status === "started"))
-      .filter((g) => !state.only || signal(g, latest(g), state.mkt, state.thr));
-    if (!list.length) { $("board").innerHTML = `<div class="empty">${state.only ? "目前沒有達到訊號的比賽。可以把「幾 % 算訊號」調低看看。" : "這個運動目前沒有即將開打的比賽（休賽期或還沒開始記錄）。"}</div>`; return; }
-    const days = new Map();
-    for (const g of list) { const d = fmtDay.format(new Date(g.t)); if (!days.has(d)) days.set(d, []); days.get(d).push(g); }
+    const list = DATA.games.filter((g) => inSport(g) && (g.status === "upcoming" || g.status === "started"));
+    const soon = list.filter((g) => g.status === "started" || new Date(g.t) - Date.now() < 30 * 36e5);   // 重點只看 30 小時內開打的
+    const sigs = boardSigs(soon), vals = valueItems(DATA.games.filter(inSport)), nTw = vals.filter((x) => x.o.ev >= EV_GO).length;
+    const bank = bankNow(), sp = stopState(), left = bank == null ? null : Math.max(0, bank * bankCfg().daycap - todayStaked());
+    const sigGames = new Set(sigs.map((x) => x.g.sport + "|" + x.g.id)), rest = list.filter((g) => !sigGames.has(g.sport + "|" + g.id));
+    $("bsub").textContent = list.length ? `${fmtMD.format(new Date())}・${list.length} 場` : "";
     const need = twNeed().done.length;
-    let h = valueBlock(DATA.games.filter(inSport));
-    h += need ? `<button type="button" class="ask" data-v="tw">${CAM}<span>有 <b>${need} 場</b>剛打完的比賽需要台彩賠率截圖，記越多期望值越準</span><span class="go">看是哪幾場 →</span></button>` : "";
-    for (const [d, gs] of days) {
-      const n = gs.filter((g) => signal(g, latest(g), state.mkt, state.thr)).length;
-      h += `<div class="day">${d}<span>${gs.length} 場${n ? `・<b class="good">${n} 場有訊號</b>` : ""}</span></div><div class="grid">${gs.map(gameCard).join("")}</div>`;
+    $("btop").innerHTML = `<div class="btiles">
+        <div class="bt on"><span>大戶訊號</span><b class="n">${sigs.length}</b></div>
+        <div class="bt"><span>划算注</span><b class="n">${nTw}</b>${vals.length > nTw ? `<small>美國另有 ${vals.length - nTw}</small>` : ""}</div>
+        <div class="bt"><span>今天可下</span>${sp && (sp.day || sp.week) ? `<b class="sm bad">已停損</b>` : left == null ? `<button type="button" class="bt-link" data-v="bets">設定本金</button>` : `<b class="n sm">${ntdAmt(left)}</b>`}</div>
+      </div>${need ? `<button type="button" class="ask" data-v="tw">${CAM}<span>有 <b>${need} 場</b>剛打完的比賽需要台彩賠率截圖</span><span class="go">看是哪幾場 →</span></button>` : ""}`;
+    if (!list.length) { $("board").innerHTML = `<div class="empty">這個運動目前沒有即將開打的比賽（休賽期或還沒開始記錄）。</div>`; return; }
+    let h = `<div class="bsec">有訊號<span>依強度排</span></div>`;
+    h += sigs.length ? `<div class="grid">${sigs.map(sigCard).join("")}</div>` : `<div class="empty" style="padding:18px">目前沒有比賽達到訊號（錢比人多 ${state.thr}%）。可以把上面的門檻調低看看。</div>`;
+    h += `<div class="bsec">划算的注</div>` + valueBlock(DATA.games.filter(inSport));
+    if (rest.length) {
+      h += `<button type="button" class="others" id="others" aria-expanded="${state.others}"><span>其他 ${rest.length} 場沒有明顯訊號</span><span class="go">${state.others ? "收起" : "展開"}</span></button>`;
+      if (state.others) {
+        h += `<div class="ctl" style="margin:12px 0 0"><div class="seg mkt" role="group" aria-label="玩法">${["ml", "sp", "ou"].map((m) => `<button type="button" data-m="${m}" aria-pressed="${state.mkt === m}">${MK[m]}</button>`).join("")}</div></div>`;
+        const days = new Map();
+        for (const g of rest) { const d = fmtDay.format(new Date(g.t)); if (!days.has(d)) days.set(d, []); days.get(d).push(g); }
+        for (const [d, gs] of days) h += `<div class="day">${d}<span>${gs.length} 場</span></div><div class="grid">${gs.map((g) => gameCard(g)).join("")}</div>`;
+      }
     }
     $("board").innerHTML = h;
   }
@@ -2170,7 +2248,7 @@ details.gbin[open]>summary::after{content:"－"}
   function renderCtl() {
     $$(".thrin").forEach((i) => { i.value = state.thr; });
     $$(".thrv").forEach((o) => { o.textContent = state.thr + "%"; });
-    $("only").setAttribute("aria-pressed", String(state.only));
+
     $$(".mkt").forEach((el) => { el.innerHTML = ["ml", "sp", "ou"].map((m) => `<button type="button" data-m="${m}" aria-pressed="${state.mkt === m}">${MK[m]}</button>`).join(""); });
     $$(".mkta").forEach((el) => { el.innerHTML = [["all", "全部"], ["ml", "獨贏"], ["sp", "讓分"], ["ou", "大小分"]].map(([k, n]) => `<button type="button" data-am="${k}" aria-pressed="${state.amkt === k}">${n}</button>`).join(""); });
   }
@@ -2221,7 +2299,8 @@ details.gbin[open]>summary::after{content:"－"}
       FORM.legs = [{...newLeg(fmtISO.format(new Date(g.t))), league: leagueOf(g), gid: g.sport + "|" + g.id, market, pick: t.dataset.pick}];
       return go("bets");
     }
-    if (t.id === "only") { state.only = !state.only; store.set("only", state.only); return render(); }
+    if (t.id === "others") { state.others = !state.others; store.set("others", state.others); return renderBoard(); }
+    if (t.dataset.sigopen) { const k = t.dataset.sigopen; state.sigOpen.has(k) ? state.sigOpen.delete(k) : state.sigOpen.add(k); return renderBoard(); }
     if (t.id === "addleg") { { const last = FORM.legs[FORM.legs.length - 1]; FORM.legs.push({...newLeg(last.date), league: last.league}); } return redrawLegs(); }
     if (t.dataset.rmleg != null) { FORM.legs.splice(+t.dataset.rmleg, 1); if (!FORM.legs.length) FORM.legs.push(newLeg()); return redrawLegs(); }
     if (t.dataset.act === "del" && DB) {
