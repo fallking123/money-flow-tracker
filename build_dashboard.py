@@ -182,12 +182,20 @@ def closing_row(rows):
     return pre_game_rows(rows)[-1]
 
 
+SNAP_ANCHORS = (1, 2, 3, 6, 12)  # 網頁「統計時間點」可選開賽前幾小時：每個時間點都要留一筆
+
+
 def thin(rows, k=CLOSED_SNAPS):
-    """平均挑 k 筆，一定包含第一筆跟最後一筆"""
+    """平均挑 k 筆，一定包含第一筆、最後一筆，以及開賽前 1/2/3/6/12 小時各自最近的一筆"""
     if len(rows) <= k:
         return rows
-    idx = sorted({round(i * (len(rows) - 1) / (k - 1)) for i in range(k)})
-    return [rows[i] for i in idx]
+    keep = {0, len(rows) - 1}
+    for a in SNAP_ANCHORS:
+        hit = [i for i, r in enumerate(rows) if num(r.get("hours_until_game")) is not None and num(r["hours_until_game"]) >= a]
+        if hit:
+            keep.add(hit[-1])
+    keep |= {round(i * (len(rows) - 1) / (k - 1)) for i in range(k)}
+    return [rows[i] for i in sorted(keep)]
 
 
 def open_of(first):

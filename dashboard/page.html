@@ -250,6 +250,21 @@ details.gbin>summary::-webkit-details-marker{display:none}
 details.gbin>summary::after{content:"＋";color:var(--muted);font-weight:400}
 details.gbin[open]>summary::after{content:"－"}
 .gbt td small{display:block;font-size:11px;color:var(--muted);font-weight:400}
+.tb td.ed{line-height:1.25}
+.tb td.ed b{font-size:14px}
+.tb td.ed small{font-size:11px;color:var(--muted);font-weight:400}
+.tb td.ed .vd{display:block;font-size:10.5px;font-weight:700;color:var(--muted)}
+.tb td.ed.good b,.tb td.ed.good .vd{color:var(--good)} .tb td.ed.bad b,.tb td.ed.bad .vd{color:var(--bad)}
+.tb td.ed.thin b,.tb td.ed.luck b{color:var(--ink2)}
+.atsel{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted)}
+.atsel select{font-size:15px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 8px}
+.stopbar{display:grid;grid-template-columns:3em 1fr auto;gap:10px;align-items:center;font-size:13px;color:var(--muted)}
+.stopbar .track{height:8px;border-radius:999px;background:var(--soft2);overflow:hidden}
+.stopbar .track i{display:block;height:100%;background:var(--warn);border-radius:999px}
+.stopbar.hit .track i{background:var(--bad)} .stopbar.hit .n{color:var(--bad)}
+.howto{font-size:12.5px;color:var(--ink2);background:var(--soft);border-radius:12px;padding:9px 12px;line-height:1.6}
+.howto>b:first-child{display:block;color:var(--ink);font-size:13px}
+.howto span{display:block;margin-top:3px}
 .qin{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted)}
 .qin input{width:110px;font:inherit;font-size:16px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:7px 10px}
 .few{font-size:11px;color:var(--muted);background:var(--soft2);border-radius:6px;padding:0 5px;margin-left:5px}
@@ -703,7 +718,33 @@ details.gbin[open]>summary::after{content:"－"}
 
   // ═════════ 資金管理：本金 → 建議下注金額（凱利公式，預設 1/4、每注最多 3%、一天最多 8%）═════════
   let BANK = null;   // 存在看板資料庫 settings/bank：{start, since, frac, cap, daycap}
-  const BANK_DEF = {frac: 0.25, cap: 0.03, daycap: 0.08};
+  const BANK_DEF = {frac: 0.25, cap: 0.03, daycap: 0.08, stopd: 0.05, stopw: 0.10};
+  // ── 心態保護：停損、連輸是不是在運氣範圍內 ──
+  const twDate = () => fmtISO.format(new Date());
+  function weekStart() {   // 台灣時間這週一
+    const d = new Date(twDate() + "T12:00:00+08:00"), wd = (d.getUTCDay() + 6) % 7;
+    return fmtISO.format(new Date(d - wd * 864e5));
+  }
+  function lossSince(from) {   // 已開獎的淨賺賠（負數＝虧）
+    return BETS.filter((b) => b.result !== "pending" && b.date >= from && b.date <= twDate()).reduce((a, b) => a + betPL(b), 0);
+  }
+  function stopState() {
+    if (!BANK || !(BANK.start > 0)) return null;
+    const c = bankCfg(), base = BANK.start, d = lossSince(twDate()), w = lossSince(weekStart());
+    const dl = base * c.stopd, wl = base * c.stopw;
+    return {d, w, dl, wl, day: -d >= dl, week: -w >= wl};
+  }
+  // n 注裡至少出現一次「連輸 k 注以上」的機率（每注輸的機率 q）
+  function pRunAtLeast(k, n, q) {
+    if (k <= 0) return 1; if (k > n) return 0;
+    let dp = new Array(k).fill(0); dp[0] = 1;   // dp[j]＝目前連輸 j 注、還沒出現過 k 連輸的機率
+    for (let i = 0; i < n; i++) {
+      const nx = new Array(k).fill(0);
+      for (let j = 0; j < k; j++) { if (!dp[j]) continue; nx[0] += dp[j] * (1 - q); if (j + 1 < k) nx[j + 1] += dp[j] * q; }
+      dp = nx;
+    }
+    return 1 - dp.reduce((a, b) => a + b, 0);
+  }
   const bankCfg = () => ({...BANK_DEF, ...(BANK || {})});
   function bankNow() {
     if (!BANK || !(BANK.start > 0)) return null;
@@ -715,6 +756,7 @@ details.gbin[open]>summary::after{content:"－"}
     const bank = bankNow(); if (!bank || p == null || !(o > 1)) return null;
     const c = bankCfg(), ev = p * o - 1, k = (p * o - 1) / (o - 1);
     if (ev < EV_GO) return {amt: 0, bank};
+    const sp = stopState(); if (sp && (sp.day || sp.week)) return {amt: 0, bank, stop: sp.day ? "今天" : "這週"};
     const pct = Math.min(k * c.frac, c.cap), left = Math.max(0, bank * c.daycap - todayStaked());
     let amt = Math.floor(bank * pct / 10) * 10;
     const dayCapped = amt > left; if (dayCapped) amt = Math.floor(left / 10) * 10;
@@ -1078,7 +1120,7 @@ details.gbin[open]>summary::after{content:"－"}
   // ═════════ 資金流向區間統計：下注人數 %、下注金額 % 分格（每幾 % 一格自己調），看押這一邊的長期勝率 ═════════
   // 每個運動／聯賽分開算（也有「全部」），獨贏、讓分、大小分各一張；全部格子都列出來（不是只挑勝率最高的）
   const BIN = {f: store.get("bin_f", "both"), lg: store.get("bin_lg", "all"), w: +store.get("bin_w", 3), min: +store.get("bin_min", 3),
-               r: +store.get("bin_r", 5), sc: store.get("bin_sc", "lg"), qb: store.get("bin_qb", ""), qm: store.get("bin_qm", "")};
+               r: +store.get("bin_r", 5), at: +store.get("bin_at", 0), sc: store.get("bin_sc", "lg"), qb: store.get("bin_qb", ""), qm: store.get("bin_qm", "")};
   const binOpen = new Set();
   const lgKey = (g) => (g.sport === "soccer" ? g.league || "soccer" : g.sport);
   function binLeagues() {
@@ -1087,13 +1129,18 @@ details.gbin[open]>summary::after{content:"－"}
     return [...m.values()].sort((a, b) => b.n - a.n);
   }
   // 一個玩法的所有「邊」：{lg, bet, money, o（贏 1／輸 −1／和 0）, pl, fair}；資料沒變就不重算
+  // 統計時間點：0＝收盤（開賽前最後一筆），其他＝開賽前至少 X 小時的最後一筆（跟你實際下注的時間對齊）
+  const AT_OPTS = [[0, "收盤"], [1, "開賽前 1 小時"], [2, "開賽前 2 小時"], [3, "開賽前 3 小時"], [6, "開賽前 6 小時"], [12, "開賽前 12 小時"]];
+  const snapAt = (g) => { if (!BIN.at) return closing(g); const ok = g.snaps.filter((x) => x.hrs != null && x.hrs >= BIN.at); return ok.length ? ok[ok.length - 1] : null; };
+  const atLabel = () => (AT_OPTS.find((x) => x[0] === BIN.at) || AT_OPTS[0])[1];
   let BINC = null;
   function binAll(mkt) {
     if (!BINC || BINC.d !== DATA) BINC = {d: DATA, m: {}};
-    if (BINC.m[mkt]) return BINC.m[mkt];
+    const ck = mkt + "|" + BIN.at;
+    if (BINC.m[ck]) return BINC.m[ck];
     const out = [];
     for (const g of allFinal()) {
-      const s = closing(g); if (!s) continue;
+      const s = snapAt(g); if (!s) continue;
       const ss = sides(g, s, mkt), lg = lgKey(g);
       ss.forEach((sd, i) => {
         if (sd.bet == null && sd.money == null) return;
@@ -1101,7 +1148,7 @@ details.gbin[open]>summary::after{content:"－"}
         out.push({lg, bet: sd.bet, money: sd.money, o: r.o, pl: r.pl, fair: fair(ss, i)});
       });
     }
-    return (BINC.m[mkt] = out);
+    return (BINC.m[ck] = out);
   }
   const binItems = (mkt, lg = BIN.lg) => (lg === "all" ? binAll(mkt) : binAll(mkt).filter((x) => x.lg === lg));
   const binLo = (v) => Math.floor(Math.min(v, 99.999) / BIN.w) * BIN.w;
@@ -1110,18 +1157,28 @@ details.gbin[open]>summary::after{content:"－"}
     const m = new Map();
     for (const it of items) {
       const k = keyFn(it); if (k == null) continue;
-      if (!m.has(k)) m.set(k, {k, n: 0, w: 0, l: 0, pl: 0, fs: 0, nf: 0});
+      if (!m.has(k)) m.set(k, {k, n: 0, w: 0, l: 0, pl: 0, fs: 0, nf: 0, nd: 0, wf: 0, e: 0, v: 0});
       const c = m.get(k); c.n++; c.pl += it.pl; if (it.o > 0) c.w++; else if (it.o < 0) c.l++;
-      if (it.fair != null) { c.fs += it.fair; c.nf++; }
+      if (it.fair != null) {
+        c.fs += it.fair; c.nf++;
+        if (it.o !== 0) { c.nd++; c.e += it.fair; c.v += it.fair * (1 - it.fair); if (it.o > 0) c.wf++; }   // 有分勝負的才拿來比
+      }
     }
-    return [...m.values()].map((c) => ({...c, wr: c.w + c.l ? c.w / (c.w + c.l) : null, exp: c.nf ? c.fs / c.nf : null, roi: c.n ? c.pl / c.n * 100 : null}));
+    // edge＝實際勝率 − 莊家估；se＝純靠運氣時 edge 的標準差；z＝差幾個標準差（|z| < 1.96 ＝ 還在運氣範圍內）
+    return [...m.values()].map((c) => ({...c, wr: c.w + c.l ? c.w / (c.w + c.l) : null, exp: c.nf ? c.fs / c.nf : null, roi: c.n ? c.pl / c.n * 100 : null,
+      edge: c.nd ? (c.wf - c.e) / c.nd : null, se: c.nd && c.v > 0 ? Math.sqrt(c.v) / c.nd : null, z: c.v > 0 ? (c.wf - c.e) / Math.sqrt(c.v) : null}));
   }
   // 符合條件的全部加總成一格
-  const binStat = (items, pred) => binGroup(items.filter(pred), () => 0)[0] || {n: 0, w: 0, l: 0, wr: null, exp: null, roi: null};
+  const binStat = (items, pred) => binGroup(items.filter(pred), () => 0)[0] || {n: 0, w: 0, l: 0, wr: null, exp: null, roi: null, edge: null, se: null, z: null};
+  // 判斷：樣本太少／還在運氣範圍／可能有優勢／可能是劣勢
+  const verdictOf = (c) => (c.n < BIN.min || c.z == null ? ["thin", "太少"] : c.z >= 1.96 ? ["good", "可能有優勢"] : c.z <= -1.96 ? ["bad", "可能是劣勢"] : ["luck", "運氣範圍內"]);
+  const edgeTxt = (c) => (c.edge == null ? "–" : sgn(c.edge * 100, 0) + "%");
   const near = (v, x) => v != null && x != null && Math.abs(v - x) <= BIN.r;
   const winTxt = (c) => (c.wr == null ? "–" : Math.round(c.wr * 100) + "%");
-  const binCells = (c) => `<td class="r n">${c.n}${c.n < BIN.min ? '<span class="few">太少</span>' : ""}</td><td class="r n">${winTxt(c)}<small class="mut"> ${c.w}勝${c.l}敗</small></td><td class="r n hide-s">${c.exp == null ? "–" : Math.round(c.exp * 100) + "%"}</td><td class="r n ${gb(c.roi)}">${c.roi == null ? "–" : sgn(c.roi, 1) + "%"}</td>`;
-  const binHead = (cols) => `<thead><tr>${cols.map((x) => `<th>${x}</th>`).join("")}<th class="r">幾次</th><th class="r">實際贏</th><th class="r hide-s">莊家估</th><th class="r">投報率</th></tr></thead>`;
+  const binCells = (c) => { const [vc, vt] = verdictOf(c);
+    return `<td class="r n">${c.n}</td><td class="r n">${winTxt(c)}<small class="mut"> ${c.w}勝${c.l}敗</small></td><td class="r n hide-s">${c.exp == null ? "–" : Math.round(c.exp * 100) + "%"}</td>`
+      + `<td class="r ed ${vc}"><b class="n">${edgeTxt(c)}</b>${c.se == null ? "" : `<small> ±${Math.round(c.se * 196)}%</small>`}<span class="vd">${vt}</span></td><td class="r n ${gb(c.roi)}">${c.roi == null ? "–" : sgn(c.roi, 1) + "%"}</td>`; };
+  const binHead = (cols) => `<thead><tr>${cols.map((x) => `<th>${x}</th>`).join("")}<th class="r">幾次</th><th class="r">實際贏</th><th class="r hide-s">莊家估</th><th class="r">比莊家多贏</th><th class="r">投報率</th></tr></thead>`;
   function binSection(mkt) {
     const items = binItems(mkt), title = `<h4 style="margin:14px 0 6px;font-size:15px">${MK[mkt]}<span class="mut" style="font-weight:400;font-size:12.5px">・${items.length} 次</span></h4>`;
     if (!items.length) return title + `<p class="mut" style="margin:0;font-size:13px">還沒有資料。</p>`;
@@ -1164,12 +1221,14 @@ details.gbin[open]>summary::after{content:"－"}
     const cfg = {w: ["每幾 %<br>一格", 1, 20, "%"], min: ["至少<br>幾次", 1, 50, ""], r: ["範圍<br>前後 ±", 1, 20, "%"]}[k];
     return `<div class="thr"><label>${cfg[0]}</label><input type="range" data-bsl="${k}" min="${cfg[1]}" max="${cfg[2]}" step="1" value="${BIN[k]}" aria-label="${cfg[0].replace("<br>", "")}"><output data-bslv="${k}">${BIN[k]}${cfg[3]}</output></div>`;
   };
+  const atSel = () => `<label class="atsel">統計時間點<select data-bsel="at">${AT_OPTS.map(([v, n]) => `<option value="${v}"${BIN.at === v ? " selected" : ""}>${n}</option>`).join("")}</select></label>`;
   function binCard() {
     const seg = (k, opts) => `<div class="seg" role="group">${opts.map(([v, n]) => `<button type="button" data-bin="${k}" data-binv="${v}" aria-pressed="${BIN[k] === v}">${n}</button>`).join("")}</div>`;
     const lgs = binLeagues(), all = lgs.reduce((a, x) => a + x.n, 0);
     if (BIN.lg !== "all" && !lgs.some((x) => x.k === BIN.lg)) BIN.lg = "all";
     const chip = (k, lab, n) => `<button type="button" class="chip" data-bin="lg" data-binv="${esc(k)}" aria-pressed="${BIN.lg === k}">${esc(lab)}<span class="c">${n}</span></button>`;
-    return `<div class="card" id="bincard"><h3>資金流向區間統計<small>開賽前最後一次截圖・已打完的比賽・每一場的每一邊都算一次</small></h3>
+    return `<div class="card" id="bincard"><h3>資金流向區間統計<small>已打完的比賽・每一場的每一邊都算一次</small></h3>
+      <div class="ctl" style="margin-bottom:8px">${atSel()}</div>
       <div class="chips" style="flex-wrap:wrap">${chip("all", "全部", all)}${lgs.map((x) => chip(x.k, x.lab, x.n)).join("")}</div>
       <h4 style="margin:10px 0 6px;font-size:15px">自己輸入比例查勝率</h4>
       <div class="ctl" style="margin-bottom:8px">
@@ -1179,11 +1238,14 @@ details.gbin[open]>summary::after{content:"－"}
       <div id="binq">${binQuery()}</div>
       <h4 style="margin:16px 0 6px;font-size:15px">全部區間</h4>
       <div class="ctl" style="margin-bottom:8px">${seg("f", [["both", "人數＋金額"], ["money", "只看金額 %"], ["bet", "只看人數 %"]])}${binSlider("w")}${binSlider("min")}</div>
-      <p class="mut" style="font-size:12.5px;margin:0">每一格都列出來，不挑最高的。樣本少的格子（標「太少」）很容易出現 100% 或 0%，那只是場數太少，不代表真的必贏。勝率高也不一定賺錢：熱門本來就常贏但賠率低，要「實際贏」比「莊家估」高、投報率是正的，才是真的有優勢（投報率用美國收盤賠率、每注 1 單位）。</p>
+      <div class="howto"><b>怎麼看</b>主要看「比莊家多贏」：實際勝率減掉莊家賠率算出來的勝率。勝率高不代表有優勢，熱門本來就常贏，只是賠率低。
+        <span>「±」是純靠運氣也可能跑出來的誤差；差距超出這個範圍才會標<b class="good">可能有優勢</b>，在範圍內就是<b>運氣範圍內</b>，樣本不夠是<b class="mut">太少</b>。</span>
+        <span>格子越多越要小心：就算完全沒有優勢，大約每 20 格也會有 1 格被標成「可能有優勢」。要等它在之後的新比賽裡還成立，才算真的。投報率用${esc(atLabel())}的美國賠率、每注 1 單位。</span></div>
       <div id="binbody">${binBody()}</div></div>`;
   }
   // 比賽頁：每一場自己的區間統計（拿這場現在的人數 %、金額 %，去找歷史上差不多比例的結果）
-  const gbStatCell = (c) => c.n ? `<td class="r n${c.n < BIN.min ? " mut" : ""}"><b class="${c.n >= BIN.min && c.wr != null ? (c.wr >= 0.5 ? "good" : "bad") : ""}">${winTxt(c)}</b><small>${c.n} 次${c.roi == null ? "" : "・" + sgn(c.roi, 0) + "%"}</small></td>` : `<td class="r mut">–</td>`;
+  const gbStatCell = (c) => { if (!c.n) return `<td class="r mut">–</td>`; const [vc, vt] = verdictOf(c);
+    return `<td class="r ed ${vc}"><b class="n">${edgeTxt(c)}</b><small>勝 ${winTxt(c)}・${c.n} 次</small><span class="vd">${vt}</span></td>`; };
   function gameBinBody(g) {
     const s = latest(g), lg = BIN.sc === "all" ? "all" : lgKey(g);
     let rows = "";
@@ -1195,12 +1257,12 @@ details.gbin[open]>summary::after{content:"－"}
     }
     if (!rows) return `<p class="mut" style="margin:0;font-size:13px">這場還沒有下注比例。</p>`;
     return `<div class="scroll"><table class="tb mini gbt"><thead><tr><th>玩法</th><th>押什麼</th><th class="r">人數</th><th class="r">金額</th><th class="r">人＋錢相近</th><th class="r">只看人數</th><th class="r">只看金額</th></tr></thead><tbody>${rows}</tbody></table></div>
-      <p class="mut" style="font-size:12px;margin:6px 0 0">${BIN.sc === "all" ? "全部聯賽" : esc(lgLabel(g))}已打完的比賽裡，比例在這場 ±${BIN.r}% 內的那一邊，贏的比例（下面小字：幾次・投報率）。灰色＝不到 ${BIN.min} 次，只當參考。</p>`;
+      <p class="mut" style="font-size:12px;margin:6px 0 0">大字＝比莊家多贏幾 %（${BIN.sc === "all" ? "全部聯賽" : esc(lgLabel(g))}已打完的比賽裡，${esc(atLabel())}比例在這場 ±${BIN.r}% 內的那一邊）。只有標「可能有優勢」的才值得參考，「運氣範圍內」等於還看不出來。</p>`;
   }
   function gameBin(g) {
     const key = g.sport + "|" + g.id, seg = `<div class="seg" role="group"><button type="button" data-bin="sc" data-binv="lg" aria-pressed="${BIN.sc === "lg"}">同聯賽</button><button type="button" data-bin="sc" data-binv="all" aria-pressed="${BIN.sc === "all"}">全部聯賽</button></div>`;
     return `<details class="gbin" data-gbd="${esc(key)}"${binOpen.has(key) ? " open" : ""}><summary>資金區間統計</summary>
-      <div class="ctl" style="margin:8px 0">${seg}${binSlider("r")}${binSlider("min")}</div><div data-gbin="${esc(key)}">${gameBinBody(g)}</div></details>`;
+      <div class="ctl" style="margin:8px 0">${seg}${atSel()}${binSlider("r")}${binSlider("min")}</div><div data-gbin="${esc(key)}">${gameBinBody(g)}</div></details>`;
   }
   function binRefreshBodies() {
     const bb = $("binbody"); if (bb) bb.innerHTML = binBody();
@@ -1302,6 +1364,7 @@ details.gbin[open]>summary::after{content:"－"}
     if (p * o - 1 < EV_GO) return "";
     const st = stakeFor(p, o);
     if (!st) return `<b>設定本金</b>（在這頁最上面）就會告訴你下多少。`;
+    if (st.stop) return `<b class="bad">${st.stop}已經到停損</b>，建議${st.stop}不要再下。`;
     if (!st.amt) return `今天的下注額度（本金的 ${Math.round(bankCfg().daycap * 100)}%）已經用完，<b>建議今天不要再下</b>。`;
     return `建議下 <b class="n">${ntdAmt(st.amt)}</b>（本金的 ${(st.pct * 100).toFixed(1)}%${st.capped ? "，已到每注上限" : ""}${st.dayCapped ? "，受今天額度限制" : ""}）。`;
   }
@@ -1387,10 +1450,43 @@ details.gbin[open]>summary::after{content:"－"}
         <label>保守程度<select id="bk-frac">${FR.map(([v, n]) => `<option value="${v}"${c.frac === v ? " selected" : ""}>${n}</option>`).join("")}</select></label>
         <label>每注最多（本金 %）<input id="bk-cap" type="number" min="0.5" max="10" step="0.5" inputmode="decimal" value="${+(c.cap * 100).toFixed(2)}"></label>
         <label>一天最多（本金 %）<input id="bk-day" type="number" min="1" max="30" step="1" inputmode="decimal" value="${+(c.daycap * 100).toFixed(2)}"></label>
+        <label>一天最多虧（本金 %）<input id="bk-sd" type="number" min="1" max="50" step="1" inputmode="decimal" value="${+(c.stopd * 100).toFixed(2)}"></label>
+        <label>一週最多虧（本金 %）<input id="bk-sw" type="number" min="1" max="80" step="1" inputmode="decimal" value="${+(c.stopw * 100).toFixed(2)}"></label>
       </div>
       <div class="formbar"><button type="button" class="btn" id="banksave">儲存</button><span class="msg" id="bkmsg"></span></div>
       <p class="mut" style="font-size:12.5px;margin:10px 0 0">${bank != null ? `例：賠率 1.90、估計贏 56%（期望值 +6.4%）的注建議下 ${ex(0.56, 1.9)}；賠率 2.10、估計贏 50%（期望值 +5%）建議下 ${ex(0.5, 2.1)}。` : ""}算法：凱利公式算出「長期最會賺」的比例，只下它的 1/4，比較不怕連輸；期望值不到 +2% 的一律不下。改本金會從現在重新開始算開獎賺賠。</p>
     </div>`;
+  }
+  function mindCard() {
+    const sp = stopState(), m = twMargin();
+    const done = BETS.filter((b) => b.result === "win" || b.result === "loss").sort((a, b) => (a.date + a.created < b.date + b.created ? -1 : 1));
+    let cur = 0; for (let i = done.length - 1; i >= 0 && done[i].result === "loss"; i--) cur++;
+    const parts = [];
+    if (sp) {
+      const bar = (lab, v, lim, hit) => `<div class="stopbar ${hit ? "hit" : ""}"><span>${lab}</span><div class="track"><i style="width:${Math.min(100, Math.max(0, -v) / lim * 100)}%"></i></div><span class="n">${ntd(v)}／上限 −${Math.round(lim).toLocaleString("en-US")}</span></div>`;
+      if (sp.day || sp.week) parts.push(`<div class="verdict bad"><b>${sp.day ? "今天" : "這週"}已經到停損，先停下來</b>${sp.day ? `今天虧 ${ntdAmt(-sp.d)}` : `這週虧 ${ntdAmt(-sp.w)}`}，到了你自己設的上限。輸了之後想追回來，是最容易越輸越多的時候。${sp.day ? "明天再看。" : "下週一重新開始。"}</div>`);
+      parts.push(bar("今天", sp.d, sp.dl, sp.day) + bar("這週", sp.w, sp.wl, sp.week));
+    } else parts.push(`<p class="mut" style="margin:0;font-size:13px">設定本金後，可以在上面設「一天／一週最多虧」，到了就會提醒你停。</p>`);
+    if (cur >= 2 && done.length) {
+      const last = done.slice(-Math.max(cur, 20));
+      const pw = last.reduce((a, b) => a + (b.p != null && (b.legs || 1) === 1 ? b.p : Math.min(0.99, (1 / b.odds) / Math.pow(1 + m, b.legs || 1))), 0) / last.length;
+      const q = 1 - pw, pNow = Math.pow(q, cur), p100 = pRunAtLeast(cur, 100, q);
+      const tone = p100 >= 0.3 ? "" : "bad";
+      parts.push(`<div class="verdict ${tone}"><b>現在連輸 ${cur} 注，${p100 >= 0.3 ? "這很正常" : "比一般運氣差，值得檢查一下"}</b>照你最近下的注，每注大約有 ${Math.round(pw * 100)}% 會贏。
+        這樣的勝率，每下 100 注，至少遇到一次「連輸 ${cur} 注」的機率是 <span class="n">${Math.round(p100 * 100)}%</span>（剛好這 ${cur} 注連輸的機率是 ${(pNow * 100).toFixed(pNow < 0.01 ? 1 : 0)}%）。
+        <small>${p100 >= 0.3 ? "連輸是一定會發生的，不代表方法壞掉。照原本的規則下，不要加碼追回來。" : "可能只是運氣差，但也可以回頭看最近幾注：是不是下了期望值是負的、或注額比平常大。"}</small></div>`);
+    } else if (done.length) parts.push(`<p class="mut" style="margin:0;font-size:13px">${cur ? "上一注輸了。" : "上一注贏了。"}連輸 2 注以上時，這裡會告訴你這是不是還在正常的運氣範圍。</p>`);
+    return `<div class="card"><h3>心態保護<small>停損、連輸是不是運氣</small></h3><div class="stack" style="gap:10px">${parts.join("")}</div></div>`;
+  }
+  // 新增注單前的檢查：負期望值或已到停損 → 先提醒，再按一次才存
+  function betWarn() {
+    const w = [], sp = stopState();
+    if (sp && (sp.day || sp.week)) w.push(`${sp.day ? "今天" : "這週"}已經到停損了`);
+    FORM.legs.forEach((L, i) => { const o = legProb(L), od = parseFloat(L.odds); if (o && od > 1 && o.p * od - 1 < 0) w.push(`${FORM.legs.length > 1 ? `第 ${i + 1} 關` : "這注"}期望值是 ${evTxt(o.p * od - 1)}（長期會虧）`); });
+    const x = parlayEv(); if (x && x.ev != null && x.ev < 0 && FORM.legs.length > 1) w.push(`整個串關期望值是 ${evTxt(x.ev)}`);
+    const avg = BETS.length ? BETS.reduce((a, b) => a + (+b.stake || 0), 0) / BETS.length : 0, st = parseFloat(FORM.stake);
+    if (avg && st >= avg * 2 && BETS.length >= 5) w.push(`這注金額是你平均每注的 ${(st / avg).toFixed(1)} 倍`);
+    return w;
   }
   function evSummary() {
     const xs = BETS.filter((b) => b.ev != null && b.stake > 0); if (!xs.length) return "";
@@ -1401,7 +1497,7 @@ details.gbin[open]>summary::after{content:"－"}
     let h = "";
     if (dbState === "loading") h += `<div class="empty">連線中…</div>`;
     else if (dbState === "off") h += `<div class="empty">這個畫面沒辦法存投注紀錄。請在 Claude App 或 claude.ai 裡打開這個看板。</div>`;
-    else h += bankCard() + `<div class="card"><h3>新增一注<small>手機和 iPad 看到的是同一份</small></h3>
+    else h += bankCard() + mindCard() + `<div class="card"><h3>新增一注<small>手機和 iPad 看到的是同一份</small></h3>
       <form id="bf" class="form" autocomplete="off">
         <label>下注日期<input type="date" name="date" data-top="date" value="${esc(FORM.date)}" required></label>
         <label>下注金額<input name="stake" data-top="stake" type="number" step="1" min="1" inputmode="numeric" placeholder="1000" value="${esc(FORM.stake)}" required></label>
@@ -1473,6 +1569,13 @@ details.gbin[open]>summary::after{content:"－"}
     const prod = legs.every((L) => L.odds > 1) ? legs.reduce((p, L) => p * L.odds, 1) : null;
     const odds = legs.length > 1 ? (parseFloat(FORM.total) || prod) : legs[0].odds;
     if (!(odds > 1) || !(stake > 0)) { $("bmsg").textContent = legs.length > 1 ? "要填每關賠率（或串關總賠率），金額要大於 0" : "賠率要大於 1、金額要大於 0"; return; }
+    const warn = betWarn(), wkey = warn.join("|") + "|" + stake + "|" + odds;
+    if (warn.length && FORM.warned !== wkey) {   // 第一次按：先提醒；內容沒變再按一次才真的存（記錄已經下的注也可以）
+      FORM.warned = wkey;
+      $("bmsg").innerHTML = `<b class="bad">等一下：</b>${warn.map(esc).join("、")}。如果已經下了要記錄，或確定要下，再按一次「新增」。`;
+      return;
+    }
+    FORM.warned = "";
     const same = (k) => legs.every((L) => L[k] === legs[0][k]);
     const b = {date: FORM.date, league: same("league") ? legs[0].league : "混合", match: legs.map((L) => L.match).join(" ＋ "),
                market: same("market") ? legs[0].market : "混合", pick: legs.map((L) => L.pick).join("／"), legs: legs.length,
@@ -2124,10 +2227,11 @@ details.gbin[open]>summary::after{content:"－"}
     if (t.id === "banksave" && DB) {
       const start = parseFloat($("bk-start").value), frac = parseFloat($("bk-frac").value);
       const cap = Math.min(0.1, Math.max(0.005, parseFloat($("bk-cap").value) / 100 || 0.03)), daycap = Math.min(0.3, Math.max(0.01, parseFloat($("bk-day").value) / 100 || 0.08));
+      const stopd = Math.min(0.5, Math.max(0.01, parseFloat($("bk-sd").value) / 100 || 0.05)), stopw = Math.min(0.8, Math.max(0.01, parseFloat($("bk-sw").value) / 100 || 0.10));
       if (!(start > 0)) { $("bkmsg").textContent = "本金要大於 0"; return; }
       const since = BANK && BANK.start === start && BANK.since ? BANK.since : new Date().toISOString();
       t.disabled = true; $("bkmsg").textContent = "儲存中…";
-      try { await DB.doc("settings/bank").set({start, since, frac, cap, daycap}); if (document.activeElement) document.activeElement.blur(); $("bkmsg").textContent = "已儲存"; }
+      try { await DB.doc("settings/bank").set({start, since, frac, cap, daycap, stopd, stopw}); if (document.activeElement) document.activeElement.blur(); $("bkmsg").textContent = "已儲存"; }
       catch (err) { $("bkmsg").textContent = "儲存失敗，等一下再試"; }
       t.disabled = false; return;
     }
@@ -2162,6 +2266,12 @@ details.gbin[open]>summary::after{content:"－"}
     state.thr = +e.target.value; store.set("thr", state.thr);
     $$(".thrv").forEach((o) => { o.textContent = state.thr + "%"; });
     if (state.view === "board") renderBoard(); else renderAnalysis();
+  });
+  document.addEventListener("change", (e) => {
+    if (!e.target.dataset || e.target.dataset.bsel !== "at") return;
+    BIN.at = +e.target.value; store.set("bin_at", BIN.at);
+    $$('[data-bsel="at"]').forEach((x) => { x.value = String(BIN.at); });
+    binRefresh();
   });
   document.addEventListener("toggle", (e) => {   // 記住每場「資金區間統計」有沒有打開，重畫時不會自己收起來
     const k = e.target.dataset && e.target.dataset.gbd; if (!k) return;
