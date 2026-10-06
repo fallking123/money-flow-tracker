@@ -541,6 +541,47 @@ def build(now):
     }
 
 
+def _rnd(v):
+    """數字縮短：≥10（百分比）留 1 位小數，其他（賠率、盤口）留 3 位"""
+    if isinstance(v, float):
+        return round(v, 1) if abs(v) >= 10 else round(v, 3)
+    if isinstance(v, list):
+        return [_rnd(x) for x in v]
+    return v
+
+
+def _thin_snaps(snaps, k=CLOSED_SNAPS):
+    """已完賽比賽的快照：保留第一筆、最後一筆、開賽前 1/2/3/6/12 小時各一筆，其餘平均挑（跟 closed 一樣）"""
+    if len(snaps) <= k:
+        return snaps
+    pre = [i for i, x in enumerate(snaps) if x.get("hrs") is None or x["hrs"] >= 0]
+    keep = {0, len(snaps) - 1}
+    if pre:
+        keep.add(pre[-1])   # 收盤那一筆
+    for a in SNAP_ANCHORS:
+        hit = [i for i, x in enumerate(snaps) if x.get("hrs") is not None and x["hrs"] >= a]
+        if hit:
+            keep.add(hit[-1])
+    keep |= {round(i * (len(snaps) - 1) / (k - 1)) for i in range(k)}
+    return [snaps[i] for i in sorted(keep)]
+
+
+def slim(data):
+    """只用在塞進 index.html 的那一份：數字縮短、已完賽比賽只留幾筆快照，網頁讀起來比較快（data.json 保持完整）"""
+    out = dict(data)
+
+    def g_slim(g):
+        g = dict(g)
+        snaps = g.get("snaps") or []
+        if g.get("status") == "final":
+            snaps = _thin_snaps(snaps)
+        g["snaps"] = [{k: (_rnd(v) if k != "ts" else v) for k, v in x.items()} for x in snaps]
+        return g
+    out["games"] = [g_slim(g) for g in data["games"]]
+    out["closed"] = [g_slim(g) for g in data.get("closed", [])]
+    return out
+
+
 if __name__ == "__main__":
     now = datetime.now(timezone.utc)
     data = build(now)
@@ -551,13 +592,13 @@ if __name__ == "__main__":
     d = os.path.dirname(OUT)
     with open(os.path.join(d, "page.html"), encoding="utf-8") as f:
         page = f.read()
-    blob = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+    blob = json.dumps(slim(data), ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     with open(os.path.join(d, "index.html"), "w", encoding="utf-8") as f:
         f.write(page.replace("__EMBEDDED_DATA__", blob, 1))
     n_up = sum(g["status"] in ("upcoming", "started") for g in data["games"])
     n_fin = sum(g["status"] == "final" for g in data["games"])
     print(f"儀表板資料：{len(data['games'])} 場（即將開賽 {n_up}、已完賽 {n_fin}），"
           f"累積驗證 {len(data['closed'])} 場，台彩對照 {data['tw']['n_total']} 筆，"
-          f"{os.path.getsize(OUT) // 1024} KB")
+          f"{os.path.getsize(OUT) // 1024} KB（網頁內嵌 {len(blob.encode()) // 1024} KB）")
     if "--check" in sys.argv:
         print(json.dumps(data["games"][0], ensure_ascii=False)[:1500])
