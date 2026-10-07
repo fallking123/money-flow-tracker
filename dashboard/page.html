@@ -769,10 +769,13 @@ details.gbin[open]>summary::after{content:"－"}
   function lossSince(from) {   // 已開獎的淨賺賠（負數＝虧）
     return BETS.filter((b) => b.result !== "pending" && b.date >= from && b.date <= twDate()).reduce((a, b) => a + betPL(b), 0);
   }
+  // 今天開始時的本金（扣掉今天已開獎的賺賠）：每日下注額度和每日停損都用它當基準，一整天不會變
+  const dayBank = () => { const b = bankNow(); return b == null ? null : Math.max(0, b - lossSince(twDate())); };
   function stopState() {
     if (!BANK || !(BANK.start > 0)) return null;
-    const c = bankCfg(), base = BANK.start, d = lossSince(twDate()), w = lossSince(weekStart());
-    const dl = base * c.stopd, wl = base * c.stopw;
+    const c = bankCfg(), d = lossSince(twDate()), w = lossSince(weekStart()), now = bankNow();
+    // 跟每日下注額度用同一個基準：今天（這週）開始時的本金
+    const dl = dayBank() * c.stopd, wl = Math.max(0, now - w) * c.stopw;
     return {d, w, dl, wl, day: -d >= dl, week: -w >= wl};
   }
   // n 注裡至少出現一次「連輸 k 注以上」的機率（每注輸的機率 q）
@@ -798,7 +801,7 @@ details.gbin[open]>summary::after{content:"－"}
     const c = bankCfg(), ev = p * o - 1, k = (p * o - 1) / (o - 1);
     if (ev < EV_GO) return {amt: 0, bank};
     const sp = stopState(); if (sp && (sp.day || sp.week)) return {amt: 0, bank, stop: sp.day ? "今天" : "這週"};
-    const pct = Math.min(k * c.frac, c.cap), left = Math.max(0, bank * c.daycap - todayStaked());
+    const pct = Math.min(k * c.frac, c.cap), left = Math.max(0, dayBank() * c.daycap - todayStaked());
     let amt = Math.floor(bank * pct / 10) * 10;
     const dayCapped = amt > left; if (dayCapped) amt = Math.floor(left / 10) * 10;
     return {amt, bank, pct: amt / bank, capped: k * c.frac > c.cap, dayCapped};
@@ -1130,7 +1133,7 @@ details.gbin[open]>summary::after{content:"－"}
     const list = DATA.games.filter((g) => inSport(g) && (g.status === "upcoming" || g.status === "started"));
     const soon = list.filter((g) => g.status === "started" || new Date(g.t) - Date.now() < 30 * 36e5);   // 重點只看 30 小時內開打的
     const sigs = boardSigs(soon), vals = valueItems(DATA.games.filter(inSport)), nTw = vals.filter((x) => x.o.ev >= EV_GO).length;
-    const bank = bankNow(), sp = stopState(), left = bank == null ? null : Math.max(0, bank * bankCfg().daycap - todayStaked());
+    const bank = bankNow(), sp = stopState(), left = bank == null ? null : Math.max(0, dayBank() * bankCfg().daycap - todayStaked());
     const sigGames = new Set(sigs.map((x) => x.g.sport + "|" + x.g.id)), rest = list.filter((g) => !sigGames.has(g.sport + "|" + g.id));
     $("bsub").textContent = list.length ? `${fmtMD.format(new Date())}・${list.length} 場` : "";
     const need = twNeed().done.length;
@@ -1553,18 +1556,19 @@ details.gbin[open]>summary::after{content:"－"}
     const ex = (p, o) => { const st = stakeFor(p, o); return st && st.amt ? ntdAmt(st.amt) : "–"; };
     const FR = [[0.125, "很保守（1/8 凱利）"], [0.25, "建議（1/4 凱利）"], [0.5, "積極（1/2 凱利）"]];
     return `<div class="card"><h3>本金和下注規則<small>手機、iPad 同一份；開獎後本金自動加減</small></h3>
-      ${bank != null ? `<div class="bankrow"><span class="big">${ntdAmt(bank)}</span><span class="mut">起始 ${ntdAmt(BANK.start)}（${since}）${bank !== BANK.start ? `，開獎後 ${ntd(bank - BANK.start)} 元` : ""}</span><span class="mut">今天已下 ${ntdAmt(today)}／一天上限 ${ntdAmt(bank * c.daycap)}</span></div>`
+      ${bank != null ? `<div class="bankrow"><span class="big">${ntdAmt(bank)}</span><span class="mut">起始 ${ntdAmt(BANK.start)}（${since}）${bank !== BANK.start ? `，開獎後 ${ntd(bank - BANK.start)} 元` : ""}</span><span class="mut">今天已下 ${ntdAmt(today)}／最多下注 ${ntdAmt(dayBank() * c.daycap)}・最多虧 ${ntdAmt(dayBank() * c.stopd)}</span></div>`
         : `<p class="mut" style="margin:0 0 10px;font-size:13.5px">先填你打算拿來玩運彩的本金（全部輸掉也不影響生活的錢）。之後期望值是正的注，App 會直接告訴你下多少。</p>`}
       <div class="form">
         <label>本金（元）<input id="bk-start" type="number" min="100" step="100" inputmode="numeric" value="${BANK && BANK.start ? BANK.start : ""}" placeholder="例如 50000"></label>
         <label>保守程度<select id="bk-frac">${FR.map(([v, n]) => `<option value="${v}"${c.frac === v ? " selected" : ""}>${n}</option>`).join("")}</select></label>
         <label>每注最多（本金 %）<input id="bk-cap" type="number" min="0.5" max="10" step="0.5" inputmode="decimal" value="${+(c.cap * 100).toFixed(2)}"></label>
-        <label>一天最多（本金 %）<input id="bk-day" type="number" min="1" max="30" step="1" inputmode="decimal" value="${+(c.daycap * 100).toFixed(2)}"></label>
+        <label>一天最多下注（本金 %）<input id="bk-day" type="number" min="1" max="30" step="1" inputmode="decimal" value="${+(c.daycap * 100).toFixed(2)}"></label>
         <label>一天最多虧（本金 %）<input id="bk-sd" type="number" min="1" max="50" step="1" inputmode="decimal" value="${+(c.stopd * 100).toFixed(2)}"></label>
         <label>一週最多虧（本金 %）<input id="bk-sw" type="number" min="1" max="80" step="1" inputmode="decimal" value="${+(c.stopw * 100).toFixed(2)}"></label>
       </div>
       <div class="formbar"><button type="button" class="btn" id="banksave">儲存</button><span class="msg" id="bkmsg"></span></div>
       <p class="mut" style="font-size:12.5px;margin:10px 0 0">${bank != null ? `例：賠率 1.90、估計贏 56%（期望值 +6.4%）的注建議下 ${ex(0.56, 1.9)}；賠率 2.10、估計贏 50%（期望值 +5%）建議下 ${ex(0.5, 2.1)}。` : ""}算法：凱利公式算出「長期最會賺」的比例，只下它的 1/4，比較不怕連輸；期望值不到 +2% 的一律不下。改本金會從現在重新開始算開獎賺賠。</p>
+      <p class="mut" style="font-size:12.5px;margin:6px 0 0">「最多下注」是一天所有注加起來的金額上限；「最多虧」是開獎後淨輸到這個數字就停。兩個都用今天開始時的本金算。例如額度 8%、停損 5%：可以分幾注下到 8%，但輸掉 5% 就收手，不用把額度用完。</p>
     </div>`;
   }
   function mindCard() {
