@@ -13,6 +13,8 @@
 3. raw/日期.json.gz         —— 每天第一次抓到的原始資料備份
 
 分層頻率：距開賽 >24 小時每 6 小時、3~24 小時每 2 小時、1~3 小時每 30 分、1 小時內每 10 分
+另外 python scrape_odds.py --final：每場比賽開賽前 5 分鐘再截一次（等到那個時間點才抓），
+存在 odds_history_YYYY-MM_final.csv（獨立檔案，跟每 10 分鐘那個排程不會互相衝突）
 （美式足球整週都在下注，所以開賽前 7 天就開始記錄；其他運動 48 小時）
 
 直接讀資料網址，不用開瀏覽器；萬一被擋（HTTP 403），程式結束碼為 3，
@@ -25,6 +27,7 @@ import json
 import os
 import statistics
 import sys
+import time
 from datetime import datetime, timezone, timedelta
 
 import requests
@@ -373,5 +376,88 @@ def run(use_browser=False):
             sys.exit(3)
 
 
+# ═════════ 開賽前 5 分鐘的那一筆（收盤）═════════
+FINAL_LEAD_MIN = 5          # 開賽前幾分鐘截圖
+FINAL_LOOKAHEAD_MIN = 40    # 一次最多等多久（排程常延遲，所以看 40 分鐘內要開打的）
+FINAL_MAX_RUN_MIN = 50      # 這次最多跑多久，之後交給下一次排程
+FINAL_STATE = os.path.join(STATE_DIR, "final_snapshot.json")
+
+
+def final_path(sport, when):
+    return os.path.join(sport_dir(sport), f"odds_history_{when.strftime('%Y-%m')}_final.csv")
+
+
+def run_final():
+    start = datetime.now(timezone.utc)
+    done = {}
+    if os.path.exists(FINAL_STATE):
+        with open(FINAL_STATE, encoding="utf-8") as f:
+            done = json.load(f)
+    wrote = 0
+    while (datetime.now(timezone.utc) - start).total_seconds() < FINAL_MAX_RUN_MIN * 60:
+        now = datetime.now(timezone.utc)
+        upcoming = []   # (開賽時間, 運動, 比賽編號)
+        for sport in active_sports():
+            try:
+                games = fetch_direct(sport)
+            except Exception as e:
+                print(f"  {sport}: 讀取失敗 {e}")
+                continue
+            for g in games:
+                if g.get("status") != "not_started" or g["id"] in done:
+                    continue
+                t = parse_time(g["scheduled"])
+                if timedelta(0) < t - now <= timedelta(minutes=FINAL_LOOKAHEAD_MIN):
+                    upcoming.append((t, sport, g["id"]))
+        if not upcoming:
+            print(f"接下來 {FINAL_LOOKAHEAD_MIN} 分鐘內沒有要開打、還沒截過最後一筆的比賽")
+            break
+        first = min(u[0] for u in upcoming)
+        batch = [u for u in upcoming if u[0] - first <= timedelta(minutes=2)]   # 同一個開賽時間一起抓
+        wait = (first - timedelta(minutes=FINAL_LEAD_MIN) - datetime.now(timezone.utc)).total_seconds()
+        if wait > 0:
+            print(f"等 {wait / 60:.1f} 分鐘，到 {first:%H:%M}Z 開賽前 {FINAL_LEAD_MIN} 分鐘截 {len(batch)} 場")
+            time.sleep(wait)
+        now = datetime.now(timezone.utc)
+        if now >= first:
+            print("已經開打，這批跳過")
+            for _, _, gid in batch:
+                done[gid] = now.isoformat()
+            continue
+        for sport in sorted({u[1] for u in batch}):
+            ids = {u[2] for u in batch if u[1] == sport}
+            try:
+                games = fetch_direct(sport)
+            except Exception as e:
+                print(f"  {sport}: 讀取失敗 {e}")
+                continue
+            due = [g for g in games if g["id"] in ids and g.get("status") == "not_started"]
+            events = []
+            try:
+                events = espn_events(sport, now - timedelta(days=1), now + timedelta(days=2))
+            except Exception:
+                pass
+            rows = []
+            for g in due:
+                ev = match_event(g, events, college=is_college(sport)) if events else None
+                row, _ = build_rows(sport, g, now, ev)
+                rows.append(row)
+                done[g["id"]] = now.isoformat()
+            append_rows(final_path(sport, now), HISTORY_FIELDS, rows)
+            wrote += len(rows)
+            print(f"  {SPORTS[sport]['name']}: 開賽前 {FINAL_LEAD_MIN} 分鐘截了 {len(rows)} 場")
+        for _, _, gid in batch:
+            done.setdefault(gid, now.isoformat())
+    cutoff = datetime.now(timezone.utc) - timedelta(days=3)
+    done = {k: v for k, v in done.items() if parse_time(v) > cutoff}
+    os.makedirs(STATE_DIR, exist_ok=True)
+    with open(FINAL_STATE, "w", encoding="utf-8") as f:
+        json.dump(done, f, ensure_ascii=False, indent=0)
+    print(f"這次共截了 {wrote} 場開賽前 {FINAL_LEAD_MIN} 分鐘的快照")
+
+
 if __name__ == "__main__":
-    run(use_browser="--browser" in sys.argv)
+    if "--final" in sys.argv:
+        run_final()
+    else:
+        run(use_browser="--browser" in sys.argv)

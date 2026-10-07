@@ -69,8 +69,11 @@ def monthly_path(sport, prefix, when):
 
 
 def recent_monthly_files(sport, prefix, months=2):
+    """最近幾個月份的檔案（同一個月可能有好幾個檔，例如 odds_history_2026-10.csv 和開賽前 5 分鐘的 odds_history_2026-10_final.csv）"""
     files = sorted(glob.glob(os.path.join(DATA_DIR, sport, f"{prefix}_*.csv")))
-    return files[-months:]
+    month = lambda f: os.path.basename(f)[len(prefix) + 1:len(prefix) + 8]
+    keep = sorted({month(f) for f in files})[-months:]
+    return [f for f in files if month(f) in keep]
 
 
 def all_monthly_files(sport, prefix):

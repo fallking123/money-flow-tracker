@@ -1,18 +1,24 @@
-name: Backfill results
+name: Final snapshot (5 min before kickoff)
 
 on:
   workflow_dispatch: {}
-  # 台灣時間 15:02 主要一次（美國比賽這時都打完了）；20:17 備用一次（GitHub 排程常延遲，下午那次沒跑到時補上）
+  # 每 10 分鐘醒來一次：看 40 分鐘內有沒有要開打的比賽，有的話就等到「開賽前 5 分鐘」才截圖
+  # （GitHub 排程常延遲 5～20 分鐘，所以不能靠排程本身剛好在那個時間點醒來）
+  # 存在 odds_history_YYYY-MM_final.csv，跟每 10 分鐘的截圖分開，兩個排程不會互相衝突
   schedule:
-    - cron: "2 7 * * *"
-    - cron: "17 12 * * *"
+    - cron: "*/10 * * * *"
 
 permissions:
   contents: write
 
+concurrency:
+  group: final-snapshot
+  cancel-in-progress: false
+
 jobs:
-  backfill:
+  final:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -20,15 +26,15 @@ jobs:
           python-version: "3.11"
       - name: Install dependencies
         run: pip install requests==2.32.3
-      - name: Backfill results
-        run: python backfill_results.py
+      - name: Wait and take the 5-minutes-before snapshot
+        run: python scrape_odds.py --final
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/data
           if git diff --cached --quiet; then echo "沒有新資料"; exit 0; fi
-          git commit -m "回填賽果"
+          git commit -m "開賽前 5 分鐘快照"
           for i in 1 2 3 4 5; do
             git pull --rebase && git push && exit 0
             sleep 15
