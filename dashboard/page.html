@@ -292,6 +292,10 @@ details.gbin[open]>summary::after{content:"－"}
 .sc-bar b{text-align:right;color:var(--ink);font-size:14px}
 .sc-note{font-size:13px;color:var(--ink2);line-height:1.6}
 .sc-full{border-top:1px solid var(--line);padding-top:12px}
+.bookl{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;font-size:13px;background:var(--soft);border-radius:12px;padding:8px 12px}
+.bookl b{color:var(--ink2)}
+.bookl span{font-weight:700}
+.bookl small{flex-basis:100%;font-size:11.5px;color:var(--muted)}
 .others{appearance:none;width:100%;margin-top:14px;border:1px dashed var(--line);background:transparent;border-radius:14px;padding:13px 14px;font-size:14px;color:var(--ink2);display:flex;justify-content:space-between;cursor:pointer}
 .others .go{color:var(--sig);font-weight:700}
 .qin{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted)}
@@ -520,6 +524,16 @@ details.gbin[open]>summary::after{content:"－"}
     for (let i = 0; i < ss.length; i++) { const sd = ss[i], d = diffOf(sd); if (d != null && d >= thr) return {...sd, i, diff: d, fair: fair(ss, i)}; }
     return null;
   }
+  // 莊家曝險：某一邊贏的時候，莊家賺（賠）總下注金額的幾 %＝1 − 這邊的金額比例 × 這邊的賠率
+  // （金額比例來自美國公開莊家的統計，不是每一家莊家真正的帳，只當參考）
+  function bookPL(g, s, mkt) {
+    const ss = sides(g, s, mkt);
+    if (ss.length < 2 || ss.some((x) => x.money == null || !x.odds)) return null;
+    const pl = ss.map((x) => 1 - x.money / 100 * x.odds);
+    const hi = pl.indexOf(Math.max(...pl)), lo = pl.indexOf(Math.min(...pl));
+    return {ss, pl, want: ss[hi], fear: ss[lo], gap: (pl[hi] - pl[lo]) * 100};
+  }
+  const plTxt = (v) => (v >= 0 ? "賺 " : "賠 ") + Math.round(Math.abs(v) * 100) + "%";
   const closing = (g) => { const pre = g.snaps.filter((s) => s.hrs == null || s.hrs >= 0); return pre.length ? pre[pre.length - 1] : g.snaps[g.snaps.length - 1]; };
   const latest = (g) => g.snaps[g.snaps.length - 1];
   function rlm(g, mkt) {
@@ -982,6 +996,8 @@ details.gbin[open]>summary::after{content:"－"}
         ${os.length === 3 ? `<div class="t"><span class="mid">下注人數</span></div>` : ""}<div class="t">${lab(os, "bet")}</div>${bar("bet")}
         ${os.length === 3 ? `<div class="t"><span class="mid">下注金額</span></div>` : ""}<div class="t">${lab(os, "money")}</div>${bar("money")}
       </div>`;
+      const bk = bookPL(g, s, mkt);
+      if (bk) h += `<div class="bookl"><b>莊家</b>${bk.ss.map((x, i) => `<span class="${bk.pl[i] >= 0 ? "good" : "bad"}">${esc(mkt === "ml" || mkt === "ou" ? x.nm : pickLabel(x, mkt))} 贏${plTxt(bk.pl[i])}</span>`).join("")}<small>最希望 ${esc(pickLabel(bk.want, mkt))} 贏・最怕 ${esc(pickLabel(bk.fear, mkt))} 贏（佔總下注金額）</small></div>`;
     }
     h += evGrid(g);
     if (has) h += gameBin(g);
@@ -1098,6 +1114,8 @@ details.gbin[open]>summary::after{content:"－"}
       else note = `台彩${o.est ? "估" : ""} ${odd(o.tw)}，要 ≥ ${odd(need)} 才划算${o.est ? "，可以看一下台彩實際賠率" : ""}。`;
     }
     if (rv) note += rv.key === sig.key ? ` 盤口也往這邊動，更可信。` : ` 但盤口往另一邊動，要小心。`;
+    const bk = bookPL(g, latest(g), mkt);
+    if (bk) note += bk.fear.key === sig.key ? ` 這邊贏莊家${plTxt(bk.pl[bk.ss.indexOf(bk.fear)])}（莊家最怕）。` : ` 這邊贏莊家反而${plTxt(bk.pl[bk.ss.findIndex((x) => x.key === sig.key)])}。`;
     return `<article class="sigc">
       <div class="sc-top"><span>${when}・${esc(lgLabel(g))}・${MK[mkt]}</span><span class="sc-tag${strong ? " on" : ""}">訊號 ${strong ? "強" : "中等"}</span></div>
       <div class="sc-pick"><span>錢押 <b>${esc(pickLabel(sig, mkt))}</b></span><span class="n">${odd(sig.odds)}</span></div>
@@ -1188,10 +1206,45 @@ details.gbin[open]>summary::after{content:"－"}
     h += `<div class="card"><h3>哪裡比較好、哪裡比較差<small>自動找出來的，只當參考</small></h3>${healthCheck([["運動", gS.list], ["玩法", gM.list], ["賠率", gO.list], ["訊號強度", gD.list], ["盤口", gR.list], ["星期", gW.list]], roi, 5)}</div>`;
     h += `<details class="more-sec"><summary>詳細拆解（依運動、玩法、賠率…）</summary><div><div class="grid">${gS.html}${gM.html}${gO.html}${gD.html}${gR.html}${gW.html}</div></div></details>`;
     h += `<details class="more-sec"><summary>每天的成績</summary><div>${matrix(rows)}</div></details>`;
+    h += timingCard() + bookCard();
     h += binCard();
     h += `<details class="more-sec"${state.sort.open ? " open" : ""}><summary>每一注的明細</summary><div>${detailTable(rows, avgClv, cv.length)}</div></details>`;
     $("analysis").innerHTML = h;
     if (n) $("anchart").innerHTML = plChart(series, chartW("anchart"), (v) => sgn(v, v % 1 ? 1 : 0));
+  }
+  // ═════════ 什麼時候下比較好：同一套訊號規則，在不同時間點跟進 ═════════
+  const snapBefore = (g, h) => { if (!h) return closing(g); const ok = g.snaps.filter((x) => x.hrs != null && x.hrs >= h); return ok.length ? ok[ok.length - 1] : null; };
+  function statRows(pick) {   // pick(g, mkt) → {sd} 或 null；回傳 {n, w, l, pl, roi, odds}
+    const mkts = state.amkt === "all" ? ["ml", "sp", "ou"] : [state.amkt];
+    let n = 0, w = 0, l = 0, pl = 0, os = 0;
+    for (const g of allFinal()) {
+      if (!inSport(g)) continue;
+      for (const mkt of mkts) {
+        const sd = pick(g, mkt); if (!sd) continue;
+        const r = settle(g, sd, mkt); if (!r) continue;
+        n++; pl += r.pl; os += sd.odds; if (r.o > 0) w++; else if (r.o < 0) l++;
+      }
+    }
+    return {n, w, l, pl, roi: n ? pl / n * 100 : null, odds: n ? os / n : null};
+  }
+  const statTr = (lab, c, extra = "") => `<tr><td>${lab}</td><td class="r n">${c.n}${c.n && c.n < 30 ? '<span class="few">少</span>' : ""}</td><td class="r n">${c.w + c.l ? Math.round(c.w / (c.w + c.l) * 100) + "%" : "–"}</td><td class="r n hide-s">${c.odds ? c.odds.toFixed(2) : "–"}</td><td class="r n ${gb(c.roi)}">${c.roi == null ? "–" : sgn(c.roi, 1) + "%"}</td>${extra}</tr>`;
+  const statHead = (first) => `<thead><tr><th>${first}</th><th class="r">注數</th><th class="r">贏的比例</th><th class="r hide-s">平均賠率</th><th class="r">投報率</th></tr></thead>`;
+  function timingCard() {
+    const T = [[0, "收盤（最後一筆）"], [1, "開賽前 1 小時"], [2, "開賽前 2 小時"], [3, "開賽前 3 小時"], [6, "開賽前 6 小時"]];
+    const rows = T.map(([h, lab]) => statTr(lab, statRows((g, mkt) => { const s = snapBefore(g, h); return s ? signal(g, s, mkt, state.thr) : null; }))).join("");
+    return `<div class="card"><h3>什麼時候下比較好<small>同一個規則（錢比人多 ≥ ${state.thr}%），在不同時間點看到訊號就跟</small></h3>
+      <div class="scroll"><table class="tb">${statHead("看訊號的時間")}<tbody>${rows}</tbody></table></div>
+      <p class="mut" style="font-size:12.5px;margin:8px 0 0">賠率用那個時間點的美國賠率，每注 1 單位。從 10/7 起每場都會有開賽前約 5 分鐘那一筆，「收盤」就是你平常下注的時間。比較的是投報率：越早下賠率可能越好，但訊號可能還沒成形；越晚越準，但好價錢可能已經被吃掉。注數少於 30 的只當參考。</p></div>`;
+  }
+  // ═════════ 莊家想要誰贏：押莊家賺最多的那邊 vs 莊家最怕的那邊 ═════════
+  function bookCard() {
+    const want = statRows((g, mkt) => { const b = bookPL(g, closing(g), mkt); return b && b.gap >= 20 ? b.want : null; });
+    const fear = statRows((g, mkt) => { const b = bookPL(g, closing(g), mkt); return b && b.gap >= 20 ? b.fear : null; });
+    let both = 0, same = 0;
+    for (const g of allFinal()) { if (!inSport(g)) continue; for (const mkt of (state.amkt === "all" ? ["ml", "sp", "ou"] : [state.amkt])) { const sg = signal(g, closing(g), mkt, state.thr), b = bookPL(g, closing(g), mkt); if (sg && b) { both++; if (b.fear.key === sg.key) same++; } } }
+    return `<div class="card"><h3>莊家想要誰贏<small>收盤時，哪一邊贏莊家賺最多／賠最多（兩邊差 ≥ 20% 才算）</small></h3>
+      <div class="scroll"><table class="tb">${statHead("押哪一邊")}<tbody>${statTr("莊家最希望贏的那邊", want)}${statTr("莊家最怕贏的那邊", fear)}</tbody></table></div>
+      <p class="mut" style="font-size:12.5px;margin:8px 0 0">莊家賺賠＝1 − 這邊的下注金額比例 × 賠率（佔總下注金額）。${both ? `有大戶訊號的 ${both} 次裡，有 ${Math.round(same / both * 100)}% 剛好就是莊家最怕的那邊，所以這個特徵跟「錢比人多」高度重疊。` : ""}金額比例來自美國公開莊家的統計，不是每一家真正的帳；像 Pinnacle 這種專收大戶的莊家，帳上的分布可能完全不同。</p></div>`;
   }
   // ═════════ 資金流向區間統計：下注人數 %、下注金額 % 分格（每幾 % 一格自己調），看押這一邊的長期勝率 ═════════
   // 每個運動／聯賽分開算（也有「全部」），獨贏、讓分、大小分各一張；全部格子都列出來（不是只挑勝率最高的）
