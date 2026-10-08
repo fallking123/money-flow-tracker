@@ -13,6 +13,8 @@
 - favorite 都押熱門（參考）
 - underdog 都押冷門（參考）
 - model1_us 模型一・美國賠率：同一個模型，押「美國賠率期望值比較高」的那一邊，用美國賠率結算（看模型本身準不準）
+- model1_us_tw 跟 model1_us 押同一邊，但改用台彩賠率結算（冰球台彩算 60 分鐘、和局算輸）：看「照美國賠率的建議去台彩下」會不會賺
+  （ev 欄記的是美國賠率的期望值，所以「只下划算的」＝美國划算的那幾注改去台彩下）
 每場都當作押 1 單位；profit＝賺賠（贏：賠率−1，輸：−1，平手退款：0）。
 ev＝開賽前估的期望值，看板用它算「只下划算的（ev > 0）」。
 
@@ -102,10 +104,9 @@ def pick_name(g, key):
     return "和局" if key == "draw" else (g.get(key + "_zh") or g[key])
 
 
-def picks(g, tw):
+def tw_opts(g, tw):
+    """台彩的每個獨贏選項：台彩賠率（有記錄用實際的，沒有用估的）、模型勝率、期望值"""
     opts, snap = ml_options(g)
-    if not opts:
-        return {}, snap
     d = discount(tw, g["sport"])
     rec = ((g.get("tw") or {}).get("ml") or {})
     for o in opts:
@@ -115,6 +116,34 @@ def picks(g, tw):
         else:
             o["tw"], o["src"] = (o["est"] if "est" in o else round(o["us"] * (1 + d / 100), 3)), "est"
         o["ev"] = o["p"] * o["tw"] - 1
+    return opts, snap
+
+
+def retro_tw(g, tw, r):
+    """舊比賽（已經沒有模型即時資料）：用當時記下的美國賠率、勝率，換算台彩那一邊的賠率"""
+    key, sport = r["pick"], g["sport"]
+    try:
+        us, p, m = float(r["us_odds"]), float(r["p"]), float(r["mkt_p"])
+    except (TypeError, ValueError):
+        return None
+    act = (((g.get("tw") or {}).get("ml") or {}).get(key) or [None])[0]
+    if sport == "nhl":   # 台彩冰球＝60 分鐘三選一：用含延長賽的勝率換算成 60 分鐘就贏的機率
+        snap = next((x for x in reversed(g.get("snaps") or []) if x.get("ou")), {})
+        ou = snap.get("ou") or []
+        total = ou[4] if len(ou) > 4 else None
+        i = 2 if key == "home" else 0
+        ph = lambda x: x if key == "home" else 1 - x
+        p3, q3 = B.nhl_reg3(ph(p), total)[i], B.nhl_reg3(ph(m), total)[i]
+        odds, src = (act, "actual") if act else (round(1 / (q3 * (1 + B.NHL3_MARGIN)), 3), "est")
+        return {"p": p3, "m": q3, "tw": odds, "src": src, "ev": p3 * odds - 1}
+    odds, src = (act, "actual") if act else (round(us * (1 + discount(tw, sport) / 100), 3), "est")
+    return {"p": p, "m": m, "tw": odds, "src": src, "ev": p * odds - 1}
+
+
+def picks(g, tw):
+    opts, snap = tw_opts(g, tw)
+    if not opts:
+        return {}, snap
     two = [o for o in opts if o["key"] != "draw"]
     out = {"model1": max(opts, key=lambda o: o["ev"]),
            "favorite": max(two, key=lambda o: o["m"]),
@@ -122,6 +151,9 @@ def picks(g, tw):
     us = us_options(g)
     if us:   # 同一個模型，改用美國賠率下：看得出模型本身準不準（不被台彩抽成蓋掉）
         out["model1_us"] = max(us, key=lambda o: o["ev"])
+        same = next((o for o in opts if o["key"] == out["model1_us"]["key"]), None)
+        if same:   # 押同一邊、改去台彩下；ev 記美國賠率的期望值（「美國划算才下」用的是同一個判斷）
+            out["model1_us_tw"] = {**same, "ev": out["model1_us"]["ev"]}
     return out, snap
 
 
@@ -186,6 +218,21 @@ def run(sports, now=None):
                            "result": "", "settle_odds": "", "settle_src": "", "profit": ""}
                 n_upd += bool(old)
                 n_new += not old
+        # 補記：以前只有 model1_us 的比賽，照它押的那一邊補一筆「改用台彩下」
+        for (gid, strat), r in list(rows.items()):
+            if strat != "model1_us" or (gid, "model1_us_tw") in rows:
+                continue
+            g = finals.get((sport, gid)) or next((x for x in games if x["id"] == gid), None)
+            if not g:
+                continue
+            opts, _ = tw_opts(g, tw)
+            o = next((x for x in opts if x["key"] == r["pick"]), None) or retro_tw(g, tw, r)
+            if not o:
+                continue
+            rows[(gid, "model1_us_tw")] = {**r, "strategy": "model1_us_tw", "p": round(o["p"], 4), "mkt_p": round(o["m"], 4),
+                                           "tw_odds": o["tw"], "tw_src": o["src"], "ev": r["ev"],
+                                           "result": "", "settle_odds": "", "settle_src": "", "profit": ""}
+            n_new += 1
         for k, r in rows.items():
             if r.get("result"):
                 continue

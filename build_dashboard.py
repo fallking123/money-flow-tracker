@@ -411,7 +411,7 @@ def team_ctx(ctx, side, k):
     return v or ""
 
 
-LIVE_STRATS = ["model1", "model1_us", "model2", "combo", "favorite", "underdog"]
+LIVE_STRATS = ["model1", "model1_us", "model1_us_tw", "model2", "combo", "favorite", "underdog"]
 
 
 def live_summary():

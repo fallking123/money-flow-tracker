@@ -1899,9 +1899,10 @@ details.more-sec>summary .sm-sub{display:block;font-weight:400;font-size:12px;co
 
   // ═════════ 模型比賽 ═════════
   const STRAT = {model1: ["模型一・台彩", "實力模型，用台彩賠率下"], model1_us: ["模型一・美國賠率", "同一個模型，用美國賠率下（看模型本身準不準）"],
+                 model1_us_tw: ["美國選邊・台彩下", "跟「模型一・美國賠率」押同一邊，改去台彩下（冰球算 60 分鐘）"],
                  model2: ["模型二・資金", "下注比例＋盤口移動"], combo: ["綜合", "模型一＋模型二"],
                  favorite: ["都押熱門", "不用模型"], underdog: ["都押冷門", "不用模型"]};
-  const READY = {model1: true, model1_us: true, favorite: true, underdog: true};
+  const READY = {model1: true, model1_us: true, model1_us_tw: true, favorite: true, underdog: true};
   const UNIT = 1000;   // 「每一場都下」每注 1,000 元
   // 美國賠率下注：含延長賽的獨贏，押「模型一勝率 × 美國賠率」比較高的那邊
   function usPick(g) {
@@ -1913,7 +1914,7 @@ details.more-sec>summary .sm-sub{display:block;font-weight:400;font-size:12px;co
   }
   // ── 獲利曲線 ──
   const MC = {view: store.get("mc_view", "live"), stake: store.get("mc_stake", "flat"), sport: store.get("mc_sport", "mlb")};
-  const LINE = {model1: ["模型一・台彩", "var(--accent)", ""], model1_us: ["模型一・美國", "var(--good)", ""], favorite: ["都押熱門", "var(--band)", "4 4"],
+  const LINE = {model1: ["模型一・台彩", "var(--accent)", ""], model1_us: ["模型一・美國", "var(--good)", ""], model1_us_tw: ["美國選邊・台彩下", "var(--warn)", ""], favorite: ["都押熱門", "var(--band)", "4 4"],
                 m1_tw: ["模型一・台彩", "var(--accent)", ""], m1_us: ["模型一・美國", "var(--good)", ""], m1_us_value: ["模型一・美國，只下 +2% 以上", "var(--warn)", ""],
                 fav_us: ["都押熱門（美國）", "var(--band)", "4 4"]};
   function startBank() { return bankNow() || 100000; }
@@ -1928,9 +1929,9 @@ details.more-sec>summary .sm-sub{display:block;font-weight:400;font-size:12px;co
   function mcLines() {
     if (MC.view === "live") {
       const ser = (DATA.live && DATA.live.series) || [];
-      return ["model1", "model1_us", "favorite"].map((k) => {
+      return ["model1", "model1_us", "model1_us_tw", "favorite"].map((k) => {
         const rs = ser.filter((x) => x[1] === k); if (!rs.length) return null;
-        if (MC.stake === "kelly" && k === "favorite") return null;
+        if (MC.stake === "kelly" && (k === "favorite" || k === "model1_us_tw")) return null;
         let c = 0;
         const pts = MC.stake === "kelly" ? kellyPath(rs) : rs.map((x) => [x[0], (c += x[6]) * UNIT]);
         return {k, pts: [[rs[0][0], 0], ...pts]};
@@ -1991,13 +1992,13 @@ details.more-sec>summary .sm-sub{display:block;font-weight:400;font-size:12px;co
     const head = `<thead><tr><th>策略</th><th class="r">已開獎</th><th class="r">猜中</th><th class="r">獲利率</th><th class="r">賺賠</th></tr></thead>`;
     const actual = agg("model1").actual || 0;
     let h = `<div class="card"><h3>每一場都下注，誰的獲利率最高<small>上線後實戰・${L.since ? `從 ${fmtMD.format(new Date(L.since))} 開始` : "今天開始"}・每場 ${UNIT.toLocaleString("en-US")} 元</small></h3>
-      <div class="scroll"><table class="tb">${head}<tbody>${row("model1")}${row("model1_us")}${row("model2")}${row("combo")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">參考（台彩賠率）</td></tr>${row("favorite")}${row("underdog")}</tbody></table></div>
+      <div class="scroll"><table class="tb">${head}<tbody>${row("model1")}${row("model1_us")}${row("model1_us_tw")}${row("model2")}${row("combo")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">參考（台彩賠率）</td></tr>${row("favorite")}${row("underdog")}</tbody></table></div>
       <p class="mut" style="font-size:12.5px;margin:8px 0 0">${done ? `台彩結算：${actual} 場用你記錄的實際賠率，其他用估的。` : `第一批比賽還沒開獎（${L.pending || 0} 場等開獎），開獎後自動結算。`}「模型一・美國賠率」是同一個模型用美國賠率下，沒有台彩抽成，比較看得出模型本身準不準（美國賠率是 10/1 起才開始記）。每個策略都押開賽前最後一次判斷的那一邊。場數少於 200 場時，差幾 % 多半是運氣。</p></div>`;
     h += curveCard();
     // 只下划算的
     const vrow = (k, nm) => { const v = (S[k] || {}).value || {}; return `<tr><td><b>${nm}</b></td><td class="r n">${v.n || 0}</td><td class="r n">${wr(v)}</td><td class="r n ${gb(v.roi)}">${v.roi == null ? "–" : sgn(v.roi, 1) + "%"}</td><td class="r n ${gb(v.pl)}">${money(v)}</td></tr>`; };
     h += `<div class="card"><h3>只下划算的<small>開賽前期望值 > 0 才下・每注 ${UNIT.toLocaleString("en-US")} 元</small></h3>
-      <div class="scroll"><table class="tb">${head}<tbody>${vrow("model1", "模型一・台彩")}${vrow("model1_us", "模型一・美國賠率")}
+      <div class="scroll"><table class="tb">${head}<tbody>${vrow("model1", "模型一・台彩")}${vrow("model1_us", "模型一・美國賠率")}${vrow("model1_us_tw", "美國划算的・改去台彩下")}
       <tr><td><b>模型二・資金</b></td><td colspan="4" class="mut">累積中</td></tr><tr><td><b>綜合</b></td><td colspan="4" class="mut">累積中</td></tr></tbody></table></div>
       <p class="mut" style="font-size:12.5px;margin:8px 0 0">每場都下一定會被抽成吃掉（台彩約 13%、美國約 4%）；真正看得出模型有沒有用的是這張表。</p></div>`;
     // 各運動
