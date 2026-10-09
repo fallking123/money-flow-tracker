@@ -214,6 +214,7 @@ h1{font-size:24px;font-weight:900;margin:0;text-wrap:balance}
 .verdict b{display:block;font-size:15px;margin-bottom:2px}
 .verdict.good{background:var(--good-soft)} .verdict.good b{color:var(--good)}
 .verdict.bad{background:var(--bad-soft)} .verdict.bad b{color:var(--bad)}
+.verdict strong{display:inline}
 .verdict small{display:block;color:var(--muted);font-size:12.5px;margin-top:3px}
 .kp{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 .kp .tile{background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:16px;padding:12px 14px}
@@ -319,6 +320,25 @@ details.more-sec>summary .sm-sub{display:block;font-weight:400;font-size:12px;co
 .bookl b{color:var(--ink2)}
 .bookl span{font-weight:700}
 .bookl span{font-weight:400;color:var(--ink2)}
+.flow3{display:flex;flex-direction:column;gap:10px}
+.f3m{display:flex;flex-direction:column;gap:4px}
+.f3h,.f3r{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr) 3.4em;gap:8px;align-items:center}
+.f3h{font-size:11.5px;color:var(--muted)} .f3h b{font-size:13px;color:var(--ink2)} .f3h span{text-align:right} .f3h span:nth-child(2),.f3h span:nth-child(3){text-align:left}
+.f3r{font-size:13px} .f3r .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.f3r.sig .nm{color:var(--sig);font-weight:700}
+.f3r .bx{display:flex;align-items:center;gap:5px;min-width:0}
+.f3r .b{flex:1;height:7px;border-radius:999px;background:var(--soft2);overflow:hidden;min-width:16px}
+.f3r .b i{display:block;height:100%;background:var(--band);border-radius:999px}
+.f3r .bx.m .b i{background:var(--sig)}
+.f3r .bx b{font-size:12px;min-width:2.6em;text-align:right}
+.f3r .od{text-align:right;font-size:12.5px;color:var(--ink2)}
+.f3r .od small{font-size:9px;margin-left:2px} .f3r .od .up{color:var(--bad)} .f3r .od .dn{color:var(--good)}
+.f3r .tags{grid-column:1/-1;display:flex;gap:6px;margin-top:-2px}
+.f3r .tags i{font-style:normal;font-size:11px;font-weight:700;border-radius:999px;padding:0 8px}
+.t-sig{background:var(--sig-soft);color:var(--sig)} .t-herd{background:var(--bad-soft);color:var(--bad)}
+.f3n{margin:0;font-size:11px;color:var(--muted)}
+.tb tr.hl td{background:var(--soft)}
+h4.hh{margin:14px 0 6px;font-size:14px}
 .subnav{display:flex;gap:4px;background:var(--soft2);border-radius:12px;padding:3px;overflow-x:auto;scrollbar-width:none}
 .subnav button{appearance:none;flex:1;border:0;background:none;padding:7px 10px;border-radius:9px;font-size:14px;color:var(--ink2);cursor:pointer;white-space:nowrap}
 .subnav button[aria-selected="true"]{background:var(--card);color:var(--ink);font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,.08)}
@@ -991,6 +1011,50 @@ details.more-sec>summary .sm-sub{display:block;font-weight:400;font-size:12px;co
     return `<div class="ts-wrap"><h4>每一注的期望值（含其他玩法）</h4><div class="scroll"><table class="tb mini evtb"><thead><tr><th>玩法</th><th>押什麼</th><th class="r">台彩</th><th class="r">期望值</th><th>判斷</th><th class="r hide-s">估計勝率</th><th class="r hide-s">至少要</th><th class="r hide-s">美國賠率・期望值</th></tr></thead><tbody>${body}</tbody></table></div>
       <p class="mut" style="font-size:12px;margin:6px 0 0">「台彩 ≥ X 才下」＝台彩實際賠率要到 X，期望值才有 +2%。其他玩法只有美國賠率，勝率和台彩賠率都是估的，參考就好。</p></div>`;
   }
+  // ═════════ 人多的地方不要去：賠率從開盤到現在變多少 ═════════
+  // 回傳這一邊「變貴了」幾個百分點（公平勝率增加多少；讓分／大小分的盤口每移 0.5 分約算 5 點）；變便宜是負的
+  const HERD = {d: +store.get("herd_d", 5), b: +store.get("herd_b", 65)};
+  function firstSnap(g, mkt) { return g.snaps.find((x) => (x.hrs == null || x.hrs >= 0) && sides(g, x, mkt).some((y) => y.odds)) || null; }
+  function priceMove(g, mkt, i, s) {
+    const f = firstSnap(g, mkt); if (!f || !s) return null;
+    const so = sides(g, f, mkt), sc = sides(g, s, mkt);
+    if (mkt === "ml" && g.open && g.open.ml && g.open.ml[0] && g.open.ml[1] && so.length === 2) { so[0] = {...so[0], odds: g.open.ml[0]}; so[1] = {...so[1], odds: g.open.ml[1]}; }
+    const po = fair(so, i), pc = fair(sc, i); if (po == null || pc == null) return null;
+    let d = (pc - po) * 100;
+    if (mkt !== "ml") {
+      let lo = so[i].ln, lc = sc[i].ln;
+      if (mkt === "sp" && i === 0 && g.open && g.open.sp != null) lo = g.open.sp;
+      if (mkt === "sp" && i === 1 && g.open && g.open.sp != null) lo = -g.open.sp;
+      if (mkt === "ou" && g.open && g.open.ou != null) lo = g.open.ou;
+      if (lo != null && lc != null && lo !== lc) {
+        // 讓分：這邊拿到的分數變少＝變貴；大小分：大分的線變高（小分的線變低）＝變貴
+        const worse = mkt === "sp" ? lo - lc : sc[i].key === "over" ? lc - lo : lo - lc;
+        d += worse * 10;
+      }
+    }
+    return d;
+  }
+  const herdFlag = (bet, mv) => bet != null && mv != null && bet >= HERD.b && mv >= HERD.d;
+  // 比賽卡：獨贏、讓分、大小分的人數 %、金額 % 放在一起
+  function flowAll(g, s) {
+    const thr = state.thr, soc = g.sport === "soccer";
+    const blocks = ["ml", "sp", "ou"].map((mkt) => {
+      const ss = sides(g, s, mkt); if (!ss.some((x) => x.bet != null)) return "";
+      const order = soc && mkt === "ml" ? [0, 1, 2] : ss.map((_, i) => i);
+      const head = mkt === "ml" ? "獨贏" : mkt === "sp" ? "讓分" : `大小分 ${ss[0].ln ?? ""}`;
+      const rows = order.map((i) => {
+        const x = ss[i], d = diffOf(x), sig = d != null && d >= thr, mv = priceMove(g, mkt, i, s), herd = herdFlag(x.bet, mv);
+        const nm = mkt === "sp" ? `${x.nm} ${line(x.ln)}` : x.nm;
+        return `<div class="f3r${sig ? " sig" : ""}"><span class="nm">${esc(nm)}</span>
+          <span class="bx"><span class="b"><i style="width:${x.bet ?? 0}%"></i></span><b class="n">${pct(x.bet)}</b></span>
+          <span class="bx m"><span class="b"><i style="width:${x.money ?? 0}%"></i></span><b class="n">${pct(x.money)}</b></span>
+          <span class="od n">${odd(x.odds)}${mv != null && Math.abs(mv) >= 2 ? `<small class="${mv > 0 ? "up" : "dn"}">${mv > 0 ? "▼" : "▲"}</small>` : ""}</span>
+          ${sig || herd ? `<span class="tags">${sig ? `<i class="t-sig">錢多 +${Math.round(d)}%</i>` : ""}${herd ? `<i class="t-herd">人多又大降</i>` : ""}</span>` : ""}</div>`;
+      }).join("");
+      return `<div class="f3m"><div class="f3h"><b>${head}</b><span>人數</span><span>金額</span><span>賠率</span></div>${rows}</div>`;
+    }).join("");
+    return blocks ? `<div class="flow3">${blocks}<p class="f3n">▼＝開盤到現在賠率變低（這邊變熱門）・「人多又大降」＝押的人 ≥ ${HERD.b}% 而且變貴 ≥ ${HERD.d} 點</p></div>` : "";
+  }
   function gameCard(g, mk) {
     const mkt = mk || state.mkt, thr = state.thr, s = latest(g), ss = sides(g, s, mkt), soc = g.sport === "soccer";
     const t = new Date(g.t), hrs = (t - Date.now()) / 36e5;
@@ -1036,18 +1100,7 @@ details.more-sec>summary .sm-sub{display:block;font-weight:400;font-size:12px;co
         const SRC = {eu: ["賽前版", "歐洲各家平均賠率"], pin: ["賽前版", "Pinnacle 賠率（歐洲平均還沒出）"], pin_live: ["臨場版", "Pinnacle 最新賠率"], live: ["臨場版", "開賽前最新賠率（美國）"], us: ["賽前版", "美國莊家賠率（歐洲、Pinnacle 都還沒有，先代用）"]}[g.model.src] || ["", "莊家"];
         h += `<div class="mdl"><b>模型估計${SRC[0] ? "・" + SRC[0] : ""}</b>主 ${f(P[0])}・和 ${f(P[1])}・客 ${f(P[2])}<small>${SRC[1]}：主 ${f(Mk[0])}・和 ${f(Mk[1])}・客 ${f(Mk[2])}（第一層模型，還沒加資金流向）</small></div>`;
       }
-      // 拉鋸條：兩選一或三選一（足球獨贏有和局）
-      const order = soc && mkt === "ml" ? ["home", "draw", "away"] : ss.map((x) => x.key);
-      const os = order.map(sdOf);
-      const colOf = (k) => (mkt === "ou" ? (k === "over" ? "var(--accent)" : "var(--band)") : k === "draw" ? "var(--band)" : tcol(g[k + "_c"], k === "home" ? "#46526A" : "#8A97AB"));
-      const lab = (arr, f) => arr.length === 3
-        ? `<span><b>${pct(arr[0][f])}</b> ${esc(arr[0].nm)}</span><span class="mid">和 <b>${pct(arr[1][f])}</b></span><span>${esc(arr[2].nm)} <b>${pct(arr[2][f])}</b></span>`
-        : `<span><b>${pct(arr[0][f])}</b> ${esc(arr[0].nm)}</span><span class="mid">${f === "bet" ? "下注人數" : "下注金額"}</span><span>${esc(arr[1].nm)} <b>${pct(arr[1][f])}</b></span>`;
-      const bar = (f) => `<div class="bar">${os.map((x, i) => `<i style="${i === os.length - 1 ? "flex:1" : `width:${x[f] ?? 0}%`};background:${colOf(x.key)}"></i>`).join("")}</div>`;
-      h += `<div class="tug">
-        ${os.length === 3 ? `<div class="t"><span class="mid">下注人數</span></div>` : ""}<div class="t">${lab(os, "bet")}</div>${bar("bet")}
-        ${os.length === 3 ? `<div class="t"><span class="mid">下注金額</span></div>` : ""}<div class="t">${lab(os, "money")}</div>${bar("money")}
-      </div>`;
+      h += flowAll(g, s);
       const bk = bookPL(g, s, mkt);
       if (bk) h += `<div class="bookl"><b>莊家</b><span>最希望 <b class="good">${esc(mkt === "ml" || mkt === "ou" ? bk.want.nm : pickLabel(bk.want, mkt))}</b> 贏</span><span>最怕 <b class="bad">${esc(mkt === "ml" || mkt === "ou" ? bk.fear.nm : pickLabel(bk.fear, mkt))}</b> 贏</span></div>`;
     }
@@ -1236,12 +1289,13 @@ details.more-sec>summary .sm-sub{display:block;font-weight:400;font-size:12px;co
     const u = (v) => sgn(v, 1) + " 注";
     const series = luckSeries(rows.map((r) => ({pl: r.pl, p: r.p, odds: r.odds, stake: 1, lab: fmtMD.format(new Date(r.t))})));
     // 分成四個小分頁，不用一路滑到底
-    const SUB = [["sum", "成績總覽"], ["when", "時機・莊家"], ["bin", "區間統計"], ["list", "每一注"]];
+    const SUB = [["sum", "成績總覽"], ["herd", "人多的地方"], ["when", "時機・莊家"], ["bin", "區間統計"], ["list", "每一注"]];
     if (!SUB.some((x) => x[0] === state.asub)) state.asub = "sum";
     const subnav = `<div class="subnav" role="tablist">${SUB.map(([k, n]) => `<button type="button" role="tab" data-asub="${k}" aria-selected="${state.asub === k}">${n}</button>`).join("")}</div>`;
     if (state.asub !== "sum") {
       let x = subnav;
       if (state.asub === "when") x += timingCard() + bookCard();
+      else if (state.asub === "herd") x += herdCard();
       else if (state.asub === "bin") x += binCard();
       else x += `<div class="card"><h3>每一注的明細<small>${n} 注・點欄位名稱可以排序</small></h3>${detailTable(rows, avgClv, cv.length)}</div>`;
       $("analysis").innerHTML = x;
@@ -1296,6 +1350,53 @@ details.more-sec>summary .sm-sub{display:block;font-weight:400;font-size:12px;co
     return `<div class="card"><h3>什麼時候下比較好<small>同一個規則（錢比人多 ≥ ${state.thr}%），在不同時間點看到訊號就跟</small></h3>
       <div class="scroll"><table class="tb">${statHead("看訊號的時間")}<tbody>${rows}</tbody></table></div>
       <p class="mut" style="font-size:12.5px;margin:8px 0 0">賠率用那個時間點的美國賠率，每注 1 單位。從 10/7 起每場都會有開賽前約 5 分鐘那一筆，「收盤」就是你平常下注的時間。比較的是投報率：越早下賠率可能越好，但訊號可能還沒成形；越晚越準，但好價錢可能已經被吃掉。注數少於 30 的只當參考。</p></div>`;
+  }
+  // ═════════ 人多的地方不要去：開盤到收盤變貴很多、押的人又很多的那一邊，是不是比較常倒 ═════════
+  function herdItems() {
+    const out = [];
+    for (const g of allFinal()) {
+      if (!inSport(g)) continue;
+      const c = closing(g); if (!c) continue;
+      for (const mkt of ["ml", "sp", "ou"]) {
+        const ss = sides(g, c, mkt); if (ss.length !== 2) continue;   // 足球獨贏三選一不算（沒辦法「反過來押」）
+        ss.forEach((x, i) => {
+          if (x.bet == null) return;
+          const mv = priceMove(g, mkt, i, c); if (mv == null) return;
+          const r = settle(g, x, mkt), rf = settle(g, ss[1 - i], mkt); if (!r || !rf) return;
+          out.push({mkt, bet: x.bet, mv, o: r.o, pl: r.pl, fpl: rf.pl, fair: fair(ss, i)});
+        });
+      }
+    }
+    return out;
+  }
+  function herdCard() {
+    const items = herdItems();
+    const grp = (xs) => { const d = xs.filter((x) => x.o !== 0), w = d.filter((x) => x.o > 0).length, n = xs.length;
+      const ef = xs.filter((x) => x.fair != null);
+      return {n, wr: d.length ? w / d.length : null, exp: ef.length ? ef.reduce((a, x) => a + x.fair, 0) / ef.length : null,
+              roi: n ? xs.reduce((a, x) => a + x.pl, 0) / n * 100 : null, froi: n ? xs.reduce((a, x) => a + x.fpl, 0) / n * 100 : null}; };
+    const cell = (v) => (v == null ? "–" : Math.round(v * 100) + "%");
+    const tr = (lab, xs, hl) => { const c = grp(xs); return `<tr${hl ? ' class="hl"' : ""}><td>${lab}</td><td class="r n">${c.n}${c.n && c.n < 30 ? '<span class="few">少</span>' : ""}</td><td class="r n">${cell(c.wr)}</td><td class="r n mut">${cell(c.exp)}</td><td class="r n ${gb(c.roi)}">${c.roi == null ? "–" : sgn(c.roi, 1) + "%"}</td><td class="r n ${gb(c.froi)}">${c.froi == null ? "–" : sgn(c.froi, 1) + "%"}</td></tr>`; };
+    const table = (xs) => {
+      const herd = xs.filter((x) => x.bet >= HERD.b && x.mv >= HERD.d), drop = xs.filter((x) => x.bet < HERD.b && x.mv >= HERD.d),
+            crowd = xs.filter((x) => x.bet >= HERD.b && x.mv < HERD.d), rest = xs.filter((x) => x.bet < HERD.b && x.mv < HERD.d);
+      return `<div class="scroll"><table class="tb"><thead><tr><th></th><th class="r">次數</th><th class="r">實際贏</th><th class="r">莊家估</th><th class="r">押這邊</th><th class="r">反過來押</th></tr></thead><tbody>
+        ${tr("人多又大降", herd, true)}${tr("只有大降", drop)}${tr("只有人多", crowd)}${tr("其他", rest)}</tbody></table></div>`;
+    };
+    const all = items, h = all.filter((x) => x.bet >= HERD.b && x.mv >= HERD.d), hc = grp(h);
+    const say = !hc.n ? "目前沒有符合條件的比賽，把下面的門檻調低一點看看。"
+      : `押的人 ≥ ${HERD.b}%、而且開盤到收盤變貴 ≥ ${HERD.d} 點的那一邊，${hc.n} 次裡實際贏 <span class="n">${cell(hc.wr)}</span>，莊家估 ${cell(hc.exp)}。` +
+        (hc.wr != null && hc.exp != null ? (hc.wr < hc.exp - 0.05 ? `比莊家估的少，<strong class="good">「人多的地方不要去」目前看起來成立</strong>。` : hc.wr > hc.exp + 0.05 ? `反而比莊家估的多，<strong class="bad">目前不成立</strong>。` : "跟莊家估的差不多，<strong>目前看不出差別</strong>。") : "") +
+        (hc.n < 30 ? `次數還少（${hc.n} 次），只能當參考。` : "");
+    const sl = (k, lab, mn, mx, unit) => `<div class="thr"><label>${lab}</label><input type="range" data-herd="${k}" min="${mn}" max="${mx}" step="1" value="${HERD[k]}"><output data-herdv="${k}">${HERD[k]}${unit}</output></div>`;
+    return `<div class="card" id="herdcard"><h3>人多的地方不要去？<small>已打完的比賽・收盤時的人數 %・開盤到收盤賠率怎麼變</small></h3>
+      <div class="ctl" style="margin-bottom:8px">${sl("b", "押的人<br>至少", 50, 90, "%")}${sl("d", "變貴<br>至少幾點", 1, 15, "")}</div>
+      <div id="herdbody"><div class="verdict" style="margin-bottom:12px">${say}</div>
+      <h4 class="hh">全部玩法</h4>${table(all)}
+      <h4 class="hh">獨贏</h4>${table(all.filter((x) => x.mkt === "ml"))}
+      <h4 class="hh">讓分</h4>${table(all.filter((x) => x.mkt === "sp"))}
+      <h4 class="hh">大小分</h4>${table(all.filter((x) => x.mkt === "ou"))}</div>
+      <p class="mut" style="font-size:12.5px;margin:10px 0 0">「變貴幾點」＝這一邊的公平勝率從開盤到收盤增加幾個百分點（賠率從 2.10 降到 1.80 大約是 7 點；讓分、大小分的盤口每往不利這邊移 0.5 分約算 5 點）。「實際贏」比「莊家估」低很多，就代表大家一窩蜂押、賠率又被壓低的那邊比較常倒；這時「反過來押」的投報率會是正的。投報率用美國收盤賠率、每注 1 單位。</p></div>`;
   }
   // ═════════ 莊家想要誰贏：押莊家賺最多的那邊 vs 莊家最怕的那邊 ═════════
   function bookCard() {
@@ -2497,6 +2598,12 @@ details.more-sec>summary .sm-sub{display:block;font-weight:400;font-size:12px;co
     }
   });
   document.addEventListener("input", (e) => {
+    if (e.target.dataset && e.target.dataset.herd) {
+      const k = e.target.dataset.herd; HERD[k] = +e.target.value; store.set("herd_" + k, HERD[k]);
+      $$(`[data-herdv="${k}"]`).forEach((o) => { o.textContent = HERD[k] + (k === "b" ? "%" : ""); });
+      const c = $("herdcard"); if (c) { const tmp = document.createElement("div"); tmp.innerHTML = herdCard(); const nb = tmp.querySelector("#herdbody"); if (nb) $("herdbody").replaceWith(nb); }
+      return;
+    }
     if (e.target.dataset && e.target.dataset.bsl) {   // 拉滑桿時只重算表格，滑桿本身不重畫（才拉得動）；每張卡的同一個滑桿一起動
       const k = e.target.dataset.bsl; BIN[k] = +e.target.value; store.set("bin_" + k, BIN[k]);
       $$(`[data-bsl="${k}"]`).forEach((x) => { if (x !== e.target) x.value = BIN[k]; });
