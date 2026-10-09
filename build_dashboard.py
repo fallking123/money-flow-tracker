@@ -434,6 +434,7 @@ def live_summary():
         strats[s] = {"all": agg(rs), "by_sport": {sp: agg([r for r in rs if r["sport"] == sp]) for sp in sorted({r["sport"] for r in rs})},
                      "value": agg([r for r in rs if num(r["ev"]) is not None and num(r["ev"]) > 0])}
     m1 = [r for r in rows if r["strategy"] == "model1"]
+    tw_of = {r["game_id"]: r["tw_odds"] for r in rows if r["strategy"] == "model1_us_tw"}
     settled = sorted([r for r in m1 if r["result"] in ("win", "loss", "push")], key=lambda r: r["game_time_utc"], reverse=True)
     pend = [r for r in m1 if not r["result"]]
     slim = lambda r: {"sport": r["sport"], "t": r["game_time_utc"], "away": r["away_zh"] or r["away"], "home": r["home_zh"] or r["home"],
@@ -443,7 +444,10 @@ def live_summary():
     series = sorted([[r["game_time_utc"], r["strategy"], r["sport"], num(r["settle_odds"]) or num(r["tw_odds"]), num(r["p"]), num(r["ev"]),
                       num(r["profit"])] for r in rows if r["result"] in ("win", "loss", "push")], key=lambda x: x[0])
     return {"since": min((r["game_time_utc"] for r in m1), default=None), "strats": strats, "pending": len(pend),
-            "recent": [slim(r) for r in settled[:30]], "series": series}
+            "recent": [slim(r) for r in settled[:30]], "series": series,
+            # 模型一・美國賠率：每一注（含還沒開賽的），新的在前
+            "us_bets": [{**slim(r), "us": num(r["us_odds"]), "tw_est": num(tw_of.get(r["game_id"]))}
+                        for r in sorted([r for r in rows if r["strategy"] == "model1_us"], key=lambda r: r["game_time_utc"], reverse=True)]}
 
 
 def build(now):

@@ -2132,6 +2132,19 @@ h4.hh{margin:14px 0 6px;font-size:14px}
         <p class="mut" style="font-size:12.5px;margin:8px 0 0">底色＝該欄最高。±＝誤差範圍，差距比它小就是運氣。三種押法都虧 13% 左右，剛好差不多是台彩的抽成：每場都下，誰都贏不了抽成。</p></div></details>`;
     }
     // 最近開獎
+    // 模型一・美國賠率：每一注
+    const ub = L.us_bets || [];
+    if (ub.length) {
+      const RS = {win: ["贏", "w"], loss: ["輸", "l"], push: ["平", "p"], void: ["取消", "p"]};
+      const done = ub.filter((x) => RS[x.result]), pl = done.reduce((a, x) => a + (x.profit || 0), 0);
+      const tr = (x) => `<tr><td class="n" style="line-height:1.3">${fmtMD.format(new Date(x.t))}<div class="mut" style="font-size:11px;font-weight:400">${esc(spLabel(x.sport))}</div></td>
+        <td style="white-space:normal;line-height:1.35"><b>${esc(x.pick)}</b> <span class="n">${odd(x.us)}</span><div class="mut" style="font-size:11.5px">${esc(x.away)} @ ${esc(x.home)}</div>
+          <div class="mut" style="font-size:11px">勝率 ${x.p == null ? "–" : Math.round(x.p * 100) + "%"}${x.ev == null ? "" : "・期望值 " + evTxt(x.ev)}${x.tw_est ? "・台彩約 " + odd(x.tw_est) : ""}</div></td>
+        <td class="r" style="line-height:1.4">${RS[x.result] ? `<span class="res ${RS[x.result][1]}">${RS[x.result][0]}</span><div class="n ${gb(x.profit)}">${x.profit != null ? sgn(x.profit * UNIT, 0) : ""}</div>` : '<span class="mut">未開賽</span>'}</td></tr>`;
+      h += `<details class="more-sec" open><summary><span>模型一・美國賠率：每一注<small class="sm-sub">${ub.length} 注・已開獎 ${done.length} 注・每注 ${UNIT.toLocaleString("en-US")} 元，合計 <b class="${gb(pl)}">${sgn(pl * UNIT, 0)}</b> 元</small></span></summary><div>
+        <div class="scroll"><table class="tb"><thead><tr><th>開賽</th><th>押哪邊・美國賠率</th><th class="r">結果</th></tr></thead><tbody>${ub.map(tr).join("")}</tbody></table></div>
+        <p class="mut" style="font-size:12.5px;margin:8px 0 0">每一場都下獨贏（含延長賽），押「模型一勝率 × 美國賠率」比較高的那一邊，用開賽前最後一次的美國賠率結算。「台彩約」是同一邊在台彩的賠率（冰球是 60 分鐘、打平算輸）。</p></div></details>`;
+    }
     const rec = L.recent || [];
     if (rec.length) {
       const RS = {win: ["贏", "w"], loss: ["輸", "l"], push: ["平", "p"]};
