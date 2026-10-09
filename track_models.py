@@ -15,6 +15,9 @@
 - model1_us 模型一・美國賠率：同一個模型，押「美國賠率期望值比較高」的那一邊，用美國賠率結算（看模型本身準不準）
 - model1_us_tw 跟 model1_us 押同一邊，但改用台彩賠率結算（冰球台彩算 60 分鐘、和局算輸）：看「照美國賠率的建議去台彩下」會不會賺
   （ev 欄記的是美國賠率的期望值，所以「只下划算的」＝美國划算的那幾注改去台彩下）
+- model1_sp_us／model1_ou_us 只下讓分／只下大小分：每場押那個玩法裡美國賠率期望值比較高的一邊（拿來比較三種玩法）
+- model1_all_us 不限獨贏：獨贏、讓分、大小分裡挑「美國賠率期望值最高」的那一注，用美國賠率結算
+  （獨贏勝率用模型一；讓分、大小分用 Pinnacle 去抽水的機率，沒有 Pinnacle 就用美國共識賠率去抽水）。pick 欄寫成「玩法|邊|盤口」，例如 sp|home|-1.5
 每場都當作押 1 單位；profit＝賺賠（贏：賠率−1，輸：−1，平手退款：0）。
 ev＝開賽前估的期望值，看板用它算「只下划算的（ev > 0）」。
 
@@ -140,6 +143,48 @@ def retro_tw(g, tw, r):
     return {"p": p, "m": m, "tw": odds, "src": src, "ev": p * odds - 1}
 
 
+def all_us_options(g, p_ml=None):
+    """美國賠率的獨贏、讓分、大小分每一個選項：[{mkt, key, line, us, p, ev, name}]（足球不算：亞洲讓分有四分之一盤）"""
+    import alerts   # alerts 也 import 這個檔，放這裡才不會互相 import
+    if g["sport"] == "soccer":
+        return []
+    pre = [x for x in (g.get("snaps") or []) if x.get("hrs") is None or x["hrs"] >= 0]
+    snap = next((x for x in reversed(pre) if any(x.get(m) for m in ("ml", "sp", "ou"))), None)
+    if not snap:
+        return []
+    out = []
+    for mkt in ("ml", "sp", "ou"):
+        ss = alerts.us_sides(g, snap, mkt)
+        if not ss or any(not o or o <= 1 for _, o, _ in ss):
+            continue
+        for key, us, line in ss:
+            if mkt != "ml" and line is None:
+                continue
+            if mkt == "ml" and p_ml:
+                p = p_ml.get(key)
+            else:
+                p, _ = alerts.prob(g, mkt, key, line)
+            if not p and mkt != "ml":   # 沒有 Pinnacle：用美國各家共識賠率去抽水（跟看板一樣的備用算法）
+                inv = [1 / o for _, o, _ in ss]
+                p = (1 / us) / sum(inv)
+            if not p or not (0.02 < p < 0.98):
+                continue
+            out.append({"mkt": mkt, "key": key, "line": line, "us": us, "p": p, "ev": p * us - 1,
+                        "name": alerts.pick_name(g, mkt, key, line)})
+    return out
+
+
+def best_all(g, p_ml=None, only=None):
+    opts = [o for o in all_us_options(g, p_ml) if not only or o["mkt"] == only]
+    if not opts:
+        return None
+    o = max(opts, key=lambda x: x["ev"])
+    ln = "" if o["line"] is None else f"{o['line']:g}"
+    label = {"ml": "獨贏", "sp": "讓分", "ou": "大小"}[o["mkt"]]
+    return {"key": f"{o['mkt']}|{o['key']}|{ln}", "name": f"{label}・{o['name']}", "us": o["us"], "p": o["p"], "m": o["p"],
+            "tw": o["us"], "src": "us", "ev": o["ev"]}
+
+
 def picks(g, tw):
     opts, snap = tw_opts(g, tw)
     if not opts:
@@ -154,6 +199,10 @@ def picks(g, tw):
         same = next((o for o in opts if o["key"] == out["model1_us"]["key"]), None)
         if same:   # 押同一邊、改去台彩下；ev 記美國賠率的期望值（「美國划算才下」用的是同一個判斷）
             out["model1_us_tw"] = {**same, "ev": out["model1_us"]["ev"]}
+    for strat, only in (("model1_all_us", None), ("model1_sp_us", "sp"), ("model1_ou_us", "ou")):
+        ba = best_all(g, only=only)
+        if ba:   # 不限獨贏（三種玩法挑最好）／只下讓分／只下大小分
+            out[strat] = ba
     return out, snap
 
 
@@ -161,6 +210,23 @@ def settle(row, g):
     """回傳 (result, 結算賠率, 賠率來源, 賺賠)"""
     res = g["result"]
     w, pick = res.get("winner"), row["pick"]
+    if row["strategy"] in ("model1_all_us", "model1_sp_us", "model1_ou_us"):   # 不限獨贏：pick＝玩法|邊|盤口，美國賠率、含延長賽
+        mkt, key, ln = (pick.split("|") + ["", "", ""])[:3]
+        odds = float(row["tw_odds"])
+        if mkt == "ml":
+            if w == "tie":
+                return "push", "", "", 0.0
+            v = 1 if w == key else -1
+        else:
+            a, h, ln = float(res["away"]), float(res["home"]), float(ln)
+            if mkt == "sp":
+                d = (a - h if key == "away" else h - a) + ln
+            else:
+                d = (a + h - ln) if key == "over" else (ln - a - h)
+            v = (d > 0) - (d < 0)
+        if v == 0:
+            return "push", odds, "us", 0.0
+        return ("win" if v > 0 else "loss"), odds, "us", round(odds - 1, 4) if v > 0 else -1.0
     if row["strategy"].endswith("_us"):   # 美國賠率：含延長賽，用開賽前最後記到的美國賠率結算
         if g["sport"] == "soccer":
             won = (w == "tie") if pick == "draw" else (w == pick)
@@ -211,7 +277,7 @@ def run(sports, now=None):
                     continue
                 rows[k] = {"sport": sport, "league": g.get("league", sport), "game_id": g["id"], "game_time_utc": g["t"],
                            "away": g["away"], "home": g["home"], "away_zh": g.get("away_zh", ""), "home_zh": g.get("home_zh", ""),
-                           "strategy": strat, "pick": o["key"], "pick_zh": pick_name(g, o["key"]),
+                           "strategy": strat, "pick": o["key"], "pick_zh": o.get("name") or pick_name(g, o["key"]),
                            "p": round(o["p"], 4), "mkt_p": round(o["m"], 4), "us_odds": o["us"], "tw_odds": o["tw"], "tw_src": o["src"],
                            "ev": round(o["ev"], 4), "hours_before": snap.get("hrs") if snap else "",
                            "updated_utc": now.strftime("%Y-%m-%dT%H:%MZ"),
@@ -233,6 +299,29 @@ def run(sports, now=None):
                                            "tw_odds": o["tw"], "tw_src": o["src"], "ev": r["ev"],
                                            "result": "", "settle_odds": "", "settle_src": "", "profit": ""}
             n_new += 1
+        # 補記：不限獨贏（過去的比賽用當時記下的模型一勝率；讓分、大小分要有 Pinnacle 資料才算得出來）
+        for (gid, strat), r in list(rows.items()):
+            if strat != "model1_us":
+                continue
+            g = finals.get((sport, gid)) or next((x for x in games if x["id"] == gid), None)
+            if not g:
+                continue
+            try:
+                p = float(r["p"])
+            except (TypeError, ValueError):
+                continue
+            other = "home" if r["pick"] == "away" else "away"
+            for new_s, only in (("model1_all_us", None), ("model1_sp_us", "sp"), ("model1_ou_us", "ou")):
+                if (gid, new_s) in rows:
+                    continue
+                ba = best_all(g, {r["pick"]: p, other: 1 - p}, only)
+                if not ba:
+                    continue
+                rows[(gid, new_s)] = {**r, "strategy": new_s, "pick": ba["key"], "pick_zh": ba["name"],
+                                      "p": round(ba["p"], 4), "mkt_p": round(ba["m"], 4), "us_odds": ba["us"],
+                                      "tw_odds": ba["tw"], "tw_src": "us", "ev": round(ba["ev"], 4),
+                                      "result": "", "settle_odds": "", "settle_src": "", "profit": ""}
+                n_new += 1
         for k, r in rows.items():
             if r.get("result"):
                 continue

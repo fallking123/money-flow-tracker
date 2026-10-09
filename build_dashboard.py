@@ -411,7 +411,7 @@ def team_ctx(ctx, side, k):
     return v or ""
 
 
-LIVE_STRATS = ["model1", "model1_us", "model1_us_tw", "model2", "combo", "favorite", "underdog"]
+LIVE_STRATS = ["model1", "model1_us", "model1_us_tw", "model1_sp_us", "model1_ou_us", "model1_all_us", "model2", "combo", "favorite", "underdog"]
 
 
 def live_summary():
@@ -447,7 +447,10 @@ def live_summary():
             "recent": [slim(r) for r in settled[:30]], "series": series,
             # 模型一・美國賠率：每一注（含還沒開賽的），新的在前
             "us_bets": [{**slim(r), "us": num(r["us_odds"]), "tw_est": num(tw_of.get(r["game_id"]))}
-                        for r in sorted([r for r in rows if r["strategy"] == "model1_us"], key=lambda r: r["game_time_utc"], reverse=True)]}
+                        for r in sorted([r for r in rows if r["strategy"] == "model1_us"], key=lambda r: r["game_time_utc"], reverse=True)],
+            # 不限獨贏：每一注
+            "all_bets": [{**slim(r), "us": num(r["us_odds"])}
+                         for r in sorted([r for r in rows if r["strategy"] == "model1_all_us"], key=lambda r: r["game_time_utc"], reverse=True)]}
 
 
 def build(now):
