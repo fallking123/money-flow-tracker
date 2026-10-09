@@ -1012,29 +1012,27 @@ h4.hh{margin:14px 0 6px;font-size:14px}
       <p class="mut" style="font-size:12px;margin:6px 0 0">「台彩 ≥ X 才下」＝台彩實際賠率要到 X，期望值才有 +2%。其他玩法只有美國賠率，勝率和台彩賠率都是估的，參考就好。</p></div>`;
   }
   // ═════════ 人多的地方不要去：賠率從開盤到現在變多少 ═════════
-  // 回傳這一邊「變貴了」幾個百分點（公平勝率增加多少；讓分／大小分的盤口每移 0.5 分約算 5 點）；變便宜是負的
-  const HERD = {d: +store.get("herd_d", 5), b: +store.get("herd_b", 65)};
+  // 這一邊從開盤到現在：賠率降了多少（開盤賠率 − 現在賠率，例如 2.10 → 1.80 ＝ 降 0.30），
+  // 讓分／大小分的盤口如果往不利這邊移，另外記移了幾分（盤口變了，賠率就不能直接比）
+  const HERD = {d: +store.get("herd_od", 20), b: +store.get("herd_b", 65)};   // d：賠率降多少（×100，20＝0.20）
   function firstSnap(g, mkt) { return g.snaps.find((x) => (x.hrs == null || x.hrs >= 0) && sides(g, x, mkt).some((y) => y.odds)) || null; }
   function priceMove(g, mkt, i, s) {
     const f = firstSnap(g, mkt); if (!f || !s) return null;
     const so = sides(g, f, mkt), sc = sides(g, s, mkt);
-    if (mkt === "ml" && g.open && g.open.ml && g.open.ml[0] && g.open.ml[1] && so.length === 2) { so[0] = {...so[0], odds: g.open.ml[0]}; so[1] = {...so[1], odds: g.open.ml[1]}; }
-    const po = fair(so, i), pc = fair(sc, i); if (po == null || pc == null) return null;
-    let d = (pc - po) * 100;
-    if (mkt !== "ml") {
-      let lo = so[i].ln, lc = sc[i].ln;
-      if (mkt === "sp" && i === 0 && g.open && g.open.sp != null) lo = g.open.sp;
-      if (mkt === "sp" && i === 1 && g.open && g.open.sp != null) lo = -g.open.sp;
-      if (mkt === "ou" && g.open && g.open.ou != null) lo = g.open.ou;
-      if (lo != null && lc != null && lo !== lc) {
-        // 讓分：這邊拿到的分數變少＝變貴；大小分：大分的線變高（小分的線變低）＝變貴
-        const worse = mkt === "sp" ? lo - lc : sc[i].key === "over" ? lc - lo : lo - lc;
-        d += worse * 10;
-      }
-    }
-    return d;
+    let oo = so[i] && so[i].odds, oc = sc[i] && sc[i].odds;
+    if (mkt === "ml" && g.open && g.open.ml && so.length === 2 && g.open.ml[i]) oo = g.open.ml[i];
+    if (!oo || !oc) return null;
+    let lo = so[i].ln, lc = sc[i].ln, worse = 0;
+    if (mkt === "sp" && g.open && g.open.sp != null) lo = i === 0 ? g.open.sp : -g.open.sp;
+    if (mkt === "ou" && g.open && g.open.ou != null) lo = g.open.ou;
+    if (mkt !== "ml" && lo != null && lc != null && lo !== lc)   // 讓分：拿到的分數變少＝不利；大小分：大分的線變高（小分的線變低）＝不利
+      worse = mkt === "sp" ? lo - lc : sc[i].key === "over" ? lc - lo : lo - lc;
+    return {oo, oc, od: lo === lc || mkt === "ml" ? oo - oc : null, lo, lc, worse};
   }
-  const herdFlag = (bet, mv) => bet != null && mv != null && bet >= HERD.b && mv >= HERD.d;
+  // 「大降」：賠率降 ≥ 門檻，或盤口往不利這邊移 ≥ 0.5 分
+  const bigDrop = (mv) => !!mv && ((mv.od != null && mv.od >= HERD.d / 100 - 1e-9) || mv.worse >= 0.5);
+  const herdFlag = (bet, mv) => bet != null && bet >= HERD.b && bigDrop(mv);
+  const mvTxt = (mv) => (!mv ? "" : mv.worse >= 0.5 ? `盤口 ${line(mv.lo)} → ${line(mv.lc)}` : `${odd(mv.oo)} → ${odd(mv.oc)}`);
   // 比賽卡：獨贏、讓分、大小分的人數 %、金額 % 放在一起
   function flowAll(g, s) {
     const thr = state.thr, soc = g.sport === "soccer";
@@ -1048,12 +1046,12 @@ h4.hh{margin:14px 0 6px;font-size:14px}
         return `<div class="f3r${sig ? " sig" : ""}"><span class="nm">${esc(nm)}</span>
           <span class="bx"><span class="b"><i style="width:${x.bet ?? 0}%"></i></span><b class="n">${pct(x.bet)}</b></span>
           <span class="bx m"><span class="b"><i style="width:${x.money ?? 0}%"></i></span><b class="n">${pct(x.money)}</b></span>
-          <span class="od n">${odd(x.odds)}${mv != null && Math.abs(mv) >= 2 ? `<small class="${mv > 0 ? "up" : "dn"}">${mv > 0 ? "▼" : "▲"}</small>` : ""}</span>
-          ${sig || herd ? `<span class="tags">${sig ? `<i class="t-sig">錢多 +${Math.round(d)}%</i>` : ""}${herd ? `<i class="t-herd">人多又大降</i>` : ""}</span>` : ""}</div>`;
+          <span class="od n">${odd(x.odds)}${mv && mv.od != null && Math.abs(mv.od) >= 0.05 ? `<small class="${mv.od > 0 ? "up" : "dn"}">${mv.od > 0 ? "▼" : "▲"}${Math.abs(mv.od).toFixed(2)}</small>` : ""}</span>
+          ${sig || herd ? `<span class="tags">${sig ? `<i class="t-sig">錢多 +${Math.round(d)}%</i>` : ""}${herd ? `<i class="t-herd">人多又大降・${mvTxt(mv)}</i>` : ""}</span>` : ""}</div>`;
       }).join("");
       return `<div class="f3m"><div class="f3h"><b>${head}</b><span>人數</span><span>金額</span><span>賠率</span></div>${rows}</div>`;
     }).join("");
-    return blocks ? `<div class="flow3">${blocks}<p class="f3n">▼＝開盤到現在賠率變低（這邊變熱門）・「人多又大降」＝押的人 ≥ ${HERD.b}% 而且變貴 ≥ ${HERD.d} 點</p></div>` : "";
+    return blocks ? `<div class="flow3">${blocks}<p class="f3n">▼0.30＝開盤到現在賠率降了 0.30（這邊變熱門）・「人多又大降」＝押的人 ≥ ${HERD.b}%，而且賠率降 ≥ ${(HERD.d / 100).toFixed(2)} 或盤口往不利這邊移 ≥ 0.5 分</p></div>` : "";
   }
   function gameCard(g, mk) {
     const mkt = mk || state.mkt, thr = state.thr, s = latest(g), ss = sides(g, s, mkt), soc = g.sport === "soccer";
@@ -1361,9 +1359,9 @@ h4.hh{margin:14px 0 6px;font-size:14px}
         const ss = sides(g, c, mkt); if (ss.length !== 2) continue;   // 足球獨贏三選一不算（沒辦法「反過來押」）
         ss.forEach((x, i) => {
           if (x.bet == null) return;
-          const mv = priceMove(g, mkt, i, c); if (mv == null) return;
+          const mv = priceMove(g, mkt, i, c); if (!mv) return;
           const r = settle(g, x, mkt), rf = settle(g, ss[1 - i], mkt); if (!r || !rf) return;
-          out.push({mkt, bet: x.bet, mv, o: r.o, pl: r.pl, fpl: rf.pl, fair: fair(ss, i)});
+          out.push({mkt, bet: x.bet, drop: bigDrop(mv), o: r.o, pl: r.pl, fpl: rf.pl, fair: fair(ss, i)});
         });
       }
     }
@@ -1378,25 +1376,25 @@ h4.hh{margin:14px 0 6px;font-size:14px}
     const cell = (v) => (v == null ? "–" : Math.round(v * 100) + "%");
     const tr = (lab, xs, hl) => { const c = grp(xs); return `<tr${hl ? ' class="hl"' : ""}><td>${lab}</td><td class="r n">${c.n}${c.n && c.n < 30 ? '<span class="few">少</span>' : ""}</td><td class="r n">${cell(c.wr)}</td><td class="r n mut">${cell(c.exp)}</td><td class="r n ${gb(c.roi)}">${c.roi == null ? "–" : sgn(c.roi, 1) + "%"}</td><td class="r n ${gb(c.froi)}">${c.froi == null ? "–" : sgn(c.froi, 1) + "%"}</td></tr>`; };
     const table = (xs) => {
-      const herd = xs.filter((x) => x.bet >= HERD.b && x.mv >= HERD.d), drop = xs.filter((x) => x.bet < HERD.b && x.mv >= HERD.d),
-            crowd = xs.filter((x) => x.bet >= HERD.b && x.mv < HERD.d), rest = xs.filter((x) => x.bet < HERD.b && x.mv < HERD.d);
+      const herd = xs.filter((x) => x.bet >= HERD.b && x.drop), drop = xs.filter((x) => x.bet < HERD.b && x.drop),
+            crowd = xs.filter((x) => x.bet >= HERD.b && !x.drop), rest = xs.filter((x) => x.bet < HERD.b && !x.drop);
       return `<div class="scroll"><table class="tb"><thead><tr><th></th><th class="r">次數</th><th class="r">實際贏</th><th class="r">莊家估</th><th class="r">押這邊</th><th class="r">反過來押</th></tr></thead><tbody>
         ${tr("人多又大降", herd, true)}${tr("只有大降", drop)}${tr("只有人多", crowd)}${tr("其他", rest)}</tbody></table></div>`;
     };
-    const all = items, h = all.filter((x) => x.bet >= HERD.b && x.mv >= HERD.d), hc = grp(h);
+    const all = items, h = all.filter((x) => x.bet >= HERD.b && x.drop), hc = grp(h);
     const say = !hc.n ? "目前沒有符合條件的比賽，把下面的門檻調低一點看看。"
-      : `押的人 ≥ ${HERD.b}%、而且開盤到收盤變貴 ≥ ${HERD.d} 點的那一邊，${hc.n} 次裡實際贏 <span class="n">${cell(hc.wr)}</span>，莊家估 ${cell(hc.exp)}。` +
+      : `押的人 ≥ ${HERD.b}%、而且開盤到收盤賠率降 ≥ ${(HERD.d / 100).toFixed(2)}（或盤口不利移 ≥ 0.5 分）的那一邊，${hc.n} 次裡實際贏 <span class="n">${cell(hc.wr)}</span>，莊家估 ${cell(hc.exp)}。` +
         (hc.wr != null && hc.exp != null ? (hc.wr < hc.exp - 0.05 ? `比莊家估的少，<strong class="good">「人多的地方不要去」目前看起來成立</strong>。` : hc.wr > hc.exp + 0.05 ? `反而比莊家估的多，<strong class="bad">目前不成立</strong>。` : "跟莊家估的差不多，<strong>目前看不出差別</strong>。") : "") +
         (hc.n < 30 ? `次數還少（${hc.n} 次），只能當參考。` : "");
-    const sl = (k, lab, mn, mx, unit) => `<div class="thr"><label>${lab}</label><input type="range" data-herd="${k}" min="${mn}" max="${mx}" step="1" value="${HERD[k]}"><output data-herdv="${k}">${HERD[k]}${unit}</output></div>`;
-    return `<div class="card" id="herdcard"><h3>人多的地方不要去？<small>已打完的比賽・收盤時的人數 %・開盤到收盤賠率怎麼變</small></h3>
-      <div class="ctl" style="margin-bottom:8px">${sl("b", "押的人<br>至少", 50, 90, "%")}${sl("d", "變貴<br>至少幾點", 1, 15, "")}</div>
+    const sl = (k, lab, mn, mx, step, fmt) => `<div class="thr"><label>${lab}</label><input type="range" data-herd="${k}" min="${mn}" max="${mx}" step="${step}" value="${HERD[k]}"><output data-herdv="${k}">${fmt(HERD[k])}</output></div>`;
+    return `<div class="card" id="herdcard"><h3>人多的地方不要去？<small>已打完的比賽・收盤時的人數 %・開盤到收盤賠率降多少</small></h3>
+      <div class="ctl" style="margin-bottom:8px">${sl("b", "押的人<br>至少", 50, 90, 1, (v) => v + "%")}${sl("d", "賠率降<br>至少", 5, 60, 5, (v) => (v / 100).toFixed(2))}</div>
       <div id="herdbody"><div class="verdict" style="margin-bottom:12px">${say}</div>
       <h4 class="hh">全部玩法</h4>${table(all)}
       <h4 class="hh">獨贏</h4>${table(all.filter((x) => x.mkt === "ml"))}
       <h4 class="hh">讓分</h4>${table(all.filter((x) => x.mkt === "sp"))}
       <h4 class="hh">大小分</h4>${table(all.filter((x) => x.mkt === "ou"))}</div>
-      <p class="mut" style="font-size:12.5px;margin:10px 0 0">「變貴幾點」＝這一邊的公平勝率從開盤到收盤增加幾個百分點（賠率從 2.10 降到 1.80 大約是 7 點；讓分、大小分的盤口每往不利這邊移 0.5 分約算 5 點）。「實際贏」比「莊家估」低很多，就代表大家一窩蜂押、賠率又被壓低的那邊比較常倒；這時「反過來押」的投報率會是正的。投報率用美國收盤賠率、每注 1 單位。</p></div>`;
+      <p class="mut" style="font-size:12.5px;margin:10px 0 0">「賠率降」＝開盤賠率減掉收盤賠率，例如 2.10 → 1.80 就是降 0.30。讓分、大小分如果盤口線變了（例如 -1 變 -1.5），賠率就不能直接比，這時盤口往不利這邊移 0.5 分以上也算「大降」。「實際贏」比「莊家估」低很多，就代表大家一窩蜂押、賠率又被壓低的那邊比較常倒；這時「反過來押」的投報率會是正的。投報率用美國收盤賠率、每注 1 單位。</p></div>`;
   }
   // ═════════ 莊家想要誰贏：押莊家賺最多的那邊 vs 莊家最怕的那邊 ═════════
   function bookCard() {
@@ -2599,8 +2597,9 @@ h4.hh{margin:14px 0 6px;font-size:14px}
   });
   document.addEventListener("input", (e) => {
     if (e.target.dataset && e.target.dataset.herd) {
-      const k = e.target.dataset.herd; HERD[k] = +e.target.value; store.set("herd_" + k, HERD[k]);
-      $$(`[data-herdv="${k}"]`).forEach((o) => { o.textContent = HERD[k] + (k === "b" ? "%" : ""); });
+      const k = e.target.dataset.herd; HERD[k] = +e.target.value;
+      store.set(k === "d" ? "herd_od" : "herd_b", HERD[k]);
+      $$(`[data-herdv="${k}"]`).forEach((o) => { o.textContent = k === "b" ? HERD[k] + "%" : (HERD[k] / 100).toFixed(2); });
       const c = $("herdcard"); if (c) { const tmp = document.createElement("div"); tmp.innerHTML = herdCard(); const nb = tmp.querySelector("#herdbody"); if (nb) $("herdbody").replaceWith(nb); }
       return;
     }
