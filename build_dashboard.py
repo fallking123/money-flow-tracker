@@ -412,6 +412,8 @@ def team_ctx(ctx, side, k):
     return v or ""
 
 
+FLIP_ODDS = 1.4   # 參考策略 model1_flip14：模型一押的台彩賠率低於這個就改押對面
+
 LIVE_STRATS = ["model1", "model1_us", "model1_us_tw", "model1_sp_us", "model1_sp_tw", "model1_ou_us", "model1_ou_tw",
                "model1_all_us", "model1_all_tw", "model2", "combo", "favorite", "underdog", "draw_us", "draw"]
 
@@ -451,6 +453,13 @@ def live_summary():
     alias = {"model1_us": "model1_us_draw", "model1_us_tw": "model1_tw_draw"}
     rows_s = rows + [{**r, "strategy": alias[r["strategy"]]} for r in rows if r["strategy"] in alias and r["pick"] == "draw"] \
         + [{**r, "strategy": "model1_tw_draw"} for r in rows if r["strategy"] == "model1" and r["sport"] == "nhl" and r["pick"] == "draw"]  # 冰球：台彩 60 分鐘和局只有模型一・台彩會挑
+    # 參考：模型一・台彩，但台彩賠率低於 1.4 的改押對面那一隊（不押和局）
+    side = {(r["game_id"], r["pick"]): r for r in rows if r["strategy"] in ("favorite", "underdog")}
+    for r in [x for x in rows if x["strategy"] == "model1"]:
+        o = num(r["settle_odds"]) or num(r["tw_odds"])
+        opp = {"home": "away", "away": "home"}.get(r["pick"])
+        f = side.get((r["game_id"], opp)) if o and o < FLIP_ODDS and opp else None
+        rows_s.append({**(f or r), "strategy": "model1_flip14", "flipped": bool(f)})
     series = sorted([[r["game_time_utc"], r["strategy"], r["sport"], num(r["settle_odds"]) or num(r["tw_odds"]), num(r["p"]), num(r["ev"]),
                       num(r["profit"]), r.get("league") or r["sport"], int(r["settle_src"] == "actual")] for r in rows_s if r["result"] in ("win", "loss", "push")], key=lambda x: x[0])
     return {"since": min((r["game_time_utc"] for r in m1), default=None), "strats": strats, "pending": len(pend),
