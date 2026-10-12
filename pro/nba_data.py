@@ -23,7 +23,10 @@ TEAM_COLS = {"game_id": "game_id", "season": "season", "season_type": "season_ty
              "free_throws_attempted": "fta", "offensive_rebounds": "orb", "defensive_rebounds": "drb", "turnovers": "tov",
              "team_turnovers": "team_tov", "total_turnovers": "total_tov"}
 PLAYER_COLS = {"game_id": "game_id", "athlete_id": "player", "team_abbreviation": "team", "minutes": "min", "plus_minus": "pm",
-               "starter": "starter", "points": "pts", "did_not_play": "dnp"}
+               "starter": "starter", "points": "pts", "did_not_play": "dnp", "field_goals_made": "fgm", "field_goals_attempted": "fga",
+               "three_point_field_goals_made": "fg3m", "three_point_field_goals_attempted": "fg3a", "free_throws_made": "ftm",
+               "free_throws_attempted": "fta", "offensive_rebounds": "oreb", "defensive_rebounds": "dreb", "assists": "ast",
+               "steals": "stl", "blocks": "blk", "turnovers": "tov", "fouls": "pf"}
 
 
 def pick(df, cols):
@@ -53,6 +56,22 @@ def main(src):
             p = p[pd.to_numeric(p.get("min"), errors="coerce").fillna(0) > 0]
             players.append(p.drop(columns=[c for c in ("dnp",) if c in p.columns]))
         print(f"NBA {y}：球隊 {len(teams[-1]) if teams else 0}、球員 {len(players[-1]) if players else 0}", flush=True)
+    # 欄位清單（讓 Claude 知道有哪些資料）、球員基本資料（生日、選秀）
+    import glob as _g
+    with open(os.path.join(OUT, "_columns.txt"), "w", encoding="utf-8") as fh:
+        for sub in ("player_box", "team_box", "player_core", "draft", "game_rosters"):
+            fs = sorted(_g.glob(os.path.join(src, "nba", sub, "parquet", "*.parquet")))
+            if fs:
+                df = pd.read_parquet(fs[-1])
+                fh.write(f"{sub}（{os.path.basename(fs[-1])}，{len(df)} 列）：{list(df.columns)}\n")
+                fh.write(f"  例：{df.iloc[0].to_dict()}\n")
+    core = sorted(_g.glob(os.path.join(src, "nba", "player_core", "parquet", "*.parquet")))
+    if core:
+        C = pd.concat([pd.read_parquet(f) for f in core], ignore_index=True)
+        keep = [c for c in C.columns if any(k in c.lower() for k in ("id", "name", "birth", "age", "draft", "position", "height", "weight", "experience", "debut", "year"))]
+        C = C[keep].drop_duplicates()
+        C.to_csv(os.path.join(OUT, "players.csv"), index=False)
+        print(f"寫入 players.csv {len(C)} 列：{keep}")
     T = pd.concat(teams, ignore_index=True)
     P = pd.concat(players, ignore_index=True)
     T.to_csv(os.path.join(OUT, "team_games.csv"), index=False)

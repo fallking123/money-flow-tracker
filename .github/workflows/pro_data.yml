@@ -27,7 +27,7 @@ jobs:
       - name: NBA (hoopR / sportsdataverse, CC BY 4.0)
         run: |
           git clone -q --depth 1 --filter=blob:none --sparse https://github.com/sportsdataverse/hoopR-nba-data /tmp/hoopr
-          git -C /tmp/hoopr sparse-checkout set nba/team_box/parquet nba/player_box/parquet
+          git -C /tmp/hoopr sparse-checkout set nba/team_box/parquet nba/player_box/parquet nba/player_core/parquet nba/draft/parquet nba/game_rosters/parquet
           python -m pro.nba_data /tmp/hoopr
       - name: Commit and push
         run: |
