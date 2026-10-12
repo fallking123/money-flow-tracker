@@ -2142,11 +2142,11 @@ td.luck{color:var(--muted)!important}
   }
   // ═════════ 台彩賠率區間：每個賠率區間兩邊都下，賺還是賠 ═════════
   const OB = {sp: store.get("ob_sp", "all"), w: store.get("ob_w", "0.1"), s: store.get("ob_s", "both")};
-  const OB_S = [["both", "兩邊都下", ["favorite", "underdog", "draw"]], ["model1", "模型一・台彩", ["model1"]], ["model1_us_tw", "美國選邊・台彩下", ["model1_us_tw"]], ["model1_us", "模型一・美國賠率", ["model1_us"]]];
+  const OB_S = [["both", "兩邊都下・台彩", ["favorite", "underdog", "draw"]], ["both_us", "兩邊都下・美國賠率", ["both_us"]], ["model1", "模型一・台彩", ["model1"]], ["model1_us_tw", "美國選邊・台彩下", ["model1_us_tw"]], ["model1_us", "模型一・美國賠率", ["model1_us"]]];
   const OB_SP = [["all", "全部"], ["mlb", "MLB"], ["nfl", "NFL"], ["nhl", "NHL"], ["nba", "NBA"], ["soccer", "足球"]];
   function oddsCard() {
     if (!OB_S.some(([k]) => k === OB.s)) OB.s = "both";
-    const [, sNm, sKeys] = OB_S.find(([k]) => k === OB.s), us = OB.s === "model1_us";
+    const [, sNm, sKeys] = OB_S.find(([k]) => k === OB.s), us = OB.s === "model1_us" || OB.s === "both_us";
     const base = serAll().filter((x) => sKeys.includes(x[1]) && x[3] > 1);
     if (!serAll().some((x) => x[1] === "favorite")) return "";
     const have = new Set(base.map((x) => x[2]));
@@ -2168,7 +2168,7 @@ td.luck{color:var(--muted)!important}
       return `<tr><td class="n">${lab(i)}</td><td class="r n">${b.n}</td><td class="r n">${Math.round(b.win / b.n * 100)}%</td><td class="r n ${gb(b.pl)}">${ntd(b.pl * UNIT)}</td><td class="r n ${gb(roi)}" style="white-space:nowrap">${sgn(roi * 100, 1)}%${luckTag(b)}${bar}</td></tr>`;
     }).join("");
     const since = rs.length ? fmtMD.format(new Date(rs[0][0])) : "";
-    return `<div class="card" id="obcard"><h3>台彩賠率區間<small>${since} 起我們自己記錄的每一場・${OB.s === "both" ? "兩邊都下（足球、冰球含和局）" : sNm + "（每場押一邊）"}・每注 ${UNIT.toLocaleString("en-US")} 元</small></h3>
+    return `<div class="card" id="obcard"><h3>${us ? "美國賠率區間" : "台彩賠率區間"}<small>${since} 起我們自己記錄的每一場・${OB.s === "both" ? "兩邊都下・台彩（足球、冰球含和局）" : OB.s === "both_us" ? "兩邊都下・美國賠率（足球含和局，冰球含延長賽）" : sNm + "（每場押一邊）"}・每注 ${UNIT.toLocaleString("en-US")} 元</small></h3>
       <div class="chips" style="flex-wrap:wrap;margin-bottom:8px">${OB_S.map(([k, n]) => `<button type="button" class="chip" data-ob="s" data-obv="${k}" aria-pressed="${OB.s === k}">${n}</button>`).join("")}</div>
       <div class="chips" style="flex-wrap:wrap;margin-bottom:8px">${sps.map(([k, n]) => `<button type="button" class="chip" data-ob="sp" data-obv="${k}" aria-pressed="${OB.sp === k}">${n}</button>`).join("")}</div>
       <div class="ctl" style="margin-bottom:10px"><div class="seg" role="group">${["0.1", "0.2", "0.5"].map((v) => `<button type="button" data-ob="w" data-obv="${v}" aria-pressed="${OB.w === v}">${v}</button>`).join("")}</div><span class="mut" style="font-size:12.5px;align-self:center">每格多寬</span></div>

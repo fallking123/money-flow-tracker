@@ -453,6 +453,24 @@ def live_summary():
     alias = {"model1_us": "model1_us_draw", "model1_us_tw": "model1_tw_draw"}
     rows_s = rows + [{**r, "strategy": alias[r["strategy"]]} for r in rows if r["strategy"] in alias and r["pick"] == "draw"] \
         + [{**r, "strategy": "model1_tw_draw"} for r in rows if r["strategy"] == "model1" and r["sport"] == "nhl" and r["pick"] == "draw"]  # 冰球：台彩 60 分鐘和局只有模型一・台彩會挑
+    # 賠率區間「兩邊都下・美國賠率」：每一邊都用美國賠率、含延長賽結算（冰球輸贏從 model1_us 那一筆推回來）
+    m1us = {r["game_id"]: r for r in rows if r["strategy"] == "model1_us" and r["result"] in ("win", "loss", "push")}
+    for r in rows:
+        if r["strategy"] not in ("favorite", "underdog", "draw_us") or r["result"] not in ("win", "loss", "push", "void"):
+            continue
+        us = num(r["us_odds"])
+        if not us or us <= 1:
+            continue
+        res = r["result"]
+        if r["sport"] == "nhl":
+            m = m1us.get(r["game_id"])
+            if not m or r["pick"] == "draw":
+                continue
+            res = m["result"] if m["pick"] == r["pick"] else {"win": "loss", "loss": "win"}.get(m["result"], m["result"])
+        if res not in ("win", "loss", "push"):
+            continue
+        rows_s.append({**r, "strategy": "both_us", "settle_odds": us, "tw_odds": us, "settle_src": "us", "result": res,
+                       "profit": round(us - 1, 4) if res == "win" else (0.0 if res == "push" else -1.0)})
     # 參考：模型一・台彩，但台彩賠率低於 1.4 的改押對面那一隊（不押和局）
     side = {(r["game_id"], r["pick"]): r for r in rows if r["strategy"] in ("favorite", "underdog")}
     for r in [x for x in rows if x["strategy"] == "model1"]:
