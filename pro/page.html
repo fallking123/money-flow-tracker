@@ -74,10 +74,11 @@ const DATA = /*__DATA__*/null;
                  set: (k, v) => { try { localStorage.setItem("pro_" + k, v); } catch (e) {} }};
   const ST = {thr: store.get("thr", "15")};
 
+  const S1 = !!(DATA && DATA.soccer && DATA.soccer.test);
   const STAGES = [
-    ["done", "第 0 階段：CLV 追蹤＋資料檢查", "建立「搶到的價錢比收盤好多少」的成績單，檢查每一份資料齊不齊全，並先拿現有的東西量一次。", true],
-    ["next", "第 1 階段：足球比分模型", "不看賠率，只用比分、射門、賽程，自己預測兩隊各進幾球，算出獨贏、讓球、大小的盤口，再跟收盤比。"],
-    ["wait", "第 2 階段：NFL、MLB、NHL", "用公開的比賽細節資料（每一個 play、每一球、射門品質）建各自的比分模型。"],
+    ["done", "第 0 階段：CLV 追蹤＋資料檢查", "建立「搶到的價錢比收盤好多少」的成績單，檢查每一份資料齊不齊全，並先拿現有的東西量一次。", !S1],
+    [S1 ? "done" : "next", "第 1 階段：足球比分模型", "不看賠率，只用比分、射門、賽程，自己預測兩隊各進幾球，算出獨贏、讓球、大小的盤口，再跟收盤比。", S1],
+    [S1 ? "next" : "wait", "第 2 階段：NFL、MLB、NHL", "用公開的比賽細節資料（每一個 play、每一球、射門品質）建各自的比分模型。"],
     ["wait", "第 3 階段：NBA", "先確認資料來源可以用。"],
     ["wait", "第 4 階段：混合＋每日對照表", "跟市場、資金流向混合，每天出「我們的盤口 vs 莊家」。"]];
 
@@ -160,9 +161,87 @@ const DATA = /*__DATA__*/null;
       <div class="scroll"><table><thead><tr><th>運動</th><th class="r">場數</th><th class="r">對到 Pinnacle</th><th class="r">有賽果</th></tr></thead><tbody>${cov}</tbody></table></div>
       <p class="note">這部分不是缺，是本來就只能從開始記的那天往後累積。Pinnacle 大約 10/1 才開始記，所以早期有些比賽對不到。</p></section>`;
   }
+  // ═════════ 第 1 階段：足球比分模型 ═════════
+  const skill = (x, base) => (base - x) / base * 100;      // 比「只知道主和客平均比例」準幾 %
+  function soccer() {
+    const R = DATA.soccer; if (!R || !R.valid) return "";
+    const V = R.valid, T = R.test, c = R.chosen;
+    const col = (E, k) => (E && E.x12 && E.x12[k]) || null;
+    // 準度表：同一批有 Pinnacle（驗證）／Betfair（考試）收盤的比賽
+    const accRow = (nm, f, sub) => `<tr><td>${nm}${sub ? `<div class="s">${sub}</div>` : ""}</td>${[V, T].map((E) => { const v = E ? f(E) : null; return `<td class="r n ${v == null ? "" : v.cls || ""}">${v == null ? "–" : v.txt}</td>`; }).join("")}</tr>`;
+    const vk = "psc", tk = "bfc";
+    const K = (E) => (E === V ? vk : tk);
+    const base = (E) => col(E, K(E)).base;
+    const sk = (x, E) => ({txt: sgn(skill(x, base(E)), 2) + "%", cls: ""});
+    const early = (E) => (col(E, "ps") && col(E, "ps").n > 1000 ? col(E, "ps") : col(E, "avg"));
+    const catchUp = (E) => { const x = col(E, K(E)); return (x.base - x.model) / (x.base - x.market) * 100; };
+    let h = `<section class="card"><span class="tag">STAGE 1 · SOCCER</span><h2>第 1 階段：足球比分模型</h2>
+      <p class="sub">十個聯賽（五大聯賽＋次級聯賽）${(R.data || {}).matches ? R.data.matches.toLocaleString("en-US") + " 場" : ""}，完全不看賠率，只用比分和射正次數。</p>
+      <div class="gl">
+        <div><b>怎麼預測</b>每一隊有「攻擊力」和「防守力」兩個分數，再加上每個聯賽的主場優勢。用它們算出兩隊各自平均會進幾球，再換算成 0:0、1:0、2:1…每一種比分的機率，就能同時算出獨贏、讓球、大小的公平盤口。和局會比單純計算的多一點，模型也有修正。</div>
+        <div><b>怎麼學</b>越近的比賽越重要（半衰期 ${c.half_life} 天＝${c.half_life} 天前的比賽只算一半）。進球有很多運氣，所以「表現」用 ${Math.round(c.w_goals * 100)}% 進球＋${Math.round((1 - c.w_goals) * 100)}% 射正次數換算。同一國的一、二級聯賽一起算，升降級的球隊分數會延續，另外學「剛升級、剛降級」平均差多少。</div>
+        <div><b>怎麼考</b>每週只用之前的比賽重新學一次，預測接下來 7 天，一路往前推。2020/21–2024/25 用來挑設定（試了 ${(R.grid || []).length} 種）；最後兩季 2025/26–2026/27 挑好之後只考一次${T ? `（${esc((T.run_utc || "").replace("T", " "))} 考的）` : ""}。</div>
+      </div></section>`;
+    // 結論
+    {
+      const BB = (E, k) => (E && E.blend && E.blend[k]) || null;
+      const vb = BB(V, "psc"), vc = (V.clv || {})["0.03"], tc = T && (T.clv || {})["0.03"];
+      const pass1 = vb && vb.b > 0 && vb.gain > 2 * vb.se, pass2 = vc && vc.dp[0] > 2 * vc.dp[1] && vc.clv[0] > 0;
+      h += `<section class="card" style="border-color:var(--accent)"><h2>第 1 階段結論：${pass1 && pass2 ? "過關" : "沒有過關"}</h2><div class="gl">
+        <div><b>準度：追上收盤的 ${Math.round(catchUp(V))}%（考試季 ${T ? Math.round(catchUp(T)) : "–"}%）</b>只看比分和射正，就能做到市場的六、七成，機率也很誠實（說 30% 大約就開 30%）。這是正常的起點，但還是比收盤差。</div>
+        <div><b>有沒有市場沒有的資訊：沒有</b>把模型混進收盤，模型的分量是負的（${vb ? vb.b.toFixed(2) : "–"}），代表模型跟收盤不一樣的地方，通常是模型錯。</div>
+        <div><b>收盤有沒有往模型移：有，但非常小</b>模型看好的那邊，收盤平均只往那邊移 ${vc ? ppt(vc.dp[0]) : "–"} 個百分點（考試季 ${tc ? ppt(tc.dp[0]) : "–"}），遠遠不夠抵掉抽成：用早盤下注的 CLV 是 ${vc ? pp(vc.clv[0]) : "–"}，等於長期每 100 元虧 ${vc ? Math.abs(vc.clv[0] * 100).toFixed(0) : "–"} 元。</div>
+        <div><b>代表什麼</b>只靠比分和射正這種「大家都看得到」的資料，打不贏市場，這跟職業圈的經驗一樣。要有優勢，需要市場還沒反映的東西（先發名單、傷兵、更細的比賽數據），或是更快的時間點。</div></div></section>`;
+    }
+    h += `<section class="card"><h2>準不準：跟市場比</h2><p class="sub">預測誰贏（主／和／客），誤差比「只知道主和客平均比例」少了幾 %。越大越準。</p>
+      <div class="scroll"><table><thead><tr><th></th><th class="r">驗證季<br>2020–2025</th><th class="r">考試季<br>2025–2027</th></tr></thead><tbody>
+        ${accRow("<b>我們的模型</b>", (E) => sk(col(E, K(E)).model, E), "不看任何賠率")}
+        ${accRow("市場・早盤", (E) => { const x = early(E); return x ? sk(x.market, E) : null; }, "驗證季：Pinnacle 賽前 2–3 天；考試季：各家平均")}
+        ${accRow("市場・收盤", (E) => sk(col(E, K(E)).market, E), "驗證季：Pinnacle；考試季：Betfair 交易所")}
+        ${accRow("<b>模型追上收盤幾成</b>", (E) => ({txt: Math.round(catchUp(E)) + "%", cls: ""}))}
+        ${accRow("場數", (E) => ({txt: col(E, K(E)).n.toLocaleString("en-US"), cls: ""}))}
+      </tbody></table></div>
+      <p class="note">一個只看比分的模型，能追上收盤的六、七成就算正常；全世界很少模型能單獨贏過 Pinnacle 收盤。重點是下面兩張表：它有沒有市場「還沒有」的資訊。</p></section>`;
+    // 混合
+    const B = (E, k) => (E && E.blend && E.blend[k]) || null;
+    const bRow = (E, k, nm) => { const b = B(E, k); if (!b) return ""; const m = {n: b.n, mean: b.gain, se: b.se}; return `<tr><td>${nm}</td><td class="r n">${b.n.toLocaleString("en-US")}</td><td class="r n">${b.b.toFixed(2)}</td><td class="r n ${gb(b.gain)}">${sgn(b.gain / b.market * 100, 2)}%${luck(m)}</td></tr>`; };
+    h += `<section class="card"><h2>模型＋收盤，會比收盤單獨更準嗎</h2><p class="sub">把模型和收盤混在一起預測（混合比例只用驗證季學，考試季直接套用）。誤差有變小，就代表模型有收盤沒算進去的東西。</p>
+      <div class="scroll"><table><thead><tr><th></th><th class="r">場數</th><th class="r">模型分量</th><th class="r">誤差少了</th></tr></thead><tbody>
+        ${bRow(V, "psc", "驗證季・Pinnacle 收盤")}${bRow(T, "psc", "考試季・Pinnacle 收盤")}${bRow(T, "bfc", "考試季・Betfair 收盤")}</tbody></table></div>
+      <p class="note">「模型分量」是 0 就代表收盤已經包含模型知道的一切；正的代表模型多帶了一點東西；${[B(V, "psc"), B(T, "bfc")].some((b) => b && b.b < 0) ? "<b>負的</b>代表模型跟收盤不一樣的地方，通常是模型錯。誤差還是小了一點，是因為混合時把收盤的熱門機率稍微調高（收盤用簡單方法去抽水時，冷門會被算得偏高），這跟模型無關。" : "負的代表模型跟收盤不一樣的地方通常是模型錯。"}</p></section>`;
+    // CLV
+    const cRow = (E, th) => { const x = E && E.clv && E.clv[th]; if (!x) return ""; const dp = {n: x.n, mean: x.dp[0], se: x.dp[1]}, roi = {n: x.n, mean: x.roi[0], se: x.roi[1]}, cl = {n: x.n, mean: x.clv[0], se: x.clv[1]};
+      return `<tr><td>≥ ${Math.round(+th * 100)}%<div class="s">${x.n.toLocaleString("en-US")} 注</div></td><td class="r n">${Math.round(x.toward * 100)}% / ${Math.round(x.away * 100)}%</td><td class="r n ${gb(dp.mean)}">${ppt(dp.mean)}${luck(dp)}</td><td class="r n ${gb(cl.mean)}">${pp(cl.mean)}${luck(cl)}</td><td class="r n ${gb(roi.mean)}">${pp(roi.mean)}${luck(roi)}</td></tr>`; };
+    const cTable = (E, nm) => (E && E.clv ? `<h3>${nm}</h3><div class="scroll"><table><thead><tr><th>模型看好<br>多少才下</th><th class="r">往模型／<br>反方向</th><th class="r">平均<br>移動</th><th class="r">CLV</th><th class="r">實際<br>投報率</th></tr></thead><tbody>${["0", "0.03", "0.05", "0.1"].map((t) => cRow(E, t)).join("")}</tbody></table></div>
+      ${E.clv.slope ? `<p class="note">整體來看：模型比早盤多看好 10 個百分點的時候，收盤平均往模型那邊移 ${(E.clv.slope.slope * 10).toFixed(2)} 個百分點（±${(E.clv.slope.se * 20).toFixed(2)}）。</p>` : ""}` : "");
+    h += `<section class="card"><h2>職業的檢驗：收盤有沒有往模型那邊移</h2><p class="sub">用早盤賠率下注：模型勝率 × 早盤賠率 − 1 超過門檻就下。之後收盤往模型那邊移，代表模型比市場早知道。</p>
+      ${cTable(V, "驗證季（早盤＝Pinnacle 賽前 2–3 天，收盤＝Pinnacle）")}${cTable(T, "考試季（同上；資料來源 2025/26 季中起沒有 Pinnacle，所以只有前半季）")}
+      <p class="note">CLV 是用早盤賠率配上收盤的公平勝率算的，最能代表長期真正的獲利率；「實際投報率」是真的照比分結算，運氣成分大很多。台彩抽 15%，這裡的數字都是在國際盤（抽 2–5%）下注的情況。</p></section>`;
+    // 校準
+    const cal = (E) => (E && E.calib ? E.calib : []);
+    const cv = cal(V), ct = cal(T);
+    if (cv.length) {
+      const map = Object.fromEntries(ct.map((x) => [x.bin, x]));
+      h += `<section class="card"><h2>機率誠不誠實</h2><p class="sub">模型說「這邊有 x%」的所有選項，實際開出幾 %。兩欄越接近越好。</p>
+        <div class="scroll"><table><thead><tr><th>模型說</th><th class="r">驗證季<br>平均說</th><th class="r">實際開出</th><th class="r">考試季<br>平均說</th><th class="r">實際開出</th></tr></thead><tbody>
+        ${cv.map((x) => { const t = map[x.bin]; return `<tr><td class="n">${x.bin}</td><td class="r n">${x.pred}%</td><td class="r n">${x.real}%</td><td class="r n">${t ? t.pred + "%" : "–"}</td><td class="r n">${t ? t.real + "%" : "–"}</td></tr>`; }).join("")}</tbody></table></div></section>`;
+    }
+    // 大小、讓分
+    const mk = (E, grp, k) => (E && E[grp] && E[grp][k]) || null;
+    const oRow = (nm, E, grp, k) => { const x = mk(E, grp, k); if (!x) return ""; const d = (x.model - x.market) / x.market * 100; return `<tr><td>${nm}</td><td class="r n">${x.n.toLocaleString("en-US")}</td><td class="r n ${d <= 0 ? "good" : "bad"}">${d <= 0 ? "準 " + Math.abs(d).toFixed(2) : "差 " + d.toFixed(2)}%</td></tr>`; };
+    h += `<section class="card"><h2>大小 2.5、亞洲讓分</h2><p class="sub">同一個比分模型算出來的，跟收盤比（讓分只比半球盤，例如 −0.5、+1.5，不會走盤）。</p>
+      <div class="scroll"><table><thead><tr><th></th><th class="r">場數</th><th class="r">模型比收盤</th></tr></thead><tbody>
+      <tr class="grp"><td colspan="3">驗證季</td></tr>${oRow("大小 2.5・Pinnacle", V, "ou", "ou_pc")}${oRow("讓分・Pinnacle", V, "ah", "ah_pc")}
+      <tr class="grp"><td colspan="3">考試季</td></tr>${oRow("大小 2.5・Betfair", T, "ou", "ou_bfc")}${oRow("大小 2.5・各家平均", T, "ou", "ou_avgc")}${oRow("讓分・Betfair", T, "ah", "ah_bfc")}</tbody></table></div></section>`;
+    // 設定比較
+    const G = (R.grid || []).slice().sort((a, b) => a.ll_model - b.ll_model);
+    if (G.length) h += `<section class="card"><details><summary><b>試過的 ${G.length} 種設定</b>（只在驗證季比較）</summary>
+      <div class="scroll" style="margin-top:8px"><table><thead><tr><th class="r">半衰期</th><th class="r">進球比重</th><th class="r">拉回</th><th class="r">比亂猜準</th></tr></thead><tbody>${G.map((g) => `<tr${g.half_life === c.half_life && g.w_goals === c.w_goals && g.ridge === c.ridge ? ' style="background:var(--accent-soft)"' : ""}><td class="r n">${g.half_life} 天</td><td class="r n">${Math.round(g.w_goals * 100)}%</td><td class="r n">${g.ridge}</td><td class="r n">${sgn(skill(g.ll_model, g.ll_base), 2)}%</td></tr>`).join("")}</tbody></table></div></details></section>`;
+    return h;
+  }
   function render() {
     if (!DATA) { $("app").innerHTML = `<div class="card">沒有資料。</div>`; return; }
-    $("app").innerHTML = head() + stages() + dataCheck() + clvIntro() + market() + signals() + model1() +
+    $("app").innerHTML = head() + stages() + soccer() + dataCheck() + clvIntro() + market() + signals() + model1() +
       `<footer>職業版只做研究和驗證，跟原本的看板、模型一完全分開。</footer>`;
   }
   document.addEventListener("click", (e) => {

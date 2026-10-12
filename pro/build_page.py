@@ -12,8 +12,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 
 def main():
+    rep = os.path.join(os.path.dirname(HERE), "docs", "data", "pro", "soccer_report.json")
     data = {"generated_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
-            "clv": clv.main(), "check": datacheck.main()}
+            "clv": clv.main(), "check": datacheck.main(),
+            "soccer": json.load(open(rep, encoding="utf-8")) if os.path.exists(rep) else None}
     tpl = open(os.path.join(HERE, "page.html"), encoding="utf-8").read()
     js = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     out = tpl.replace("/*__DATA__*/null", js)
