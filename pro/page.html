@@ -76,12 +76,13 @@ const DATA = /*__DATA__*/null;
 
   const S1 = !!(DATA && DATA.soccer && DATA.soccer.test);
   const S2 = !!(DATA && DATA.us && ["mlb", "nfl", "nhl"].every((k) => DATA.us[k] && DATA.us[k].test));
+  const S3 = !!(DATA && DATA.us && DATA.us.nba && DATA.us.nba.test);
   const STAGES = [
     ["done", "第 0 階段：CLV 追蹤＋資料檢查", "建立「搶到的價錢比收盤好多少」的成績單，檢查每一份資料齊不齊全，並先拿現有的東西量一次。", !S1],
     [S1 ? "done" : "next", "第 1 階段：足球比分模型", "不看賠率，只用比分、射門、賽程，自己預測兩隊各進幾球，算出獨贏、讓球、大小的盤口，再跟收盤比。", S1 && !S2],
-    [S2 ? "done" : S1 ? "next" : "wait", "第 2 階段：NFL、MLB、NHL", "用公開的比賽細節資料（每一個 play、每一球的打席結果、射門品質）建各自的模型。", S2],
-    ["wait", "第 3 階段：NBA", "先確認資料來源可以用。"],
-    ["wait", "第 4 階段：混合＋每日對照表", "跟市場、資金流向混合，每天出「我們的盤口 vs 莊家」。"]];
+    [S2 ? "done" : S1 ? "next" : "wait", "第 2 階段：NFL、MLB、NHL", "用公開的比賽細節資料（每一個 play、每一球的打席結果、射門品質）建各自的模型。", S2 && !S3],
+    [S3 ? "done" : S2 ? "next" : "wait", "第 3 階段：NBA", "效率（每 100 回合得失分）、節奏、誰缺陣、背靠背。", S3],
+    [S3 ? "next" : "wait", "第 4 階段：混合＋每日對照表", "跟市場、資金流向混合，每天出「我們的盤口 vs 莊家」。"]];
 
   function head() {
     return `<header><span class="tag">PRO MODEL · LAB</span><h1>職業版模型</h1>
@@ -248,20 +249,22 @@ const DATA = /*__DATA__*/null;
     const fmtCu = (m) => (m ? Math.round(cu(m)) + "%" : "–");
     const bl = (m) => { if (!m) return "–"; const b = m.blend; const x = {n: m.n, mean: b.gain, se: b.se}; return `${b.b.toFixed(2)}${luck(x)}`; };
     const mv = (m, k) => { const c = m && m.clv && m.clv[k]; if (!c) return "沒有開盤資料"; const d = {n: c.n, mean: c.dp[0], se: c.dp[1]}; return `<span class="${gb(c.dp[0])}">${ppt(c.dp[0])}</span>（${Math.round(c.toward * 100)}% / ${Math.round(c.away * 100)}%）${luck(d)}`; };
-    let h = `<section class="card"><span class="tag">STAGE 2 · US SPORTS</span><h2>第 2 階段：NFL、MLB、NHL</h2>
-      <p class="sub">三個運動都完全不看賠率；每一場只用之前的比賽算；驗證季挑設定，最後兩季各考一次。</p>
-      <div class="scroll"><table><thead><tr><th>運動</th><th class="r">追上收盤<br>驗證／考試</th><th class="r">混合時<br>模型分量</th><th>收盤有沒有往模型移<br>（考試季，往這邊／反方向）</th></tr></thead><tbody>
+    let h = `<section class="card"><span class="tag">STAGE 2 · US SPORTS</span><h2>第 2、3 階段：MLB、NFL、NHL、NBA</h2>
+      <p class="sub">四個運動都完全不看賠率；每一場只用之前的比賽算；驗證季挑設定，最後兩季各考一次。</p>
+      <div class="scroll"><table><thead><tr><th style="min-width:110px">運動</th><th class="r">追上收盤<br>驗證／考試</th><th class="r">混合時<br>模型分量</th><th>收盤有沒有往模型移<br>（考試季，往這邊／反方向）</th></tr></thead><tbody>
         <tr><td><b>MLB</b><div class="s">先發投手、牛棚、打線、球場</div></td><td class="r n">${fmtCu(M.valid.ml)} / ${fmtCu(M.test.ml)}</td><td class="r n">${bl(M.test.ml)}</td><td class="n">${mv(M.test.ml, "calm_0.03")}</td></tr>
         <tr><td><b>NFL</b><div class="s">每一個 play 的 EPA、四分衛</div></td><td class="r n">${fmtCu(N.valid.ml)} / ${fmtCu(N.test.ml)}</td><td class="r n">${bl(N.test.ml)}</td><td class="n">${mv(N.test.ml, "calm_0.03")}</td></tr>
+        ${U.nba && U.nba.test ? `<tr><td><b>NBA</b><div class="s">效率、節奏、缺陣（第 3 階段）</div></td><td class="r n">${fmtCu(U.nba.valid.ml)} / ${fmtCu(U.nba.test.ml)}</td><td class="r n">${bl(U.nba.test.ml)}</td><td class="n">${mv(U.nba.test.ml, "calm_0.03")}</td></tr>` : ""}
         <tr><td><b>NHL</b><div class="s">射門品質 xG、多一人、守門</div></td><td class="r n">– / ${fmtCu(H.test.ml)}</td><td class="r n">${bl(H.test.ml)}</td><td class="n">${mv(H.test.ml, "calm_0.03")}</td></tr>
       </tbody></table></div>
       <p class="note">「追上收盤」＝從亂猜到收盤的距離，模型走了幾成。「模型分量」正而且看得出，才代表模型有收盤沒有的東西。「收盤往模型移」只算開盤到收盤沒有大動（&lt; 8 個百分點）的比賽，避免把臨時換先發算進去。</p></section>`;
     // 結論
     const mc = M.test.ml.clv, mv3 = mc["calm_0.03"], mv10 = mc["calm_0.1"], vv = M.valid.ml.clv["calm_0.03"];
-    h += `<section class="card" style="border-color:var(--accent)"><h2>第 2 階段結論</h2><div class="gl">
+    h += `<section class="card" style="border-color:var(--accent)"><h2>第 2、3 階段結論</h2><div class="gl">
       <div><b>MLB：有東西，但還不夠賺</b>模型跟開盤不一樣的時候，收盤往模型那邊移的比例是 ${Math.round(mv3.toward * 100)}%、反方向只有 ${Math.round(mv3.away * 100)}%（驗證季 ${Math.round(vv.toward * 100)}% / ${Math.round(vv.away * 100)}%），兩段時間都遠超過運氣範圍——代表模型（主要是先發投手的分析）比開盤早知道一些事。但收盤還是比模型準；用開盤的美國平均賠率下注，CLV 大約 ${pp(mv3.clv[0])}（模型看好 10% 以上才下：${pp(mv10.clv[0])}），差不多打平莊家抽成。</div>
       <div><b>NFL：沒有</b>效率模型追上收盤七成左右，混合後沒有比收盤準；照模型下讓分，命中率在運氣範圍內。NFL 沒有歷史開盤，沒辦法檢查盤口移動。</div>
       <div><b>NHL：沒有</b>追上收盤約六成，混合後沒有比較準。另外發現舊的冰球盤口資料有問題（見下面）。</div>
+      ${U.nba && U.nba.test ? (() => { const n = U.nba.test.ml.clv["calm_0.03"]; return `<div><b>NBA（第 3 階段）：有一點，但更弱</b>收盤往模型移 ${Math.round(n.toward * 100)}% vs 反方向 ${Math.round(n.away * 100)}%（平均 ${ppt(n.dp[0])} 個百分點），比 MLB 弱很多；用開盤價下注 CLV ${pp(n.clv[0])}，扣掉抽成是虧的。缺陣球員的影響，用正負值估得不夠好（職業團隊用更細的球員數據），這是 NBA 最可能改進的地方。</div>`; })() : ""}
       <div><b>代表什麼</b>MLB 的開盤比較「軟」，先發投手的數據能預測盤口會往哪裡走——這正是職業玩家在 MLB 常用的做法：開盤就下、搶價錢。但要真的賺，需要比美國平均更好的價錢（例如 Pinnacle），而台彩抽 15%，差太多。</div></div></section>`;
     // MLB 詳細
     const cRow = (c, th, lab) => { const x = c && c[th]; if (!x) return ""; const dp = {n: x.n, mean: x.dp[0], se: x.dp[1]}, cl = {n: x.n, mean: x.clv[0], se: x.clv[1]}, roi = x.roi ? {n: x.n, mean: x.roi[0], se: x.roi[1]} : null;
@@ -279,9 +282,16 @@ const DATA = /*__DATA__*/null;
       <tr class="grp"><td colspan="3">驗證季 2017–2023</td></tr>${lt(N.valid.spread, "讓分")}${lt(N.valid.total, "大小")}
       <tr class="grp"><td colspan="3">考試季 2024–2025</td></tr>${lt(N.test.spread, "讓分")}${lt(N.test.total, "大小")}</tbody></table></div>
       <p class="note">分差預測的平均誤差：模型 ${N.test.mae.model} 分、收盤讓分 ${N.test.mae.market} 分（考試季）。</p></section>`;
+    // NBA
+    if (U.nba && U.nba.test) {
+      const B = U.nba;
+      h += `<section class="card"><h2>NBA：開盤下注，收盤有沒有往模型移</h2><p class="sub">只有 2023–24 起有開盤（驗證季只有 1 季）。已排除開盤到收盤大動（常是臨時傷兵）的比賽。</p>
+        ${mlbT(B.valid.ml.clv, "驗證季（只有 2023–24 有開盤）")}${mlbT(B.test.ml.clv, "考試季 2024–25、2025–26")}
+        <p class="note">分差預測平均誤差：模型 ${B.test.mae.model} 分、收盤讓分 ${B.test.mae.market} 分。照模型下讓分、大小，命中率都在 50% 左右（要 52.4% 才打平）。</p></section>`;
+    }
     // NHL
     h += `<section class="card"><h2>NHL：資料問題</h2><p class="note" style="margin:0">${esc(H.odds_note || "")} 這也代表：原本看板「模型一」的冰球部分，訓練時用過這些有問題的盤口，之後值得回頭檢查（要動原本的模型，會先問你）。</p></section>`;
-    h += `<section class="card"><p class="note" style="margin:0">資料來源：MLB 逐打席紀錄來自 Retrosheet——The information used here was obtained free of charge from and is copyrighted by Retrosheet. Interested parties may contact Retrosheet at www.retrosheet.org。NHL 射門品質來自 MoneyPuck.com。NFL 每一個 play 來自 nflverse。</p></section>`;
+    h += `<section class="card"><p class="note" style="margin:0">資料來源：MLB 逐打席紀錄來自 Retrosheet——The information used here was obtained free of charge from and is copyrighted by Retrosheet. Interested parties may contact Retrosheet at www.retrosheet.org。NHL 射門品質來自 MoneyPuck.com。NFL 每一個 play 來自 nflverse。NBA 球隊、球員數據來自 hoopR / sportsdataverse（CC BY 4.0）。</p></section>`;
     return h;
   }
   function render() {
