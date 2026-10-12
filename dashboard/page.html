@@ -2129,6 +2129,38 @@ h4.hh{margin:14px 0 6px;font-size:14px}
       <div class="chips" style="flex-wrap:wrap"><button type="button" class="chip" data-mlg="*" aria-pressed="${!MLG.sel.size}">全部</button>${socAll.length ? `<button type="button" class="chip" data-mlg="soccer" aria-pressed="${!!socOn}">足球（五大聯賽）</button>` : ""}${opts.map(([k, n]) => `<button type="button" class="chip" data-mlg="${k}" aria-pressed="${MLG.sel.has(k)}">${n}</button>`).join("")}</div>
       <p class="mut" style="font-size:12.5px;margin:8px 0 0">${MLG.sel.size ? `現在只算：<b>${nm.join("、")}</b>` : "現在算全部聯賽"}</p></div>`;
   }
+  // ═════════ 台彩賠率區間：每個賠率區間兩邊都下，賺還是賠 ═════════
+  const OB = {sp: store.get("ob_sp", "all"), w: store.get("ob_w", "0.1")};
+  const OB_SP = [["all", "全部"], ["mlb", "MLB"], ["nfl", "NFL"], ["nhl", "NHL"], ["nba", "NBA"], ["soccer", "足球"]];
+  function oddsCard() {
+    const base = serAll().filter((x) => ["favorite", "underdog", "draw"].includes(x[1]) && x[3] > 1);
+    if (!base.length) return "";
+    const have = new Set(base.map((x) => x[2]));
+    const sps = OB_SP.filter(([k]) => k === "all" || have.has(k));
+    if (!sps.some(([k]) => k === OB.sp)) OB.sp = "all";
+    const rs = base.filter((x) => OB.sp === "all" || x[2] === OB.sp);
+    const w = +OB.w, cap = 3, B = new Map();
+    for (const x of rs) {
+      const i = x[3] >= cap ? 1e9 : Math.floor(Math.round(x[3] * 1000) / 1000 / w + 1e-9);
+      const b = B.get(i) || {n: 0, win: 0, pl: 0}; b.n++; b.win += x[6] > 0; b.pl += x[6]; B.set(i, b);
+    }
+    const keys = [...B.keys()].sort((a, b) => a - b);
+    const mx = Math.max(...keys.map((k) => Math.abs(B.get(k).pl / B.get(k).n)), 0.01);
+    const lab = (i) => (i === 1e9 ? `${cap.toFixed(1)} 以上` : `${(i * w).toFixed(w < 0.2 ? 1 : 1)}–${((i + 1) * w).toFixed(1)}`);
+    const tot = rs.reduce((a, x) => a + x[6], 0);
+    const trs = keys.map((i) => {
+      const b = B.get(i), roi = b.pl / b.n, wd = Math.round(Math.abs(roi) / mx * 46);
+      const bar = `<div style="display:flex;justify-content:flex-end;margin-top:3px"><span style="display:flex;width:64px"><span style="width:32px;display:flex;justify-content:flex-end">${roi < 0 ? `<i style="display:block;height:6px;width:${Math.round(wd * 32 / 46)}px;background:var(--bad);border-radius:3px 0 0 3px"></i>` : ""}</span><span style="width:1px;height:8px;margin-top:-1px;background:var(--line)"></span><span style="width:31px;display:flex">${roi > 0 ? `<i style="display:block;height:6px;width:${Math.round(wd * 31 / 46)}px;background:var(--good);border-radius:0 3px 3px 0"></i>` : ""}</span></span></div>`;
+      return `<tr><td class="n">${lab(i)}</td><td class="r n">${b.n}</td><td class="r n">${Math.round(b.win / b.n * 100)}%</td><td class="r n ${gb(b.pl)}">${ntd(b.pl * UNIT)}</td><td class="r n ${gb(roi)}" style="white-space:nowrap">${sgn(roi * 100, 1)}%${bar}</td></tr>`;
+    }).join("");
+    const since = rs.length ? fmtMD.format(new Date(rs[0][0])) : "";
+    return `<div class="card" id="obcard"><h3>台彩賠率區間<small>${since} 起我們自己記錄的每一場・兩邊都下（足球含和局）・每注 ${UNIT.toLocaleString("en-US")} 元</small></h3>
+      <div class="chips" style="flex-wrap:wrap;margin-bottom:8px">${sps.map(([k, n]) => `<button type="button" class="chip" data-ob="sp" data-obv="${k}" aria-pressed="${OB.sp === k}">${n}</button>`).join("")}</div>
+      <div class="ctl" style="margin-bottom:10px"><div class="seg" role="group">${["0.1", "0.2", "0.5"].map((v) => `<button type="button" data-ob="w" data-obv="${v}" aria-pressed="${OB.w === v}">${v}</button>`).join("")}</div><span class="mut" style="font-size:12.5px;align-self:center">每格多寬</span></div>
+      <div class="scroll"><table class="tb"><thead><tr><th>台彩賠率</th><th class="r">注數</th><th class="r">中幾成</th><th class="r">賺賠</th><th class="r">投報率</th></tr></thead><tbody>${trs}
+        <tr><td><b>合計</b></td><td class="r n"><b>${rs.length}</b></td><td></td><td class="r n ${gb(tot)}"><b>${ntd(tot * UNIT)}</b></td><td class="r n ${gb(tot)}"><b>${rs.length ? sgn(tot / rs.length * 100, 1) + "%" : "–"}</b></td></tr></tbody></table></div>
+      <p class="mut" style="font-size:12.5px;margin:8px 0 0">用台彩賠率結算（有記錄用實際的，沒有用估的；冰球算 60 分鐘）。一格少於 100 注時，多中或少中 1 注投報率就差很多，大多是運氣；要每格幾百注才看得出哪個區間真的比較好。</p></div>`;
+  }
   // ═════════ 固定金額 vs 凱利：同一批注、同一筆本金，三種下法比一比 ═════════
   const KS = {s: store.get("ks_s", "model1_us")};
   const KS_FLOOR = 0.0025;   // 「凱利・每注都下」最少下本金的 0.25%
@@ -2219,6 +2251,7 @@ h4.hh{margin:14px 0 6px;font-size:14px}
       <p class="mut" style="font-size:12.5px;margin:8px 0 0">${done ? `台彩結算：${actual} 場用你記錄的實際賠率，其他用估的。` : `第一批比賽還沒開獎（${L.pending || 0} 場等開獎），開獎後自動結算。`}「模型一・美國賠率」是同一個模型用美國賠率下，沒有台彩抽成，比較看得出模型本身準不準（美國賠率是 10/1 起才開始記）。每個策略都押開賽前最後一次判斷的那一邊。場數少於 200 場時，差幾 % 多半是運氣。</p></div>`;
     h += curveCard();
     h += stakeCard();
+    h += oddsCard();
     // 只下划算的
     const vrow = (k, nm) => { const v = aggV(k); return `<tr><td><b>${nm}</b></td><td class="r n">${v.n || 0}</td><td class="r n">${wr(v)}</td><td class="r n ${gb(v.roi)}">${v.roi == null ? "–" : sgn(v.roi, 1) + "%"}</td><td class="r n ${gb(v.pl)}">${money(v)}</td></tr>`; };
     h += `<div class="card"><h3>只下划算的<small>${lgTag}開賽前期望值 > 0 才下・每注 ${UNIT.toLocaleString("en-US")} 元</small></h3>
@@ -2836,6 +2869,7 @@ h4.hh{margin:14px 0 6px;font-size:14px}
       else MLG.sel.has(k) ? MLG.sel.delete(k) : MLG.sel.add(k);
       store.set("mdl_lg", [...MLG.sel]); return renderModels();
     }
+    if (t.dataset.ob) { OB[t.dataset.ob] = t.dataset.obv; store.set("ob_" + t.dataset.ob, t.dataset.obv); const c = $("obcard"); if (c) c.outerHTML = oddsCard(); return; }
     if (t.dataset.ks) { KS.s = t.dataset.ks; store.set("ks_s", KS.s); const c = $("kscard"); if (c) { c.outerHTML = stakeCard(); drawKs(); } return; }
     if (t.dataset.mc) { MC[t.dataset.mc] = t.dataset.mcv; store.set("mc_" + t.dataset.mc, t.dataset.mcv); return renderModels(); }
     if (t.dataset.s) { state.sport = t.dataset.s; store.set("sport", state.sport); return render(); }
