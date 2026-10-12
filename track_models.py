@@ -222,14 +222,36 @@ def tw_price(g, tw, pick):
     return round(us * (1 + discount(tw, g["sport"], mkt) / 100), 3), "est"
 
 
+def tw_prob(g, pick, p):
+    """同一注照台彩規則贏的機率：冰球獨贏＝60 分鐘就贏（打平算輸）、冰球大小＝只算 60 分鐘；其他跟美國一樣"""
+    try:
+        p = float(p)
+    except (TypeError, ValueError):
+        return None
+    mkt, key, ln = (pick.split("|") + ["", "", ""])[:3]
+    if g["sport"] != "nhl" or mkt == "sp":
+        return p
+    pre = [x for x in (g.get("snaps") or []) if x.get("hrs") is None or x["hrs"] >= 0]
+    snap = next((x for x in reversed(pre) if x.get("ou")), {})
+    ou = snap.get("ou") or []
+    if mkt == "ml":
+        ph = p if key == "home" else 1 - p
+        return B.nhl_reg3(ph, ou[4] if len(ou) > 4 else None)[2 if key == "home" else 0]
+    line = float(ln) if ln not in ("", None) else None
+    return nhl_reg_over(p, line) if key == "over" else 1 - nhl_reg_over(1 - p, line)
+
+
 def twin_row(r, g, tw):
-    """把 _us 那一筆複製成「改去台彩下」的一筆；台彩不能下就記 void"""
+    """把 _us 那一筆複製成「改去台彩下」的一筆；台彩不能下就記 void。p 換成照台彩規則贏的機率"""
     tp = tw_price(g, tw, r["pick"])
     row = {**r, "strategy": TW_TWINS[r["strategy"]], "result": "", "settle_odds": "", "settle_src": "", "profit": ""}
     if tp:
         row["tw_odds"], row["tw_src"] = tp
     else:
         row["tw_odds"], row["tw_src"] = "", "none"
+    pt = tw_prob(g, r["pick"], r["p"])
+    if pt is not None:
+        row["p"] = round(pt, 4)
     return row
 
 
@@ -398,6 +420,16 @@ def run(sports, now=None):
                                       "tw_odds": ba["tw"], "tw_src": "us", "ev": round(ba["ev"], 4),
                                       "result": "", "settle_odds": "", "settle_src": "", "profit": ""}
                 n_new += 1
+        # 修正：以前的「台彩下」冰球那幾筆，勝率是含延長賽的，換成 60 分鐘的（只改 p，不動結算）
+        for (gid, strat), r in list(rows.items()):
+            if strat not in TW_TWINS or (gid, TW_TWINS[strat]) not in rows:
+                continue
+            t = rows[(gid, TW_TWINS[strat])]
+            if sport == "nhl" and t.get("p") == r.get("p") and not r["pick"].startswith("sp"):
+                g = finals.get((sport, gid)) or next((x for x in games if x["id"] == gid), None)
+                pt = tw_prob(g, r["pick"], r["p"]) if g else None
+                if pt is not None:
+                    t["p"] = round(pt, 4)
         # 補記：已經有 _us、還沒有「台彩下」那一筆的比賽
         for (gid, strat), r in list(rows.items()):
             if strat not in TW_TWINS or (gid, TW_TWINS[strat]) in rows:

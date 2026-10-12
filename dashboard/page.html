@@ -2023,7 +2023,8 @@ h4.hh{margin:14px 0 6px;font-size:14px}
   const MC = {view: store.get("mc_view", "live"), stake: store.get("mc_stake", "flat"), sport: store.get("mc_sport", "mlb")};
   const LINE = {model1: ["模型一・台彩", "var(--accent)", ""], model1_us: ["模型一・美國", "var(--good)", ""], model1_us_tw: ["美國選邊・台彩下", "var(--warn)", ""], favorite: ["都押熱門", "var(--band)", "4 4"],
                 m1_tw: ["模型一・台彩", "var(--accent)", ""], m1_us: ["模型一・美國", "var(--good)", ""], m1_us_value: ["模型一・美國，只下 +2% 以上", "var(--warn)", ""],
-                fav_us: ["都押熱門（美國）", "var(--band)", "4 4"]};
+                fav_us: ["都押熱門（美國）", "var(--band)", "4 4"],
+                ks_a: ["固定金額・每注都下", "var(--band)", "4 4"], ks_b: ["固定金額・只下划算的", "var(--accent)", ""], ks_c: ["凱利・只下划算的", "var(--good)", ""]};
   function startBank() { return bankNow() || 100000; }
   // 凱利：只下期望值 ≥ +2% 的，用你的設定（1/4 凱利、每注上限），本金照開獎順序滾動
   function kellyPath(rows) {
@@ -2066,6 +2067,44 @@ h4.hh{margin:14px 0 6px;font-size:14px}
     s += `<text x="${L}" y="${H - 7}" fill="var(--muted)" font-size="11">${lab(d0)}</text><text x="${W - R}" y="${H - 7}" text-anchor="end" fill="var(--muted)" font-size="11">${lab(d1)}</text>`;
     return s + "</svg>";
   }
+  // ═════════ 固定金額 vs 凱利：同一批注、同一筆本金，三種下法比一比 ═════════
+  const KS = {s: store.get("ks_s", "model1_us")};
+  const KS_OPTS = [["model1_us", "模型一・美國"], ["model1_us_tw", "美國選邊・台彩下"], ["model1_all_us", "不限玩法・美國"], ["model1_all_tw", "不限玩法・台彩下"], ["model1", "模型一・台彩"]];
+  function ksRun(rs, mode) {
+    const c = bankCfg(), b0 = startBank(), flat = Math.max(10, Math.round(b0 / 100 / 10) * 10);
+    let bank = b0, peak = b0, dd = 0, n = 0, staked = 0;
+    const pts = [[rs.length ? rs[0][0] : null, 0]];
+    for (const [t, , , o, p, , pl] of rs) {
+      const ev = p != null && o > 1 ? p * o - 1 : null;
+      let st = 0;
+      if (mode === "a") st = flat;
+      else if (ev != null && ev >= EV_GO) st = mode === "b" ? flat : Math.floor(bank * Math.min(c.frac * ev / (o - 1), c.cap) / 10) * 10;
+      if (st > 0) { n++; staked += st; bank += st * pl; peak = Math.max(peak, bank); dd = Math.max(dd, peak - bank); }
+      pts.push([t, bank - b0]);
+    }
+    return {n, staked, pl: bank - b0, roi: staked ? (bank - b0) / staked * 100 : null, dd, pts, flat};
+  }
+  function stakeCard() {
+    const ser = (DATA.live && DATA.live.series) || [];
+    const opts = KS_OPTS.filter(([k]) => ser.some((x) => x[1] === k));
+    if (!opts.length) return "";
+    if (!opts.some(([k]) => k === KS.s)) KS.s = opts[0][0];
+    const rs = ser.filter((x) => x[1] === KS.s), c = bankCfg(), b0 = startBank();
+    const R = {a: ksRun(rs, "a"), b: ksRun(rs, "b"), c: ksRun(rs, "c")};
+    const best = Object.entries(R).filter(([, r]) => r.n).sort((x, y) => y[1].pl - x[1].pl)[0];
+    const row = (k, nm, sub) => { const r = R[k]; return `<tr${best && best[0] === k ? ' class="hl"' : ""}><td><b>${nm}</b><div class="mut" style="font-size:11.5px;white-space:normal">${sub}</div></td><td class="r n">${r.n}</td><td class="r n ${gb(r.pl)}">${r.n ? ntd(r.pl) : "–"}</td><td class="r n ${gb(r.roi)}">${r.roi == null ? "–" : sgn(r.roi, 1) + "%"}</td><td class="r n ${r.dd ? "bad" : ""}">${r.n ? "−" + Math.round(r.dd).toLocaleString("en-US") : "–"}</td></tr>`; };
+    const chips = opts.map(([k, nm]) => `<button type="button" class="chip" data-ks="${k}" aria-pressed="${KS.s === k}">${nm}</button>`).join("");
+    const lines = ["a", "b", "c"].filter((k) => R[k].n).map((k) => ({k: "ks_" + k, pts: R[k].pts.filter((p) => p[0])}));
+    return `<div class="card" id="kscard"><h3>每注一樣多，還是照情況調整？<small>同一批注、同一筆起始本金 ${ntdAmt(b0)}</small></h3>
+      <div class="chips" style="flex-wrap:wrap">${chips}</div>
+      <div class="scroll"><table class="tb"><thead><tr><th>下法</th><th class="r">下幾注</th><th class="r">賺賠（元）</th><th class="r">投報率</th><th class="r">最慘時</th></tr></thead><tbody>
+        ${row("a", "固定金額・每注都下", `每注 ${ntdAmt(R.a.flat)}（本金的 1%）`)}
+        ${row("b", "固定金額・只下划算的", `期望值 ≥ +${Math.round(EV_GO * 100)}% 才下，每注 ${ntdAmt(R.b.flat)}`)}
+        ${row("c", "凱利・只下划算的", `期望值 ≥ +${Math.round(EV_GO * 100)}% 才下，${c.frac === 0.25 ? "1/4" : c.frac === 0.5 ? "1/2" : "1/8"} 凱利、每注最多 ${Math.round(c.cap * 100)}%，本金照開獎順序滾動`)}
+      </tbody></table></div>
+      ${lines.length ? `<div class="chart" id="kschart"></div><div class="legend">${lines.map((l) => `<span><i style="background:${LINE[l.k][1]}"></i>${LINE[l.k][0]}</span>`).join("")}</div>` : ""}
+      <p class="mut" style="font-size:12.5px;margin:8px 0 0">「最慘時」＝從最高點最多掉了多少錢。凱利會在期望值越高的注下越多、期望值越低下越少，期望值是負的就不下；起始本金用你在「我的投注」設定的本金（沒設定就用 100,000）。注數少的時候，三種下法的差別大多是運氣，要累積到幾百注才看得出哪種比較好。</p></div>`;
+  }
   function curveCard() {
     const seg = (key, opts) => `<div class="seg" role="group">${opts.map(([v, n]) => `<button type="button" data-mc="${key}" data-mcv="${v}" aria-pressed="${MC[key] === v}">${n}</button>`).join("")}</div>`;
     const ums = Object.keys((DATA.stats || {}).us_models || {});
@@ -2102,6 +2141,7 @@ h4.hh{margin:14px 0 6px;font-size:14px}
       <div class="scroll"><table class="tb">${head}<tbody>${row("model1")}${row("model1_us")}${row("model1_us_tw")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">不限獨贏・美國賠率</td></tr>${row("model1_sp_us")}${row("model1_ou_us")}${row("model1_all_us")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">不限獨贏・同一注改去台彩下</td></tr>${row("model1_sp_tw")}${row("model1_ou_tw")}${row("model1_all_tw")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">還在累積</td></tr>${row("model2")}${row("combo")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">參考（台彩賠率）</td></tr>${row("favorite")}${row("underdog")}</tbody></table></div>
       <p class="mut" style="font-size:12.5px;margin:8px 0 0">${done ? `台彩結算：${actual} 場用你記錄的實際賠率，其他用估的。` : `第一批比賽還沒開獎（${L.pending || 0} 場等開獎），開獎後自動結算。`}「模型一・美國賠率」是同一個模型用美國賠率下，沒有台彩抽成，比較看得出模型本身準不準（美國賠率是 10/1 起才開始記）。每個策略都押開賽前最後一次判斷的那一邊。場數少於 200 場時，差幾 % 多半是運氣。</p></div>`;
     h += curveCard();
+    h += stakeCard();
     // 只下划算的
     const vrow = (k, nm) => { const v = (S[k] || {}).value || {}; return `<tr><td><b>${nm}</b></td><td class="r n">${v.n || 0}</td><td class="r n">${wr(v)}</td><td class="r n ${gb(v.roi)}">${v.roi == null ? "–" : sgn(v.roi, 1) + "%"}</td><td class="r n ${gb(v.pl)}">${money(v)}</td></tr>`; };
     h += `<div class="card"><h3>只下划算的<small>開賽前期望值 > 0 才下・每注 ${UNIT.toLocaleString("en-US")} 元</small></h3>
@@ -2171,6 +2211,13 @@ h4.hh{margin:14px 0 6px;font-size:14px}
     }
     $("models").innerHTML = h;
     const mcl = mcLines(); if (mcl.length && $("mcchart")) $("mcchart").innerHTML = multiChart(mcl, chartW("mcchart"));
+    drawKs();
+  }
+  function drawKs() {
+    const el = $("kschart"); if (!el) return;
+    const ser = ((DATA.live && DATA.live.series) || []).filter((x) => x[1] === KS.s);
+    const lines = ["a", "b", "c"].map((k) => ({k: "ks_" + k, r: ksRun(ser, k)})).filter((l) => l.r.n).map((l) => ({k: l.k, pts: l.r.pts.filter((p) => p[0])}));
+    if (lines.length) el.innerHTML = multiChart(lines, chartW("kschart"));
   }
 
   // ═════════ 說明 ═════════
@@ -2589,6 +2636,7 @@ h4.hh{margin:14px 0 6px;font-size:14px}
     if (t.dataset.crm) { const [key, i] = t.dataset.crm.split("|"), arr = cst(CALC.cur)[key]; if (arr && arr.length > (+t.dataset.cmin || 1)) arr.splice(+i, 1); csave(); return renderCalc(); }
     if (t.dataset.cset) { cst(CALC.cur)[t.dataset.cset] = t.dataset.cv; csave(); return renderCalc(); }
     if (t.dataset.creset) { CALC.s[CALC.cur] = null; cst(CALC.cur); csave(); return renderCalc(); }
+    if (t.dataset.ks) { KS.s = t.dataset.ks; store.set("ks_s", KS.s); const c = $("kscard"); if (c) { c.outerHTML = stakeCard(); drawKs(); } return; }
     if (t.dataset.mc) { MC[t.dataset.mc] = t.dataset.mcv; store.set("mc_" + t.dataset.mc, t.dataset.mcv); return renderModels(); }
     if (t.dataset.s) { state.sport = t.dataset.s; store.set("sport", state.sport); return render(); }
     if (t.dataset.m) { state.mkt = t.dataset.m; store.set("mkt", state.mkt); return render(); }
