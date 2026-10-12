@@ -2024,7 +2024,7 @@ h4.hh{margin:14px 0 6px;font-size:14px}
   const LINE = {model1: ["模型一・台彩", "var(--accent)", ""], model1_us: ["模型一・美國", "var(--good)", ""], model1_us_tw: ["美國選邊・台彩下", "var(--warn)", ""], favorite: ["都押熱門", "var(--band)", "4 4"],
                 m1_tw: ["模型一・台彩", "var(--accent)", ""], m1_us: ["模型一・美國", "var(--good)", ""], m1_us_value: ["模型一・美國，只下 +2% 以上", "var(--warn)", ""],
                 fav_us: ["都押熱門（美國）", "var(--band)", "4 4"],
-                ks_a: ["固定金額・每注都下", "var(--band)", "4 4"], ks_b: ["固定金額・只下划算的", "var(--accent)", ""], ks_c: ["凱利・只下划算的", "var(--good)", ""]};
+                ks_a: ["固定金額・每注都下", "var(--band)", "4 4"], ks_b: ["固定金額・只下划算的", "var(--accent)", ""], ks_c: ["凱利・只下划算的", "var(--good)", ""], ks_d: ["凱利・每注都下", "var(--warn)", ""], ks_e: ["依期望值加減碼・每注都下", "var(--bad)", ""]};
   function startBank() { return bankNow() || 100000; }
   // 凱利：只下期望值 ≥ +2% 的，用你的設定（1/4 凱利、每注上限），本金照開獎順序滾動
   function kellyPath(rows) {
@@ -2069,6 +2069,7 @@ h4.hh{margin:14px 0 6px;font-size:14px}
   }
   // ═════════ 固定金額 vs 凱利：同一批注、同一筆本金，三種下法比一比 ═════════
   const KS = {s: store.get("ks_s", "model1_us")};
+  const KS_FLOOR = 0.0025;   // 「凱利・每注都下」最少下本金的 0.25%
   const KS_OPTS = [["model1_us", "模型一・美國"], ["model1_us_tw", "美國選邊・台彩下"], ["model1_all_us", "不限玩法・美國"], ["model1_all_tw", "不限玩法・台彩下"], ["model1", "模型一・台彩"]];
   function ksRun(rs, mode) {
     const c = bankCfg(), b0 = startBank(), flat = Math.max(10, Math.round(b0 / 100 / 10) * 10);
@@ -2078,6 +2079,14 @@ h4.hh{margin:14px 0 6px;font-size:14px}
       const ev = p != null && o > 1 ? p * o - 1 : null;
       let st = 0;
       if (mode === "a") st = flat;
+      else if (mode === "d") {   // 每注都下：照凱利算，太小或期望值是負的就下最低 0.25%
+        const k = ev != null && o > 1 ? c.frac * ev / (o - 1) : 0;
+        st = Math.max(10, Math.floor(bank * Math.min(Math.max(k, KS_FLOOR), c.cap) / 10) * 10);
+      }
+      else if (mode === "e") {   // 每注都下：1% 為基準，期望值每高 1% 多下 20%（最少 0.25%、最多 3%）
+        const m = ev == null ? 1 : Math.min(c.cap * 100, Math.max(KS_FLOOR * 100, 1 + 20 * ev));
+        st = Math.max(10, Math.floor(b0 * m / 100 / 10) * 10);
+      }
       else if (ev != null && ev >= EV_GO) st = mode === "b" ? flat : Math.floor(bank * Math.min(c.frac * ev / (o - 1), c.cap) / 10) * 10;
       if (st > 0) { n++; staked += st; bank += st * pl; peak = Math.max(peak, bank); dd = Math.max(dd, peak - bank); }
       pts.push([t, bank - b0]);
@@ -2090,15 +2099,17 @@ h4.hh{margin:14px 0 6px;font-size:14px}
     if (!opts.length) return "";
     if (!opts.some(([k]) => k === KS.s)) KS.s = opts[0][0];
     const rs = ser.filter((x) => x[1] === KS.s), c = bankCfg(), b0 = startBank();
-    const R = {a: ksRun(rs, "a"), b: ksRun(rs, "b"), c: ksRun(rs, "c")};
+    const R = {a: ksRun(rs, "a"), e: ksRun(rs, "e"), d: ksRun(rs, "d"), b: ksRun(rs, "b"), c: ksRun(rs, "c")};
     const best = Object.entries(R).filter(([, r]) => r.n).sort((x, y) => y[1].pl - x[1].pl)[0];
     const row = (k, nm, sub) => { const r = R[k]; return `<tr${best && best[0] === k ? ' class="hl"' : ""}><td><b>${nm}</b><div class="mut" style="font-size:11.5px;white-space:normal">${sub}</div></td><td class="r n">${r.n}</td><td class="r n ${gb(r.pl)}">${r.n ? ntd(r.pl) : "–"}</td><td class="r n ${gb(r.roi)}">${r.roi == null ? "–" : sgn(r.roi, 1) + "%"}</td><td class="r n ${r.dd ? "bad" : ""}">${r.n ? "−" + Math.round(r.dd).toLocaleString("en-US") : "–"}</td></tr>`; };
     const chips = opts.map(([k, nm]) => `<button type="button" class="chip" data-ks="${k}" aria-pressed="${KS.s === k}">${nm}</button>`).join("");
-    const lines = ["a", "b", "c"].filter((k) => R[k].n).map((k) => ({k: "ks_" + k, pts: R[k].pts.filter((p) => p[0])}));
+    const lines = ["a", "e", "d", "b", "c"].filter((k) => R[k].n).map((k) => ({k: "ks_" + k, pts: R[k].pts.filter((p) => p[0])}));
     return `<div class="card" id="kscard"><h3>每注一樣多，還是照情況調整？<small>同一批注、同一筆起始本金 ${ntdAmt(b0)}</small></h3>
       <div class="chips" style="flex-wrap:wrap">${chips}</div>
       <div class="scroll"><table class="tb"><thead><tr><th>下法</th><th class="r">下幾注</th><th class="r">賺賠（元）</th><th class="r">投報率</th><th class="r">最慘時</th></tr></thead><tbody>
         ${row("a", "固定金額・每注都下", `每注 ${ntdAmt(R.a.flat)}（本金的 1%）`)}
+        ${row("e", "依期望值加減碼・每注都下", `每場都下，以 1% 為基準，期望值每高 1% 多下 20%、每低 1% 少下 20%（最少 ${(KS_FLOOR * 100).toFixed(2)}%、最多 ${Math.round(c.cap * 100)}%）`)}
+        ${row("d", "凱利・每注都下", `每場都下，金額照凱利（期望值越高下越多，最多 ${Math.round(c.cap * 100)}%）；期望值是負的或算出來太小就下最低 ${(KS_FLOOR * 100).toFixed(2)}%`)}
         ${row("b", "固定金額・只下划算的", `期望值 ≥ +${Math.round(EV_GO * 100)}% 才下，每注 ${ntdAmt(R.b.flat)}`)}
         ${row("c", "凱利・只下划算的", `期望值 ≥ +${Math.round(EV_GO * 100)}% 才下，${c.frac === 0.25 ? "1/4" : c.frac === 0.5 ? "1/2" : "1/8"} 凱利、每注最多 ${Math.round(c.cap * 100)}%，本金照開獎順序滾動`)}
       </tbody></table></div>
@@ -2216,7 +2227,7 @@ h4.hh{margin:14px 0 6px;font-size:14px}
   function drawKs() {
     const el = $("kschart"); if (!el) return;
     const ser = ((DATA.live && DATA.live.series) || []).filter((x) => x[1] === KS.s);
-    const lines = ["a", "b", "c"].map((k) => ({k: "ks_" + k, r: ksRun(ser, k)})).filter((l) => l.r.n).map((l) => ({k: l.k, pts: l.r.pts.filter((p) => p[0])}));
+    const lines = ["a", "e", "d", "b", "c"].map((k) => ({k: "ks_" + k, r: ksRun(ser, k)})).filter((l) => l.r.n).map((l) => ({k: l.k, pts: l.r.pts.filter((p) => p[0])}));
     if (lines.length) el.innerHTML = multiChart(lines, chartW("kschart"));
   }
 
