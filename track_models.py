@@ -19,7 +19,7 @@
 - model1_sp_tw／model1_ou_tw／model1_all_tw：跟對應的 _us 押同一注，改用台彩賠率結算（估的，有記錄用實際的）。
   冰球台彩只算 60 分鐘：獨贏打平算輸、大小分用前三節總分；台彩冰球讓分是三選一，跟美國 ±1.5 不能比，不下（void）。
   ev 欄記的是美國賠率的期望值（「只下划算的」＝美國划算的那幾注改去台彩下）
-- draw_us／draw 足球都押和局：每場都押和局，分別用美國賠率、台彩賠率（有記錄用實際的，沒有用估的）結算（參考）
+- draw_us／draw 都押和局（足球；冰球只有台彩 draw，60 分鐘打平）：每場都押和局，分別用美國賠率、台彩賠率（有記錄用實際的，沒有用估的）結算（參考）
 - model1_us_draw／model1_tw_draw 不另外記：看板從 model1_us／model1_us_tw 裡挑「押和局」的那幾注算
 - model1_all_us 不限獨贏：獨贏、讓分、大小分裡挑「美國賠率期望值最高」的那一注，用美國賠率結算
   （獨贏勝率用模型一；讓分、大小分用 Pinnacle 去抽水的機率，沒有 Pinnacle 就用美國共識賠率去抽水）。pick 欄寫成「玩法|邊|盤口」，例如 sp|home|-1.5
@@ -191,10 +191,21 @@ def best_all(g, p_ml=None, only=None):
 
 
 def draw_opts(g, tw):
-    """足球都押和局（不需要模型，打完的比賽也能補記）：(美國那一筆, 台彩那一筆)；p＝市場去抽水的和局機率"""
-    if g["sport"] != "soccer":
+    """都押和局（不需要模型，打完的比賽也能補記）：((美國那一筆或 None, 台彩那一筆), snap)；p＝市場去抽水的和局機率。
+    足球：90 分鐘和局，美國、台彩都有。冰球：台彩獨贏是 60 分鐘三選一，和局＝打進延長賽；美國沒有這個盤，只算台彩"""
+    if g["sport"] not in ("soccer", "nhl"):
         return None
     pre = [x for x in (g.get("snaps") or []) if x.get("hrs") is None or x["hrs"] >= 0]
+    act = (((g.get("tw") or {}).get("ml") or {}).get("draw") or [None])[0]
+    if g["sport"] == "nhl":
+        snap = next((x for x in reversed(pre) if x.get("ml") and len(x["ml"]) > 5 and x["ml"][4] and x["ml"][5]), None)
+        if not snap or min(snap["ml"][4], snap["ml"][5]) <= 1:
+            return None
+        a, h = snap["ml"][4], snap["ml"][5]
+        ou = next((x["ou"] for x in reversed(pre) if x.get("ou") and len(x["ou"]) > 4), None)
+        m = B.nhl_reg3((1 / h) / (1 / a + 1 / h), ou[4] if ou else None)[1]
+        two, src = (act, "actual") if act else (round(1 / (m * (1 + B.NHL3_MARGIN)), 3), "est")
+        return (None, {"key": "draw", "name": "和局（60分鐘）", "us": "", "p": m, "m": m, "tw": two, "src": src, "ev": m * two - 1}), snap
     snap = next((x for x in reversed(pre) if x.get("ml") and len(x["ml"]) > 8 and all(x["ml"][6:9])), None)
     if not snap:
         return None
@@ -202,7 +213,6 @@ def draw_opts(g, tw):
     if any(o <= 1 for o in us):
         return None
     m = (1 / us[1]) / sum(1 / o for o in us)
-    act = (((g.get("tw") or {}).get("ml") or {}).get("draw") or [None])[0]
     two, src = (act, "actual") if act else (round(us[1] * (1 + discount(tw, "soccer") / 100), 3), "est")
     base = {"key": "draw", "name": "和局", "us": us[1], "p": m, "m": m}
     return ({**base, "tw": us[1], "src": "us", "ev": m * us[1] - 1},
@@ -296,7 +306,9 @@ def picks(g, tw):
             out[strat] = ba
     dr = draw_opts(g, tw)
     if dr:
-        out["draw_us"], out["draw"] = dr[0]
+        if dr[0][0]:
+            out["draw_us"] = dr[0][0]
+        out["draw"] = dr[0][1]
     return out, snap
 
 
@@ -445,15 +457,17 @@ def run(sports, now=None):
                                       "result": "", "settle_odds": "", "settle_src": "", "profit": ""}
                 n_new += 1
         # 補記：足球都押和局（用每場開賽前最後的賠率）
-        if sport == "soccer":
+        if sport in ("soccer", "nhl"):
             for (gid, strat), r in list(rows.items()):
-                if strat != "favorite" or ((gid, "draw_us") in rows and (gid, "draw") in rows):
+                if strat != "favorite" or ((gid, "draw_us") in rows or sport == "nhl") and (gid, "draw") in rows:
                     continue
                 g = finals.get((sport, gid)) or next((x for x in games if x["id"] == gid), None)
                 dr = draw_opts(g, tw) if g else None
                 if not dr:
                     continue
                 for new_s, o in zip(("draw_us", "draw"), dr[0]):
+                    if not o or (gid, new_s) in rows:
+                        continue
                     rows.setdefault((gid, new_s), {**r, "strategy": new_s, "pick": "draw", "pick_zh": "和局", "p": round(o["p"], 4),
                                                    "mkt_p": round(o["m"], 4), "us_odds": o["us"], "tw_odds": o["tw"], "tw_src": o["src"],
                                                    "ev": round(o["ev"], 4), "result": "", "settle_odds": "", "settle_src": "", "profit": ""})

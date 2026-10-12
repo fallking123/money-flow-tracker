@@ -449,7 +449,8 @@ def live_summary():
     # 每一筆開獎的注（畫獲利曲線、算凱利用）：[時間, 策略, 運動, 結算賠率, 開賽前勝率, 開賽前期望值, 賺賠(每 1 單位)]
     # 模型一押和局的那幾注，另外當成一個策略（model1_us_draw／model1_tw_draw），看「模型挑的和局」準不準
     alias = {"model1_us": "model1_us_draw", "model1_us_tw": "model1_tw_draw"}
-    rows_s = rows + [{**r, "strategy": alias[r["strategy"]]} for r in rows if r["strategy"] in alias and r["pick"] == "draw"]
+    rows_s = rows + [{**r, "strategy": alias[r["strategy"]]} for r in rows if r["strategy"] in alias and r["pick"] == "draw"] \
+        + [{**r, "strategy": "model1_tw_draw"} for r in rows if r["strategy"] == "model1" and r["sport"] == "nhl" and r["pick"] == "draw"]  # 冰球：台彩 60 分鐘和局只有模型一・台彩會挑
     series = sorted([[r["game_time_utc"], r["strategy"], r["sport"], num(r["settle_odds"]) or num(r["tw_odds"]), num(r["p"]), num(r["ev"]),
                       num(r["profit"]), r.get("league") or r["sport"], int(r["settle_src"] == "actual")] for r in rows_s if r["result"] in ("win", "loss", "push")], key=lambda x: x[0])
     return {"since": min((r["game_time_utc"] for r in m1), default=None), "strats": strats, "pending": len(pend),
