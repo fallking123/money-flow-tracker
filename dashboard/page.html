@@ -2268,7 +2268,7 @@ h4.hh{margin:14px 0 6px;font-size:14px}
       const tdone = ub.filter((x) => x.twr && ["win", "loss", "push"].includes(x.twr[2])), tpl = tdone.reduce((a, x) => a + (x.twr[3] || 0), 0);
       const RS = {win: ["贏", "w"], loss: ["輸", "l"], push: ["平", "p"], void: ["取消", "p"]};
       const done = ub.filter((x) => RS[x.result]), pl = done.reduce((a, x) => a + (x.profit || 0), 0);
-      const tr = (x) => `<tr><td class="n" style="line-height:1.3">${fmtMD.format(new Date(x.t))}<div class="mut" style="font-size:11px;font-weight:400">${esc(spLabel(x.sport))}</div></td>
+      const tr = (x) => `<tr><td class="n" style="line-height:1.3">${fmtMD.format(new Date(x.t))}<div class="mut" style="font-size:11px;font-weight:400">${esc(x.sport === "soccer" ? ((MLG_LIST.find(([k]) => k === x.lg) || [])[1] || "足球") : spLabel(x.sport))}</div></td>
         <td style="white-space:normal;line-height:1.35"><b>${esc(x.pick)}</b> <span class="n">${odd(x.us)}</span><div class="mut" style="font-size:11.5px">${esc(x.away)} @ ${esc(x.home)}</div>
           <div class="mut" style="font-size:11px">勝率 ${x.p == null ? "–" : Math.round(x.p * 100) + "%"}${x.ev == null ? "" : "・期望值 " + evTxt(x.ev)}</div></td>
         <td class="r" style="line-height:1.4"><div class="mut" style="font-size:10.5px">美國</div>${RS[x.result] ? `<span class="res ${RS[x.result][1]}">${RS[x.result][0]}</span><div class="n ${gb(x.profit)}">${x.profit != null ? sgn(x.profit * UNIT, 0) : ""}</div>` : '<span class="mut">未開賽</span>'}</td>
