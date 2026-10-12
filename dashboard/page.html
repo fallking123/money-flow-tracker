@@ -51,6 +51,8 @@ button,input,select{font:inherit;color:inherit}
 .upd b{color:var(--ink2);font-weight:700}
 .rf{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--accent);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;flex:none}
 .rf:disabled{color:var(--muted);cursor:default}
+.rf+.rf{margin-left:-6px}
+@media (max-width:420px){.rf{padding:5px 9px;font-size:12px}.upd{font-size:11.5px}}
 .rfmsg{max-width:1080px;margin:0 auto;padding:0 16px 8px;font-size:12.5px;color:var(--muted);text-align:right}
 .rfmsg.bad{color:var(--bad)}
 .navtop{display:flex;gap:4px;background:var(--soft2);padding:4px;border-radius:999px;overflow-x:auto;scrollbar-width:none}
@@ -426,7 +428,7 @@ h4.hh{margin:14px 0 6px;font-size:14px}
   <div class="logo"><i><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2.5 13 L7 8 L10 10.5 L15.5 4.5" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></i>資金流向</div>
   <nav class="navtop" id="navtop" aria-label="頁面"></nav>
   <div class="upd" id="upd">讀取中…</div>
-  <button type="button" class="rf" id="rf" hidden>立即更新</button>
+  <button type="button" class="rf" id="rr" hidden>更新賽果</button><button type="button" class="rf" id="rf" hidden>立即更新</button>
 </div><div class="rfmsg" id="rfmsg" hidden></div></header>
 
 <main>
@@ -2002,9 +2004,12 @@ h4.hh{margin:14px 0 6px;font-size:14px}
                  model1_sp_us: ["只下讓分・美國", "每場押讓分比較划算的一邊（勝率用 Pinnacle，沒有就用美國去抽水）"],
                  model1_ou_us: ["只下大小分・美國", "每場押大小分比較划算的一邊（同上）"],
                  model1_all_us: ["不限玩法・美國", "獨贏、讓分、大小分裡挑期望值最高的一注"],
+                 model1_sp_tw: ["只下讓分・台彩下", "同一注改去台彩下（冰球台彩讓分不一樣，不算）"],
+                 model1_ou_tw: ["只下大小分・台彩下", "同一注改去台彩下（冰球只算 60 分鐘）"],
+                 model1_all_tw: ["不限玩法・台彩下", "同一注改去台彩下（冰球只算 60 分鐘，讓分不算）"],
                  model2: ["模型二・資金", "下注比例＋盤口移動"], combo: ["綜合", "模型一＋模型二"],
                  favorite: ["都押熱門", "不用模型"], underdog: ["都押冷門", "不用模型"]};
-  const READY = {model1: true, model1_us: true, model1_us_tw: true, model1_sp_us: true, model1_ou_us: true, model1_all_us: true, favorite: true, underdog: true};
+  const READY = {model1: true, model1_us: true, model1_us_tw: true, model1_sp_us: true, model1_ou_us: true, model1_all_us: true, model1_sp_tw: true, model1_ou_tw: true, model1_all_tw: true, favorite: true, underdog: true};
   const UNIT = 1000;   // 「每一場都下」每注 1,000 元
   // 美國賠率下注：含延長賽的獨贏，押「模型一勝率 × 美國賠率」比較高的那邊
   function usPick(g) {
@@ -2094,13 +2099,13 @@ h4.hh{margin:14px 0 6px;font-size:14px}
     const head = `<thead><tr><th>策略</th><th class="r">已開獎</th><th class="r">猜中</th><th class="r">獲利率</th><th class="r">賺賠</th></tr></thead>`;
     const actual = agg("model1").actual || 0;
     let h = `<div class="card"><h3>每一場都下注，誰的獲利率最高<small>上線後實戰・${L.since ? `從 ${fmtMD.format(new Date(L.since))} 開始` : "今天開始"}・每場 ${UNIT.toLocaleString("en-US")} 元</small></h3>
-      <div class="scroll"><table class="tb">${head}<tbody>${row("model1")}${row("model1_us")}${row("model1_us_tw")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">不限獨贏（美國賠率）</td></tr>${row("model1_sp_us")}${row("model1_ou_us")}${row("model1_all_us")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">還在累積</td></tr>${row("model2")}${row("combo")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">參考（台彩賠率）</td></tr>${row("favorite")}${row("underdog")}</tbody></table></div>
+      <div class="scroll"><table class="tb">${head}<tbody>${row("model1")}${row("model1_us")}${row("model1_us_tw")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">不限獨贏・美國賠率</td></tr>${row("model1_sp_us")}${row("model1_ou_us")}${row("model1_all_us")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">不限獨贏・同一注改去台彩下</td></tr>${row("model1_sp_tw")}${row("model1_ou_tw")}${row("model1_all_tw")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">還在累積</td></tr>${row("model2")}${row("combo")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">參考（台彩賠率）</td></tr>${row("favorite")}${row("underdog")}</tbody></table></div>
       <p class="mut" style="font-size:12.5px;margin:8px 0 0">${done ? `台彩結算：${actual} 場用你記錄的實際賠率，其他用估的。` : `第一批比賽還沒開獎（${L.pending || 0} 場等開獎），開獎後自動結算。`}「模型一・美國賠率」是同一個模型用美國賠率下，沒有台彩抽成，比較看得出模型本身準不準（美國賠率是 10/1 起才開始記）。每個策略都押開賽前最後一次判斷的那一邊。場數少於 200 場時，差幾 % 多半是運氣。</p></div>`;
     h += curveCard();
     // 只下划算的
     const vrow = (k, nm) => { const v = (S[k] || {}).value || {}; return `<tr><td><b>${nm}</b></td><td class="r n">${v.n || 0}</td><td class="r n">${wr(v)}</td><td class="r n ${gb(v.roi)}">${v.roi == null ? "–" : sgn(v.roi, 1) + "%"}</td><td class="r n ${gb(v.pl)}">${money(v)}</td></tr>`; };
     h += `<div class="card"><h3>只下划算的<small>開賽前期望值 > 0 才下・每注 ${UNIT.toLocaleString("en-US")} 元</small></h3>
-      <div class="scroll"><table class="tb">${head}<tbody>${vrow("model1", "模型一・台彩")}${vrow("model1_us", "模型一・美國賠率")}${vrow("model1_us_tw", "美國划算的・改去台彩下")}${vrow("model1_all_us", "不限玩法・美國賠率")}
+      <div class="scroll"><table class="tb">${head}<tbody>${vrow("model1", "模型一・台彩")}${vrow("model1_us", "模型一・美國賠率")}${vrow("model1_us_tw", "美國划算的・改去台彩下")}${vrow("model1_all_us", "不限玩法・美國賠率")}${vrow("model1_all_tw", "不限玩法・美國划算的改去台彩下")}
       <tr><td><b>模型二・資金</b></td><td colspan="4" class="mut">累積中</td></tr><tr><td><b>綜合</b></td><td colspan="4" class="mut">累積中</td></tr></tbody></table></div>
       <p class="mut" style="font-size:12.5px;margin:8px 0 0">每場都下一定會被抽成吃掉（台彩約 13%、美國約 4%）；真正看得出模型有沒有用的是這張表。</p></div>`;
     // 各運動
@@ -2136,16 +2141,25 @@ h4.hh{margin:14px 0 6px;font-size:14px}
     }
     // 最近開獎
     // 模型一・美國賠率／不限玩法：每一注
+    // 同一注改去台彩下：台彩賠率（估）、輸贏、賺賠
+    const twCell = (t) => {
+      if (!t) return '<span class="mut">–</span>';
+      const [o, src, res, pf] = t, R = {win: ["贏", "w"], loss: ["輸", "l"], push: ["平", "p"]};
+      if (src === "none" || res === "void") return '<span class="mut" style="font-size:11px">台彩<br>不能下</span>';
+      return `<div class="mut" style="font-size:10.5px">台彩 ${odd(o)}${src === "actual" ? "" : "估"}</div>${R[res] ? `<span class="res ${R[res][1]}">${R[res][0]}</span><div class="n ${gb(pf)}">${pf != null ? sgn(pf * UNIT, 0) : ""}</div>` : '<span class="mut">未開賽</span>'}`;
+    };
     const betList = (ub, title, open, note) => {
       if (!ub.length) return "";
+      const tdone = ub.filter((x) => x.twr && ["win", "loss", "push"].includes(x.twr[2])), tpl = tdone.reduce((a, x) => a + (x.twr[3] || 0), 0);
       const RS = {win: ["贏", "w"], loss: ["輸", "l"], push: ["平", "p"], void: ["取消", "p"]};
       const done = ub.filter((x) => RS[x.result]), pl = done.reduce((a, x) => a + (x.profit || 0), 0);
       const tr = (x) => `<tr><td class="n" style="line-height:1.3">${fmtMD.format(new Date(x.t))}<div class="mut" style="font-size:11px;font-weight:400">${esc(spLabel(x.sport))}</div></td>
         <td style="white-space:normal;line-height:1.35"><b>${esc(x.pick)}</b> <span class="n">${odd(x.us)}</span><div class="mut" style="font-size:11.5px">${esc(x.away)} @ ${esc(x.home)}</div>
-          <div class="mut" style="font-size:11px">勝率 ${x.p == null ? "–" : Math.round(x.p * 100) + "%"}${x.ev == null ? "" : "・期望值 " + evTxt(x.ev)}${x.tw_est ? "・台彩約 " + odd(x.tw_est) : ""}</div></td>
-        <td class="r" style="line-height:1.4">${RS[x.result] ? `<span class="res ${RS[x.result][1]}">${RS[x.result][0]}</span><div class="n ${gb(x.profit)}">${x.profit != null ? sgn(x.profit * UNIT, 0) : ""}</div>` : '<span class="mut">未開賽</span>'}</td></tr>`;
-      return `<details class="more-sec"${open ? " open" : ""}><summary><span>${title}<small class="sm-sub">${ub.length} 注・已開獎 ${done.length} 注・每注 ${UNIT.toLocaleString("en-US")} 元，合計 <b class="${gb(pl)}">${sgn(pl * UNIT, 0)}</b> 元</small></span></summary><div>
-        <div class="scroll"><table class="tb"><thead><tr><th>開賽</th><th>押哪邊・美國賠率</th><th class="r">結果</th></tr></thead><tbody>${ub.map(tr).join("")}</tbody></table></div>
+          <div class="mut" style="font-size:11px">勝率 ${x.p == null ? "–" : Math.round(x.p * 100) + "%"}${x.ev == null ? "" : "・期望值 " + evTxt(x.ev)}</div></td>
+        <td class="r" style="line-height:1.4"><div class="mut" style="font-size:10.5px">美國</div>${RS[x.result] ? `<span class="res ${RS[x.result][1]}">${RS[x.result][0]}</span><div class="n ${gb(x.profit)}">${x.profit != null ? sgn(x.profit * UNIT, 0) : ""}</div>` : '<span class="mut">未開賽</span>'}</td>
+        <td class="r" style="line-height:1.4">${twCell(x.twr)}</td></tr>`;
+      return `<details class="more-sec"${open ? " open" : ""}><summary><span>${title}<small class="sm-sub">${ub.length} 注・已開獎 ${done.length} 注・每注 ${UNIT.toLocaleString("en-US")} 元・美國合計 <b class="${gb(pl)}">${sgn(pl * UNIT, 0)}</b> 元${tdone.length ? `・同一注台彩下合計 <b class="${gb(tpl)}">${sgn(tpl * UNIT, 0)}</b> 元` : ""}</small></span></summary><div>
+        <div class="scroll"><table class="tb"><thead><tr><th>開賽</th><th>押哪邊・美國賠率</th><th class="r">美國</th><th class="r">台彩下</th></tr></thead><tbody>${ub.map(tr).join("")}</tbody></table></div>
         <p class="mut" style="font-size:12.5px;margin:8px 0 0">${note}</p></div></details>`;
     };
     h += betList(L.us_bets || [], "模型一・美國賠率：每一注", true, "每一場都下獨贏（含延長賽），押「模型一勝率 × 美國賠率」比較高的那一邊，用開賽前最後一次的美國賠率結算。「台彩約」是同一邊在台彩的賠率（冰球是 60 分鐘、打平算輸）。");
@@ -2644,33 +2658,39 @@ h4.hh{margin:14px 0 6px;font-size:14px}
   window.addEventListener("hashchange", () => { const v = hashView(); if (v && v !== state.view) go(v); });
   let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (DATA && (state.view === "analysis" || state.view === "bets" || state.view === "models")) render(); }, 250); });
 
-  // ═════════ 立即更新：觸發「更新資金流向看板」排程（Claude Code Remote 連接器）═════════
-  const RF_SERVER = "Claude Code Remote", RF_TRIGGER = "trig_01XweDYPo1nKoEys2Dc9BcfP", RF_WAIT = 3 * 60 * 1000;
+  // ═════════ 立即更新（看板）／更新賽果：觸發排程（Claude Code Remote 連接器）═════════
+  const RF_SERVER = "Claude Code Remote";
+  const RFS = {
+    rf: {trigger: "trig_01XweDYPo1nKoEys2Dc9BcfP", wait: 3 * 60 * 1000, label: "立即更新", sent: "已送出。大約 2 分鐘後重新整理，就會看到最新資料。"},
+    rr: {trigger: "trig_016ztv65SGXxGsfqqmt3Smt1", wait: 10 * 60 * 1000, label: "更新賽果", sent: "已送出：會先去抓最新比分，再更新看板。大約 6～10 分鐘後重新整理，就會看到最新賽果。"},
+  };
   let MCP = null;
   function rfMsg(text, bad) { const m = $("rfmsg"); m.hidden = !text; m.textContent = text || ""; m.classList.toggle("bad", !!bad); }
   function rfState() {
-    const b = $("rf"); if (!b) return;
-    b.hidden = !MCP;
-    const left = store.get("rf_at", 0) + RF_WAIT - Date.now();
-    b.disabled = left > 0;
-    b.textContent = left > 0 ? "更新中…" : "立即更新";
-    if (left > 0) setTimeout(rfState, Math.min(left, 30000) + 200);
-    else if (store.get("rf_at", 0) && Date.now() - store.get("rf_at", 0) < RF_WAIT + 10 * 60 * 1000) rfMsg("應該更新好了，往下拉重新整理（或重新打開看板）就會看到最新資料。");
+    for (const [id, c] of Object.entries(RFS)) {
+      const b = $(id); if (!b) continue;
+      b.hidden = !MCP;
+      const at = store.get(id + "_at", 0), left = at + c.wait - Date.now();
+      b.disabled = left > 0;
+      b.textContent = left > 0 ? "更新中…" : c.label;
+      if (left > 0) setTimeout(rfState, Math.min(left, 30000) + 200);
+    }
   }
   (async () => {
     try { MCP = window.claude && window.claude.use ? await window.claude.use("mcp") : null; } catch (e) { MCP = null; }
     rfState();
   })();
   document.addEventListener("click", async (e) => {
-    const b = e.target.closest && e.target.closest("#rf"); if (!b || !MCP || b.disabled) return;
+    const b = e.target.closest && e.target.closest("#rf, #rr"); if (!b || !MCP || b.disabled) return;
+    const c = RFS[b.id];
     b.disabled = true; b.textContent = "送出中…"; rfMsg("");
     try {
-      await MCP.callTool(RF_SERVER, "fire_trigger", {trigger_id: RF_TRIGGER});
-      store.set("rf_at", Date.now());
-      rfMsg("已送出。大約 2 分鐘後重新整理，就會看到最新資料。");
+      await MCP.callTool(RF_SERVER, "fire_trigger", {trigger_id: c.trigger});
+      store.set(b.id + "_at", Date.now());
+      rfMsg(c.sent);
       rfState();
     } catch (err) {
-      const c = (err && err.code) || "upstream_error";
+      const code = (err && err.code) || "upstream_error";
       const M = {
         not_in_manifest: "你沒有允許這個看板使用更新功能。重新打開看板，跳出詢問時選允許。",
         consent_required: "你沒有允許這個看板使用更新功能。再按一次，跳出詢問時選允許。",
@@ -2680,11 +2700,11 @@ h4.hh{margin:14px 0 6px;font-size:14px}
         blocked_by_policy: "你的帳號設定不允許從網頁觸發更新，請直接跟 Claude 說「更新看板」。",
         approval_required: "這個動作需要額外核准，請直接跟 Claude 說「更新看板」。",
         tool_error: "排程回報失敗：" + ((err && err.message) || "") + "。可以直接跟 Claude 說「更新看板」。",
-        server_unavailable: "連線逾時，不確定有沒有送出。等 3 分鐘重新整理看看，沒更新再按一次。",
-        upstream_error: "不確定有沒有送出。等 3 分鐘重新整理看看，沒更新再按一次。",
+        server_unavailable: "連線逾時，不確定有沒有送出。等幾分鐘重新整理看看，沒更新再按一次。",
+        upstream_error: "不確定有沒有送出。等幾分鐘重新整理看看，沒更新再按一次。",
       };
-      rfMsg(M[c] || M.upstream_error, true);
-      if (c === "server_unavailable" || c === "upstream_error") store.set("rf_at", Date.now());
+      rfMsg(M[code] || M.upstream_error, true);
+      if (code === "server_unavailable" || code === "upstream_error") store.set(b.id + "_at", Date.now());
       rfState();
     }
   });

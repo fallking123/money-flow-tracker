@@ -15,7 +15,7 @@ import os
 import sys
 from datetime import datetime, timezone, timedelta
 
-from sports_common import (NHL3_MARGIN, nhl_reg3, reg_winner, _norm, active_sports, all_monthly_files, parse_time, read_rows,
+from sports_common import (NHL3_MARGIN, nhl_reg3, reg_winner, reg_total, _norm, active_sports, all_monthly_files, parse_time, read_rows,
                             recent_monthly_files, sport_dir)
 import record_tw_odds
 import soccer_dashboard
@@ -241,7 +241,8 @@ def build_closed():
                 "snaps": [snap_of(r) for r in thin(pre)],
                 "result": {"away": num(res["away_score"]), "home": num(res["home_score"]),
                            "winner": res["winner"], "margin": num(res["margin"]), "total": num(res["total_points"]),
-                           "reg": reg_winner(res.get("away_periods"), res.get("home_periods")) if sport == "nhl" else None},
+                           "reg": reg_winner(res.get("away_periods"), res.get("home_periods")) if sport == "nhl" else None,
+                           "reg_total": reg_total(res.get("away_periods"), res.get("home_periods")) if sport == "nhl" else None},
             })
     closed.sort(key=lambda g: g["t"], reverse=True)
     return closed[:MAX_CLOSED]
@@ -411,7 +412,8 @@ def team_ctx(ctx, side, k):
     return v or ""
 
 
-LIVE_STRATS = ["model1", "model1_us", "model1_us_tw", "model1_sp_us", "model1_ou_us", "model1_all_us", "model2", "combo", "favorite", "underdog"]
+LIVE_STRATS = ["model1", "model1_us", "model1_us_tw", "model1_sp_us", "model1_sp_tw", "model1_ou_us", "model1_ou_tw",
+               "model1_all_us", "model1_all_tw", "model2", "combo", "favorite", "underdog"]
 
 
 def live_summary():
@@ -435,6 +437,10 @@ def live_summary():
                      "value": agg([r for r in rs if num(r["ev"]) is not None and num(r["ev"]) > 0])}
     m1 = [r for r in rows if r["strategy"] == "model1"]
     tw_of = {r["game_id"]: r["tw_odds"] for r in rows if r["strategy"] == "model1_us_tw"}
+    # 同一注改去台彩下的結果（跟每一注明細放在一起看）：[台彩賠率, 來源, 結果, 賺賠]
+    twin = lambda strat: {r["game_id"]: [num(r["settle_odds"]) or num(r["tw_odds"]), r["tw_src"], r["result"], num(r["profit"])]
+                          for r in rows if r["strategy"] == strat}
+    tw_us, tw_all = twin("model1_us_tw"), twin("model1_all_tw")
     settled = sorted([r for r in m1 if r["result"] in ("win", "loss", "push")], key=lambda r: r["game_time_utc"], reverse=True)
     pend = [r for r in m1 if not r["result"]]
     slim = lambda r: {"sport": r["sport"], "t": r["game_time_utc"], "away": r["away_zh"] or r["away"], "home": r["home_zh"] or r["home"],
@@ -446,10 +452,10 @@ def live_summary():
     return {"since": min((r["game_time_utc"] for r in m1), default=None), "strats": strats, "pending": len(pend),
             "recent": [slim(r) for r in settled[:30]], "series": series,
             # 模型一・美國賠率：每一注（含還沒開賽的），新的在前
-            "us_bets": [{**slim(r), "us": num(r["us_odds"]), "tw_est": num(tw_of.get(r["game_id"]))}
+            "us_bets": [{**slim(r), "us": num(r["us_odds"]), "tw_est": num(tw_of.get(r["game_id"])), "twr": tw_us.get(r["game_id"])}
                         for r in sorted([r for r in rows if r["strategy"] == "model1_us"], key=lambda r: r["game_time_utc"], reverse=True)],
             # 不限獨贏：每一注
-            "all_bets": [{**slim(r), "us": num(r["us_odds"])}
+            "all_bets": [{**slim(r), "us": num(r["us_odds"]), "twr": tw_all.get(r["game_id"])}
                          for r in sorted([r for r in rows if r["strategy"] == "model1_all_us"], key=lambda r: r["game_time_utc"], reverse=True)]}
 
 
@@ -504,7 +510,8 @@ def build(now):
                 "result": None if not res or res["status"] != "final" else {
                     "away": num(res["away_score"]), "home": num(res["home_score"]),
                     "winner": res["winner"], "margin": num(res["margin"]), "total": num(res["total_points"]),
-                    "reg": reg_winner(res.get("away_periods"), res.get("home_periods")) if sport == "nhl" else None},
+                    "reg": reg_winner(res.get("away_periods"), res.get("home_periods")) if sport == "nhl" else None,
+                    "reg_total": reg_total(res.get("away_periods"), res.get("home_periods")) if sport == "nhl" else None},
                 "ctx": None if not ctx else {
                     "venue": ctx["venue"], "indoor": ctx["indoor"] == "True",
                     "temp_f": num(ctx["temp_f"]), "wind_mph": num(ctx["wind_mph"]),

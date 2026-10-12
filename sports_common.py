@@ -280,6 +280,18 @@ def nhl_reg_over(p_over_full, line):
     return p_over_full - NHL_TIE_AT.get(k // 2, 0.0) if k % 2 == 0 else p_over_full
 
 
+def reg_total(away_periods, home_periods):
+    """各節比分 → 60 分鐘（前三節）的總分；沒有各節比分回傳 None（台彩冰球大小分只算 60 分鐘）"""
+    try:
+        a = [float(x) for x in str(away_periods).replace("|", "-").split("-") if x != ""]
+        h = [float(x) for x in str(home_periods).replace("|", "-").split("-") if x != ""]
+    except ValueError:
+        return None
+    if len(a) < 3 or len(h) < 3:
+        return None
+    return sum(a[:3]) + sum(h[:3])
+
+
 def reg_winner(away_periods, home_periods):
     """各節比分（例如 1-0-2-1）→ 60 分鐘結果 away/home/tie；沒有各節比分回傳 None"""
     try:

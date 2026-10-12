@@ -16,6 +16,9 @@
 - model1_us_tw 跟 model1_us 押同一邊，但改用台彩賠率結算（冰球台彩算 60 分鐘、和局算輸）：看「照美國賠率的建議去台彩下」會不會賺
   （ev 欄記的是美國賠率的期望值，所以「只下划算的」＝美國划算的那幾注改去台彩下）
 - model1_sp_us／model1_ou_us 只下讓分／只下大小分：每場押那個玩法裡美國賠率期望值比較高的一邊（拿來比較三種玩法）
+- model1_sp_tw／model1_ou_tw／model1_all_tw：跟對應的 _us 押同一注，改用台彩賠率結算（估的，有記錄用實際的）。
+  冰球台彩只算 60 分鐘：獨贏打平算輸、大小分用前三節總分；台彩冰球讓分是三選一，跟美國 ±1.5 不能比，不下（void）。
+  ev 欄記的是美國賠率的期望值（「只下划算的」＝美國划算的那幾注改去台彩下）
 - model1_all_us 不限獨贏：獨贏、讓分、大小分裡挑「美國賠率期望值最高」的那一注，用美國賠率結算
   （獨贏勝率用模型一；讓分、大小分用 Pinnacle 去抽水的機率，沒有 Pinnacle 就用美國共識賠率去抽水）。pick 欄寫成「玩法|邊|盤口」，例如 sp|home|-1.5
 每場都當作押 1 單位；profit＝賺賠（贏：賠率−1，輸：−1，平手退款：0）。
@@ -31,7 +34,7 @@ from datetime import datetime, timedelta, timezone
 
 import build_dashboard as B
 import record_tw_odds
-from sports_common import parse_time, read_rows, sport_dir
+from sports_common import nhl_reg_over, parse_time, read_rows, sport_dir
 
 FIELDS = ["sport", "league", "game_id", "game_time_utc", "away", "home", "away_zh", "home_zh", "strategy", "pick", "pick_zh",
           "p", "mkt_p", "us_odds", "tw_odds", "tw_src", "ev", "hours_before", "updated_utc",
@@ -185,6 +188,51 @@ def best_all(g, p_ml=None, only=None):
             "tw": o["us"], "src": "us", "ev": o["ev"]}
 
 
+TW_TWINS = {"model1_sp_us": "model1_sp_tw", "model1_ou_us": "model1_ou_tw", "model1_all_us": "model1_all_tw"}
+NHL_OU_MARGIN = 0.15   # 台彩冰球大小抽成（跟 alerts.py 一樣）
+
+
+def tw_price(g, tw, pick):
+    """「玩法|邊|盤口」這一注在台彩大約是多少賠率 → (賠率, 來源)；台彩不能下回傳 None"""
+    mkt, key, ln = (pick.split("|") + ["", "", ""])[:3]
+    line = float(ln) if ln not in ("", None) else None
+    pre = [x for x in (g.get("snaps") or []) if x.get("hrs") is None or x["hrs"] >= 0]
+    snap = next((x for x in reversed(pre) if x.get(mkt)), None)
+    if not snap:
+        return None
+    import alerts
+    ss = alerts.us_sides(g, snap, mkt)
+    if not ss or any(not o or o <= 1 for _, o, _ in ss):
+        return None
+    rec = ((g.get("tw") or {}).get(mkt) or {}).get(key)
+    if rec and rec[0] and (mkt == "ml" or rec[1] is None or rec[1] == line):
+        return rec[0], "actual"
+    us = next(o for k, o, _ in ss if k == key)
+    if g["sport"] == "nhl":
+        inv = {k: 1 / o for k, o, _ in ss}
+        fair = {k: v / sum(inv.values()) for k, v in inv.items()}
+        if mkt == "sp":
+            return None          # 台彩冰球讓分是三選一，跟美國 ±1.5 不能比
+        if mkt == "ml":
+            ou = snap.get("ou") or []
+            q3 = B.nhl_reg3(fair["home"], ou[4] if len(ou) > 4 else None)[2 if key == "home" else 0]
+            return round(1 / (q3 * (1 + B.NHL3_MARGIN)), 3), "est"
+        pp = nhl_reg_over(fair["over"], line) if key == "over" else 1 - nhl_reg_over(1 - fair["under"], line)
+        return round(1 / (pp * (1 + NHL_OU_MARGIN)), 3), "est"
+    return round(us * (1 + discount(tw, g["sport"], mkt) / 100), 3), "est"
+
+
+def twin_row(r, g, tw):
+    """把 _us 那一筆複製成「改去台彩下」的一筆；台彩不能下就記 void"""
+    tp = tw_price(g, tw, r["pick"])
+    row = {**r, "strategy": TW_TWINS[r["strategy"]], "result": "", "settle_odds": "", "settle_src": "", "profit": ""}
+    if tp:
+        row["tw_odds"], row["tw_src"] = tp
+    else:
+        row["tw_odds"], row["tw_src"] = "", "none"
+    return row
+
+
 def picks(g, tw):
     opts, snap = tw_opts(g, tw)
     if not opts:
@@ -210,6 +258,32 @@ def settle(row, g):
     """回傳 (result, 結算賠率, 賠率來源, 賺賠)"""
     res = g["result"]
     w, pick = res.get("winner"), row["pick"]
+    if row["strategy"] in TW_TWINS.values():   # 改去台彩下：冰球只算 60 分鐘；台彩不能下的記 void
+        if row.get("tw_src") == "none" or not row.get("tw_odds"):
+            return "void", "", "", 0.0
+        mkt, key, ln = (pick.split("|") + ["", "", ""])[:3]
+        odds, src = float(row["tw_odds"]), row["tw_src"] or "est"
+        nhl = g["sport"] == "nhl"
+        if mkt == "ml":
+            wr = res.get("reg") if nhl else w
+            if wr is None:
+                return "void", "", "", 0.0
+            if wr == "tie" and not nhl:
+                return "push", odds, src, 0.0
+            v = 1 if wr == key else -1          # 冰球 60 分鐘打平＝押哪隊都輸
+        else:
+            a, h, ln = float(res["away"]), float(res["home"]), float(ln)
+            if mkt == "sp":
+                d = (a - h if key == "away" else h - a) + ln
+            else:
+                tot = res.get("reg_total") if nhl else a + h
+                if tot is None:
+                    return "void", "", "", 0.0
+                d = (tot - ln) if key == "over" else (ln - tot)
+            v = (d > 0) - (d < 0)
+        if v == 0:
+            return "push", odds, src, 0.0
+        return ("win" if v > 0 else "loss"), odds, src, round(odds - 1, 4) if v > 0 else -1.0
     if row["strategy"] in ("model1_all_us", "model1_sp_us", "model1_ou_us"):   # 不限獨贏：pick＝玩法|邊|盤口，美國賠率、含延長賽
         mkt, key, ln = (pick.split("|") + ["", "", ""])[:3]
         odds = float(row["tw_odds"])
@@ -284,6 +358,8 @@ def run(sports, now=None):
                            "result": "", "settle_odds": "", "settle_src": "", "profit": ""}
                 n_upd += bool(old)
                 n_new += not old
+                if strat in TW_TWINS:   # 同一注改去台彩下
+                    rows[(g["id"], TW_TWINS[strat])] = twin_row(rows[k], g, tw)
         # 補記：以前只有 model1_us 的比賽，照它押的那一邊補一筆「改用台彩下」
         for (gid, strat), r in list(rows.items()):
             if strat != "model1_us" or (gid, "model1_us_tw") in rows:
@@ -321,6 +397,14 @@ def run(sports, now=None):
                                       "p": round(ba["p"], 4), "mkt_p": round(ba["m"], 4), "us_odds": ba["us"],
                                       "tw_odds": ba["tw"], "tw_src": "us", "ev": round(ba["ev"], 4),
                                       "result": "", "settle_odds": "", "settle_src": "", "profit": ""}
+                n_new += 1
+        # 補記：已經有 _us、還沒有「台彩下」那一筆的比賽
+        for (gid, strat), r in list(rows.items()):
+            if strat not in TW_TWINS or (gid, TW_TWINS[strat]) in rows:
+                continue
+            g = finals.get((sport, gid)) or next((x for x in games if x["id"] == gid), None)
+            if g:
+                rows[(gid, TW_TWINS[strat])] = twin_row(r, g, tw)
                 n_new += 1
         for k, r in rows.items():
             if r.get("result"):
