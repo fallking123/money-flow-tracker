@@ -1,0 +1,36 @@
+name: Pro model data (Retrosheet, MoneyPuck)
+
+# 職業版第 2 階段的資料：只在需要時手動跑（或改 pro/fetch_us.py 推上來時跑）
+on:
+  workflow_dispatch: {}
+  push:
+    paths:
+      - pro/fetch_us.py
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install requests==2.32.3
+      - name: Download and summarize
+        run: python -m pro.fetch_us mlb nhl
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/pro/mlb docs/data/pro/nhl
+          if git diff --cached --quiet; then echo "沒有新資料"; exit 0; fi
+          git commit -m "職業版：MLB／NHL 歷史資料"
+          for i in 1 2 3 4 5; do
+            git pull --rebase && git push && exit 0
+            sleep 15
+          done
+          exit 1
