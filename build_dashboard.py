@@ -443,12 +443,12 @@ def live_summary():
     tw_us, tw_all = twin("model1_us_tw"), twin("model1_all_tw")
     settled = sorted([r for r in m1 if r["result"] in ("win", "loss", "push")], key=lambda r: r["game_time_utc"], reverse=True)
     pend = [r for r in m1 if not r["result"]]
-    slim = lambda r: {"sport": r["sport"], "t": r["game_time_utc"], "away": r["away_zh"] or r["away"], "home": r["home_zh"] or r["home"],
+    slim = lambda r: {"sport": r["sport"], "lg": r.get("league") or r["sport"], "t": r["game_time_utc"], "away": r["away_zh"] or r["away"], "home": r["home_zh"] or r["home"],
                       "pick": r["pick_zh"], "p": num(r["p"]), "tw": num(r["settle_odds"]) or num(r["tw_odds"]),
                       "src": r["settle_src"] or r["tw_src"], "ev": num(r["ev"]), "result": r["result"], "profit": num(r["profit"])}
     # 每一筆開獎的注（畫獲利曲線、算凱利用）：[時間, 策略, 運動, 結算賠率, 開賽前勝率, 開賽前期望值, 賺賠(每 1 單位)]
     series = sorted([[r["game_time_utc"], r["strategy"], r["sport"], num(r["settle_odds"]) or num(r["tw_odds"]), num(r["p"]), num(r["ev"]),
-                      num(r["profit"])] for r in rows if r["result"] in ("win", "loss", "push")], key=lambda x: x[0])
+                      num(r["profit"]), r.get("league") or r["sport"], int(r["settle_src"] == "actual")] for r in rows if r["result"] in ("win", "loss", "push")], key=lambda x: x[0])
     return {"since": min((r["game_time_utc"] for r in m1), default=None), "strats": strats, "pending": len(pend),
             "recent": [slim(r) for r in settled[:30]], "series": series,
             # 模型一・美國賠率：每一注（含還沒開賽的），新的在前
