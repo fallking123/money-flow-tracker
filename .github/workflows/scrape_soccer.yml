@@ -27,15 +27,25 @@ jobs:
           python-version: "3.11"
       - name: Install dependencies
         run: pip install requests==2.32.3
+      - name: Skip if the resident worker is running
+        id: alive
+        if: github.event_name == 'schedule'
+        run: |
+          if python resident.py --alive; then echo "skip=true" >> "$GITHUB_OUTPUT"; echo "常駐工作在跑，這次跳過"; fi
       - name: Run soccer scraper
+        if: steps.alive.outputs.skip != 'true'
         run: python scrape_soccer.py
       - name: Pinnacle lines (Europe / Asia sharp money)
+        if: steps.alive.outputs.skip != 'true'
         run: python scrape_pinnacle.py soccer || echo "Pinnacle 抓取失敗，不影響主資料"
       - name: Track model picks (every game, settle with 台彩 odds)
+        if: steps.alive.outputs.skip != 'true'
         run: python track_models.py soccer || echo "模型實戰記錄失敗，不影響主資料"
       - name: Value bet alerts (台彩 or US odds EV >= +2%)
+        if: steps.alive.outputs.skip != 'true'
         run: python alerts.py soccer || echo "划算注提醒失敗，不影響主資料"
       - name: Commit and push
+        if: steps.alive.outputs.skip != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

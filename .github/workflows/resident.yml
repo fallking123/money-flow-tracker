@@ -1,0 +1,33 @@
+name: Resident worker (always-on, self-timed)
+
+# 常駐工作：自己看時鐘抓資料（每 10 分鐘美國四大、每小時 :25 足球、每場開賽前 5 分鐘截圖）。
+# GitHub 排程不準時，所以不靠它在對的時間醒來：這裡每小時排一次只是「排隊接棒」——
+# 同一時間只有一個在跑、一個在排隊；跑的那個 5 小時 40 分後結束，排隊的馬上接手。
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "7 * * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: resident
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install requests==2.32.3
+      - name: Run (about 5h40m, then hand over)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          python resident.py

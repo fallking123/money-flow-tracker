@@ -26,9 +26,16 @@ jobs:
           python-version: "3.11"
       - name: Install dependencies
         run: pip install requests==2.32.3
+      - name: Skip if the resident worker is running
+        id: alive
+        if: github.event_name == 'schedule'
+        run: |
+          if python resident.py --alive; then echo "skip=true" >> "$GITHUB_OUTPUT"; echo "常駐工作在跑，這次跳過"; fi
       - name: Wait and take the 5-minutes-before snapshot
+        if: steps.alive.outputs.skip != 'true'
         run: python scrape_odds.py --final
       - name: Commit and push
+        if: steps.alive.outputs.skip != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

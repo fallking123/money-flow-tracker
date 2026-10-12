@@ -456,6 +456,73 @@ def run_final():
     print(f"這次共截了 {wrote} 場開賽前 {FINAL_LEAD_MIN} 分鐘的快照")
 
 
+# ═════════ 給常駐工作（resident.py）用：不等待，只回傳／只截「現在該截」的 ═════════
+def final_load_done():
+    if os.path.exists(FINAL_STATE):
+        with open(FINAL_STATE, encoding="utf-8") as f:
+            return json.load(f)
+    return {}
+
+
+def final_save_done(done):
+    cutoff = datetime.now(timezone.utc) - timedelta(days=3)
+    done = {k: v for k, v in done.items() if parse_time(v) > cutoff}
+    os.makedirs(STATE_DIR, exist_ok=True)
+    with open(FINAL_STATE, "w", encoding="utf-8") as f:
+        json.dump(done, f, ensure_ascii=False, indent=0)
+    return done
+
+
+def final_targets(now, done, lookahead_min=180):
+    """接下來 lookahead_min 分鐘內要開打、還沒截過的比賽：[(開賽時間, 運動, 比賽編號)]"""
+    out = []
+    for sport in active_sports():
+        try:
+            games = fetch_direct(sport)
+        except Exception as e:
+            print(f"  {sport}: 讀取賽程失敗 {e}")
+            continue
+        for g in games:
+            if g.get("status") != "not_started" or g["id"] in done:
+                continue
+            t = parse_time(g["scheduled"])
+            if timedelta(0) < t - now <= timedelta(minutes=lookahead_min):
+                out.append((t, sport, g["id"]))
+    return sorted(out)
+
+
+def final_capture(batch, done):
+    """batch：[(開賽時間, 運動, 比賽編號)]，現在就截（重新抓最新的；已經開打的跳過）。回傳截了幾場"""
+    now = datetime.now(timezone.utc)
+    wrote = 0
+    for sport in sorted({b[1] for b in batch}):
+        ids = {b[2] for b in batch if b[1] == sport}
+        try:
+            games = fetch_direct(sport)
+        except Exception as e:
+            print(f"  {sport}: 讀取失敗 {e}")
+            continue
+        due = [g for g in games if g["id"] in ids and g.get("status") == "not_started" and parse_time(g["scheduled"]) > now]
+        events = []
+        try:
+            events = espn_events(sport, now - timedelta(days=1), now + timedelta(days=2))
+        except Exception:
+            pass
+        rows = []
+        for g in due:
+            ev = match_event(g, events, college=is_college(sport)) if events else None
+            row, _ = build_rows(sport, g, now, ev)
+            rows.append(row)
+            done[g["id"]] = now.isoformat()
+        if rows:
+            append_rows(final_path(sport, now), HISTORY_FIELDS, rows)
+            wrote += len(rows)
+            print(f"  {SPORTS[sport]['name']}: 開賽前截了 {len(rows)} 場（{now:%H:%M:%S}Z）")
+    for b in batch:                       # 已經開打或找不到的，也標記處理過，不要一直重試
+        done.setdefault(b[2], now.isoformat())
+    return wrote
+
+
 if __name__ == "__main__":
     if "--final" in sys.argv:
         run_final()
