@@ -1,241 +1,337 @@
 sport,league,game_id,game_time_utc,away,home,away_zh,home_zh,strategy,pick,pick_zh,p,mkt_p,us_odds,tw_odds,tw_src,ev,hours_before,updated_utc,result,settle_odds,settle_src,profit
+soccer,bundesliga,an293122,2026-10-09T18:30Z,Werder Bremen,Borussia Dortmund,不萊梅,多特蒙德,draw,draw,和局,0.1775,0.1775,5.27,4.77,est,-0.1533,0.87,2026-10-09T17:37Z,win,4.77,est,3.77
+soccer,bundesliga,an293122,2026-10-09T18:30Z,Werder Bremen,Borussia Dortmund,不萊梅,多特蒙德,draw_us,draw,和局,0.1775,0.1775,5.27,5.27,us,-0.0645,0.87,2026-10-09T17:37Z,win,5.27,us,4.27
 soccer,bundesliga,an293122,2026-10-09T18:30Z,Werder Bremen,Borussia Dortmund,不萊梅,多特蒙德,favorite,home,多特蒙德,0.7167,0.7026,1.3333,1.207,est,-0.1349,0.87,2026-10-09T17:37Z,loss,1.207,est,-1.0
 soccer,bundesliga,an293122,2026-10-09T18:30Z,Werder Bremen,Borussia Dortmund,不萊梅,多特蒙德,model1,home,多特蒙德,0.7167,0.7026,1.3333,1.207,est,-0.1349,0.87,2026-10-09T17:37Z,loss,1.207,est,-1.0
 soccer,bundesliga,an293122,2026-10-09T18:30Z,Werder Bremen,Borussia Dortmund,不萊梅,多特蒙德,model1_us,home,多特蒙德,0.7167,0.7026,1.3333,1.3333,us,-0.0444,0.87,2026-10-09T17:37Z,loss,1.3333,us,-1.0
 soccer,bundesliga,an293122,2026-10-09T18:30Z,Werder Bremen,Borussia Dortmund,不萊梅,多特蒙德,model1_us_tw,home,多特蒙德,0.7167,0.7026,1.3333,1.207,est,-0.0444,0.87,2026-10-09T17:37Z,loss,1.207,est,-1.0
 soccer,bundesliga,an293122,2026-10-09T18:30Z,Werder Bremen,Borussia Dortmund,不萊梅,多特蒙德,underdog,away,不萊梅,0.1043,0.1172,7.74,7.006,est,-0.2693,0.87,2026-10-09T17:37Z,loss,7.006,est,-1.0
+soccer,ligue1,an293001,2026-10-09T18:45Z,Lyon,Lens,里昂,朗斯,draw,draw,和局,0.2619,0.2619,3.6,3.258,est,-0.1468,0.04,2026-10-09T18:42Z,loss,3.258,est,-1.0
+soccer,ligue1,an293001,2026-10-09T18:45Z,Lyon,Lens,里昂,朗斯,draw_us,draw,和局,0.2619,0.2619,3.6,3.6,us,-0.0572,0.04,2026-10-09T18:42Z,loss,3.6,us,-1.0
 soccer,ligue1,an293001,2026-10-09T18:45Z,Lyon,Lens,里昂,朗斯,favorite,home,朗斯,0.3587,0.3685,2.52,2.281,est,-0.1818,0.04,2026-10-09T18:42Z,win,2.281,est,1.281
 soccer,ligue1,an293001,2026-10-09T18:45Z,Lyon,Lens,里昂,朗斯,model1,away,里昂,0.3733,0.3685,2.59,2.344,est,-0.125,0.04,2026-10-09T18:42Z,loss,2.344,est,-1.0
 soccer,ligue1,an293001,2026-10-09T18:45Z,Lyon,Lens,里昂,朗斯,model1_us,away,里昂,0.3733,0.3685,2.59,2.59,us,-0.0332,0.04,2026-10-09T18:42Z,loss,2.59,us,-1.0
 soccer,ligue1,an293001,2026-10-09T18:45Z,Lyon,Lens,里昂,朗斯,model1_us_tw,away,里昂,0.3733,0.3685,2.59,2.344,est,-0.0332,0.04,2026-10-09T18:42Z,loss,2.344,est,-1.0
 soccer,ligue1,an293001,2026-10-09T18:45Z,Lyon,Lens,里昂,朗斯,underdog,home,朗斯,0.3587,0.3685,2.52,2.281,est,-0.1818,0.04,2026-10-09T18:42Z,win,2.281,est,1.281
+soccer,laliga,an293049,2026-10-09T19:00Z,Espanyol,Malaga CF,西班牙人,馬拉加,draw,draw,和局,0.2953,0.2953,3.2,2.896,est,-0.1447,0.29,2026-10-09T18:42Z,win,2.896,est,1.896
+soccer,laliga,an293049,2026-10-09T19:00Z,Espanyol,Malaga CF,西班牙人,馬拉加,draw_us,draw,和局,0.2953,0.2953,3.2,3.2,us,-0.0549,0.29,2026-10-09T18:42Z,win,3.2,us,2.2
 soccer,laliga,an293049,2026-10-09T19:00Z,Espanyol,Malaga CF,西班牙人,馬拉加,favorite,away,西班牙人,0.3745,0.3675,2.6,2.353,est,-0.1188,0.29,2026-10-09T18:42Z,loss,2.353,est,-1.0
 soccer,laliga,an293049,2026-10-09T19:00Z,Espanyol,Malaga CF,西班牙人,馬拉加,model1,draw,和局,0.3054,0.2978,3.2,2.896,est,-0.1156,0.29,2026-10-09T18:42Z,win,2.896,est,1.896
 soccer,laliga,an293049,2026-10-09T19:00Z,Espanyol,Malaga CF,西班牙人,馬拉加,model1_us,draw,和局,0.3054,0.2978,3.2,3.2,us,-0.0227,0.29,2026-10-09T18:42Z,win,3.2,us,2.2
 soccer,laliga,an293049,2026-10-09T19:00Z,Espanyol,Malaga CF,西班牙人,馬拉加,model1_us_tw,draw,和局,0.3054,0.2978,3.2,2.896,est,-0.0227,0.29,2026-10-09T18:42Z,win,2.896,est,1.896
 soccer,laliga,an293049,2026-10-09T19:00Z,Espanyol,Malaga CF,西班牙人,馬拉加,underdog,home,馬拉加,0.32,0.3347,2.77,2.507,est,-0.1978,0.29,2026-10-09T18:42Z,loss,2.507,est,-1.0
+soccer,epl,an292983,2026-10-10T11:30Z,Leeds United,Arsenal,里茲聯,兵工廠,draw,draw,和局,0.2051,0.2051,4.6,4.164,est,-0.146,0.88,2026-10-10T10:37Z,loss,4.164,est,-1.0
+soccer,epl,an292983,2026-10-10T11:30Z,Leeds United,Arsenal,里茲聯,兵工廠,draw_us,draw,和局,0.2051,0.2051,4.6,4.6,us,-0.0566,0.88,2026-10-10T10:37Z,loss,4.6,us,-1.0
 soccer,epl,an292983,2026-10-10T11:30Z,Leeds United,Arsenal,里茲聯,兵工廠,favorite,home,兵工廠,0.6921,0.6715,1.4082,1.275,est,-0.1176,0.88,2026-10-10T10:37Z,win,1.275,est,0.275
 soccer,epl,an292983,2026-10-10T11:30Z,Leeds United,Arsenal,里茲聯,兵工廠,model1,home,兵工廠,0.6921,0.6715,1.4082,1.275,est,-0.1176,0.88,2026-10-10T10:37Z,win,1.275,est,0.275
 soccer,epl,an292983,2026-10-10T11:30Z,Leeds United,Arsenal,里茲聯,兵工廠,model1_us,home,兵工廠,0.6921,0.6715,1.4082,1.4082,us,-0.0254,0.88,2026-10-10T10:37Z,win,1.4082,us,0.4082
 soccer,epl,an292983,2026-10-10T11:30Z,Leeds United,Arsenal,里茲聯,兵工廠,model1_us_tw,home,兵工廠,0.6921,0.6715,1.4082,1.275,est,-0.0254,0.88,2026-10-10T10:37Z,win,1.275,est,0.275
 soccer,epl,an292983,2026-10-10T11:30Z,Leeds United,Arsenal,里茲聯,兵工廠,underdog,away,里茲聯,0.1041,0.1193,7.55,6.834,est,-0.2886,0.88,2026-10-10T10:37Z,loss,6.834,est,-1.0
+soccer,laliga,an293047,2026-10-10T12:00Z,Athletic Bilbao,Rayo Vallecano,畢爾包,巴列卡諾,draw,draw,和局,0.2965,0.2965,3.17,2.869,est,-0.1493,0.39,2026-10-10T11:36Z,,,,
+soccer,laliga,an293047,2026-10-10T12:00Z,Athletic Bilbao,Rayo Vallecano,畢爾包,巴列卡諾,draw_us,draw,和局,0.2965,0.2965,3.17,3.17,us,-0.0601,0.39,2026-10-10T11:36Z,,,,
 soccer,laliga,an293047,2026-10-10T12:00Z,Athletic Bilbao,Rayo Vallecano,畢爾包,巴列卡諾,favorite,away,畢爾包,0.3885,0.3727,2.5,2.263,est,-0.1208,0.39,2026-10-10T11:36Z,,,,
 soccer,laliga,an293047,2026-10-10T12:00Z,Athletic Bilbao,Rayo Vallecano,畢爾包,巴列卡諾,model1,draw,和局,0.3167,0.3021,3.17,2.869,est,-0.0914,0.39,2026-10-10T11:36Z,,,,
 soccer,laliga,an293047,2026-10-10T12:00Z,Athletic Bilbao,Rayo Vallecano,畢爾包,巴列卡諾,model1_us,draw,和局,0.3167,0.3021,3.17,3.17,us,0.0039,0.39,2026-10-10T11:36Z,,,,
 soccer,laliga,an293047,2026-10-10T12:00Z,Athletic Bilbao,Rayo Vallecano,畢爾包,巴列卡諾,model1_us_tw,draw,和局,0.3167,0.3021,3.17,2.869,est,0.0039,0.39,2026-10-10T11:36Z,,,,
 soccer,laliga,an293047,2026-10-10T12:00Z,Athletic Bilbao,Rayo Vallecano,畢爾包,巴列卡諾,underdog,home,巴列卡諾,0.2948,0.3253,2.87,2.598,est,-0.2341,0.39,2026-10-10T11:36Z,,,,
+soccer,seriea,an292990,2026-10-10T13:00Z,Fiorentina,Genoa,佛羅倫斯,熱那亞,draw,draw,和局,0.2968,0.2968,3.17,2.869,est,-0.1484,0.27,2026-10-10T12:44Z,loss,2.869,est,-1.0
+soccer,seriea,an292990,2026-10-10T13:00Z,Fiorentina,Genoa,佛羅倫斯,熱那亞,draw_us,draw,和局,0.2968,0.2968,3.17,3.17,us,-0.059,0.27,2026-10-10T12:44Z,loss,3.17,us,-1.0
 soccer,seriea,an292990,2026-10-10T13:00Z,Fiorentina,Genoa,佛羅倫斯,熱那亞,favorite,away,佛羅倫斯,0.4213,0.4069,2.3,2.082,est,-0.1229,0.27,2026-10-10T12:44Z,loss,2.082,est,-1.0
 soccer,seriea,an292990,2026-10-10T13:00Z,Fiorentina,Genoa,佛羅倫斯,熱那亞,model1,draw,和局,0.3087,0.3002,3.17,2.869,est,-0.1143,0.27,2026-10-10T12:44Z,loss,2.869,est,-1.0
 soccer,seriea,an292990,2026-10-10T13:00Z,Fiorentina,Genoa,佛羅倫斯,熱那亞,model1_us,draw,和局,0.3087,0.3002,3.17,3.17,us,-0.0214,0.27,2026-10-10T12:44Z,loss,3.17,us,-1.0
 soccer,seriea,an292990,2026-10-10T13:00Z,Fiorentina,Genoa,佛羅倫斯,熱那亞,model1_us_tw,draw,和局,0.3087,0.3002,3.17,2.869,est,-0.0214,0.27,2026-10-10T12:44Z,loss,2.869,est,-1.0
 soccer,seriea,an292990,2026-10-10T13:00Z,Fiorentina,Genoa,佛羅倫斯,熱那亞,underdog,home,熱那亞,0.27,0.2929,3.2,2.896,est,-0.2181,0.27,2026-10-10T12:44Z,win,2.896,est,1.896
+soccer,bundesliga,an293114,2026-10-10T13:30Z,VfB Stuttgart,Paderborn,斯圖加特,帕德博恩,draw,draw,和局,0.2078,0.2078,4.5,4.073,est,-0.1538,0.77,2026-10-10T12:44Z,loss,4.073,est,-1.0
+soccer,bundesliga,an293114,2026-10-10T13:30Z,VfB Stuttgart,Paderborn,斯圖加特,帕德博恩,draw_us,draw,和局,0.2078,0.2078,4.5,4.5,us,-0.0651,0.77,2026-10-10T12:44Z,loss,4.5,us,-1.0
 soccer,bundesliga,an293114,2026-10-10T13:30Z,VfB Stuttgart,Paderborn,斯圖加特,帕德博恩,favorite,away,斯圖加特,0.6208,0.5863,1.5814,1.431,est,-0.1116,0.77,2026-10-10T12:44Z,win,1.431,est,0.431
 soccer,bundesliga,an293114,2026-10-10T13:30Z,VfB Stuttgart,Paderborn,斯圖加特,帕德博恩,model1,away,斯圖加特,0.6208,0.5863,1.5814,1.431,est,-0.1116,0.77,2026-10-10T12:44Z,win,1.431,est,0.431
 soccer,bundesliga,an293114,2026-10-10T13:30Z,VfB Stuttgart,Paderborn,斯圖加特,帕德博恩,model1_us,away,斯圖加特,0.6208,0.5863,1.5814,1.5814,us,-0.0183,0.77,2026-10-10T12:44Z,win,1.5814,us,0.5814
 soccer,bundesliga,an293114,2026-10-10T13:30Z,VfB Stuttgart,Paderborn,斯圖加特,帕德博恩,model1_us_tw,away,斯圖加特,0.6208,0.5863,1.5814,1.431,est,-0.0183,0.77,2026-10-10T12:44Z,win,1.431,est,0.431
 soccer,bundesliga,an293114,2026-10-10T13:30Z,VfB Stuttgart,Paderborn,斯圖加特,帕德博恩,underdog,home,帕德博恩,0.1791,0.2112,4.65,4.209,est,-0.2462,0.77,2026-10-10T12:44Z,loss,4.209,est,-1.0
+soccer,bundesliga,an293116,2026-10-10T13:30Z,Elversberg,Union Berlin,埃爾弗斯貝格,柏林聯,draw,draw,和局,0.267,0.267,3.5,3.168,est,-0.1541,0.77,2026-10-10T12:44Z,loss,3.168,est,-1.0
+soccer,bundesliga,an293116,2026-10-10T13:30Z,Elversberg,Union Berlin,埃爾弗斯貝格,柏林聯,draw_us,draw,和局,0.267,0.267,3.5,3.5,us,-0.0654,0.77,2026-10-10T12:44Z,loss,3.5,us,-1.0
 soccer,bundesliga,an293116,2026-10-10T13:30Z,Elversberg,Union Berlin,埃爾弗斯貝格,柏林聯,favorite,home,柏林聯,0.3645,0.3772,2.4,2.172,est,-0.2083,0.77,2026-10-10T12:44Z,win,2.172,est,1.172
 soccer,bundesliga,an293116,2026-10-10T13:30Z,Elversberg,Union Berlin,埃爾弗斯貝格,柏林聯,model1,away,埃爾弗斯貝格,0.3593,0.3539,2.72,2.462,est,-0.1154,0.77,2026-10-10T12:44Z,loss,2.462,est,-1.0
 soccer,bundesliga,an293116,2026-10-10T13:30Z,Elversberg,Union Berlin,埃爾弗斯貝格,柏林聯,model1_us,away,埃爾弗斯貝格,0.3593,0.3539,2.72,2.72,us,-0.0227,0.77,2026-10-10T12:44Z,loss,2.72,us,-1.0
 soccer,bundesliga,an293116,2026-10-10T13:30Z,Elversberg,Union Berlin,埃爾弗斯貝格,柏林聯,model1_us_tw,away,埃爾弗斯貝格,0.3593,0.3539,2.72,2.462,est,-0.0227,0.77,2026-10-10T12:44Z,loss,2.462,est,-1.0
 soccer,bundesliga,an293116,2026-10-10T13:30Z,Elversberg,Union Berlin,埃爾弗斯貝格,柏林聯,underdog,away,埃爾弗斯貝格,0.3593,0.3539,2.72,2.462,est,-0.1154,0.77,2026-10-10T12:44Z,loss,2.462,est,-1.0
+soccer,bundesliga,an293117,2026-10-10T13:30Z,Bayer Leverkusen,Mainz 05,勒沃庫森,美因茲,draw,draw,和局,0.2581,0.2581,3.6,3.258,est,-0.1591,0.77,2026-10-10T12:44Z,loss,3.258,est,-1.0
+soccer,bundesliga,an293117,2026-10-10T13:30Z,Bayer Leverkusen,Mainz 05,勒沃庫森,美因茲,draw_us,draw,和局,0.2581,0.2581,3.6,3.6,us,-0.0708,0.77,2026-10-10T12:44Z,loss,3.6,us,-1.0
 soccer,bundesliga,an293117,2026-10-10T13:30Z,Bayer Leverkusen,Mainz 05,勒沃庫森,美因茲,favorite,away,勒沃庫森,0.4596,0.4399,2.15,1.946,est,-0.1056,0.77,2026-10-10T12:44Z,win,1.946,est,0.946
 soccer,bundesliga,an293117,2026-10-10T13:30Z,Bayer Leverkusen,Mainz 05,勒沃庫森,美因茲,model1,away,勒沃庫森,0.4596,0.4399,2.15,1.946,est,-0.1056,0.77,2026-10-10T12:44Z,win,1.946,est,0.946
 soccer,bundesliga,an293117,2026-10-10T13:30Z,Bayer Leverkusen,Mainz 05,勒沃庫森,美因茲,model1_us,away,勒沃庫森,0.4596,0.4399,2.15,2.15,us,-0.0119,0.77,2026-10-10T12:44Z,win,2.15,us,1.15
 soccer,bundesliga,an293117,2026-10-10T13:30Z,Bayer Leverkusen,Mainz 05,勒沃庫森,美因茲,model1_us_tw,away,勒沃庫森,0.4596,0.4399,2.15,1.946,est,-0.0119,0.77,2026-10-10T12:44Z,win,1.946,est,0.946
 soccer,bundesliga,an293117,2026-10-10T13:30Z,Bayer Leverkusen,Mainz 05,勒沃庫森,美因茲,underdog,home,美因茲,0.2742,0.3001,3,2.715,est,-0.2555,0.77,2026-10-10T12:44Z,loss,2.715,est,-1.0
+soccer,bundesliga,an293118,2026-10-10T13:30Z,Bayern Munich,Augsburg,拜仁慕尼黑,奧格斯堡,draw,draw,和局,0.1174,0.1174,8,7.241,est,-0.1499,0.77,2026-10-10T12:44Z,win,7.241,est,6.241
+soccer,bundesliga,an293118,2026-10-10T13:30Z,Bayern Munich,Augsburg,拜仁慕尼黑,奧格斯堡,draw_us,draw,和局,0.1174,0.1174,8,8,us,-0.0607,0.77,2026-10-10T12:44Z,win,8.0,us,7.0
 soccer,bundesliga,an293118,2026-10-10T13:30Z,Bayern Munich,Augsburg,拜仁慕尼黑,奧格斯堡,favorite,away,拜仁慕尼黑,0.8506,0.8142,1.1859,1.073,est,-0.0873,0.77,2026-10-10T12:44Z,loss,1.073,est,-1.0
 soccer,bundesliga,an293118,2026-10-10T13:30Z,Bayern Munich,Augsburg,拜仁慕尼黑,奧格斯堡,model1,away,拜仁慕尼黑,0.8506,0.8142,1.1859,1.073,est,-0.0873,0.77,2026-10-10T12:44Z,loss,1.073,est,-1.0
 soccer,bundesliga,an293118,2026-10-10T13:30Z,Bayern Munich,Augsburg,拜仁慕尼黑,奧格斯堡,model1_us,away,拜仁慕尼黑,0.8506,0.8142,1.1859,1.1859,us,0.0087,0.77,2026-10-10T12:44Z,loss,1.1859,us,-1.0
 soccer,bundesliga,an293118,2026-10-10T13:30Z,Bayern Munich,Augsburg,拜仁慕尼黑,奧格斯堡,model1_us_tw,away,拜仁慕尼黑,0.8506,0.8142,1.1859,1.073,est,0.0087,0.77,2026-10-10T12:44Z,loss,1.073,est,-1.0
 soccer,bundesliga,an293118,2026-10-10T13:30Z,Bayern Munich,Augsburg,拜仁慕尼黑,奧格斯堡,underdog,home,奧格斯堡,0.0479,0.0718,10.37,9.386,est,-0.5504,0.77,2026-10-10T12:44Z,loss,9.386,est,-1.0
+soccer,bundesliga,an293120,2026-10-10T13:30Z,Hamburger SV,Hoffenheim,漢堡,霍芬海姆,draw,draw,和局,0.1919,0.1919,4.85,4.39,est,-0.1575,0.77,2026-10-10T12:44Z,loss,4.39,est,-1.0
+soccer,bundesliga,an293120,2026-10-10T13:30Z,Hamburger SV,Hoffenheim,漢堡,霍芬海姆,draw_us,draw,和局,0.1919,0.1919,4.85,4.85,us,-0.0692,0.77,2026-10-10T12:44Z,loss,4.85,us,-1.0
 soccer,bundesliga,an293120,2026-10-10T13:30Z,Hamburger SV,Hoffenheim,漢堡,霍芬海姆,favorite,home,霍芬海姆,0.6975,0.6674,1.4,1.267,est,-0.1163,0.77,2026-10-10T12:44Z,loss,1.267,est,-1.0
 soccer,bundesliga,an293120,2026-10-10T13:30Z,Hamburger SV,Hoffenheim,漢堡,霍芬海姆,model1,home,霍芬海姆,0.6975,0.6674,1.4,1.267,est,-0.1163,0.77,2026-10-10T12:44Z,loss,1.267,est,-1.0
 soccer,bundesliga,an293120,2026-10-10T13:30Z,Hamburger SV,Hoffenheim,漢堡,霍芬海姆,model1_us,home,霍芬海姆,0.6975,0.6674,1.4,1.4,us,-0.0235,0.77,2026-10-10T12:44Z,loss,1.4,us,-1.0
 soccer,bundesliga,an293120,2026-10-10T13:30Z,Hamburger SV,Hoffenheim,漢堡,霍芬海姆,model1_us_tw,home,霍芬海姆,0.6975,0.6674,1.4,1.267,est,-0.0235,0.77,2026-10-10T12:44Z,loss,1.267,est,-1.0
 soccer,bundesliga,an293120,2026-10-10T13:30Z,Hamburger SV,Hoffenheim,漢堡,霍芬海姆,underdog,away,漢堡,0.1253,0.1451,6.5,5.883,est,-0.2629,0.77,2026-10-10T12:44Z,win,5.883,est,4.883
+soccer,epl,an292974,2026-10-10T14:00Z,Brighton & Hove Albion,Sunderland,布萊頓,桑德蘭,draw,draw,和局,0.2849,0.2849,3.3,2.987,est,-0.1491,0.38,2026-10-10T13:37Z,loss,2.987,est,-1.0
+soccer,epl,an292974,2026-10-10T14:00Z,Brighton & Hove Albion,Sunderland,布萊頓,桑德蘭,draw_us,draw,和局,0.2849,0.2849,3.3,3.3,us,-0.0599,0.38,2026-10-10T13:37Z,loss,3.3,us,-1.0
 soccer,epl,an292974,2026-10-10T14:00Z,Brighton & Hove Albion,Sunderland,布萊頓,桑德蘭,favorite,away,布萊頓,0.4131,0.3997,2.34,2.118,est,-0.1251,0.38,2026-10-10T13:37Z,win,2.118,est,1.118
 soccer,epl,an292974,2026-10-10T14:00Z,Brighton & Hove Albion,Sunderland,布萊頓,桑德蘭,model1,away,布萊頓,0.4131,0.3997,2.34,2.118,est,-0.1251,0.38,2026-10-10T13:37Z,win,2.118,est,1.118
 soccer,epl,an292974,2026-10-10T14:00Z,Brighton & Hove Albion,Sunderland,布萊頓,桑德蘭,model1_us,away,布萊頓,0.4131,0.3997,2.34,2.34,us,-0.0333,0.38,2026-10-10T13:37Z,win,2.34,us,1.34
 soccer,epl,an292974,2026-10-10T14:00Z,Brighton & Hove Albion,Sunderland,布萊頓,桑德蘭,model1_us_tw,away,布萊頓,0.4131,0.3997,2.34,2.118,est,-0.0333,0.38,2026-10-10T13:37Z,win,2.118,est,1.118
 soccer,epl,an292974,2026-10-10T14:00Z,Brighton & Hove Albion,Sunderland,布萊頓,桑德蘭,underdog,home,桑德蘭,0.3029,0.3227,3,2.715,est,-0.1776,0.38,2026-10-10T13:37Z,loss,2.715,est,-1.0
+soccer,epl,an292977,2026-10-10T14:00Z,Fulham,Ipswich Town,富勒姆,伊普斯維奇,draw,draw,和局,0.2692,0.2692,3.4,3.077,est,-0.1717,0.38,2026-10-10T13:37Z,loss,3.077,est,-1.0
+soccer,epl,an292977,2026-10-10T14:00Z,Fulham,Ipswich Town,富勒姆,伊普斯維奇,draw_us,draw,和局,0.2692,0.2692,3.4,3.4,us,-0.0847,0.38,2026-10-10T13:37Z,loss,3.4,us,-1.0
 soccer,epl,an292977,2026-10-10T14:00Z,Fulham,Ipswich Town,富勒姆,伊普斯維奇,favorite,away,富勒姆,0.425,0.4073,2.3,2.082,est,-0.1152,0.38,2026-10-10T13:37Z,loss,2.082,est,-1.0
 soccer,epl,an292977,2026-10-10T14:00Z,Fulham,Ipswich Town,富勒姆,伊普斯維奇,model1,draw,和局,0.2937,0.2846,3.4,3.077,est,-0.0963,0.38,2026-10-10T13:37Z,loss,3.077,est,-1.0
 soccer,epl,an292977,2026-10-10T14:00Z,Fulham,Ipswich Town,富勒姆,伊普斯維奇,model1_us,draw,和局,0.2937,0.2846,3.4,3.4,us,-0.0014,0.38,2026-10-10T13:37Z,loss,3.4,us,-1.0
 soccer,epl,an292977,2026-10-10T14:00Z,Fulham,Ipswich Town,富勒姆,伊普斯維奇,model1_us_tw,draw,和局,0.2937,0.2846,3.4,3.077,est,-0.0014,0.38,2026-10-10T13:37Z,loss,3.077,est,-1.0
 soccer,epl,an292977,2026-10-10T14:00Z,Fulham,Ipswich Town,富勒姆,伊普斯維奇,underdog,home,伊普斯維奇,0.2812,0.3081,2.75,2.489,est,-0.3001,0.38,2026-10-10T13:37Z,win,2.489,est,1.489
+soccer,epl,an292981,2026-10-10T14:00Z,AFC Bournemouth,Chelsea,伯恩茅斯,切爾西,draw,draw,和局,0.2413,0.2413,3.9,3.53,est,-0.1482,0.38,2026-10-10T13:37Z,loss,3.53,est,-1.0
+soccer,epl,an292981,2026-10-10T14:00Z,AFC Bournemouth,Chelsea,伯恩茅斯,切爾西,draw_us,draw,和局,0.2413,0.2413,3.9,3.9,us,-0.0589,0.38,2026-10-10T13:37Z,loss,3.9,us,-1.0
 soccer,epl,an292981,2026-10-10T14:00Z,AFC Bournemouth,Chelsea,伯恩茅斯,切爾西,favorite,home,切爾西,0.5428,0.5219,1.7692,1.601,est,-0.131,0.38,2026-10-10T13:37Z,win,1.601,est,0.601
 soccer,epl,an292981,2026-10-10T14:00Z,AFC Bournemouth,Chelsea,伯恩茅斯,切爾西,model1,home,切爾西,0.5428,0.5219,1.7692,1.601,est,-0.131,0.38,2026-10-10T13:37Z,win,1.601,est,0.601
 soccer,epl,an292981,2026-10-10T14:00Z,AFC Bournemouth,Chelsea,伯恩茅斯,切爾西,model1_us,home,切爾西,0.5428,0.5219,1.7692,1.7692,us,-0.0397,0.38,2026-10-10T13:37Z,win,1.7692,us,0.7692
 soccer,epl,an292981,2026-10-10T14:00Z,AFC Bournemouth,Chelsea,伯恩茅斯,切爾西,model1_us_tw,home,切爾西,0.5428,0.5219,1.7692,1.601,est,-0.0397,0.38,2026-10-10T13:37Z,win,1.601,est,0.601
 soccer,epl,an292981,2026-10-10T14:00Z,AFC Bournemouth,Chelsea,伯恩茅斯,切爾西,underdog,away,伯恩茅斯,0.2242,0.2402,4.15,3.756,est,-0.1579,0.38,2026-10-10T13:37Z,loss,3.756,est,-1.0
+soccer,epl,an292982,2026-10-10T14:00Z,Brentford,Aston Villa,布倫特福德,阿斯頓維拉,draw,draw,和局,0.2688,0.2688,3.5,3.168,est,-0.1484,0.38,2026-10-10T13:37Z,win,3.168,est,2.168
+soccer,epl,an292982,2026-10-10T14:00Z,Brentford,Aston Villa,布倫特福德,阿斯頓維拉,draw_us,draw,和局,0.2688,0.2688,3.5,3.5,us,-0.0592,0.38,2026-10-10T13:37Z,win,3.5,us,2.5
 soccer,epl,an292982,2026-10-10T14:00Z,Brentford,Aston Villa,布倫特福德,阿斯頓維拉,favorite,home,阿斯頓維拉,0.3561,0.3666,2.64,2.39,est,-0.1489,0.38,2026-10-10T13:37Z,loss,2.39,est,-1.0
 soccer,epl,an292982,2026-10-10T14:00Z,Brentford,Aston Villa,布倫特福德,阿斯頓維拉,model1,draw,和局,0.2724,0.2669,3.5,3.168,est,-0.137,0.38,2026-10-10T13:37Z,win,3.168,est,2.168
 soccer,epl,an292982,2026-10-10T14:00Z,Brentford,Aston Villa,布倫特福德,阿斯頓維拉,model1_us,draw,和局,0.2724,0.2669,3.5,3.5,us,-0.0466,0.38,2026-10-10T13:37Z,win,3.5,us,2.5
 soccer,epl,an292982,2026-10-10T14:00Z,Brentford,Aston Villa,布倫特福德,阿斯頓維拉,model1_us_tw,draw,和局,0.2724,0.2669,3.5,3.168,est,-0.0466,0.38,2026-10-10T13:37Z,win,3.168,est,2.168
 soccer,epl,an292982,2026-10-10T14:00Z,Brentford,Aston Villa,布倫特福德,阿斯頓維拉,underdog,home,阿斯頓維拉,0.3561,0.3666,2.64,2.39,est,-0.1489,0.38,2026-10-10T13:37Z,loss,2.39,est,-1.0
+soccer,laliga,an293054,2026-10-10T14:15Z,Atletico Madrid,Deportivo Alaves,馬德里競技,阿拉維斯,draw,draw,和局,0.2548,0.2548,3.7,3.349,est,-0.1466,0.63,2026-10-10T13:37Z,loss,3.349,est,-1.0
+soccer,laliga,an293054,2026-10-10T14:15Z,Atletico Madrid,Deportivo Alaves,馬德里競技,阿拉維斯,draw_us,draw,和局,0.2548,0.2548,3.7,3.7,us,-0.0571,0.63,2026-10-10T13:37Z,loss,3.7,us,-1.0
 soccer,laliga,an293054,2026-10-10T14:15Z,Atletico Madrid,Deportivo Alaves,馬德里競技,阿拉維斯,favorite,away,馬德里競技,0.5524,0.5276,1.8,1.629,est,-0.1001,0.63,2026-10-10T13:37Z,win,1.629,est,0.629
 soccer,laliga,an293054,2026-10-10T14:15Z,Atletico Madrid,Deportivo Alaves,馬德里競技,阿拉維斯,model1,away,馬德里競技,0.5524,0.5276,1.8,1.629,est,-0.1001,0.63,2026-10-10T13:37Z,win,1.629,est,0.629
 soccer,laliga,an293054,2026-10-10T14:15Z,Atletico Madrid,Deportivo Alaves,馬德里競技,阿拉維斯,model1_us,away,馬德里競技,0.5524,0.5276,1.8,1.8,us,-0.0057,0.63,2026-10-10T13:37Z,win,1.8,us,0.8
 soccer,laliga,an293054,2026-10-10T14:15Z,Atletico Madrid,Deportivo Alaves,馬德里競技,阿拉維斯,model1_us_tw,away,馬德里競技,0.5524,0.5276,1.8,1.629,est,-0.0057,0.63,2026-10-10T13:37Z,win,1.629,est,0.629
 soccer,laliga,an293054,2026-10-10T14:15Z,Atletico Madrid,Deportivo Alaves,馬德里競技,阿拉維斯,underdog,home,阿拉維斯,0.19,0.2148,4.26,3.856,est,-0.2674,0.63,2026-10-10T13:37Z,loss,3.856,est,-1.0
+soccer,ligue1,an293000,2026-10-10T15:15Z,Le Havre,Lille,勒哈佛,里爾,draw,draw,和局,0.2088,0.2088,4.5,4.073,est,-0.1498,0.63,2026-10-10T14:37Z,loss,4.073,est,-1.0
+soccer,ligue1,an293000,2026-10-10T15:15Z,Le Havre,Lille,勒哈佛,里爾,draw_us,draw,和局,0.2088,0.2088,4.5,4.5,us,-0.0606,0.63,2026-10-10T14:37Z,loss,4.5,us,-1.0
 soccer,ligue1,an293000,2026-10-10T15:15Z,Le Havre,Lille,勒哈佛,里爾,favorite,home,里爾,0.639,0.634,1.4525,1.315,est,-0.1597,0.63,2026-10-10T14:37Z,win,1.315,est,0.315
 soccer,ligue1,an293000,2026-10-10T15:15Z,Le Havre,Lille,勒哈佛,里爾,model1,away,勒哈佛,0.1482,0.1579,6.5,5.883,est,-0.1281,0.63,2026-10-10T14:37Z,loss,5.883,est,-1.0
 soccer,ligue1,an293000,2026-10-10T15:15Z,Le Havre,Lille,勒哈佛,里爾,model1_us,away,勒哈佛,0.1482,0.1579,6.5,6.5,us,-0.0367,0.63,2026-10-10T14:37Z,loss,6.5,us,-1.0
 soccer,ligue1,an293000,2026-10-10T15:15Z,Le Havre,Lille,勒哈佛,里爾,model1_us_tw,away,勒哈佛,0.1482,0.1579,6.5,5.883,est,-0.0367,0.63,2026-10-10T14:37Z,loss,5.883,est,-1.0
 soccer,ligue1,an293000,2026-10-10T15:15Z,Le Havre,Lille,勒哈佛,里爾,underdog,away,勒哈佛,0.1482,0.1579,6.5,5.883,est,-0.1281,0.63,2026-10-10T14:37Z,loss,5.883,est,-1.0
+soccer,seriea,an292989,2026-10-10T16:00Z,Parma Calcio 1913,Inter,帕爾馬,國際米蘭,draw,draw,和局,0.1287,0.1287,7.24,6.553,est,-0.1566,0.38,2026-10-10T15:37Z,loss,6.553,est,-1.0
+soccer,seriea,an292989,2026-10-10T16:00Z,Parma Calcio 1913,Inter,帕爾馬,國際米蘭,draw_us,draw,和局,0.1287,0.1287,7.24,7.24,us,-0.0682,0.38,2026-10-10T15:37Z,loss,7.24,us,-1.0
 soccer,seriea,an292989,2026-10-10T16:00Z,Parma Calcio 1913,Inter,帕爾馬,國際米蘭,favorite,home,國際米蘭,0.8185,0.801,1.1634,1.053,est,-0.1381,0.38,2026-10-10T15:37Z,win,1.053,est,0.053
 soccer,seriea,an292989,2026-10-10T16:00Z,Parma Calcio 1913,Inter,帕爾馬,國際米蘭,model1,home,國際米蘭,0.8185,0.801,1.1634,1.053,est,-0.1381,0.38,2026-10-10T15:37Z,win,1.053,est,0.053
 soccer,seriea,an292989,2026-10-10T16:00Z,Parma Calcio 1913,Inter,帕爾馬,國際米蘭,model1_us,home,國際米蘭,0.8185,0.801,1.1634,1.1634,us,-0.0478,0.38,2026-10-10T15:37Z,win,1.1634,us,0.1634
 soccer,seriea,an292989,2026-10-10T16:00Z,Parma Calcio 1913,Inter,帕爾馬,國際米蘭,model1_us_tw,home,國際米蘭,0.8185,0.801,1.1634,1.053,est,-0.0478,0.38,2026-10-10T15:37Z,win,1.053,est,0.053
 soccer,seriea,an292989,2026-10-10T16:00Z,Parma Calcio 1913,Inter,帕爾馬,國際米蘭,underdog,away,帕爾馬,0.0584,0.0703,13.25,11.993,est,-0.2996,0.38,2026-10-10T15:37Z,loss,11.993,est,-1.0
+soccer,epl,an292975,2026-10-10T16:30Z,Tottenham Hotspur,Manchester United,熱刺,曼聯,draw,draw,和局,0.2267,0.2267,4.15,3.756,est,-0.1486,0.88,2026-10-10T15:37Z,win,3.756,est,2.756
+soccer,epl,an292975,2026-10-10T16:30Z,Tottenham Hotspur,Manchester United,熱刺,曼聯,draw_us,draw,和局,0.2267,0.2267,4.15,4.15,us,-0.0593,0.88,2026-10-10T15:37Z,win,4.15,us,3.15
 soccer,epl,an292975,2026-10-10T16:30Z,Tottenham Hotspur,Manchester United,熱刺,曼聯,favorite,home,曼聯,0.5421,0.5566,1.7042,1.543,est,-0.1635,0.88,2026-10-10T15:37Z,loss,1.543,est,-1.0
 soccer,epl,an292975,2026-10-10T16:30Z,Tottenham Hotspur,Manchester United,熱刺,曼聯,model1,draw,和局,0.2353,0.2217,4.15,3.756,est,-0.1162,0.88,2026-10-10T15:37Z,win,3.756,est,2.756
 soccer,epl,an292975,2026-10-10T16:30Z,Tottenham Hotspur,Manchester United,熱刺,曼聯,model1_us,draw,和局,0.2353,0.2217,4.15,4.15,us,-0.0235,0.88,2026-10-10T15:37Z,win,4.15,us,3.15
 soccer,epl,an292975,2026-10-10T16:30Z,Tottenham Hotspur,Manchester United,熱刺,曼聯,model1_us_tw,draw,和局,0.2353,0.2217,4.15,3.756,est,-0.0235,0.88,2026-10-10T15:37Z,win,3.756,est,2.756
 soccer,epl,an292975,2026-10-10T16:30Z,Tottenham Hotspur,Manchester United,熱刺,曼聯,underdog,away,熱刺,0.2225,0.2217,4.25,3.847,est,-0.144,0.88,2026-10-10T15:37Z,loss,3.847,est,-1.0
+soccer,laliga,an293051,2026-10-10T16:30Z,Getafe,Barcelona,赫塔費,巴塞隆納,draw,draw,和局,0.0953,0.0953,9.95,9.006,est,-0.1415,0.88,2026-10-10T15:37Z,loss,9.006,est,-1.0
+soccer,laliga,an293051,2026-10-10T16:30Z,Getafe,Barcelona,赫塔費,巴塞隆納,draw_us,draw,和局,0.0953,0.0953,9.95,9.95,us,-0.0516,0.88,2026-10-10T15:37Z,loss,9.95,us,-1.0
 soccer,laliga,an293051,2026-10-10T16:30Z,Getafe,Barcelona,赫塔費,巴塞隆納,favorite,home,巴塞隆納,0.9078,0.8834,1.1049,1.0,est,-0.0922,0.88,2026-10-10T15:37Z,win,1.0,est,0.0
 soccer,laliga,an293051,2026-10-10T16:30Z,Getafe,Barcelona,赫塔費,巴塞隆納,model1,home,巴塞隆納,0.9078,0.8834,1.1049,1.0,est,-0.0922,0.88,2026-10-10T15:37Z,win,1.0,est,0.0
 soccer,laliga,an293051,2026-10-10T16:30Z,Getafe,Barcelona,赫塔費,巴塞隆納,model1_us,home,巴塞隆納,0.9078,0.8834,1.1049,1.1049,us,0.003,0.88,2026-10-10T15:37Z,win,1.1049,us,0.1049
 soccer,laliga,an293051,2026-10-10T16:30Z,Getafe,Barcelona,赫塔費,巴塞隆納,model1_us_tw,home,巴塞隆納,0.9078,0.8834,1.1049,1.0,est,0.003,0.88,2026-10-10T15:37Z,win,1.0,est,0.0
 soccer,laliga,an293051,2026-10-10T16:30Z,Getafe,Barcelona,赫塔費,巴塞隆納,underdog,away,赫塔費,0.0273,0.0389,20.49,18.546,est,-0.4937,0.88,2026-10-10T15:37Z,loss,18.546,est,-1.0
+soccer,bundesliga,an293121,2026-10-10T16:30Z,Eintracht Frankfurt,RB Leipzig,法蘭克福,萊比錫,draw,draw,和局,0.2063,0.2063,4.5,4.073,est,-0.1596,0.88,2026-10-10T15:37Z,loss,4.073,est,-1.0
+soccer,bundesliga,an293121,2026-10-10T16:30Z,Eintracht Frankfurt,RB Leipzig,法蘭克福,萊比錫,draw_us,draw,和局,0.2063,0.2063,4.5,4.5,us,-0.0715,0.88,2026-10-10T15:37Z,loss,4.5,us,-1.0
 soccer,bundesliga,an293121,2026-10-10T16:30Z,Eintracht Frankfurt,RB Leipzig,法蘭克福,萊比錫,favorite,home,萊比錫,0.6072,0.5854,1.5988,1.447,est,-0.1214,0.88,2026-10-10T15:37Z,win,1.447,est,0.447
 soccer,bundesliga,an293121,2026-10-10T16:30Z,Eintracht Frankfurt,RB Leipzig,法蘭克福,萊比錫,model1,home,萊比錫,0.6072,0.5854,1.5988,1.447,est,-0.1214,0.88,2026-10-10T15:37Z,win,1.447,est,0.447
 soccer,bundesliga,an293121,2026-10-10T16:30Z,Eintracht Frankfurt,RB Leipzig,法蘭克福,萊比錫,model1_us,home,萊比錫,0.6072,0.5854,1.5988,1.5988,us,-0.0292,0.88,2026-10-10T15:37Z,win,1.5988,us,0.5988
 soccer,bundesliga,an293121,2026-10-10T16:30Z,Eintracht Frankfurt,RB Leipzig,法蘭克福,萊比錫,model1_us_tw,home,萊比錫,0.6072,0.5854,1.5988,1.447,est,-0.0292,0.88,2026-10-10T15:37Z,win,1.447,est,0.447
 soccer,bundesliga,an293121,2026-10-10T16:30Z,Eintracht Frankfurt,RB Leipzig,法蘭克福,萊比錫,underdog,away,法蘭克福,0.1949,0.2119,4.36,3.946,est,-0.2309,0.88,2026-10-10T15:37Z,loss,3.946,est,-1.0
+soccer,seriea,an292986,2026-10-10T18:45Z,Frosinone Calcio,SSC Napoli,弗羅西諾內,拿坡里,draw,draw,和局,0.2167,0.2167,4.3,3.892,est,-0.1566,0.06,2026-10-10T18:41Z,loss,3.892,est,-1.0
+soccer,seriea,an292986,2026-10-10T18:45Z,Frosinone Calcio,SSC Napoli,弗羅西諾內,拿坡里,draw_us,draw,和局,0.2167,0.2167,4.3,4.3,us,-0.0682,0.06,2026-10-10T18:41Z,loss,4.3,us,-1.0
 soccer,seriea,an292986,2026-10-10T18:45Z,Frosinone Calcio,SSC Napoli,弗羅西諾內,拿坡里,favorite,home,拿坡里,0.6343,0.6178,1.5348,1.389,est,-0.119,0.06,2026-10-10T18:41Z,win,1.389,est,0.389
 soccer,seriea,an292986,2026-10-10T18:45Z,Frosinone Calcio,SSC Napoli,弗羅西諾內,拿坡里,model1,home,拿坡里,0.6343,0.6178,1.5348,1.389,est,-0.119,0.06,2026-10-10T18:41Z,win,1.389,est,0.389
 soccer,seriea,an292986,2026-10-10T18:45Z,Frosinone Calcio,SSC Napoli,弗羅西諾內,拿坡里,model1_us,home,拿坡里,0.6343,0.6178,1.5348,1.5348,us,-0.0265,0.06,2026-10-10T18:41Z,win,1.5348,us,0.5348
 soccer,seriea,an292986,2026-10-10T18:45Z,Frosinone Calcio,SSC Napoli,弗羅西諾內,拿坡里,model1_us_tw,home,拿坡里,0.6343,0.6178,1.5348,1.389,est,-0.0265,0.06,2026-10-10T18:41Z,win,1.389,est,0.389
 soccer,seriea,an292986,2026-10-10T18:45Z,Frosinone Calcio,SSC Napoli,弗羅西諾內,拿坡里,underdog,away,弗羅西諾內,0.1542,0.1688,5.29,4.788,est,-0.2617,0.06,2026-10-10T18:41Z,loss,4.788,est,-1.0
+soccer,ligue1,an292996,2026-10-10T18:45Z,Le Mans,Paris Saint-Germain,勒芒,巴黎聖日耳曼,draw,draw,和局,0.1158,0.1158,8.15,7.377,est,-0.1454,0.06,2026-10-10T18:41Z,loss,7.377,est,-1.0
+soccer,ligue1,an292996,2026-10-10T18:45Z,Le Mans,Paris Saint-Germain,勒芒,巴黎聖日耳曼,draw_us,draw,和局,0.1158,0.1158,8.15,8.15,us,-0.0559,0.06,2026-10-10T18:41Z,loss,8.15,us,-1.0
 soccer,ligue1,an292996,2026-10-10T18:45Z,Le Mans,Paris Saint-Germain,勒芒,巴黎聖日耳曼,favorite,home,巴黎聖日耳曼,0.8625,0.8335,1.1634,1.053,est,-0.0918,0.06,2026-10-10T18:41Z,win,1.053,est,0.053
 soccer,ligue1,an292996,2026-10-10T18:45Z,Le Mans,Paris Saint-Germain,勒芒,巴黎聖日耳曼,model1,home,巴黎聖日耳曼,0.8625,0.8335,1.1634,1.053,est,-0.0918,0.06,2026-10-10T18:41Z,win,1.053,est,0.053
 soccer,ligue1,an292996,2026-10-10T18:45Z,Le Mans,Paris Saint-Germain,勒芒,巴黎聖日耳曼,model1_us,home,巴黎聖日耳曼,0.8625,0.8335,1.1634,1.1634,us,0.0034,0.06,2026-10-10T18:41Z,win,1.1634,us,0.1634
 soccer,ligue1,an292996,2026-10-10T18:45Z,Le Mans,Paris Saint-Germain,勒芒,巴黎聖日耳曼,model1_us_tw,home,巴黎聖日耳曼,0.8625,0.8335,1.1634,1.053,est,0.0034,0.06,2026-10-10T18:41Z,win,1.053,est,0.053
 soccer,ligue1,an292996,2026-10-10T18:45Z,Le Mans,Paris Saint-Germain,勒芒,巴黎聖日耳曼,underdog,away,勒芒,0.0437,0.0585,13,11.767,est,-0.4858,0.06,2026-10-10T18:41Z,loss,11.767,est,-1.0
+soccer,ligue1,an292998,2026-10-10T18:45Z,Toulouse,Monaco,土魯斯,摩納哥,draw,draw,和局,0.2297,0.2297,4.12,3.729,est,-0.1434,0.06,2026-10-10T18:41Z,win,3.729,est,2.729
+soccer,ligue1,an292998,2026-10-10T18:45Z,Toulouse,Monaco,土魯斯,摩納哥,draw_us,draw,和局,0.2297,0.2297,4.12,4.12,us,-0.0536,0.06,2026-10-10T18:41Z,win,4.12,us,3.12
 soccer,ligue1,an292998,2026-10-10T18:45Z,Toulouse,Monaco,土魯斯,摩納哥,favorite,home,摩納哥,0.5875,0.5829,1.6289,1.474,est,-0.134,0.06,2026-10-10T18:41Z,loss,1.474,est,-1.0
 soccer,ligue1,an292998,2026-10-10T18:45Z,Toulouse,Monaco,土魯斯,摩納哥,model1,draw,和局,0.2339,0.229,4.12,3.729,est,-0.1278,0.06,2026-10-10T18:41Z,win,3.729,est,2.729
 soccer,ligue1,an292998,2026-10-10T18:45Z,Toulouse,Monaco,土魯斯,摩納哥,model1_us,draw,和局,0.2339,0.229,4.12,4.12,us,-0.0363,0.06,2026-10-10T18:41Z,win,4.12,us,3.12
 soccer,ligue1,an292998,2026-10-10T18:45Z,Toulouse,Monaco,土魯斯,摩納哥,model1_us_tw,draw,和局,0.2339,0.229,4.12,3.729,est,-0.0363,0.06,2026-10-10T18:41Z,win,3.729,est,2.729
 soccer,ligue1,an292998,2026-10-10T18:45Z,Toulouse,Monaco,土魯斯,摩納哥,underdog,away,土魯斯,0.1786,0.188,5,4.526,est,-0.1917,0.06,2026-10-10T18:41Z,loss,4.526,est,-1.0
+soccer,ligue1,an292999,2026-10-10T18:45Z,Paris FC,Lorient,巴黎FC,洛里昂,draw,draw,和局,0.2839,0.2839,3.25,2.942,est,-0.1649,0.06,2026-10-10T18:41Z,loss,2.942,est,-1.0
+soccer,ligue1,an292999,2026-10-10T18:45Z,Paris FC,Lorient,巴黎FC,洛里昂,draw_us,draw,和局,0.2839,0.2839,3.25,3.25,us,-0.0774,0.06,2026-10-10T18:41Z,loss,3.25,us,-1.0
 soccer,ligue1,an292999,2026-10-10T18:45Z,Paris FC,Lorient,巴黎FC,洛里昂,favorite,away,巴黎FC,0.4889,0.4697,2,1.81,est,-0.1151,0.06,2026-10-10T18:41Z,loss,1.81,est,-1.0
 soccer,ligue1,an292999,2026-10-10T18:45Z,Paris FC,Lorient,巴黎FC,洛里昂,model1,draw,和局,0.3032,0.2982,3.25,2.942,est,-0.108,0.06,2026-10-10T18:41Z,loss,2.942,est,-1.0
 soccer,ligue1,an292999,2026-10-10T18:45Z,Paris FC,Lorient,巴黎FC,洛里昂,model1_us,draw,和局,0.3032,0.2982,3.25,3.25,us,-0.0146,0.06,2026-10-10T18:41Z,loss,3.25,us,-1.0
 soccer,ligue1,an292999,2026-10-10T18:45Z,Paris FC,Lorient,巴黎FC,洛里昂,model1_us_tw,draw,和局,0.3032,0.2982,3.25,2.942,est,-0.0146,0.06,2026-10-10T18:41Z,loss,2.942,est,-1.0
 soccer,ligue1,an292999,2026-10-10T18:45Z,Paris FC,Lorient,巴黎FC,洛里昂,underdog,home,洛里昂,0.2079,0.232,3.62,3.277,est,-0.3187,0.06,2026-10-10T18:41Z,win,3.277,est,2.277
+soccer,ligue1,an293002,2026-10-10T18:45Z,Angers,Brest,昂熱,布雷斯特,draw,draw,和局,0.2546,0.2546,3.7,3.349,est,-0.1473,0.06,2026-10-10T18:41Z,loss,3.349,est,-1.0
+soccer,ligue1,an293002,2026-10-10T18:45Z,Angers,Brest,昂熱,布雷斯特,draw_us,draw,和局,0.2546,0.2546,3.7,3.7,us,-0.058,0.06,2026-10-10T18:41Z,loss,3.7,us,-1.0
 soccer,ligue1,an293002,2026-10-10T18:45Z,Angers,Brest,昂熱,布雷斯特,favorite,home,布雷斯特,0.5421,0.5174,1.8475,1.672,est,-0.0936,0.06,2026-10-10T18:41Z,win,1.672,est,0.672
 soccer,ligue1,an293002,2026-10-10T18:45Z,Angers,Brest,昂熱,布雷斯特,model1,home,布雷斯特,0.5421,0.5174,1.8475,1.672,est,-0.0936,0.06,2026-10-10T18:41Z,win,1.672,est,0.672
 soccer,ligue1,an293002,2026-10-10T18:45Z,Angers,Brest,昂熱,布雷斯特,model1_us,home,布雷斯特,0.5421,0.5174,1.8475,1.8475,us,0.0015,0.06,2026-10-10T18:41Z,win,1.8475,us,0.8475
 soccer,ligue1,an293002,2026-10-10T18:45Z,Angers,Brest,昂熱,布雷斯特,model1_us_tw,home,布雷斯特,0.5421,0.5174,1.8475,1.672,est,0.0015,0.06,2026-10-10T18:41Z,win,1.672,est,0.672
 soccer,ligue1,an293002,2026-10-10T18:45Z,Angers,Brest,昂熱,布雷斯特,underdog,away,昂熱,0.208,0.2264,4,3.621,est,-0.2468,0.06,2026-10-10T18:41Z,loss,3.621,est,-1.0
+soccer,laliga,an293046,2026-10-10T19:00Z,Villarreal,Real Madrid,比利亞雷亞爾,皇家馬德里,draw,draw,和局,0.165,0.165,5.7,5.159,est,-0.1487,0.31,2026-10-10T18:41Z,loss,5.159,est,-1.0
+soccer,laliga,an293046,2026-10-10T19:00Z,Villarreal,Real Madrid,比利亞雷亞爾,皇家馬德里,draw_us,draw,和局,0.165,0.165,5.7,5.7,us,-0.0594,0.31,2026-10-10T18:41Z,loss,5.7,us,-1.0
 soccer,laliga,an293046,2026-10-10T19:00Z,Villarreal,Real Madrid,比利亞雷亞爾,皇家馬德里,favorite,home,皇家馬德里,0.7375,0.7082,1.3425,1.215,est,-0.1039,0.31,2026-10-10T18:41Z,win,1.215,est,0.215
 soccer,laliga,an293046,2026-10-10T19:00Z,Villarreal,Real Madrid,比利亞雷亞爾,皇家馬德里,model1,home,皇家馬德里,0.7375,0.7082,1.3425,1.215,est,-0.1039,0.31,2026-10-10T18:41Z,win,1.215,est,0.215
 soccer,laliga,an293046,2026-10-10T19:00Z,Villarreal,Real Madrid,比利亞雷亞爾,皇家馬德里,model1_us,home,皇家馬德里,0.7375,0.7082,1.3425,1.3425,us,-0.0099,0.31,2026-10-10T18:41Z,win,1.3425,us,0.3425
 soccer,laliga,an293046,2026-10-10T19:00Z,Villarreal,Real Madrid,比利亞雷亞爾,皇家馬德里,model1_us_tw,home,皇家馬德里,0.7375,0.7082,1.3425,1.215,est,-0.0099,0.31,2026-10-10T18:41Z,win,1.215,est,0.215
 soccer,laliga,an293046,2026-10-10T19:00Z,Villarreal,Real Madrid,比利亞雷亞爾,皇家馬德里,underdog,away,比利亞雷亞爾,0.1056,0.1244,7,6.336,est,-0.3309,0.31,2026-10-10T18:41Z,loss,6.336,est,-1.0
+soccer,seriea,an292991,2026-10-11T10:30Z,Roma,Como,羅馬,科莫,draw,draw,和局,0.2745,0.2745,3.42,3.096,est,-0.1501,0.86,2026-10-11T09:38Z,win,3.096,est,2.096
+soccer,seriea,an292991,2026-10-11T10:30Z,Roma,Como,羅馬,科莫,draw_us,draw,和局,0.2745,0.2745,3.42,3.42,us,-0.0612,0.86,2026-10-11T09:38Z,win,3.42,us,2.42
 soccer,seriea,an292991,2026-10-11T10:30Z,Roma,Como,羅馬,科莫,favorite,home,科莫,0.3866,0.3954,2.35,2.127,est,-0.1777,0.86,2026-10-11T09:38Z,loss,2.127,est,-1.0
 soccer,seriea,an292991,2026-10-11T10:30Z,Roma,Como,羅馬,科莫,model1,draw,和局,0.2814,0.2748,3.42,3.096,est,-0.1288,0.86,2026-10-11T09:38Z,win,3.096,est,2.096
 soccer,seriea,an292991,2026-10-11T10:30Z,Roma,Como,羅馬,科莫,model1_us,draw,和局,0.2814,0.2748,3.42,3.42,us,-0.0376,0.86,2026-10-11T09:38Z,win,3.42,us,2.42
 soccer,seriea,an292991,2026-10-11T10:30Z,Roma,Como,羅馬,科莫,model1_us_tw,draw,和局,0.2814,0.2748,3.42,3.096,est,-0.0376,0.86,2026-10-11T09:38Z,win,3.096,est,2.096
 soccer,seriea,an292991,2026-10-11T10:30Z,Roma,Como,羅馬,科莫,underdog,away,羅馬,0.3321,0.3298,2.88,2.607,est,-0.1342,0.86,2026-10-11T09:38Z,loss,2.607,est,-1.0
+soccer,laliga,an293052,2026-10-11T12:00Z,Celta Vigo,Elche,塞爾塔,埃爾切,draw,draw,和局,0.2925,0.2925,3.22,2.915,est,-0.1473,0.39,2026-10-11T11:37Z,win,2.915,est,1.915
+soccer,laliga,an293052,2026-10-11T12:00Z,Celta Vigo,Elche,塞爾塔,埃爾切,draw_us,draw,和局,0.2925,0.2925,3.22,3.22,us,-0.058,0.39,2026-10-11T11:37Z,win,3.22,us,2.22
 soccer,laliga,an293052,2026-10-11T12:00Z,Celta Vigo,Elche,塞爾塔,埃爾切,favorite,away,塞爾塔,0.4114,0.3958,2.42,2.19,est,-0.099,0.39,2026-10-11T11:37Z,loss,2.19,est,-1.0
 soccer,laliga,an293052,2026-10-11T12:00Z,Celta Vigo,Elche,塞爾塔,埃爾切,model1,away,塞爾塔,0.4114,0.3958,2.42,2.19,est,-0.099,0.39,2026-10-11T11:37Z,loss,2.19,est,-1.0
 soccer,laliga,an293052,2026-10-11T12:00Z,Celta Vigo,Elche,塞爾塔,埃爾切,model1_us,away,塞爾塔,0.4114,0.3958,2.42,2.42,us,-0.0044,0.39,2026-10-11T11:37Z,loss,2.42,us,-1.0
 soccer,laliga,an293052,2026-10-11T12:00Z,Celta Vigo,Elche,塞爾塔,埃爾切,model1_us_tw,away,塞爾塔,0.4114,0.3958,2.42,2.19,est,-0.0044,0.39,2026-10-11T11:37Z,loss,2.19,est,-1.0
 soccer,laliga,an293052,2026-10-11T12:00Z,Celta Vigo,Elche,塞爾塔,埃爾切,underdog,home,埃爾切,0.2842,0.3101,2.96,2.679,est,-0.2386,0.39,2026-10-11T11:37Z,loss,2.679,est,-1.0
+soccer,epl,an292978,2026-10-11T13:00Z,Everton,Hull City,艾佛頓,赫爾城,draw,draw,和局,0.2789,0.2789,3.32,3.005,est,-0.162,0.25,2026-10-11T12:44Z,win,3.005,est,2.005
+soccer,epl,an292978,2026-10-11T13:00Z,Everton,Hull City,艾佛頓,赫爾城,draw_us,draw,和局,0.2789,0.2789,3.32,3.32,us,-0.0741,0.25,2026-10-11T12:44Z,win,3.32,us,2.32
 soccer,epl,an292978,2026-10-11T13:00Z,Everton,Hull City,艾佛頓,赫爾城,favorite,away,艾佛頓,0.5006,0.4788,1.9524,1.767,est,-0.1154,0.25,2026-10-11T12:44Z,loss,1.767,est,-1.0
 soccer,epl,an292978,2026-10-11T13:00Z,Everton,Hull City,艾佛頓,赫爾城,model1,away,艾佛頓,0.5006,0.4788,1.9524,1.767,est,-0.1154,0.25,2026-10-11T12:44Z,loss,1.767,est,-1.0
 soccer,epl,an292978,2026-10-11T13:00Z,Everton,Hull City,艾佛頓,赫爾城,model1_us,away,艾佛頓,0.5006,0.4788,1.9524,1.9524,us,-0.0226,0.25,2026-10-11T12:44Z,loss,1.9524,us,-1.0
 soccer,epl,an292978,2026-10-11T13:00Z,Everton,Hull City,艾佛頓,赫爾城,model1_us_tw,away,艾佛頓,0.5006,0.4788,1.9524,1.767,est,-0.0226,0.25,2026-10-11T12:44Z,loss,1.767,est,-1.0
 soccer,epl,an292978,2026-10-11T13:00Z,Everton,Hull City,艾佛頓,赫爾城,underdog,home,赫爾城,0.2075,0.232,3.75,3.394,est,-0.2957,0.25,2026-10-11T12:44Z,loss,3.394,est,-1.0
+soccer,epl,an292979,2026-10-11T13:00Z,Nottingham Forest,Crystal Palace,諾丁漢森林,水晶宮,draw,draw,和局,0.2834,0.2834,3.3,2.987,est,-0.1535,0.25,2026-10-11T12:44Z,loss,2.987,est,-1.0
+soccer,epl,an292979,2026-10-11T13:00Z,Nottingham Forest,Crystal Palace,諾丁漢森林,水晶宮,draw_us,draw,和局,0.2834,0.2834,3.3,3.3,us,-0.0648,0.25,2026-10-11T12:44Z,loss,3.3,us,-1.0
 soccer,epl,an292979,2026-10-11T13:00Z,Nottingham Forest,Crystal Palace,諾丁漢森林,水晶宮,favorite,away,諾丁漢森林,0.3942,0.3808,2.5,2.263,est,-0.1079,0.25,2026-10-11T12:44Z,loss,2.263,est,-1.0
 soccer,epl,an292979,2026-10-11T13:00Z,Nottingham Forest,Crystal Palace,諾丁漢森林,水晶宮,model1,away,諾丁漢森林,0.3942,0.3808,2.5,2.263,est,-0.1079,0.25,2026-10-11T12:44Z,loss,2.263,est,-1.0
 soccer,epl,an292979,2026-10-11T13:00Z,Nottingham Forest,Crystal Palace,諾丁漢森林,水晶宮,model1_us,away,諾丁漢森林,0.3942,0.3808,2.5,2.5,us,-0.0145,0.25,2026-10-11T12:44Z,loss,2.5,us,-1.0
 soccer,epl,an292979,2026-10-11T13:00Z,Nottingham Forest,Crystal Palace,諾丁漢森林,水晶宮,model1_us_tw,away,諾丁漢森林,0.3942,0.3808,2.5,2.263,est,-0.0145,0.25,2026-10-11T12:44Z,loss,2.263,est,-1.0
 soccer,epl,an292979,2026-10-11T13:00Z,Nottingham Forest,Crystal Palace,諾丁漢森林,水晶宮,underdog,home,水晶宮,0.31,0.3337,2.73,2.471,est,-0.234,0.25,2026-10-11T12:44Z,win,2.471,est,1.471
+soccer,seriea,an292987,2026-10-11T13:00Z,Bologna,Lecce,波隆那,萊切,draw,draw,和局,0.2946,0.2946,3.2,2.896,est,-0.1468,0.25,2026-10-11T12:44Z,loss,2.896,est,-1.0
+soccer,seriea,an292987,2026-10-11T13:00Z,Bologna,Lecce,波隆那,萊切,draw_us,draw,和局,0.2946,0.2946,3.2,3.2,us,-0.0572,0.25,2026-10-11T12:44Z,loss,3.2,us,-1.0
 soccer,seriea,an292987,2026-10-11T13:00Z,Bologna,Lecce,波隆那,萊切,favorite,away,波隆那,0.4995,0.4678,2.02,1.828,est,-0.0869,0.25,2026-10-11T12:44Z,win,1.828,est,0.828
 soccer,seriea,an292987,2026-10-11T13:00Z,Bologna,Lecce,波隆那,萊切,model1,away,波隆那,0.4995,0.4678,2.02,1.828,est,-0.0869,0.25,2026-10-11T12:44Z,win,1.828,est,0.828
 soccer,seriea,an292987,2026-10-11T13:00Z,Bologna,Lecce,波隆那,萊切,model1_us,away,波隆那,0.4995,0.4678,2.02,2.02,us,0.009,0.25,2026-10-11T12:44Z,win,2.02,us,1.02
 soccer,seriea,an292987,2026-10-11T13:00Z,Bologna,Lecce,波隆那,萊切,model1_us_tw,away,波隆那,0.4995,0.4678,2.02,1.828,est,0.009,0.25,2026-10-11T12:44Z,win,1.828,est,0.828
 soccer,seriea,an292987,2026-10-11T13:00Z,Bologna,Lecce,波隆那,萊切,underdog,home,萊切,0.1933,0.2356,3.95,3.575,est,-0.309,0.25,2026-10-11T12:44Z,loss,3.575,est,-1.0
+soccer,seriea,an292988,2026-10-11T13:00Z,Monza,Lazio,蒙札,拉齊歐,draw,draw,和局,0.2465,0.2465,3.8,3.44,est,-0.152,0.25,2026-10-11T12:44Z,loss,3.44,est,-1.0
+soccer,seriea,an292988,2026-10-11T13:00Z,Monza,Lazio,蒙札,拉齊歐,draw_us,draw,和局,0.2465,0.2465,3.8,3.8,us,-0.0632,0.25,2026-10-11T12:44Z,loss,3.8,us,-1.0
 soccer,seriea,an292988,2026-10-11T13:00Z,Monza,Lazio,蒙札,拉齊歐,favorite,home,拉齊歐,0.5525,0.5627,1.6944,1.534,est,-0.1525,0.25,2026-10-11T12:44Z,win,1.534,est,0.534
 soccer,seriea,an292988,2026-10-11T13:00Z,Monza,Lazio,蒙札,拉齊歐,model1,draw,和局,0.2607,0.2468,3.8,3.44,est,-0.1032,0.25,2026-10-11T12:44Z,loss,3.44,est,-1.0
 soccer,seriea,an292988,2026-10-11T13:00Z,Monza,Lazio,蒙札,拉齊歐,model1_us,draw,和局,0.2607,0.2468,3.8,3.8,us,-0.0093,0.25,2026-10-11T12:44Z,loss,3.8,us,-1.0
 soccer,seriea,an292988,2026-10-11T13:00Z,Monza,Lazio,蒙札,拉齊歐,model1_us_tw,draw,和局,0.2607,0.2468,3.8,3.44,est,-0.0093,0.25,2026-10-11T12:44Z,loss,3.44,est,-1.0
 soccer,seriea,an292988,2026-10-11T13:00Z,Monza,Lazio,蒙札,拉齊歐,underdog,away,蒙札,0.1867,0.1905,4.67,4.227,est,-0.2108,0.25,2026-10-11T12:44Z,loss,4.227,est,-1.0
+soccer,ligue1,an292997,2026-10-11T13:00Z,Strasbourg,Nice,史特拉斯堡,尼斯,draw,draw,和局,0.2621,0.2621,3.57,3.231,est,-0.1532,0.25,2026-10-11T12:44Z,loss,3.231,est,-1.0
+soccer,ligue1,an292997,2026-10-11T13:00Z,Strasbourg,Nice,史特拉斯堡,尼斯,draw_us,draw,和局,0.2621,0.2621,3.57,3.57,us,-0.0644,0.25,2026-10-11T12:44Z,loss,3.57,us,-1.0
 soccer,ligue1,an292997,2026-10-11T13:00Z,Strasbourg,Nice,史特拉斯堡,尼斯,favorite,home,尼斯,0.4668,0.4461,2.17,1.964,est,-0.0832,0.25,2026-10-11T12:44Z,win,1.964,est,0.964
 soccer,ligue1,an292997,2026-10-11T13:00Z,Strasbourg,Nice,史特拉斯堡,尼斯,model1,home,尼斯,0.4668,0.4461,2.17,1.964,est,-0.0832,0.25,2026-10-11T12:44Z,win,1.964,est,0.964
 soccer,ligue1,an292997,2026-10-11T13:00Z,Strasbourg,Nice,史特拉斯堡,尼斯,model1_us,home,尼斯,0.4668,0.4461,2.17,2.17,us,0.013,0.25,2026-10-11T12:44Z,win,2.17,us,1.17
 soccer,ligue1,an292997,2026-10-11T13:00Z,Strasbourg,Nice,史特拉斯堡,尼斯,model1_us_tw,home,尼斯,0.4668,0.4461,2.17,1.964,est,0.013,0.25,2026-10-11T12:44Z,win,1.964,est,0.964
 soccer,ligue1,an292997,2026-10-11T13:00Z,Strasbourg,Nice,史特拉斯堡,尼斯,underdog,away,史特拉斯堡,0.2762,0.2911,3.05,2.761,est,-0.2374,0.25,2026-10-11T12:44Z,loss,2.761,est,-1.0
+soccer,bundesliga,an293115,2026-10-11T13:30Z,Borussia Moenchengladbach,FC Koeln,門興,科隆,draw,draw,和局,0.2489,0.2489,3.75,3.394,est,-0.1551,0.75,2026-10-11T12:44Z,loss,3.394,est,-1.0
+soccer,bundesliga,an293115,2026-10-11T13:30Z,Borussia Moenchengladbach,FC Koeln,門興,科隆,draw_us,draw,和局,0.2489,0.2489,3.75,3.75,us,-0.0665,0.75,2026-10-11T12:44Z,loss,3.75,us,-1.0
 soccer,bundesliga,an293115,2026-10-11T13:30Z,Borussia Moenchengladbach,FC Koeln,門興,科隆,favorite,home,科隆,0.4886,0.4791,1.9524,1.767,est,-0.1366,0.75,2026-10-11T12:44Z,win,1.767,est,0.767
 soccer,bundesliga,an293115,2026-10-11T13:30Z,Borussia Moenchengladbach,FC Koeln,門興,科隆,model1,draw,和局,0.2565,0.2559,3.75,3.394,est,-0.1294,0.75,2026-10-11T12:44Z,loss,3.394,est,-1.0
 soccer,bundesliga,an293115,2026-10-11T13:30Z,Borussia Moenchengladbach,FC Koeln,門興,科隆,model1_us,draw,和局,0.2565,0.2559,3.75,3.75,us,-0.0381,0.75,2026-10-11T12:44Z,loss,3.75,us,-1.0
 soccer,bundesliga,an293115,2026-10-11T13:30Z,Borussia Moenchengladbach,FC Koeln,門興,科隆,model1_us_tw,draw,和局,0.2565,0.2559,3.75,3.394,est,-0.0381,0.75,2026-10-11T12:44Z,loss,3.394,est,-1.0
 soccer,bundesliga,an293115,2026-10-11T13:30Z,Borussia Moenchengladbach,FC Koeln,門興,科隆,underdog,away,門興,0.2549,0.265,3.42,3.096,est,-0.2108,0.75,2026-10-11T12:44Z,loss,3.096,est,-1.0
+soccer,laliga,an293045,2026-10-11T14:15Z,RC Deportivo La Coruna,Real Sociedad,拉科魯尼亞,皇家社會,draw,draw,和局,0.2429,0.2429,3.9,3.53,est,-0.1424,0.62,2026-10-11T13:37Z,loss,3.53,est,-1.0
+soccer,laliga,an293045,2026-10-11T14:15Z,RC Deportivo La Coruna,Real Sociedad,拉科魯尼亞,皇家社會,draw_us,draw,和局,0.2429,0.2429,3.9,3.9,us,-0.0525,0.62,2026-10-11T13:37Z,loss,3.9,us,-1.0
 soccer,laliga,an293045,2026-10-11T14:15Z,RC Deportivo La Coruna,Real Sociedad,拉科魯尼亞,皇家社會,favorite,home,皇家社會,0.5666,0.5519,1.6993,1.538,est,-0.1286,0.62,2026-10-11T13:37Z,win,1.538,est,0.538
 soccer,laliga,an293045,2026-10-11T14:15Z,RC Deportivo La Coruna,Real Sociedad,拉科魯尼亞,皇家社會,model1,draw,和局,0.2473,0.2481,3.9,3.53,est,-0.127,0.62,2026-10-11T13:37Z,loss,3.53,est,-1.0
 soccer,laliga,an293045,2026-10-11T14:15Z,RC Deportivo La Coruna,Real Sociedad,拉科魯尼亞,皇家社會,model1_us,draw,和局,0.2473,0.2481,3.9,3.9,us,-0.0355,0.62,2026-10-11T13:37Z,loss,3.9,us,-1.0
 soccer,laliga,an293045,2026-10-11T14:15Z,RC Deportivo La Coruna,Real Sociedad,拉科魯尼亞,皇家社會,model1_us_tw,draw,和局,0.2473,0.2481,3.9,3.53,est,-0.0355,0.62,2026-10-11T13:37Z,loss,3.53,est,-1.0
 soccer,laliga,an293045,2026-10-11T14:15Z,RC Deportivo La Coruna,Real Sociedad,拉科魯尼亞,皇家社會,underdog,away,拉科魯尼亞,0.1862,0.2,4.75,4.299,est,-0.1995,0.62,2026-10-11T13:37Z,loss,4.299,est,-1.0
+soccer,ligue1,an292995,2026-10-11T15:15Z,Auxerre,Rennes,歐塞爾,雷恩,draw,draw,和局,0.1967,0.1967,4.8,4.345,est,-0.1453,0.62,2026-10-11T14:38Z,loss,4.345,est,-1.0
+soccer,ligue1,an292995,2026-10-11T15:15Z,Auxerre,Rennes,歐塞爾,雷恩,draw_us,draw,和局,0.1967,0.1967,4.8,4.8,us,-0.0558,0.62,2026-10-11T14:38Z,loss,4.8,us,-1.0
 soccer,ligue1,an292995,2026-10-11T15:15Z,Auxerre,Rennes,歐塞爾,雷恩,favorite,home,雷恩,0.6899,0.664,1.4348,1.299,est,-0.1038,0.62,2026-10-11T14:38Z,win,1.299,est,0.299
 soccer,ligue1,an292995,2026-10-11T15:15Z,Auxerre,Rennes,歐塞爾,雷恩,model1,home,雷恩,0.6899,0.664,1.4348,1.299,est,-0.1038,0.62,2026-10-11T14:38Z,win,1.299,est,0.299
 soccer,ligue1,an292995,2026-10-11T15:15Z,Auxerre,Rennes,歐塞爾,雷恩,model1_us,home,雷恩,0.6899,0.664,1.4348,1.4348,us,-0.0101,0.62,2026-10-11T14:38Z,win,1.4348,us,0.4348
 soccer,ligue1,an292995,2026-10-11T15:15Z,Auxerre,Rennes,歐塞爾,雷恩,model1_us_tw,home,雷恩,0.6899,0.664,1.4348,1.299,est,-0.0101,0.62,2026-10-11T14:38Z,win,1.299,est,0.299
 soccer,ligue1,an292995,2026-10-11T15:15Z,Auxerre,Rennes,歐塞爾,雷恩,underdog,away,歐塞爾,0.1222,0.1402,6.5,5.883,est,-0.2811,0.62,2026-10-11T14:38Z,loss,5.883,est,-1.0
+soccer,epl,an292976,2026-10-11T15:30Z,Manchester City,Liverpool,曼城,利物浦,draw,draw,和局,0.2586,0.2586,3.6,3.258,est,-0.1575,0.87,2026-10-11T14:38Z,loss,3.258,est,-1.0
+soccer,epl,an292976,2026-10-11T15:30Z,Manchester City,Liverpool,曼城,利物浦,draw_us,draw,和局,0.2586,0.2586,3.6,3.6,us,-0.069,0.87,2026-10-11T14:38Z,loss,3.6,us,-1.0
 soccer,epl,an292976,2026-10-11T15:30Z,Manchester City,Liverpool,曼城,利物浦,favorite,away,曼城,0.4674,0.4542,2.12,1.919,est,-0.1031,0.87,2026-10-11T14:38Z,win,1.919,est,0.919
 soccer,epl,an292976,2026-10-11T15:30Z,Manchester City,Liverpool,曼城,利物浦,model1,away,曼城,0.4674,0.4542,2.12,1.919,est,-0.1031,0.87,2026-10-11T14:38Z,win,1.919,est,0.919
 soccer,epl,an292976,2026-10-11T15:30Z,Manchester City,Liverpool,曼城,利物浦,model1_us,away,曼城,0.4674,0.4542,2.12,2.12,us,-0.0091,0.87,2026-10-11T14:38Z,win,2.12,us,1.12
 soccer,epl,an292976,2026-10-11T15:30Z,Manchester City,Liverpool,曼城,利物浦,model1_us_tw,away,曼城,0.4674,0.4542,2.12,1.919,est,-0.0091,0.87,2026-10-11T14:38Z,win,1.919,est,0.919
 soccer,epl,an292976,2026-10-11T15:30Z,Manchester City,Liverpool,曼城,利物浦,underdog,home,利物浦,0.2744,0.2893,3.08,2.788,est,-0.235,0.87,2026-10-11T14:38Z,loss,2.788,est,-1.0
+soccer,bundesliga,an293119,2026-10-11T15:30Z,Schalke 04,Freiburg,,,draw,draw,和局,0.2386,0.2386,3.92,3.548,est,-0.1535,0.87,2026-10-11T14:38Z,loss,3.548,est,-1.0
+soccer,bundesliga,an293119,2026-10-11T15:30Z,Schalke 04,Freiburg,,,draw_us,draw,和局,0.2386,0.2386,3.92,3.92,us,-0.0648,0.87,2026-10-11T14:38Z,loss,3.92,us,-1.0
 soccer,bundesliga,an293119,2026-10-11T15:30Z,Schalke 04,Freiburg,,,favorite,home,Freiburg,0.6021,0.5852,1.6369,1.482,est,-0.1077,0.87,2026-10-11T14:38Z,win,1.482,est,0.482
 soccer,bundesliga,an293119,2026-10-11T15:30Z,Schalke 04,Freiburg,,,model1,home,Freiburg,0.6021,0.5852,1.6369,1.482,est,-0.1077,0.87,2026-10-11T14:38Z,win,1.482,est,0.482
 soccer,bundesliga,an293119,2026-10-11T15:30Z,Schalke 04,Freiburg,,,model1_us,home,Freiburg,0.6021,0.5852,1.6369,1.6369,us,-0.0144,0.87,2026-10-11T14:38Z,win,1.6369,us,0.6369
 soccer,bundesliga,an293119,2026-10-11T15:30Z,Schalke 04,Freiburg,,,model1_us_tw,home,Freiburg,0.6021,0.5852,1.6369,1.482,est,-0.0144,0.87,2026-10-11T14:38Z,win,1.482,est,0.482
 soccer,bundesliga,an293119,2026-10-11T15:30Z,Schalke 04,Freiburg,,,underdog,away,Schalke 04,0.1663,0.1816,4.92,4.453,est,-0.2595,0.87,2026-10-11T14:38Z,loss,4.453,est,-1.0
+soccer,seriea,an292985,2026-10-11T16:00Z,AC Milan,Sassuolo,AC米蘭,薩索洛,draw,draw,和局,0.2639,0.2639,3.55,3.213,est,-0.152,0.37,2026-10-11T15:38Z,win,3.213,est,2.213
+soccer,seriea,an292985,2026-10-11T16:00Z,AC Milan,Sassuolo,AC米蘭,薩索洛,draw_us,draw,和局,0.2639,0.2639,3.55,3.55,us,-0.063,0.37,2026-10-11T15:38Z,win,3.55,us,2.55
 soccer,seriea,an292985,2026-10-11T16:00Z,AC Milan,Sassuolo,AC米蘭,薩索洛,favorite,away,AC米蘭,0.5189,0.4932,1.9091,1.728,est,-0.1033,0.37,2026-10-11T15:38Z,loss,1.728,est,-1.0
 soccer,seriea,an292985,2026-10-11T16:00Z,AC Milan,Sassuolo,AC米蘭,薩索洛,model1,away,AC米蘭,0.5189,0.4932,1.9091,1.728,est,-0.1033,0.37,2026-10-11T15:38Z,loss,1.728,est,-1.0
 soccer,seriea,an292985,2026-10-11T16:00Z,AC Milan,Sassuolo,AC米蘭,薩索洛,model1_us,away,AC米蘭,0.5189,0.4932,1.9091,1.9091,us,-0.0094,0.37,2026-10-11T15:38Z,loss,1.9091,us,-1.0
 soccer,seriea,an292985,2026-10-11T16:00Z,AC Milan,Sassuolo,AC米蘭,薩索洛,model1_us_tw,away,AC米蘭,0.5189,0.4932,1.9091,1.728,est,-0.0094,0.37,2026-10-11T15:38Z,loss,1.728,est,-1.0
 soccer,seriea,an292985,2026-10-11T16:00Z,AC Milan,Sassuolo,AC米蘭,薩索洛,underdog,home,薩索洛,0.2089,0.2383,3.82,3.458,est,-0.2776,0.37,2026-10-11T15:38Z,loss,3.458,est,-1.0
+soccer,laliga,an293053,2026-10-11T16:30Z,Osasuna,Real Betis,奧薩蘇納,貝提斯,draw,draw,和局,0.2139,0.2139,4.41,3.992,est,-0.1461,0.87,2026-10-11T15:38Z,loss,3.992,est,-1.0
+soccer,laliga,an293053,2026-10-11T16:30Z,Osasuna,Real Betis,奧薩蘇納,貝提斯,draw_us,draw,和局,0.2139,0.2139,4.41,4.41,us,-0.0567,0.87,2026-10-11T15:38Z,loss,4.41,us,-1.0
 soccer,laliga,an293053,2026-10-11T16:30Z,Osasuna,Real Betis,奧薩蘇納,貝提斯,favorite,home,貝提斯,0.6551,0.6417,1.5,1.358,est,-0.1104,0.87,2026-10-11T15:38Z,win,1.358,est,0.358
 soccer,laliga,an293053,2026-10-11T16:30Z,Osasuna,Real Betis,奧薩蘇納,貝提斯,model1,home,貝提斯,0.6551,0.6417,1.5,1.358,est,-0.1104,0.87,2026-10-11T15:38Z,win,1.358,est,0.358
 soccer,laliga,an293053,2026-10-11T16:30Z,Osasuna,Real Betis,奧薩蘇納,貝提斯,model1_us,home,貝提斯,0.6551,0.6417,1.5,1.5,us,-0.0173,0.87,2026-10-11T15:38Z,win,1.5,us,0.5
 soccer,laliga,an293053,2026-10-11T16:30Z,Osasuna,Real Betis,奧薩蘇納,貝提斯,model1_us_tw,home,貝提斯,0.6551,0.6417,1.5,1.358,est,-0.0173,0.87,2026-10-11T15:38Z,win,1.358,est,0.358
 soccer,laliga,an293053,2026-10-11T16:30Z,Osasuna,Real Betis,奧薩蘇納,貝提斯,underdog,away,奧薩蘇納,0.1317,0.1449,6,5.431,est,-0.2847,0.87,2026-10-11T15:38Z,loss,5.431,est,-1.0
+soccer,seriea,an292992,2026-10-11T18:45Z,Juventus,Cagliari,尤文圖斯,卡利亞里,draw,draw,和局,0.246,0.246,3.8,3.44,est,-0.1538,0.05,2026-10-11T18:42Z,win,3.44,est,2.44
+soccer,seriea,an292992,2026-10-11T18:45Z,Juventus,Cagliari,尤文圖斯,卡利亞里,draw_us,draw,和局,0.246,0.246,3.8,3.8,us,-0.0652,0.05,2026-10-11T18:42Z,win,3.8,us,2.8
 soccer,seriea,an292992,2026-10-11T18:45Z,Juventus,Cagliari,尤文圖斯,卡利亞里,favorite,away,尤文圖斯,0.658,0.6177,1.5319,1.387,est,-0.0874,0.05,2026-10-11T18:42Z,loss,1.387,est,-1.0
 soccer,seriea,an292992,2026-10-11T18:45Z,Juventus,Cagliari,尤文圖斯,卡利亞里,model1,away,尤文圖斯,0.658,0.6177,1.5319,1.387,est,-0.0874,0.05,2026-10-11T18:42Z,loss,1.387,est,-1.0
 soccer,seriea,an292992,2026-10-11T18:45Z,Juventus,Cagliari,尤文圖斯,卡利亞里,model1_us,away,尤文圖斯,0.658,0.6177,1.5319,1.5319,us,0.008,0.05,2026-10-11T18:42Z,loss,1.5319,us,-1.0
 soccer,seriea,an292992,2026-10-11T18:45Z,Juventus,Cagliari,尤文圖斯,卡利亞里,model1_us_tw,away,尤文圖斯,0.658,0.6177,1.5319,1.387,est,0.008,0.05,2026-10-11T18:42Z,loss,1.387,est,-1.0
 soccer,seriea,an292992,2026-10-11T18:45Z,Juventus,Cagliari,尤文圖斯,卡利亞里,underdog,home,卡利亞里,0.1033,0.1397,6.5,5.883,est,-0.3923,0.05,2026-10-11T18:42Z,loss,5.883,est,-1.0
+soccer,ligue1,an292994,2026-10-11T18:45Z,Marseille,Troyes,馬賽,,draw,draw,和局,0.2686,0.2686,3.52,3.186,est,-0.1442,0.05,2026-10-11T18:42Z,loss,3.186,est,-1.0
+soccer,ligue1,an292994,2026-10-11T18:45Z,Marseille,Troyes,馬賽,,draw_us,draw,和局,0.2686,0.2686,3.52,3.52,us,-0.0545,0.05,2026-10-11T18:42Z,loss,3.52,us,-1.0
 soccer,ligue1,an292994,2026-10-11T18:45Z,Marseille,Troyes,馬賽,,favorite,away,馬賽,0.4887,0.4675,2.05,1.856,est,-0.093,0.05,2026-10-11T18:42Z,win,1.856,est,0.856
 soccer,ligue1,an292994,2026-10-11T18:45Z,Marseille,Troyes,馬賽,,model1,away,馬賽,0.4887,0.4675,2.05,1.856,est,-0.093,0.05,2026-10-11T18:42Z,win,1.856,est,0.856
 soccer,ligue1,an292994,2026-10-11T18:45Z,Marseille,Troyes,馬賽,,model1_us,away,馬賽,0.4887,0.4675,2.05,2.05,us,0.0018,0.05,2026-10-11T18:42Z,win,2.05,us,1.05
 soccer,ligue1,an292994,2026-10-11T18:45Z,Marseille,Troyes,馬賽,,model1_us_tw,away,馬賽,0.4887,0.4675,2.05,1.856,est,0.0018,0.05,2026-10-11T18:42Z,win,1.856,est,0.856
 soccer,ligue1,an292994,2026-10-11T18:45Z,Marseille,Troyes,馬賽,,underdog,home,Troyes,0.2335,0.2586,3.5,3.168,est,-0.2603,0.05,2026-10-11T18:42Z,loss,3.168,est,-1.0
+soccer,laliga,an293048,2026-10-11T19:00Z,Valencia,Racing Santander,瓦倫西亞,,draw,draw,和局,0.2714,0.2714,3.47,3.141,est,-0.1474,0.3,2026-10-11T18:42Z,win,3.141,est,2.141
+soccer,laliga,an293048,2026-10-11T19:00Z,Valencia,Racing Santander,瓦倫西亞,,draw_us,draw,和局,0.2714,0.2714,3.47,3.47,us,-0.0581,0.3,2026-10-11T18:42Z,win,3.47,us,2.47
 soccer,laliga,an293048,2026-10-11T19:00Z,Valencia,Racing Santander,瓦倫西亞,,favorite,home,Racing Santander,0.419,0.414,2.32,2.1,est,-0.1201,0.3,2026-10-11T18:42Z,loss,2.1,est,-1.0
 soccer,laliga,an293048,2026-10-11T19:00Z,Valencia,Racing Santander,瓦倫西亞,,model1,home,Racing Santander,0.419,0.414,2.32,2.1,est,-0.1201,0.3,2026-10-11T18:42Z,loss,2.1,est,-1.0
 soccer,laliga,an293048,2026-10-11T19:00Z,Valencia,Racing Santander,瓦倫西亞,,model1_us,home,Racing Santander,0.419,0.414,2.32,2.32,us,-0.0279,0.3,2026-10-11T18:42Z,loss,2.32,us,-1.0
 soccer,laliga,an293048,2026-10-11T19:00Z,Valencia,Racing Santander,瓦倫西亞,,model1_us_tw,home,Racing Santander,0.419,0.414,2.32,2.1,est,-0.0279,0.3,2026-10-11T18:42Z,loss,2.1,est,-1.0
 soccer,laliga,an293048,2026-10-11T19:00Z,Valencia,Racing Santander,瓦倫西亞,,underdog,away,瓦倫西亞,0.3064,0.3128,2.92,2.643,est,-0.1902,0.3,2026-10-11T18:42Z,loss,2.643,est,-1.0
-soccer,seriea,an292993,2026-10-12T16:30Z,Venezia,Atalanta,威尼斯,亞特蘭大,favorite,home,亞特蘭大,0.6023,0.6055,1.5236,1.379,est,-0.1694,11.79,2026-10-12T05:41Z,,,,
-soccer,seriea,an292993,2026-10-12T16:30Z,Venezia,Atalanta,威尼斯,亞特蘭大,model1,draw,和局,0.2345,0.2245,4.2,3.802,est,-0.1084,11.79,2026-10-12T05:41Z,,,,
-soccer,seriea,an292993,2026-10-12T16:30Z,Venezia,Atalanta,威尼斯,亞特蘭大,model1_us,draw,和局,0.2345,0.2245,4.2,4.2,us,-0.0151,11.79,2026-10-12T05:41Z,,,,
-soccer,seriea,an292993,2026-10-12T16:30Z,Venezia,Atalanta,威尼斯,亞特蘭大,model1_us_tw,draw,和局,0.2345,0.2245,4.2,3.802,est,-0.0151,11.79,2026-10-12T05:41Z,,,,
-soccer,seriea,an292993,2026-10-12T16:30Z,Venezia,Atalanta,威尼斯,亞特蘭大,underdog,away,威尼斯,0.1632,0.17,5.68,5.141,est,-0.161,11.79,2026-10-12T05:41Z,,,,
-soccer,seriea,an292984,2026-10-12T18:45Z,Udinese,Torino,烏迪內斯,杜林,favorite,home,杜林,0.3985,0.4058,2.35,2.127,est,-0.1524,13.06,2026-10-12T05:41Z,,,,
-soccer,seriea,an292984,2026-10-12T18:45Z,Udinese,Torino,烏迪內斯,杜林,model1,draw,和局,0.306,0.2938,3.1,2.806,est,-0.1414,13.06,2026-10-12T05:41Z,,,,
-soccer,seriea,an292984,2026-10-12T18:45Z,Udinese,Torino,烏迪內斯,杜林,model1_us,draw,和局,0.306,0.2938,3.1,3.1,us,-0.0514,13.06,2026-10-12T05:41Z,,,,
-soccer,seriea,an292984,2026-10-12T18:45Z,Udinese,Torino,烏迪內斯,杜林,model1_us_tw,draw,和局,0.306,0.2938,3.1,2.806,est,-0.0514,13.06,2026-10-12T05:41Z,,,,
-soccer,seriea,an292984,2026-10-12T18:45Z,Udinese,Torino,烏迪內斯,杜林,underdog,away,烏迪內斯,0.2955,0.3004,3.15,2.851,est,-0.1575,13.06,2026-10-12T05:41Z,,,,
-soccer,epl,an292980,2026-10-12T19:00Z,Newcastle United,Coventry City,紐卡索,考文垂,favorite,away,紐卡索,0.463,0.4502,2.15,1.946,est,-0.099,13.31,2026-10-12T05:41Z,,,,
-soccer,epl,an292980,2026-10-12T19:00Z,Newcastle United,Coventry City,紐卡索,考文垂,model1,away,紐卡索,0.463,0.4502,2.15,1.946,est,-0.099,13.31,2026-10-12T05:41Z,,,,
-soccer,epl,an292980,2026-10-12T19:00Z,Newcastle United,Coventry City,紐卡索,考文垂,model1_us,away,紐卡索,0.463,0.4502,2.15,2.15,us,-0.0045,13.31,2026-10-12T05:41Z,,,,
-soccer,epl,an292980,2026-10-12T19:00Z,Newcastle United,Coventry City,紐卡索,考文垂,model1_us_tw,away,紐卡索,0.463,0.4502,2.15,1.946,est,-0.0045,13.31,2026-10-12T05:41Z,,,,
-soccer,epl,an292980,2026-10-12T19:00Z,Newcastle United,Coventry City,紐卡索,考文垂,underdog,home,考文垂,0.2724,0.2882,3.1,2.806,est,-0.2356,13.31,2026-10-12T05:41Z,,,,
-soccer,laliga,an293050,2026-10-12T19:00Z,Sevilla,Levante UD,塞維亞,,favorite,away,塞維亞,0.3744,0.3652,2.73,2.471,est,-0.0749,13.31,2026-10-12T05:41Z,,,,
-soccer,laliga,an293050,2026-10-12T19:00Z,Sevilla,Levante UD,塞維亞,,model1,away,塞維亞,0.3744,0.3652,2.73,2.471,est,-0.0749,13.31,2026-10-12T05:41Z,,,,
-soccer,laliga,an293050,2026-10-12T19:00Z,Sevilla,Levante UD,塞維亞,,model1_us,away,塞維亞,0.3744,0.3652,2.73,2.73,us,0.0221,13.31,2026-10-12T05:41Z,,,,
-soccer,laliga,an293050,2026-10-12T19:00Z,Sevilla,Levante UD,塞維亞,,model1_us_tw,away,塞維亞,0.3744,0.3652,2.73,2.471,est,0.0221,13.31,2026-10-12T05:41Z,,,,
-soccer,laliga,an293050,2026-10-12T19:00Z,Sevilla,Levante UD,塞維亞,,underdog,home,Levante UD,0.3256,0.3489,2.65,2.399,est,-0.2189,13.31,2026-10-12T05:41Z,,,,
+soccer,seriea,an292993,2026-10-12T16:30Z,Venezia,Atalanta,威尼斯,亞特蘭大,draw,draw,和局,0.2224,0.2224,4.2,3.802,est,-0.1544,11.79,2026-10-12T05:43Z,,,,
+soccer,seriea,an292993,2026-10-12T16:30Z,Venezia,Atalanta,威尼斯,亞特蘭大,draw_us,draw,和局,0.2224,0.2224,4.2,4.2,us,-0.0658,11.79,2026-10-12T05:43Z,,,,
+soccer,seriea,an292993,2026-10-12T16:30Z,Venezia,Atalanta,威尼斯,亞特蘭大,favorite,home,亞特蘭大,0.6023,0.6055,1.5236,1.379,est,-0.1694,11.79,2026-10-12T05:43Z,,,,
+soccer,seriea,an292993,2026-10-12T16:30Z,Venezia,Atalanta,威尼斯,亞特蘭大,model1,draw,和局,0.2345,0.2245,4.2,3.802,est,-0.1084,11.79,2026-10-12T05:43Z,,,,
+soccer,seriea,an292993,2026-10-12T16:30Z,Venezia,Atalanta,威尼斯,亞特蘭大,model1_us,draw,和局,0.2345,0.2245,4.2,4.2,us,-0.0151,11.79,2026-10-12T05:43Z,,,,
+soccer,seriea,an292993,2026-10-12T16:30Z,Venezia,Atalanta,威尼斯,亞特蘭大,model1_us_tw,draw,和局,0.2345,0.2245,4.2,3.802,est,-0.0151,11.79,2026-10-12T05:43Z,,,,
+soccer,seriea,an292993,2026-10-12T16:30Z,Venezia,Atalanta,威尼斯,亞特蘭大,underdog,away,威尼斯,0.1632,0.17,5.68,5.141,est,-0.161,11.79,2026-10-12T05:43Z,,,,
+soccer,seriea,an292984,2026-10-12T18:45Z,Udinese,Torino,烏迪內斯,杜林,draw,draw,和局,0.3013,0.3013,3.1,2.806,est,-0.1546,15.01,2026-10-12T05:43Z,,,,
+soccer,seriea,an292984,2026-10-12T18:45Z,Udinese,Torino,烏迪內斯,杜林,draw_us,draw,和局,0.3013,0.3013,3.1,3.1,us,-0.066,15.01,2026-10-12T05:43Z,,,,
+soccer,seriea,an292984,2026-10-12T18:45Z,Udinese,Torino,烏迪內斯,杜林,favorite,home,杜林,0.3985,0.4058,2.35,2.127,est,-0.1524,15.01,2026-10-12T05:43Z,,,,
+soccer,seriea,an292984,2026-10-12T18:45Z,Udinese,Torino,烏迪內斯,杜林,model1,draw,和局,0.306,0.2938,3.1,2.806,est,-0.1414,15.01,2026-10-12T05:43Z,,,,
+soccer,seriea,an292984,2026-10-12T18:45Z,Udinese,Torino,烏迪內斯,杜林,model1_us,draw,和局,0.306,0.2938,3.1,3.1,us,-0.0514,15.01,2026-10-12T05:43Z,,,,
+soccer,seriea,an292984,2026-10-12T18:45Z,Udinese,Torino,烏迪內斯,杜林,model1_us_tw,draw,和局,0.306,0.2938,3.1,2.806,est,-0.0514,15.01,2026-10-12T05:43Z,,,,
+soccer,seriea,an292984,2026-10-12T18:45Z,Udinese,Torino,烏迪內斯,杜林,underdog,away,烏迪內斯,0.2955,0.3004,3.1,2.806,est,-0.1708,15.01,2026-10-12T05:43Z,,,,
+soccer,epl,an292980,2026-10-12T19:00Z,Newcastle United,Coventry City,紐卡索,考文垂,draw,draw,和局,0.2668,0.2668,3.52,3.186,est,-0.1499,15.26,2026-10-12T05:43Z,,,,
+soccer,epl,an292980,2026-10-12T19:00Z,Newcastle United,Coventry City,紐卡索,考文垂,draw_us,draw,和局,0.2668,0.2668,3.52,3.52,us,-0.0607,15.26,2026-10-12T05:43Z,,,,
+soccer,epl,an292980,2026-10-12T19:00Z,Newcastle United,Coventry City,紐卡索,考文垂,favorite,away,紐卡索,0.463,0.4502,2.15,1.946,est,-0.099,15.26,2026-10-12T05:43Z,,,,
+soccer,epl,an292980,2026-10-12T19:00Z,Newcastle United,Coventry City,紐卡索,考文垂,model1,away,紐卡索,0.463,0.4502,2.15,1.946,est,-0.099,15.26,2026-10-12T05:43Z,,,,
+soccer,epl,an292980,2026-10-12T19:00Z,Newcastle United,Coventry City,紐卡索,考文垂,model1_us,away,紐卡索,0.463,0.4502,2.15,2.15,us,-0.0045,15.26,2026-10-12T05:43Z,,,,
+soccer,epl,an292980,2026-10-12T19:00Z,Newcastle United,Coventry City,紐卡索,考文垂,model1_us_tw,away,紐卡索,0.463,0.4502,2.15,1.946,est,-0.0045,15.26,2026-10-12T05:43Z,,,,
+soccer,epl,an292980,2026-10-12T19:00Z,Newcastle United,Coventry City,紐卡索,考文垂,underdog,home,考文垂,0.2724,0.2882,3.17,2.869,est,-0.2185,15.26,2026-10-12T05:43Z,,,,
+soccer,laliga,an293050,2026-10-12T19:00Z,Sevilla,Levante UD,塞維亞,,draw,draw,和局,0.2984,0.2984,3.15,2.851,est,-0.1494,15.26,2026-10-12T05:43Z,,,,
+soccer,laliga,an293050,2026-10-12T19:00Z,Sevilla,Levante UD,塞維亞,,draw_us,draw,和局,0.2984,0.2984,3.15,3.15,us,-0.0601,15.26,2026-10-12T05:43Z,,,,
+soccer,laliga,an293050,2026-10-12T19:00Z,Sevilla,Levante UD,塞維亞,,favorite,away,塞維亞,0.3744,0.3652,2.73,2.471,est,-0.0749,15.26,2026-10-12T05:43Z,,,,
+soccer,laliga,an293050,2026-10-12T19:00Z,Sevilla,Levante UD,塞維亞,,model1,away,塞維亞,0.3744,0.3652,2.73,2.471,est,-0.0749,15.26,2026-10-12T05:43Z,,,,
+soccer,laliga,an293050,2026-10-12T19:00Z,Sevilla,Levante UD,塞維亞,,model1_us,away,塞維亞,0.3744,0.3652,2.73,2.73,us,0.0221,15.26,2026-10-12T05:43Z,,,,
+soccer,laliga,an293050,2026-10-12T19:00Z,Sevilla,Levante UD,塞維亞,,model1_us_tw,away,塞維亞,0.3744,0.3652,2.73,2.471,est,0.0221,15.26,2026-10-12T05:43Z,,,,
+soccer,laliga,an293050,2026-10-12T19:00Z,Sevilla,Levante UD,塞維亞,,underdog,home,Levante UD,0.3256,0.3489,2.63,2.381,est,-0.2247,15.26,2026-10-12T05:43Z,,,,

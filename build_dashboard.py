@@ -413,7 +413,7 @@ def team_ctx(ctx, side, k):
 
 
 LIVE_STRATS = ["model1", "model1_us", "model1_us_tw", "model1_sp_us", "model1_sp_tw", "model1_ou_us", "model1_ou_tw",
-               "model1_all_us", "model1_all_tw", "model2", "combo", "favorite", "underdog"]
+               "model1_all_us", "model1_all_tw", "model2", "combo", "favorite", "underdog", "draw_us", "draw"]
 
 
 def live_summary():
@@ -447,8 +447,11 @@ def live_summary():
                       "pick": r["pick_zh"], "p": num(r["p"]), "tw": num(r["settle_odds"]) or num(r["tw_odds"]),
                       "src": r["settle_src"] or r["tw_src"], "ev": num(r["ev"]), "result": r["result"], "profit": num(r["profit"])}
     # 每一筆開獎的注（畫獲利曲線、算凱利用）：[時間, 策略, 運動, 結算賠率, 開賽前勝率, 開賽前期望值, 賺賠(每 1 單位)]
+    # 模型一押和局的那幾注，另外當成一個策略（model1_us_draw／model1_tw_draw），看「模型挑的和局」準不準
+    alias = {"model1_us": "model1_us_draw", "model1_us_tw": "model1_tw_draw"}
+    rows_s = rows + [{**r, "strategy": alias[r["strategy"]]} for r in rows if r["strategy"] in alias and r["pick"] == "draw"]
     series = sorted([[r["game_time_utc"], r["strategy"], r["sport"], num(r["settle_odds"]) or num(r["tw_odds"]), num(r["p"]), num(r["ev"]),
-                      num(r["profit"]), r.get("league") or r["sport"], int(r["settle_src"] == "actual")] for r in rows if r["result"] in ("win", "loss", "push")], key=lambda x: x[0])
+                      num(r["profit"]), r.get("league") or r["sport"], int(r["settle_src"] == "actual")] for r in rows_s if r["result"] in ("win", "loss", "push")], key=lambda x: x[0])
     return {"since": min((r["game_time_utc"] for r in m1), default=None), "strats": strats, "pending": len(pend),
             "recent": [slim(r) for r in settled[:30]], "series": series,
             # 模型一・美國賠率：每一注（含還沒開賽的），新的在前
