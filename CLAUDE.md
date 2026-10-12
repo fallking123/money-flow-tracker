@@ -1,0 +1,59 @@
+# 給 Claude 的專案說明（每個新對話先讀這份）
+
+## 使用者
+- 住台灣，在**台灣運彩（台彩）**下注，用 iPhone／iPad 看看板。不會寫程式，所有修改都由 Claude 做。
+- **一律用繁體中文回覆**（就算使用者打簡體字也一樣）。用白話，少用術語；數字用表格，結論放前面。
+- 目前**每注固定金額**，等資料累積夠了再考慮凱利。下注會緊張，不要鼓吹多下。
+- 誠實優先：到現在**還沒有一注台彩期望值是正的**；樣本少的結果要講清楚「大多是運氣」。
+- 看板上新增的功能，舊功能都要保留（使用者明確要求過）。
+
+## 絕對不要做
+- **不要抓玩運彩（ToS 不允許）、不要抓台彩官網（Cloudflare）**。台彩賠率只能靠使用者截圖，由 Claude 讀圖後用 `record_tw_odds.py` 記錄。
+- 只記台彩的**最終賠率**。
+- 不協助在台灣使用國外下注網站、VPN 等（在台灣下國外網站是違法的，使用者知道）。
+
+## 看板（網頁 artifact）
+- 網址：https://claude.ai/artifact/7PL5t3Y98XSVwmnQBPaTjU
+- 原始碼：`dashboard/page.html`（模板）→ `python3 build_dashboard.py` 產生 `dashboard/index.html`（資料內嵌）＋ `dashboard/data.json`。**只改 page.html，不要手改 index.html。**
+- 發布：Artifact 工具 publish，`url` 填上面網址、`file_path` 填 `dashboard/index.html`，不要傳 icon、不要傳 capabilities（沿用：`db` ＋ `mcp`（Claude Code Remote 的 fire_trigger））。
+- 發布被拒（排程剛發布過新版本）：讀被存下來的那份 HTML，跟本地 index.html 比對短行（`awk 'length<5000'` 再 diff），差異只有自己的修改和開頭的 wrapper 就重送一次同樣內容即可。
+- 頁面（底部導覽）：比賽、選注、準不準（分析）、投注、模型、台彩、計算機、說明。
+  - 「模型」頁有分頁：成績／曲線／下多少／賠率區間／每一注／回測，上方「只看哪些聯賽」篩選套用到除了回測以外的分頁。
+  - 獲利率顏色維持紅綠，下面小字「還看不出／看得出」（注數 < 30 或離 0 不到 2 倍標準誤＝還看不出）。
+- 使用者自己的資料存在 artifact 的 db：`bets`（投注／觀察紀錄）、`settings/bank`（本金設定）。
+- 測試：用 playwright（Chromium 已裝好），把 index.html 前面接一段假的 `window.claude`（db 回傳假資料）存成暫存檔打開，檢查沒有 JS 錯誤、手機寬 390px 沒有橫向捲動。
+
+## 資料與程式
+- 每個運動一個資料夾 `docs/data/<運動>/`（mlb、nba、nfl、nhl、soccer；ncaaf 暫停）。詳細欄位見 README.md。
+- `docs/data/tw_odds.csv`：使用者截圖記錄的台彩實際賠率。
+- `docs/data/<運動>/model_picks.csv`：各策略「每一場都下」的實戰記錄（`track_models.py` 產生）。
+- 主要程式：
+  - `scrape_odds.py`（美國四大資金流向，`--final`＝開賽前 5 分鐘截圖）、`scrape_soccer.py`、`scrape_pinnacle.py`、`scrape_extra.py`、`scrape_context.py`
+  - `backfill_results.py` 補賽果；`us_model.py`／`soccer_model.py` 模型一訓練
+  - `track_models.py` 策略記錄與結算；`alerts.py`／`alerts_report.py` 划算注；`check_flip.py` 參考策略提醒
+  - `build_dashboard.py` 組看板資料（`live_summary()` 給模型頁用）
+- GitHub Actions（UTC）：scrape_odds 每 10 分（含 track_models、alerts）、final_snapshot 每 10 分、scrape_soccer 每小時 :25、backfill_results 07:02 與 12:17（台灣 15:02、20:17）、scrape_context 每天 4 次、history（模型一重練）週日 20:30、soccer_model 週一四 22:40。
+- Actions 一直在 commit 資料：**commit 前一定 `git pull --rebase`**。model_picks.csv 衝突時，取自己的版本後重跑一次 `track_models.py` 就會補回來。
+- commit 訊息用繁體中文，結尾加上系統要求的 Co-Authored-By／Claude-Session 兩行。
+
+## 排程任務（Claude 的 scheduled tasks）
+| 名稱 | 做什麼 |
+|---|---|
+| 划算注推播 | 每小時 :05（台灣），跑 alerts_report.py，有新的才推播 |
+| 更新資金流向看板 | 台灣 6–12、16、18、21、23 點的 :10，重建並發布看板（看板上「立即更新」按鈕也會觸發） |
+| 立即更新賽果 | 只能手動觸發（看板「更新賽果」按鈕）：跑 backfill workflow → 本機 track_models → 重建發布 |
+| 台彩截圖需求清單 | 每天 21:03，列出還沒記台彩賠率的比賽 |
+| 改押對面策略提醒 | 每週日 20:50，check_flip.py 改過的注滿 100 注就推播一次並自動停用 |
+
+## 重要的運彩規則（算錯會差很多）
+- 期望值 EV = 勝率 × 賠率 − 1；「划算」門檻 EV ≥ +2%。
+- 台彩抽成約 15%（美國約 4.5%）；沒有實際台彩賠率時用「美國賠率 ×（1 + 折扣）」估，折扣由 tw_odds.csv 算（約 −9.5%）。
+- **NHL 台彩獨贏＝60 分鐘三選一（客／和／主），打進延長賽＝和局，押隊伍算輸**；大小分也只算 60 分鐘；台彩冰球讓分跟美國 ±1.5 不能比（不算）。美國盤含延長賽。
+- 足球台彩讓分是三選一（例如 1:0），我們的足球讓分是美國／亞洲盤，不能直接比。
+- 模型一＝每週重練的羅吉斯迴歸，效果約等於市場收盤價；勝率準、但不保證贏抽成。
+- 樣本少時不要下結論：每格／每策略幾百注才看得出來。
+
+## 目前的觀察（2026-10-12）
+- 10/1 起：模型一・美國賠率 +12.7%（還看不出），同一注改去台彩下約 +0%；模型一・台彩 −11%；都押冷門 −30%（看得出會虧）。
+- 足球模型一的獲利大多來自和局（11 注中 5）。
+- 長期歷史：台彩每個賠率區間都虧 10–18%，低賠（< 1.3）虧最少、3.0 以上大冷門虧最多。
