@@ -16,6 +16,12 @@ def main():
     data = {"generated_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
             "clv": clv.main(), "check": datacheck.main(),
             "soccer": json.load(open(rep, encoding="utf-8")) if os.path.exists(rep) else None}
+    us = os.path.join(os.path.dirname(HERE), "docs", "data", "pro", "us_report.json")
+    if os.path.exists(us):
+        u = json.load(open(us, encoding="utf-8"))
+        for k in u.values():           # 網頁不需要校準以外的大清單
+            k.pop("grid", None)
+        data["us"] = u
     tpl = open(os.path.join(HERE, "page.html"), encoding="utf-8").read()
     js = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     out = tpl.replace("/*__DATA__*/null", js)

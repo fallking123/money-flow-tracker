@@ -244,7 +244,7 @@ def main():
         R.update({"grid": grid, "chosen": c, "valid": ev, "blend_ab": [ev["ml"]["blend"]["a"], ev["ml"]["blend"]["b"]],
                   "tuned_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
                   "data": {"games": len(games), "first": games[0]["date"], "last": games[-1]["date"]}})
-        json.dump(rep, open(rep_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+        E.save_sport(rep_path, "nfl", R)
         print("NFL 驗證完成：", c, ev["ml"]["ll_model"], ev["ml"]["ll_close"])
     elif "--final-test" in sys.argv:
         if R.get("test"):
@@ -254,7 +254,7 @@ def main():
         preds = run(games, tg, c["half_life"], c["ridge"], TEST)
         ev = evaluate(preds, blend=R["blend_ab"])
         R["test"] = {"run_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"), "config": c, **ev}
-        json.dump(rep, open(rep_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+        E.save_sport(rep_path, "nfl", R)
         log = os.path.join(OUT, "test_log.json")
         hist = json.load(open(log)) if os.path.exists(log) else []
         hist.append({"stage": 2, "sport": "nfl", "run_utc": R["test"]["run_utc"], "config": c})

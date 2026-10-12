@@ -23,5 +23,31 @@
    "half_life": 180,
    "ridge": 32.0
   }
+ },
+ {
+  "stage": 2,
+  "sport": "mlb",
+  "run_utc": "2026-10-12T14:32Z",
+  "config": {
+   "hl_sp": 180,
+   "k_sp": 100,
+   "hl_team": 180,
+   "hl_bp": 180
+  }
+ },
+ {
+  "stage": 2,
+  "sport": "nhl",
+  "run_utc": "2026-10-12T14:35Z",
+  "config": {
+   "half_life": 240,
+   "ridge": 8.0
+  }
+ },
+ {
+  "stage": 2,
+  "sport": "mlb",
+  "run_utc": "2026-10-12T14:37Z",
+  "note": "存檔被蓋掉，用同設定重算一次，結果與第一次完全相同（已核對）"
  }
 ]

@@ -53,7 +53,8 @@
 - **每做完一個階段就停下來**：跟使用者說明這階段在做什麼、結果如何，等他確認才做下一階段。
 - 原則：核心模型不放賠率（自己先開盤再跟莊家比）、嚴格照時間順序、最後兩季留到最後才考、成績單看 log loss vs 收盤／機率校準／CLV／美國或 Pinnacle 賠率獲利＋運氣範圍。不用條款不允許抓取的網站。資料不齊全就從頭重建。
 - 階段：0 CLV 追蹤＋資料檢查（`pro/lines.py`、`pro/clv.py`、`pro/datacheck.py`）→ 1 足球比分模型 → 2 NFL、MLB、NHL → 3 NBA → 4 混合＋每日對照表。
-- 進度：第 0 階段使用者已確認。第 1 階段（足球，`pro/soccer_model.py`）完成，2026-10-12 等使用者確認：選定半衰期 180 天、進球 50%＋射正 50%、拉回 0.3；最後兩季已考過一次（`docs/data/pro/test_log.json`，**不能重考**，`--final-test` 會擋）。結果：追上收盤 74%／64%，混合時模型分量為負、收盤只往模型移 +0.06 個百分點、CLV −3% → 沒過關（只靠比分射正贏不了市場）。
+- 進度：第 0、1 階段使用者已確認。第 2 階段（MLB `pro/mlb_model.py`、NFL `pro/nfl_model.py`、NHL `pro/nhl_model.py`，共用 `pro/us_eval.py`，結果 `docs/data/pro/us_report.json`）完成，2026-10-12 等使用者確認。三個運動最後兩季都已考過（test_log.json，不能重考）。結果：MLB 收盤明顯往模型移（開盤→收盤，往模型 60–63% vs 反方向 26–33%，看得出），但用美國平均開盤價 CLV 約 −1%～+0.5%，大約打平；NFL、NHL 沒有優勢。
+- 資料：MLB＝Retrosheet（`pro/fetch_us.py` 在 GitHub Actions `pro_data.yml` 下載整理，網頁要附 Retrosheet 聲明）；NHL＝MoneyPuck；NFL＝nflverse（`pro/nfl_data.py`，工作環境可直接下載）。**ESPN 冰球盤 2022–23、2023–24 的收盤獨贏是壞的（兩邊機率加起來 83%），SBRO 冰球盤也有問題**；原本模型一的冰球訓練用過這些盤口，要修先問使用者。
 - 資料：football-data 2025/26 季中起沒有 Pinnacle 收盤 → 最後兩季用 Betfair 交易所收盤（BFEC*）當標準答案。Pinnacle 檔案 period：0＝全場；NHL 的 6＝60 分鐘三選一（有和局賠率）。
 
 ## 重要的運彩規則（算錯會差很多）

@@ -130,6 +130,20 @@ def clv(rs):
         if dp:
             out[str(th)] = {"n": len(dp), "dp": ms(dp), "clv": ms(cl), "roi": ms(roi),
                             "toward": round(sum(x > 0.002 for x in dp) / len(dp), 3), "away": round(sum(x < -0.002 for x in dp) / len(dp), 3)}
+    # 穩健檢查：排除開盤到收盤大動（≥ 8 個百分點，常是臨時換先發、傷兵等「開盤時還不知道」的事）的比賽，結果還在才算數
+    calm = [r for r in pool if abs(r["pc"] - r["po"]) < 0.08]
+    for th in (0.0, 0.03, 0.05, 0.10):
+        dp, cl, roi = [], [], []
+        for r in calm:
+            for side, p, po, pc, o in (("h", r["p"], r["po"], r["pc"], r["oo_h"]), ("a", 1 - r["p"], 1 - r["po"], 1 - r["pc"], r["oo_a"])):
+                if th <= p * o - 1 <= 1:
+                    dp.append(pc - po)
+                    cl.append(o * pc - 1)
+                    won = r["y"] if side == "h" else 1 - r["y"]
+                    roi.append(o - 1 if won else -1)
+        if dp:
+            out["calm_" + str(th)] = {"n": len(dp), "dp": ms(dp), "clv": ms(cl), "roi": ms(roi), "toward": round(sum(x > 0.002 for x in dp) / len(dp), 3),
+                                      "away": round(sum(x < -0.002 for x in dp) / len(dp), 3), "excluded_games": len(pool) - len(calm)}
     x = np.array([r["p"] - r["po"] for r in pool])
     yy = np.array([r["pc"] - r["po"] for r in pool])
     if len(x) > 30 and (x * x).sum() > 0:
@@ -173,3 +187,12 @@ def line_eval(rows, key):
         if hits:
             out[str(th)] = ms(hits)
     return out
+
+
+def save_sport(path, key, data):
+    """只更新自己那個運動：存檔前重新讀一次（避免同時跑的另一個程式蓋掉別的運動）"""
+    import json
+    import os
+    rep = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {}
+    rep[key] = data
+    json.dump(rep, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
