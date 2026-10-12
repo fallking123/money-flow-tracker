@@ -2136,23 +2136,19 @@ td.luck{color:var(--muted)!important}
     const opts = MLG_LIST.filter(([k]) => have.has(k)); if (!opts.length) return "";
     const socAll = SOCCER_LG.filter((k) => have.has(k)), socOn = socAll.length && socAll.every((k) => MLG.sel.has(k));
     const nm = lgNames();
-    return `<div class="card" id="lgcard"><h3>只看哪些聯賽<small>可以複選，下面所有成績、曲線、每一注都只算你選的</small></h3>
+    return `<div class="card" id="lgcard"><h3>只看哪些聯賽<small>可以複選・成績、曲線、下多少、賠率區間、每一注都只算你選的</small></h3>
       <div class="chips" style="flex-wrap:wrap"><button type="button" class="chip" data-mlg="*" aria-pressed="${!MLG.sel.size}">全部</button>${socAll.length ? `<button type="button" class="chip" data-mlg="soccer" aria-pressed="${!!socOn}">足球（五大聯賽）</button>` : ""}${opts.map(([k, n]) => `<button type="button" class="chip" data-mlg="${k}" aria-pressed="${MLG.sel.has(k)}">${n}</button>`).join("")}</div>
       <p class="mut" style="font-size:12.5px;margin:8px 0 0">${MLG.sel.size ? `現在只算：<b>${nm.join("、")}</b>` : "現在算全部聯賽"}</p></div>`;
   }
   // ═════════ 台彩賠率區間：每個賠率區間兩邊都下，賺還是賠 ═════════
   const OB = {sp: store.get("ob_sp", "all"), w: store.get("ob_w", "0.1"), s: store.get("ob_s", "both")};
   const OB_S = [["both", "兩邊都下・台彩", ["favorite", "underdog", "draw"]], ["both_us", "兩邊都下・美國賠率", ["both_us"]], ["model1", "模型一・台彩", ["model1"]], ["model1_us_tw", "美國選邊・台彩下", ["model1_us_tw"]], ["model1_us", "模型一・美國賠率", ["model1_us"]]];
-  const OB_SP = [["all", "全部"], ["mlb", "MLB"], ["nfl", "NFL"], ["nhl", "NHL"], ["nba", "NBA"], ["soccer", "足球"]];
   function oddsCard() {
     if (!OB_S.some(([k]) => k === OB.s)) OB.s = "both";
     const [, sNm, sKeys] = OB_S.find(([k]) => k === OB.s), us = OB.s === "model1_us" || OB.s === "both_us";
-    const base = serAll().filter((x) => sKeys.includes(x[1]) && x[3] > 1);
+    const base = serF().filter((x) => sKeys.includes(x[1]) && x[3] > 1);
     if (!serAll().some((x) => x[1] === "favorite")) return "";
-    const have = new Set(base.map((x) => x[2]));
-    const sps = OB_SP.filter(([k]) => k === "all" || have.has(k));
-    if (!sps.some(([k]) => k === OB.sp)) OB.sp = "all";
-    const rs = base.filter((x) => OB.sp === "all" || x[2] === OB.sp);
+    const rs = base;
     const w = +OB.w, cap = 3, B = new Map();
     for (const x of rs) {
       const i = x[3] >= cap ? 1e9 : Math.floor(Math.round(x[3] * 1000) / 1000 / w + 1e-9);
@@ -2168,9 +2164,8 @@ td.luck{color:var(--muted)!important}
       return `<tr><td class="n">${lab(i)}</td><td class="r n">${b.n}</td><td class="r n">${Math.round(b.win / b.n * 100)}%</td><td class="r n ${gb(b.pl)}">${ntd(b.pl * UNIT)}</td><td class="r n ${gb(roi)}" style="white-space:nowrap">${sgn(roi * 100, 1)}%${luckTag(b)}${bar}</td></tr>`;
     }).join("");
     const since = rs.length ? fmtMD.format(new Date(rs[0][0])) : "";
-    return `<div class="card" id="obcard"><h3>${us ? "美國賠率區間" : "台彩賠率區間"}<small>${since} 起我們自己記錄的每一場・${OB.s === "both" ? "兩邊都下・台彩（足球、冰球含和局）" : OB.s === "both_us" ? "兩邊都下・美國賠率（足球含和局，冰球含延長賽）" : sNm + "（每場押一邊）"}・每注 ${UNIT.toLocaleString("en-US")} 元</small></h3>
+    return `<div class="card" id="obcard"><h3>${us ? "美國賠率區間" : "台彩賠率區間"}<small>${MLG.sel.size ? `只算 ${lgNames().join("、")}・` : ""}${since} 起我們自己記錄的每一場・${OB.s === "both" ? "兩邊都下・台彩（足球、冰球含和局）" : OB.s === "both_us" ? "兩邊都下・美國賠率（足球含和局，冰球含延長賽）" : sNm + "（每場押一邊）"}・每注 ${UNIT.toLocaleString("en-US")} 元</small></h3>
       <div class="chips" style="flex-wrap:wrap;margin-bottom:8px">${OB_S.map(([k, n]) => `<button type="button" class="chip" data-ob="s" data-obv="${k}" aria-pressed="${OB.s === k}">${n}</button>`).join("")}</div>
-      <div class="chips" style="flex-wrap:wrap;margin-bottom:8px">${sps.map(([k, n]) => `<button type="button" class="chip" data-ob="sp" data-obv="${k}" aria-pressed="${OB.sp === k}">${n}</button>`).join("")}</div>
       <div class="ctl" style="margin-bottom:10px"><div class="seg" role="group">${["0.1", "0.2", "0.5"].map((v) => `<button type="button" data-ob="w" data-obv="${v}" aria-pressed="${OB.w === v}">${v}</button>`).join("")}</div><span class="mut" style="font-size:12.5px;align-self:center">每格多寬</span></div>
       <div class="scroll"><table class="tb"><thead><tr><th>${us ? "美國賠率" : "台彩賠率"}</th><th class="r">注數</th><th class="r">中幾成</th><th class="r">賺賠</th><th class="r">投報率</th></tr></thead><tbody>${trs}
         <tr><td><b>合計</b></td><td class="r n"><b>${rs.length}</b></td><td></td><td class="r n ${gb(tot)}"><b>${ntd(tot * UNIT)}</b></td><td class="r n ${gb(tot)}"><b>${rs.length ? sgn(tot / rs.length * 100, 1) + "%" : "–"}</b></td></tr></tbody></table></div>
@@ -2343,7 +2338,7 @@ td.luck{color:var(--muted)!important}
     const tabs = MT_TABS.filter(([k]) => T[k]);
     if (!tabs.some(([k]) => k === MT.tab)) MT.tab = "score";
     const sub = `<div class="subnav" role="tablist" style="margin-bottom:12px">${tabs.map(([k, n]) => `<button type="button" role="tab" data-mtab="${k}" aria-selected="${MT.tab === k}">${n}</button>`).join("")}</div>`;
-    $("models").innerHTML = sub + (MT.tab === "bt" || MT.tab === "odds" ? "" : lgCard()) + T[MT.tab];
+    $("models").innerHTML = sub + (MT.tab === "bt" ? "" : lgCard()) + T[MT.tab];
     const mcl = mcLines(); if (mcl.length && $("mcchart")) $("mcchart").innerHTML = multiChart(mcl, chartW("mcchart"));
     drawKs();
   }
