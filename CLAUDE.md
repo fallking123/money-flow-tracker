@@ -46,12 +46,14 @@
 | 改押對面策略提醒 | 每週日 20:50，check_flip.py 改過的注滿 100 注就推播一次並自動停用 |
 
 ## 職業版（pro/，進行中）
-- 照職業團隊做法從頭建的新模型，**跟模型一完全分開**：程式只放 `pro/`，輸出只寫 `docs/data/pro/`，看板只在「模型」頁的「職業版」分頁。不要改模型一或 model_picks.csv 來配合它。
+- 照職業團隊做法從頭建的新模型，**跟原本的看板和模型一完全分開，是獨立的成品**：
+  - 網頁：https://claude.ai/artifact/2gU7YFcfAW7F5E2EJQr2F5（模板 `pro/page.html` → `python3 -m pro.build_page` → `pro/dist/index.html`，發布到這個網址）
+  - 程式只放 `pro/`，輸出只寫 `docs/data/pro/` 和 `pro/dist/`。原本的看板沒有任何職業版的東西；不要改模型一或 model_picks.csv 來配合它。
 - **每做完一個階段就停下來**：跟使用者說明這階段在做什麼、結果如何，等他確認才做下一階段。
-- 原則：核心模型不放賠率（自己先開盤再跟莊家比）、嚴格照時間順序、最後兩季留到最後才考、成績單看 log loss vs Pinnacle 收盤／機率校準／CLV／美國或 Pinnacle 賠率獲利＋運氣範圍。不用條款不允許抓取的網站。
-- 階段：0 CLV 追蹤（`pro/lines.py`、`pro/clv.py`，build_dashboard 每次重建都會重算）→ 1 足球比分模型 → 2 NFL、MLB、NHL → 3 NBA → 4 混合＋每日對照表。
+- 原則：核心模型不放賠率（自己先開盤再跟莊家比）、嚴格照時間順序、最後兩季留到最後才考、成績單看 log loss vs 收盤／機率校準／CLV／美國或 Pinnacle 賠率獲利＋運氣範圍。不用條款不允許抓取的網站。資料不齊全就從頭重建。
+- 階段：0 CLV 追蹤＋資料檢查（`pro/lines.py`、`pro/clv.py`、`pro/datacheck.py`）→ 1 足球比分模型 → 2 NFL、MLB、NHL → 3 NBA → 4 混合＋每日對照表。
 - 進度：第 0 階段完成，2026-10-12 等使用者確認。
-- Pinnacle 檔案 period：0＝全場；NHL 的 6＝60 分鐘三選一（有和局賠率，之後可拿來估台彩冰球）。
+- 資料：football-data 2025/26 季中起沒有 Pinnacle 收盤 → 最後兩季用 Betfair 交易所收盤（BFEC*）當標準答案。Pinnacle 檔案 period：0＝全場；NHL 的 6＝60 分鐘三選一（有和局賠率）。
 
 ## 重要的運彩規則（算錯會差很多）
 - 期望值 EV = 勝率 × 賠率 − 1；「划算」門檻 EV ≥ +2%。

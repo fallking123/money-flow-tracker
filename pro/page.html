@@ -1,0 +1,175 @@
+<title>職業版模型</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+:root{
+  --bg:#F3F5F4; --card:#FFFFFF; --soft:#EEF2F0; --ink:#13201C; --ink2:#3E4D48; --muted:#6A7873; --line:#DDE4E1;
+  --accent:#0E6E62; --accent-soft:#DCEFEA; --good:#15803D; --bad:#C2410C; --warn:#A16207;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0E1513; --card:#16201D; --soft:#1C2825; --ink:#E6EEEB; --ink2:#B7C5C0; --muted:#8B9B96; --line:#26332F;
+  --accent:#4FC1AE; --accent-soft:#16342E; --good:#4ADE80; --bad:#FB923C; --warn:#FACC15; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1513; --card:#16201D; --soft:#1C2825; --ink:#E6EEEB; --ink2:#B7C5C0; --muted:#8B9B96; --line:#26332F;
+  --accent:#4FC1AE; --accent-soft:#16342E; --good:#4ADE80; --bad:#FB923C; --warn:#FACC15; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 "Noto Sans TC",-apple-system,"PingFang TC",sans-serif;-webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin:0 auto;padding-inline:16px;padding-block:20px 48px;display:flex;flex-direction:column;gap:14px}
+header h1{margin:0;font-size:26px;font-weight:900;letter-spacing:.02em;text-wrap:balance}
+header p{margin:4px 0 0;color:var(--muted);font-size:13.5px}
+.tag{display:inline-block;font:600 11px/1 "IBM Plex Mono",monospace;letter-spacing:.08em;color:var(--accent);background:var(--accent-soft);padding:5px 8px;border-radius:6px;margin-bottom:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.card h2{margin:0 0 4px;font-size:18px;font-weight:900;text-wrap:balance}
+.card h3{margin:16px 0 6px;font-size:15px}
+.sub{margin:0 0 12px;color:var(--muted);font-size:13px}
+.note{margin:10px 0 0;color:var(--muted);font-size:12.5px;line-height:1.65}
+.steps{display:flex;flex-direction:column;gap:12px}
+.step{display:grid;grid-template-columns:26px 1fr;gap:10px;align-items:start}
+.dot{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font:600 12px "IBM Plex Mono",monospace;color:#fff;background:var(--muted)}
+.step.done .dot{background:var(--good)} .step.next .dot{background:var(--accent)} .step.wait .dot{background:var(--line);color:var(--muted)}
+.step b{font-size:14.5px} .step p{margin:2px 0 0;font-size:12.5px;color:var(--ink2)}
+.pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent);margin-left:6px;vertical-align:1px}
+.gl{display:grid;gap:10px}
+.gl div{font-size:13.5px;color:var(--ink2)} .gl b{display:block;color:var(--ink);font-size:14px}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-inline:-4px;padding-inline:4px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-size:11.5px;font-weight:500;color:var(--muted);text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+.r{text-align:right} .n{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+.grp td{background:var(--soft);color:var(--muted);font-size:11.5px;padding:4px 8px}
+.s{font-size:11px;color:var(--muted);font-weight:400;line-height:1.3}
+.good{color:var(--good)} .bad{color:var(--bad)} .warn{color:var(--warn)}
+.lk{font:500 10.5px "Noto Sans TC",sans-serif;color:var(--muted);white-space:nowrap}
+.lk.real{color:var(--ink2);font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chip{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--ink2);border-radius:999px;padding:6px 14px;font:600 13px "IBM Plex Mono",monospace;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:6px}
+.kpi{background:var(--soft);border-radius:10px;padding:10px}
+.kpi span{display:block;font-size:11.5px;color:var(--muted)} .kpi b{font:600 19px "IBM Plex Mono",monospace}
+.meter{height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin-top:4px}
+.meter i{display:block;height:100%;background:var(--accent)}
+.meter.low i{background:var(--warn)}
+footer{color:var(--muted);font-size:12px;text-align:center}
+@media (max-width:420px){.kpis{grid-template-columns:1fr 1fr}.kpi:last-child{grid-column:span 2}}
+</style>
+<div class="wrap" id="app"></div>
+<script>
+const DATA = /*__DATA__*/null;
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+  const sgn = (x, d = 1) => (x > 0 ? "+" : x < 0 ? "−" : "") + Math.abs(x).toFixed(d);
+  const gb = (x) => (x == null ? "" : x > 0 ? "good" : x < 0 ? "bad" : "");
+  const pp = (x, d = 1) => (x == null ? "–" : sgn(x * 100, d) + "%");
+  const ppt = (x, d = 2) => (x == null ? "–" : sgn(x * 100, d));
+  const SPN = {soccer: "足球", nfl: "NFL", mlb: "MLB", nhl: "NHL", nba: "NBA"};
+  const sp = (k) => SPN[k] || k.toUpperCase();
+  const MIN_N = 30;
+  const luck = (m) => (!m || !m.n ? "" : m.n < MIN_N ? '<div class="lk">注太少</div>' : m.se == null || Math.abs(m.mean) < 2 * m.se ? '<div class="lk">還看不出</div>' : '<div class="lk real">看得出</div>');
+  const store = {get: (k, d) => { try { const v = localStorage.getItem("pro_" + k); return v == null ? d : v; } catch (e) { return d; } },
+                 set: (k, v) => { try { localStorage.setItem("pro_" + k, v); } catch (e) {} }};
+  const ST = {thr: store.get("thr", "15")};
+
+  const STAGES = [
+    ["done", "第 0 階段：CLV 追蹤＋資料檢查", "建立「搶到的價錢比收盤好多少」的成績單，檢查每一份資料齊不齊全，並先拿現有的東西量一次。", true],
+    ["next", "第 1 階段：足球比分模型", "不看賠率，只用比分、射門、賽程，自己預測兩隊各進幾球，算出獨贏、讓球、大小的盤口，再跟收盤比。"],
+    ["wait", "第 2 階段：NFL、MLB、NHL", "用公開的比賽細節資料（每一個 play、每一球、射門品質）建各自的比分模型。"],
+    ["wait", "第 3 階段：NBA", "先確認資料來源可以用。"],
+    ["wait", "第 4 階段：混合＋每日對照表", "跟市場、資金流向混合，每天出「我們的盤口 vs 莊家」。"]];
+
+  function head() {
+    return `<header><span class="tag">PRO MODEL · LAB</span><h1>職業版模型</h1>
+      <p>照職業團隊的做法從頭建，跟原本的資金流向看板完全分開・更新 ${esc((DATA.generated_utc || "").replace("T", " ").replace("Z", " UTC"))}</p></header>`;
+  }
+  function stages() {
+    return `<section class="card"><h2>進度</h2><p class="sub">每做完一個階段就停下來給你看，你確認後才做下一個。</p>
+      <div class="steps">${STAGES.map(([s, t, d, wait], i) => `<div class="step ${s}"><div class="dot">${s === "done" ? "✓" : i}</div><div><b>${t}</b>${wait ? '<span class="pill">等你確認</span>' : ""}<p>${d}</p></div></div>`).join("")}</div>
+      <p class="note">原則：核心模型不放賠率（先自己開盤，再跟莊家比）・只用比賽之前的資料・最後兩季留到最後才考一次・不用條款不允許抓取的網站。</p></section>`;
+  }
+  function clvIntro() {
+    return `<section class="card"><h2>CLV 是什麼</h2><div class="gl">
+      <div><b>搶到的價錢</b>你下注那一刻的賠率，跟「收盤」（開賽前最後的價錢）比是好還是壞。收盤是最多錢、最多消息進來之後的價錢，所以最準。</div>
+      <div><b>CLV（期望值）</b>下注賠率 × 收盤的公平勝率 − 1。長期來說，獲利率會很接近這個數字。</div>
+      <div><b>盤口移動</b>從你下注到收盤，市場覺得你押的那邊勝率變高還是變低（百分點）。正的＝你比市場早知道。</div>
+      <div><b>為什麼比輸贏好用</b>輸贏要幾千注才看得出實力；CLV 幾百注就看得出來，因為它不管這場是不是剛好多進一球。</div></div></section>`;
+  }
+  function market() {
+    const R = DATA.clv; if (!R) return "";
+    const imp = (m) => (m.ll_first - m.ll_close) / m.ll_first * 100;
+    const row = (k, m, src) => `<tr><td style="max-width:170px">${sp(k)}<div class="s">${src}</div></td><td class="r n">${m.n.toLocaleString("en-US")}</td><td class="r n ${gb(imp(m))}">${sgn(imp(m), 2)}%</td><td class="r n">${(m.move * 100).toFixed(1)}</td></tr>`;
+    const H = R.market_hist || {}, Lv = R.market_live || {};
+    return `<section class="card"><h2>收盤真的比較準嗎</h2><p class="sub">同一批比賽，用「早一點的盤」和「收盤」各自預測誰贏，比誰的誤差小。</p>
+      <div class="scroll"><table><thead><tr><th>運動</th><th class="r">場數</th><th class="r">收盤準多少</th><th class="r">平均移動<br>（百分點）</th></tr></thead><tbody>
+      <tr class="grp"><td colspan="4">歷史（幾萬場）</td></tr>${Object.entries(H).map(([k, m]) => row(k, m, m.what)).join("")}
+      <tr class="grp"><td colspan="4">我們自己記的（Pinnacle 第一次看到 vs 收盤）</td></tr>${Object.entries(Lv).map(([k, m]) => row(k, m, `第一次看到約開賽前 ${Math.round(m.first_h)} 小時`)).join("")}</tbody></table></div>
+      <p class="note">「收盤準多少」＝預測誤差（log loss）少了幾 %。歷史幾萬場，每個運動都是收盤比較準，所以拿收盤當標準答案是對的。我們自己記的才兩週、場數少，有的運動反過來是運氣。</p></section>`;
+  }
+  function signals() {
+    const S = (DATA.clv || {}).signals || {}, s = S["ml_" + ST.thr];
+    if (!s) return "";
+    const a = s.all, diff = a.clv_us && a.clv_base && a.clv_us.n ? {n: a.clv_us.n, mean: a.clv_us.mean - a.clv_base.mean, se: a.clv_us.se} : null;
+    const chips = ["10", "15", "20", "25", "30"].filter((t) => S["ml_" + t]).map((t) => `<button type="button" class="chip" data-thr="${t}" aria-pressed="${ST.thr === t}">${t}%</button>`).join("");
+    const hr = (b) => `<tr><td>${b.label}</td><td class="r n">${(b.dp && b.dp.n) || 0}</td><td class="r n">${b.toward == null ? "–" : Math.round(b.toward * 100) + "%"} / ${b.away == null ? "–" : Math.round(b.away * 100) + "%"}</td><td class="r n ${gb(b.dp && b.dp.mean)}">${b.dp && b.dp.n ? ppt(b.dp.mean) : "–"}${luck(b.dp)}</td></tr>`;
+    const lr = (mk, nm) => { const x = (S[`${mk}_${ST.thr}`] || {}).all; if (!x || !x.gain || !x.gain.n) return ""; return `<tr><td>${nm}</td><td class="r n">${x.gain.n}</td><td class="r n">${Math.round(x.toward * 100)}% / ${Math.round(x.away * 100)}%</td><td class="r n ${gb(x.gain.mean)}">${sgn(x.gain.mean, 2)}${luck(x.gain)}</td></tr>`; };
+    const lines = lr("sp", "讓分") + lr("ou", "大小");
+    return `<section class="card" id="sig"><h2>資金流向「錢比人多」：訊號一出現就下</h2><p class="sub">獨贏・錢% − 人% 第一次超過門檻的那一刻下注，跟 Pinnacle 收盤比。</p>
+      <div class="chips">${chips}</div>
+      <div class="kpis"><div class="kpi"><span>有收盤可對照</span><b>${a.dp.n}</b></div><div class="kpi"><span>平均盤口移動</span><b class="${gb(a.dp.mean)}">${ppt(a.dp.mean)}</b>${luck(a.dp)}</div><div class="kpi"><span>比同時間亂押好</span><b class="${gb(diff && diff.mean)}">${diff ? pp(diff.mean) : "–"}</b>${luck(diff)}</div></div>
+      <div class="scroll"><table><tbody>
+        <tr><td>之後盤口往訊號這邊移／往反方向移</td><td class="r n">${a.toward == null ? "–" : Math.round(a.toward * 100) + "%"} / ${a.away == null ? "–" : Math.round(a.away * 100) + "%"}</td></tr>
+        <tr><td>CLV：用當時美國賠率下</td><td class="r n ${gb(a.clv_us.mean)}">${pp(a.clv_us.mean)}</td></tr>
+        <tr><td>同一時間兩邊亂押（基準）</td><td class="r n ${gb(a.clv_base.mean)}">${pp(a.clv_base.mean)}</td></tr></tbody></table></div>
+      <h3>離開賽多久出現的訊號</h3>
+      <div class="scroll"><table><thead><tr><th>訊號出現時</th><th class="r">個數</th><th class="r">往這邊／反方向</th><th class="r">平均移動</th></tr></thead><tbody>${s.by_h.map(hr).join("")}</tbody></table></div>
+      ${lines ? `<h3>讓分、大小：盤口線有沒有往這邊動（分）</h3><div class="scroll"><table><thead><tr><th>玩法</th><th class="r">個數</th><th class="r">往這邊／反方向</th><th class="r">平均（分）</th></tr></thead><tbody>${lines}</tbody></table></div>` : ""}
+      <p class="note">平均移動接近 0、往這邊和反方向差不多＝訊號出現後市場沒有跟著走，目前還看不出錢比人多能提早知道結果。CLV 是負的主要是美國莊家的抽成（亂押也是負的），要看「比亂押好多少」。開賽前 5–10 分鐘才下，價錢就是收盤，CLV 一定約等於抽成。</p></section>`;
+  }
+  function model1() {
+    const M = (DATA.clv || {}).model1_us || {}, ks = Object.keys(M).filter((k) => k !== "all");
+    if (!ks.length) return "";
+    const row = (k) => { const m = M[k], d = {n: m.n, mean: m.mean - m.base.mean, se: m.se}; return `<tr><td>${sp(k)}</td><td class="r n">${m.n}</td><td class="r n ${gb(m.mean)}">${pp(m.mean)}</td><td class="r n ${gb(m.base.mean)}">${pp(m.base.mean)}</td><td class="r n ${gb(d.mean)}">${pp(d.mean)}${luck(d)}</td><td class="r n ${gb(m.dp.mean)}">${ppt(m.dp.mean)}${luck(m.dp)}</td></tr>`; };
+    return `<section class="card"><h2>原本的模型一，CLV 是多少</h2><p class="sub">拿新的成績單量一次舊模型：模型一・美國賠率的每一注，跟 Pinnacle 收盤比。</p>
+      <div class="scroll"><table><thead><tr><th>運動</th><th class="r">注數</th><th class="r">CLV</th><th class="r">亂押</th><th class="r">比亂押好</th><th class="r">盤口移動</th></tr></thead><tbody>${ks.map(row).join("")}</tbody></table></div>
+      <p class="note">全部 ${M.all.n} 注平均 CLV ${pp(M.all.mean)}，同時間亂押 ${pp(M.all.base)}。CLV 是負的＝長期大約每注虧這麼多，所以模型一實戰目前賺錢多半是運氣。比亂押好一點，是因為它會挑美國賠率給得比較大方的那一邊；盤口移動接近 0＝它沒有比市場早知道（它本來就是學市場）。這就是要做職業版的原因。</p></section>`;
+  }
+  function dataCheck() {
+    const D = DATA.check; if (!D) return "";
+    const pct = (a, n) => (n ? Math.round(a / n * 100) : 0);
+    const cell = (a, n) => { const p = pct(a, n); return `<td class="r n ${p >= 97 ? "" : p >= 50 ? "warn" : "bad"}">${p}%</td>`; };
+    const ss = D.soccer.seasons;
+    const src = (s) => (s.psc && s.bfc ? "兩個都有" : s.psc ? "Pinnacle" : s.bfc ? "Betfair" : "沒有");
+    const soc = ss.map((s) => `<tr><td class="n">${s.season}</td><td class="r n">${s.n.toLocaleString("en-US")}</td>${cell(s.res, s.n)}<td class="r n ${pct(s.bench, s.n) >= 97 ? "" : pct(s.bench, s.n) >= 50 ? "warn" : "bad"}">${pct(s.bench, s.n)}%<div class="s">${src(s)}${s.psc && s.psc < s.n * 0.97 ? `（P ${pct(s.psc, s.n)}%）` : ""}</div></td>${cell(s.shots, s.n)}</tr>`).join("");
+    const tot = ss.reduce((a, s) => a + s.n, 0);
+    const U = D.us || {};
+    const us = Object.entries(U).map(([k, u]) => `<tr><td>${sp(k)}<div class="s">${esc(u.from)}–${esc(u.to)}，${u.seasons} 季</div></td><td class="r n">${u.n.toLocaleString("en-US")}</td>${cell(u.score, u.n)}${cell(u.close, u.n)}${cell(u.open, u.n)}</tr>`).join("");
+    const C = (DATA.clv || {}).coverage || {};
+    const cov = Object.entries(C).map(([k, c]) => `<tr><td>${sp(k)}</td><td class="r n">${c.games}</td><td class="r n">${c.pin}</td><td class="r n">${c.done}</td></tr>`).join("");
+    const odd = (D.soccer.odd || []).map((o) => `${o.div} ${o.season}：${o.n} 場裡 ${o.res} 場有賽果`).join("；");
+    return `<section class="card"><h2>資料檢查</h2><p class="sub">每一份要拿來訓練或當標準答案的資料，齊不齊全。黃色、紅色的格子是有缺的地方。</p>
+      <h3>足球（第 1 階段用）：十個聯賽、${ss.length} 季、${tot.toLocaleString("en-US")} 場</h3>
+      <div class="scroll"><table><thead><tr><th>球季</th><th class="r">場數</th><th class="r">賽果</th><th class="r">收盤<br>（標準答案）</th><th class="r">射門數</th></tr></thead><tbody>${soc}</tbody></table></div>
+      <p class="note">比賽和賽果是完整的（法國聯賽 2019/20 疫情提前結束、2023/24 起改 18 隊，場數本來就比較少${odd ? "；" + esc(odd) : ""}）。<b>缺的是標準答案</b>：資料來源從 2025/26 季中起不再提供 Pinnacle 收盤，所以最後兩季改用 Betfair 交易所收盤（也是幾乎不抽水、很準的市場，2024/25 兩個都有，可以先確認兩者一致）。射門數 2014–2017 只有五大聯賽有。</p>
+      <h3>美國四大歷史（第 2、3 階段用）</h3>
+      <div class="scroll"><table><thead><tr><th>運動</th><th class="r">場數</th><th class="r">比分</th><th class="r">收盤</th><th class="r">開盤</th></tr></thead><tbody>${us}</tbody></table></div>
+      <p class="note">比分和收盤賠率都完整；開盤賠率 NFL 沒有、NBA 只有近幾季。這兩個階段要用的比賽細節（每一個 play、每一球、射門）目前還沒有，到時候從公開來源重新下載、從頭建。</p>
+      <h3>我們自己記的盤口（9/27 起）</h3>
+      <div class="scroll"><table><thead><tr><th>運動</th><th class="r">場數</th><th class="r">對到 Pinnacle</th><th class="r">有賽果</th></tr></thead><tbody>${cov}</tbody></table></div>
+      <p class="note">這部分不是缺，是本來就只能從開始記的那天往後累積。Pinnacle 大約 10/1 才開始記，所以早期有些比賽對不到。</p></section>`;
+  }
+  function render() {
+    if (!DATA) { $("app").innerHTML = `<div class="card">沒有資料。</div>`; return; }
+    $("app").innerHTML = head() + stages() + dataCheck() + clvIntro() + market() + signals() + model1() +
+      `<footer>職業版只做研究和驗證，跟原本的看板、模型一完全分開。</footer>`;
+  }
+  document.addEventListener("click", (e) => {
+    const t = e.target.closest("[data-thr]"); if (!t) return;
+    ST.thr = t.dataset.thr; store.set("thr", ST.thr);
+    const y = window.scrollY; render(); window.scrollTo(0, y);
+  });
+  render();
+})();
+</script>
