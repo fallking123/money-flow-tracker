@@ -2130,11 +2130,14 @@ h4.hh{margin:14px 0 6px;font-size:14px}
       <p class="mut" style="font-size:12.5px;margin:8px 0 0">${MLG.sel.size ? `現在只算：<b>${nm.join("、")}</b>` : "現在算全部聯賽"}</p></div>`;
   }
   // ═════════ 台彩賠率區間：每個賠率區間兩邊都下，賺還是賠 ═════════
-  const OB = {sp: store.get("ob_sp", "all"), w: store.get("ob_w", "0.1")};
+  const OB = {sp: store.get("ob_sp", "all"), w: store.get("ob_w", "0.1"), s: store.get("ob_s", "both")};
+  const OB_S = [["both", "兩邊都下", ["favorite", "underdog", "draw"]], ["model1", "模型一・台彩", ["model1"]], ["model1_us_tw", "美國選邊・台彩下", ["model1_us_tw"]], ["model1_us", "模型一・美國賠率", ["model1_us"]]];
   const OB_SP = [["all", "全部"], ["mlb", "MLB"], ["nfl", "NFL"], ["nhl", "NHL"], ["nba", "NBA"], ["soccer", "足球"]];
   function oddsCard() {
-    const base = serAll().filter((x) => ["favorite", "underdog", "draw"].includes(x[1]) && x[3] > 1);
-    if (!base.length) return "";
+    if (!OB_S.some(([k]) => k === OB.s)) OB.s = "both";
+    const [, sNm, sKeys] = OB_S.find(([k]) => k === OB.s), us = OB.s === "model1_us";
+    const base = serAll().filter((x) => sKeys.includes(x[1]) && x[3] > 1);
+    if (!serAll().some((x) => x[1] === "favorite")) return "";
     const have = new Set(base.map((x) => x[2]));
     const sps = OB_SP.filter(([k]) => k === "all" || have.has(k));
     if (!sps.some(([k]) => k === OB.sp)) OB.sp = "all";
@@ -2154,12 +2157,13 @@ h4.hh{margin:14px 0 6px;font-size:14px}
       return `<tr><td class="n">${lab(i)}</td><td class="r n">${b.n}</td><td class="r n">${Math.round(b.win / b.n * 100)}%</td><td class="r n ${gb(b.pl)}">${ntd(b.pl * UNIT)}</td><td class="r n ${gb(roi)}" style="white-space:nowrap">${sgn(roi * 100, 1)}%${bar}</td></tr>`;
     }).join("");
     const since = rs.length ? fmtMD.format(new Date(rs[0][0])) : "";
-    return `<div class="card" id="obcard"><h3>台彩賠率區間<small>${since} 起我們自己記錄的每一場・兩邊都下（足球含和局）・每注 ${UNIT.toLocaleString("en-US")} 元</small></h3>
+    return `<div class="card" id="obcard"><h3>台彩賠率區間<small>${since} 起我們自己記錄的每一場・${OB.s === "both" ? "兩邊都下（足球含和局）" : sNm + "（每場押一邊）"}・每注 ${UNIT.toLocaleString("en-US")} 元</small></h3>
+      <div class="chips" style="flex-wrap:wrap;margin-bottom:8px">${OB_S.map(([k, n]) => `<button type="button" class="chip" data-ob="s" data-obv="${k}" aria-pressed="${OB.s === k}">${n}</button>`).join("")}</div>
       <div class="chips" style="flex-wrap:wrap;margin-bottom:8px">${sps.map(([k, n]) => `<button type="button" class="chip" data-ob="sp" data-obv="${k}" aria-pressed="${OB.sp === k}">${n}</button>`).join("")}</div>
       <div class="ctl" style="margin-bottom:10px"><div class="seg" role="group">${["0.1", "0.2", "0.5"].map((v) => `<button type="button" data-ob="w" data-obv="${v}" aria-pressed="${OB.w === v}">${v}</button>`).join("")}</div><span class="mut" style="font-size:12.5px;align-self:center">每格多寬</span></div>
-      <div class="scroll"><table class="tb"><thead><tr><th>台彩賠率</th><th class="r">注數</th><th class="r">中幾成</th><th class="r">賺賠</th><th class="r">投報率</th></tr></thead><tbody>${trs}
+      <div class="scroll"><table class="tb"><thead><tr><th>${us ? "美國賠率" : "台彩賠率"}</th><th class="r">注數</th><th class="r">中幾成</th><th class="r">賺賠</th><th class="r">投報率</th></tr></thead><tbody>${trs}
         <tr><td><b>合計</b></td><td class="r n"><b>${rs.length}</b></td><td></td><td class="r n ${gb(tot)}"><b>${ntd(tot * UNIT)}</b></td><td class="r n ${gb(tot)}"><b>${rs.length ? sgn(tot / rs.length * 100, 1) + "%" : "–"}</b></td></tr></tbody></table></div>
-      <p class="mut" style="font-size:12.5px;margin:8px 0 0">用台彩賠率結算（有記錄用實際的，沒有用估的；冰球算 60 分鐘）。一格少於 100 注時，多中或少中 1 注投報率就差很多，大多是運氣；要每格幾百注才看得出哪個區間真的比較好。</p></div>`;
+      <p class="mut" style="font-size:12.5px;margin:8px 0 0">${us ? "用美國賠率結算、按美國賠率分格（含延長賽）。" : "用台彩賠率結算（有記錄用實際的，沒有用估的；冰球算 60 分鐘）。"}「兩邊都下」＝不用模型的基準，拿來跟模型一同一格比，看模型有沒有比較會挑。一格少於 100 注時，多中或少中 1 注投報率就差很多，大多是運氣；要每格幾百注才看得出哪個區間真的比較好。</p></div>`;
   }
   // ═════════ 固定金額 vs 凱利：同一批注、同一筆本金，三種下法比一比 ═════════
   const KS = {s: store.get("ks_s", "model1_us")};
