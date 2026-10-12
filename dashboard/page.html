@@ -2179,8 +2179,8 @@ h4.hh{margin:14px 0 6px;font-size:14px}
     const top = live.filter((k) => agg(k).n).sort((a, b) => agg(b).roi - agg(a).roi)[0];
     const wr = (a) => (a.n - a.push > 0 ? Math.round(a.win / (a.n - a.push) * 100) + "%" : "–");
     const money = (a) => (a.n ? ntd(a.pl * UNIT) : "–");
-    const row = (k) => {
-      const [nm, sub] = STRAT[k], a = agg(k), ref = k === "favorite" || k === "underdog";
+    const row = (k, nmO, subO) => {
+      const [nm0, sub0] = STRAT[k], nm = nmO || nm0, sub = subO || sub0, a = agg(k), ref = k === "favorite" || k === "underdog";
       const name = `<td><b style="${ref ? "font-weight:500;color:var(--ink2)" : ""}">${nm}</b>${top === k && done ? ' <span class="pill sig">目前最高</span>' : ""}<div class="mut" style="font-size:11.5px;white-space:normal">${sub}</div></td>`;
       if (!READY[k]) return `<tr>${name}<td colspan="4" class="mut" style="white-space:normal;font-size:12.5px">累積中：資金流向 9/27 才開始收，大約一整季後上線，上線那天起跟模型一比同一批比賽</td></tr>`;
       return `<tr>${name}<td class="r n">${a.n || 0}</td><td class="r n">${wr(a)}</td><td class="r n ${gb(a.roi)}">${a.roi == null ? "–" : sgn(a.roi, 1) + "%"}</td><td class="r n ${gb(a.pl)}">${money(a)}</td></tr>`;
@@ -2188,7 +2188,7 @@ h4.hh{margin:14px 0 6px;font-size:14px}
     const head = `<thead><tr><th>策略</th><th class="r">已開獎</th><th class="r">猜中</th><th class="r">獲利率</th><th class="r">賺賠</th></tr></thead>`;
     const actual = agg("model1").actual || 0;
     let h = `<div class="card"><h3>每一場都下注，誰的獲利率最高<small>上線後實戰・${L.since ? `從 ${fmtMD.format(new Date(L.since))} 開始` : "今天開始"}・每場 ${UNIT.toLocaleString("en-US")} 元</small></h3>
-      <div class="scroll"><table class="tb">${head}<tbody>${row("model1")}${row("model1_us")}${row("model1_us_tw")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">不限獨贏・美國賠率</td></tr>${row("model1_sp_us")}${row("model1_ou_us")}${row("model1_all_us")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">不限獨贏・同一注改去台彩下</td></tr>${row("model1_sp_tw")}${row("model1_ou_tw")}${row("model1_all_tw")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">還在累積</td></tr>${row("model2")}${row("combo")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">參考（台彩賠率）</td></tr>${row("favorite")}${row("underdog")}</tbody></table></div>
+      <div class="scroll"><table class="tb">${head}<tbody>${row("model1")}${row("model1_us")}${row("model1_us_tw")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">不限獨贏・美國賠率</td></tr>${row("model1_us", "只下獨贏・美國", "每場押獨贏比較划算的一邊（跟上面「模型一・美國賠率」同一批）")}${row("model1_sp_us")}${row("model1_ou_us")}${row("model1_all_us")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">不限獨贏・同一注改去台彩下</td></tr>${row("model1_us_tw", "只下獨贏・台彩下", "同一注改去台彩下（冰球算 60 分鐘、打平算輸）")}${row("model1_sp_tw")}${row("model1_ou_tw")}${row("model1_all_tw")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">還在累積</td></tr>${row("model2")}${row("combo")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">參考（台彩賠率）</td></tr>${row("favorite")}${row("underdog")}</tbody></table></div>
       <p class="mut" style="font-size:12.5px;margin:8px 0 0">${done ? `台彩結算：${actual} 場用你記錄的實際賠率，其他用估的。` : `第一批比賽還沒開獎（${L.pending || 0} 場等開獎），開獎後自動結算。`}「模型一・美國賠率」是同一個模型用美國賠率下，沒有台彩抽成，比較看得出模型本身準不準（美國賠率是 10/1 起才開始記）。每個策略都押開賽前最後一次判斷的那一邊。場數少於 200 場時，差幾 % 多半是運氣。</p></div>`;
     h += curveCard();
     h += stakeCard();
