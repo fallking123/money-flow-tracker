@@ -32,7 +32,8 @@
   - `backfill_results.py` 補賽果；`us_model.py`／`soccer_model.py` 模型一訓練
   - `track_models.py` 策略記錄與結算；`alerts.py`／`alerts_report.py` 划算注；`check_flip.py` 參考策略提醒
   - `build_dashboard.py` 組看板資料（`live_summary()` 給模型頁用）
-- GitHub Actions（UTC）：scrape_odds 每 10 分（含 track_models、alerts）、final_snapshot 每 10 分、scrape_soccer 每小時 :25、backfill_results 07:02 與 12:17（台灣 15:02、20:17）、scrape_context 每天 4 次、history（模型一重練）週日 20:30、soccer_model 週一四 22:40。
+- **常駐工作（2026-10-12 起，主力）**：`resident.py` ＋ `.github/workflows/resident.yml`。一個工作一直開著自己看時鐘：每 10 分美國四大（scrape_odds＋extra＋pinnacle＋track_models＋alerts）、每小時 :25 足球、每場開賽前 5 分截圖；跑 5h40m 交棒給排隊的下一個。心跳檔 `docs/data/state/resident.json`。舊的 scrape_odds／scrape_soccer／final_snapshot 排程變成備援：排程觸發時先 `python resident.py --alive`，有心跳就跳過。檢查：`python3 check_resident.py <開始時間>`。上線前實測 GitHub 排程每小時只跑 2.6–3.6 次、NHL 開賽前截圖只截到 56%。
+- GitHub Actions（UTC，舊排程）：scrape_odds 每 10 分（含 track_models、alerts）、final_snapshot 每 10 分、scrape_soccer 每小時 :25、backfill_results 07:02 與 12:17（台灣 15:02、20:17）、scrape_context 每天 4 次、history（模型一重練）週日 20:30、soccer_model 週一四 22:40。
 - Actions 一直在 commit 資料：**commit 前一定 `git pull --rebase`**。model_picks.csv 衝突時，取自己的版本後重跑一次 `track_models.py` 就會補回來。
 - commit 訊息用繁體中文，結尾加上系統要求的 Co-Authored-By／Claude-Session 兩行。
 
