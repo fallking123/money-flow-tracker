@@ -14,5 +14,14 @@
   "sport": "soccer",
   "run_utc": "2026-10-12T14:05Z",
   "note": "只重算 CLV 的比較方式（早盤、收盤同一家 Pinnacle），沒有重跑模型"
+ },
+ {
+  "stage": 2,
+  "sport": "nfl",
+  "run_utc": "2026-10-12T14:23Z",
+  "config": {
+   "half_life": 180,
+   "ridge": 32.0
+  }
  }
 ]
