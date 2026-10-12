@@ -418,6 +418,16 @@ LIVE_STRATS = ["model1", "model1_us", "model1_us_tw", "model1_sp_us", "model1_sp
                "model1_all_us", "model1_all_tw", "model2", "combo", "favorite", "underdog", "draw_us", "draw"]
 
 
+def pro_report():
+    """職業版（pro/，跟模型一完全分開）：每次重建看板時重算 CLV 報告，只拿來顯示"""
+    try:
+        from pro import clv
+        return clv.main()
+    except Exception as e:     # 職業版出錯不影響看板其他部分
+        print(f"  職業版 CLV 報告失敗：{e}")
+        return None
+
+
 def live_summary():
     """上線後實戰（track_models.py 記的）：每個策略每場都下 1 單位的成績，給「模型」頁用"""
     rows = []
@@ -583,6 +593,7 @@ def build(now):
         "closed": closed,
         "tw": tw,
         "live": live_summary(),
+        "pro": pro_report(),
     }
 
 

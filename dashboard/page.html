@@ -2236,8 +2236,72 @@ td.luck{color:var(--muted)!important}
       ${lines.length ? `<div class="legend">${legend}</div>` : ""}
       <p class="mut" style="font-size:12.5px;margin:8px 0 0">${note}</p></div>`;
   }
+  // ═════════ 職業版（pro/，跟模型一完全分開）═════════
+  const PRO = {thr: store.get("pro_thr", "15")};
+  const PRO_STAGES = [
+    ["done", "第 0 階段：CLV 追蹤", "建立「搶到的價錢比收盤好多少」的成績單，先拿現有的東西來量：市場本身、資金流向訊號、模型一。"],
+    ["next", "第 1 階段：足球比分模型", "不看賠率，自己預測兩隊各進幾球，算出獨贏、讓球、大小的盤口，再跟 Pinnacle 比。"],
+    ["wait", "第 2 階段：NFL、MLB、NHL", "用公開的比賽細節資料（每一 play、每一球、射門品質）建各自的比分模型。"],
+    ["wait", "第 3 階段：NBA", "先確認資料能不能用。"],
+    ["wait", "第 4 階段：混合＋每日對照表", "跟市場、資金流向混合，每天出「我們的盤口 vs 莊家」。"]];
+  const pp = (x, d = 1) => (x == null ? "–" : sgn(x * 100, d) + "%");
+  const ppt = (x, d = 2) => (x == null ? "–" : sgn(x * 100, d));
+  const proLuck = (m) => (!m || !m.n ? "" : m.n < LUCK_N || m.se == null || Math.abs(m.mean) < 2 * m.se ? '<div class="lk">還看不出</div>' : '<div class="lk real">看得出</div>');
+  function proTab() {
+    const R = DATA.pro;
+    const st = { done: ["✓", "var(--good)"], next: ["→", "var(--accent)"], wait: ["·", "var(--muted)"] };
+    let h = `<div class="card"><h3>職業版<small>照職業團隊的做法從頭建，跟模型一完全分開</small></h3>
+      <div style="display:grid;gap:10px">${PRO_STAGES.map(([s, t, d]) => `<div style="display:flex;gap:10px;align-items:flex-start"><b style="flex:0 0 22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:13px;color:#fff;background:${st[s][1]}">${st[s][0]}</b><div><b>${t}</b>${s === "done" ? ' <span class="pill sig">等你確認</span>' : ""}<div class="mut" style="font-size:12.5px">${d}</div></div></div>`).join("")}</div>
+      <p class="mut" style="font-size:12.5px;margin:10px 0 0">原則：核心模型不放賠率、只用比賽之前的資料、最後兩季留到最後才考、每個階段做完先給你看。</p></div>`;
+    if (!R) return h + `<div class="card"><p class="mut" style="margin:0">CLV 報告還沒產生。</p></div>`;
+    h += `<div class="card"><h3>CLV 是什麼</h3><div class="gl">
+      <div><b>搶到的價錢</b>你下注那一刻的賠率，跟「收盤」（開賽前最後的價錢）比是好還是壞。收盤是最多錢、最多資訊進來之後的價錢，所以最準。</div>
+      <div><b>CLV（期望值版）</b>下注賠率 × Pinnacle 收盤的公平勝率 − 1。長期來說，你的獲利率會很接近這個數字。</div>
+      <div><b>盤口移動</b>從你下注到收盤，市場覺得你押的那邊勝率變高還是變低（百分點）。正的＝你比市場早知道。</div>
+      <div><b>為什麼比輸贏好用</b>輸贏要幾千注才看得出實力；CLV 幾百注就看得出來，因為它不管這場是不是剛好進一顆球。</div></div></div>`;
+    // 市場本身
+    const imp = (m) => (m.ll_first - m.ll_close) / m.ll_first * 100;
+    const mrow = (sp, m, src) => `<tr><td style="white-space:normal;max-width:150px">${esc(spLabel(sp))}<div class="mut" style="font-size:11px;line-height:1.3">${src}</div></td><td class="r n">${m.n.toLocaleString("en-US")}</td><td class="r n ${gb(imp(m))}">${sgn(imp(m), 2)}%</td><td class="r n">${(m.move * 100).toFixed(1)}</td></tr>`;
+    const mh = R.market_hist || {}, ml = R.market_live || {};
+    h += `<div class="card"><h3>收盤真的比較準嗎<small>同一批比賽，用「早一點的盤」和「收盤」各自預測誰贏，比誰準</small></h3>
+      <div class="scroll"><table class="tb"><thead><tr><th>運動</th><th class="r">場數</th><th class="r">收盤準多少</th><th class="r">平均移動<br>（百分點）</th></tr></thead><tbody>
+      <tr><td colspan="4" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">歷史（幾萬場）</td></tr>${Object.entries(mh).map(([sp, m]) => mrow(sp, m, m.what)).join("")}
+      <tr><td colspan="4" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">我們自己記的（Pinnacle 第一次看到 vs 收盤）</td></tr>${Object.entries(ml).map(([sp, m]) => mrow(sp, m, `第一次看到約開賽前 ${Math.round(m.first_h)} 小時`)).join("")}</tbody></table></div>
+      <p class="mut" style="font-size:12.5px;margin:8px 0 0">「收盤準多少」＝預測誤差（log loss）少了幾 %。歷史幾萬場每個運動都是收盤比較準，所以拿收盤當標準答案是對的。我們自己記的場數還少，有幾個運動反過來，那是運氣。</p></div>`;
+    // 資金流向訊號
+    const S = R.signals || {}, k = `ml_${PRO.thr}`, s = S[k];
+    const chips = ["10", "15", "20", "25", "30"].filter((t) => S["ml_" + t]).map((t) => `<button type="button" class="chip" data-prothr="${t}" aria-pressed="${PRO.thr === t}">${t}%</button>`).join("");
+    if (s) {
+      const a = s.all, diff = a.clv_us && a.clv_base && a.clv_us.n ? {n: a.clv_us.n, mean: a.clv_us.mean - a.clv_base.mean, se: a.clv_us.se} : null;
+      const hr = (b) => `<tr><td>${b.label}</td><td class="r n">${b.dp && b.dp.n || 0}</td><td class="r n">${b.toward == null ? "–" : Math.round(b.toward * 100) + "%"} / ${b.away == null ? "–" : Math.round(b.away * 100) + "%"}</td><td class="r n ${gb(b.dp && b.dp.mean)}">${b.dp && b.dp.n ? ppt(b.dp.mean) : "–"}${proLuck(b.dp)}</td></tr>`;
+      const lineRow = (mk, nm) => { const x = (S[`${mk}_${PRO.thr}`] || {}).all; if (!x || !x.gain || !x.gain.n) return ""; return `<tr><td>${nm}</td><td class="r n">${x.gain.n}</td><td class="r n">${Math.round(x.toward * 100)}% / ${Math.round(x.away * 100)}%</td><td class="r n ${gb(x.gain.mean)}">${sgn(x.gain.mean, 2)} 分${proLuck(x.gain)}</td></tr>`; };
+      h += `<div class="card"><h3>錢比人多：訊號一出現就下<small>獨贏・錢% − 人% 第一次超過門檻的那一刻下注，跟 Pinnacle 收盤比</small></h3>
+        <div class="chips" style="margin-bottom:10px;flex-wrap:wrap">${chips}</div>
+        <div class="scroll"><table class="tb"><tbody>
+          <tr><td>有 Pinnacle 對照的訊號</td><td class="r n">${a.dp.n} 個</td></tr>
+          <tr><td>之後盤口往這邊移／往反方向移</td><td class="r n">${a.toward == null ? "–" : Math.round(a.toward * 100) + "%"} / ${a.away == null ? "–" : Math.round(a.away * 100) + "%"}</td></tr>
+          <tr><td>平均移動（百分點，正＝往這邊）</td><td class="r n ${gb(a.dp.mean)}">${ppt(a.dp.mean)}${proLuck(a.dp)}</td></tr>
+          <tr><td>CLV：用當時美國賠率下</td><td class="r n ${gb(a.clv_us.mean)}">${pp(a.clv_us.mean)}</td></tr>
+          <tr><td>同一時間兩邊亂押（基準）</td><td class="r n ${gb(a.clv_base.mean)}">${pp(a.clv_base.mean)}</td></tr>
+          <tr><td><b>比亂押好多少</b></td><td class="r n ${gb(diff && diff.mean)}"><b>${diff ? pp(diff.mean) : "–"}</b>${proLuck(diff)}</td></tr>
+        </tbody></table></div>
+        <h4 style="margin:14px 0 6px;font-size:14px">離開賽多久出現的訊號</h4>
+        <div class="scroll"><table class="tb"><thead><tr><th>訊號出現時</th><th class="r">個數</th><th class="r">往這邊／反方向</th><th class="r">平均移動</th></tr></thead><tbody>${s.by_h.map(hr).join("")}</tbody></table></div>
+        ${lineRow("sp", "讓分") || lineRow("ou", "大小") ? `<h4 style="margin:14px 0 6px;font-size:14px">讓分、大小：盤口線有沒有往這邊動</h4><div class="scroll"><table class="tb"><thead><tr><th>玩法</th><th class="r">個數</th><th class="r">往這邊／反方向</th><th class="r">平均（分）</th></tr></thead><tbody>${lineRow("sp", "讓分")}${lineRow("ou", "大小")}</tbody></table></div>` : ""}
+        <p class="mut" style="font-size:12.5px;margin:8px 0 0">「平均移動」接近 0、往這邊和往反方向差不多＝訊號出現之後，市場沒有跟著它走，也就是錢比人多還沒看出能提早知道結果。CLV 是負的主要是美國莊家的抽成（亂押也是負的），要看的是「比亂押好多少」。開賽前 5–10 分鐘才下注，價錢就是收盤，CLV 一定約等於抽成。</p></div>`;
+    }
+    // 模型一
+    const M = R.model1_us || {}, sps = Object.keys(M).filter((x) => x !== "all");
+    if (sps.length) {
+      const mr = (sp) => { const m = M[sp], d = {n: m.n, mean: m.mean - m.base.mean, se: m.se}; return `<tr><td>${esc(spLabel(sp))}</td><td class="r n">${m.n}</td><td class="r n ${gb(m.mean)}">${pp(m.mean)}</td><td class="r n ${gb(m.base.mean)}">${pp(m.base.mean)}</td><td class="r n ${gb(d.mean)}">${pp(d.mean)}${proLuck(d)}</td><td class="r n ${gb(m.dp.mean)}">${ppt(m.dp.mean)}${proLuck(m.dp)}</td></tr>`; };
+      h += `<div class="card"><h3>模型一・美國賠率的 CLV<small>每一注用當時的美國賠率，跟 Pinnacle 收盤比</small></h3>
+        <div class="scroll"><table class="tb"><thead><tr><th>運動</th><th class="r">注數</th><th class="r">CLV</th><th class="r">亂押</th><th class="r">比亂押好</th><th class="r">盤口移動</th></tr></thead><tbody>${sps.map(mr).join("")}</tbody></table></div>
+        <p class="mut" style="font-size:12.5px;margin:8px 0 0">全部 ${M.all.n} 注平均 CLV ${pp(M.all.mean)}，亂押 ${pp(M.all.base)}。CLV 是負的＝長期大約每注虧這麼多；模型一實戰目前賺錢，多半是運氣。比亂押好一點，是因為模型一會挑美國賠率給得比較大方的那一邊；盤口移動接近 0＝模型一沒有比市場早知道（它本來就是學市場）。這正是要做職業版的原因。</p></div>`;
+    }
+    return h;
+  }
   const MT = {tab: store.get("mtab", "score")};
-  const MT_TABS = [["score", "成績"], ["curve", "曲線"], ["stake", "下多少"], ["odds", "賠率區間"], ["bets", "每一注"], ["bt", "回測"]];
+  const MT_TABS = [["score", "成績"], ["curve", "曲線"], ["stake", "下多少"], ["odds", "賠率區間"], ["bets", "每一注"], ["bt", "回測"], ["pro", "職業版"]];
   function renderModels() {
     const L = DATA.live || {strats: {}}, S = L.strats || {};
     const SF = serF(), useSer = serAll().some((x) => x[7] != null);
@@ -2335,10 +2399,11 @@ td.luck{color:var(--muted)!important}
       h += `<details class="more-sec"><summary><span>模型一最近開獎<small class="sm-sub">台彩・每場 1,000 元</small></span></summary><div><div class="scroll"><table class="tb"><thead><tr><th>日期</th><th>比賽</th><th>押</th><th class="r">台彩</th><th>結果</th><th class="r">賺賠</th></tr></thead><tbody>${rec.map((x) => `<tr><td class="n">${fmtMD.format(new Date(x.t))}</td><td>${x.sport === "soccer" ? `${esc(x.home)} vs ${esc(x.away)}` : `${esc(x.away)} @ ${esc(x.home)}`}</td><td>${esc(x.pick)}</td><td class="r n">${odd(x.tw)}${x.src === "actual" ? "" : '<small class="mut">估</small>'}</td><td><span class="res ${(RS[x.result] || ["", "p"])[1]}">${(RS[x.result] || [x.result])[0]}</span></td><td class="r n ${gb(x.profit)}">${ntd((x.profit || 0) * UNIT)}</td></tr>`).join("")}</tbody></table></div></div></details>`;
     }
     T.bets += h;
+    T.pro = proTab();
     const tabs = MT_TABS.filter(([k]) => T[k]);
     if (!tabs.some(([k]) => k === MT.tab)) MT.tab = "score";
     const sub = `<div class="subnav" role="tablist" style="margin-bottom:12px">${tabs.map(([k, n]) => `<button type="button" role="tab" data-mtab="${k}" aria-selected="${MT.tab === k}">${n}</button>`).join("")}</div>`;
-    $("models").innerHTML = sub + (MT.tab === "bt" ? "" : lgCard()) + T[MT.tab];
+    $("models").innerHTML = sub + (MT.tab === "bt" || MT.tab === "pro" ? "" : lgCard()) + T[MT.tab];
     const mcl = mcLines(); if (mcl.length && $("mcchart")) $("mcchart").innerHTML = multiChart(mcl, chartW("mcchart"));
     drawKs();
   }
@@ -2880,6 +2945,7 @@ td.luck{color:var(--muted)!important}
     if (t.dataset.sliptab) { SLIP.tab = t.dataset.sliptab; store.set("slip_tab", SLIP.tab); return slipRefresh(); }
     if (t.dataset.sliprec) return slipToForm(t.dataset.sliprec);
     if (t.dataset.lgfold) { const k = t.dataset.lgfold; SLIP.fold.has(k) ? SLIP.fold.delete(k) : SLIP.fold.add(k); store.set("sim_fold", [...SLIP.fold]); return renderSim(); }
+    if (t.dataset.prothr) { PRO.thr = t.dataset.prothr; store.set("pro_thr", PRO.thr); return renderModels(); }
     if (t.dataset.mtab) { MT.tab = t.dataset.mtab; store.set("mtab", MT.tab); renderModels(); window.scrollTo(0, 0); return; }
     if (t.dataset.mlg) {
       const k = t.dataset.mlg;
