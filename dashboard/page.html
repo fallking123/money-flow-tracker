@@ -62,7 +62,7 @@ button,input,select{font:inherit;color:inherit}
 main{max-width:1080px;margin:0 auto;padding:18px 16px 60px}
 @media (max-width:899px){
   .navtop{display:none}
-  .tabs{display:grid;grid-template-columns:repeat(7,1fr);position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+  .tabs{display:grid;grid-template-columns:repeat(8,1fr);position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
   .tabs button{appearance:none;border:0;background:none;height:var(--tabh);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:11px;white-space:nowrap;color:var(--muted);cursor:pointer}
   .tabs button[aria-current="page"]{color:var(--accent);font-weight:700}
   main{padding-bottom:calc(var(--tabh) + 40px + env(safe-area-inset-bottom,0px))}
@@ -322,6 +322,38 @@ details.more-sec>summary .sm-sub{display:block;font-weight:400;font-size:12px;co
 .bookl b{color:var(--ink2)}
 .bookl span{font-weight:700}
 .bookl span{font-weight:400;color:var(--ink2)}
+.sim-legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--ink2);margin-bottom:10px}
+.sim-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.sim-legend i.go{background:var(--good)} .sim-legend i.edge{background:var(--warn)} .sim-legend i.no{background:var(--line)}
+.sim-lg{margin-bottom:12px}
+.sim-lgh{appearance:none;width:100%;display:flex;justify-content:space-between;align-items:center;gap:8px;border:0;border-radius:12px;background:var(--warn-soft);padding:10px 14px;font-size:15px;color:var(--ink);cursor:pointer;text-align:left}
+.sim-g{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-top:8px;display:flex;flex-direction:column;gap:7px}
+.sim-gh{display:flex;gap:10px;align-items:baseline;font-size:14px;flex-wrap:wrap} .sim-gh>.n{color:var(--muted);font-size:13px}
+.sim-row{display:grid;grid-template-columns:3.6em 1fr;gap:8px;align-items:center}
+.sim-row .k{font-size:12px;color:var(--muted);line-height:1.2} .sim-row .k small{display:block;font-size:10px}
+.sim-opts{display:grid;gap:6px} .sim-opts.c2{grid-template-columns:repeat(2,minmax(0,1fr))} .sim-opts.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.sim-btn{appearance:none;border:1.5px solid transparent;background:var(--soft2);border-radius:10px;padding:5px 6px;display:flex;flex-direction:column;align-items:center;gap:0;cursor:pointer;color:var(--ink);min-width:0;min-height:52px;justify-content:center}
+.sim-btn .t{font-size:11px;color:var(--muted);white-space:nowrap}
+.sim-btn b{font-size:16px} .sim-btn b i{font-style:normal;font-size:9.5px;color:var(--muted);margin-left:2px;font-weight:600}
+.sim-btn .e{font-size:10.5px;font-weight:700;color:var(--muted)}
+.sim-btn.go .e{color:var(--good)} .sim-btn.edge .e{color:var(--warn)} .sim-btn.no .e{color:var(--bad);opacity:.75}
+.sim-btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff} .sim-btn[aria-pressed="true"] .t,.sim-btn[aria-pressed="true"] .e,.sim-btn[aria-pressed="true"] b i{color:#fff;opacity:1}
+.slip{position:fixed;left:0;right:0;bottom:0;z-index:25;max-width:760px;margin:0 auto;padding:0 10px}
+@media (max-width:899px){.slip{bottom:calc(var(--tabh) + env(safe-area-inset-bottom,0px))}}
+.slip-bar{appearance:none;width:100%;display:flex;align-items:center;gap:10px;border:0;border-radius:14px 14px 0 0;background:var(--warn);color:#fff;padding:10px 14px;font-size:14px;cursor:pointer;text-align:left;box-shadow:0 -4px 16px rgba(0,0,0,.12)}
+.slip-bar b{color:#fff} .slip-bar .sb-s{flex:1;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .slip-bar .sb-t{font-size:12.5px;opacity:.9}
+.slip-bar .n.good,.slip-bar .n.bad{color:#fff}
+.sl-panel{background:var(--card);border:1px solid var(--line);border-top:0;max-height:62vh;overflow-y:auto;padding:10px 12px 12px;display:flex;flex-direction:column;gap:10px}
+.sl-tabs{display:flex} .sl-tabs button{flex:1}
+.sl-leg{background:var(--soft);border-radius:12px;padding:8px 10px;display:flex;flex-direction:column;gap:4px} .sl-leg.gone{opacity:.7}
+.sl-h{display:flex;justify-content:space-between;align-items:center;font-size:12px}
+.sl-x{appearance:none;border:0;background:none;font-size:20px;line-height:1;color:var(--muted);cursor:pointer;padding:0 4px;min-width:32px;min-height:32px}
+.sl-pick{display:flex;flex-direction:column;font-size:14px} .sl-pick .mut{font-size:12px}
+.sl-row{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:13px}
+.sl-row label{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted)}
+.sl-row input{width:86px;font:inherit;font-size:16px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:5px 8px}
+.sl-sum{border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:8px}
+.sl-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px} .sl-grid>div{background:var(--soft);border-radius:10px;padding:6px 8px;display:flex;flex-direction:column} .sl-grid span{font-size:11.5px;color:var(--muted)} .sl-grid b{font-size:18px}
 .flow3{display:flex;flex-direction:column;gap:10px}
 .f3m{display:flex;flex-direction:column;gap:4px}
 .f3h,.f3r{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr) 3.4em;gap:8px;align-items:center}
@@ -471,6 +503,12 @@ h4.hh{margin:14px 0 6px;font-size:14px}
     <div id="tw" class="stack"></div>
   </section>
 
+  <section data-view="sim" hidden>
+    <h1>選注</h1>
+    <p class="intro">像台彩一樣點選要下的注，下面的投注單會算每一關的期望值；選兩關以上就看得到串關的總賠率、全部猜中的機率和期望值。賠率是估的台彩賠率，可以在投注單改成台彩上看到的實際賠率。</p>
+    <div id="sim"></div>
+  </section>
+
   <section data-view="calc" hidden>
     <h1>計算機</h1>
     <p class="intro">13 種投注計算機。賠率都用小數（跟台彩一樣，例如 1.85），金額以 10 元為單位。輸入的數字會記在這台裝置上，下次打開還在。</p>
@@ -507,6 +545,7 @@ h4.hh{margin:14px 0 6px;font-size:14px}
   };
   const VIEWS = [
     {k: "board", n: "今日比賽", s: "比賽", i: '<rect x="3" y="4" width="16" height="14" rx="3" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M3 9h16M8 2.5v3M14 2.5v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>'},
+    {k: "sim", n: "選注", s: "選注", i: '<path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h9A2.5 2.5 0 0 1 18 6.5V9a2 2 0 0 0 0 4v2.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 4 15.5V13a2 2 0 0 0 0-4z" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linejoin="round"/><path d="M9 8.5h4M9 11h4M9 13.5h2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>'},
     {k: "analysis", n: "訊號準不準", s: "準不準", i: '<path d="M3 16l5-5 3 3 7-8" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'},
     {k: "bets", n: "我的投注", s: "投注", i: '<rect x="4" y="3" width="14" height="16" rx="3" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M8 8h6M8 11.5h6M8 15h3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>'},
     {k: "models", n: "模型比賽", s: "模型", i: '<circle cx="5.5" cy="6" r="2.2" stroke="currentColor" stroke-width="1.7" fill="none"/><circle cx="16.5" cy="6" r="2.2" stroke="currentColor" stroke-width="1.7" fill="none"/><circle cx="11" cy="16.5" r="2.2" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M7.2 7.6l2.7 7M14.8 7.6l-2.7 7M7.8 6h6.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>'},
@@ -2312,6 +2351,101 @@ h4.hh{margin:14px 0 6px;font-size:14px}
     $("method").innerHTML = h;
   }
 
+  // ═════════ 選注：台彩風格的點選介面＋投注單（一關／過關）═════════
+  const SLIP = {legs: store.get("slip", []), open: false, tab: store.get("slip_tab", "single"), amt: store.get("slip_amt", ""), fold: new Set(store.get("sim_fold", []))};
+  const slipSave = () => { store.set("slip", SLIP.legs); };
+  const MKN = {ml: "不讓分", sp: "讓分", ou: "大小"};
+  // 一個選項的唯一代號：比賽|玩法|邊|盤口
+  const optId = (g, o) => `${g.sport}|${g.id}|${o.mkt}|${o.sd.key}|${o.sd.ln ?? ""}`;
+  function simGames() {
+    return DATA.games.filter((g) => inSport(g) && g.status === "upcoming").sort((a, b) => (a.t < b.t ? -1 : a.t > b.t ? 1 : 0));
+  }
+  // 投注單裡的每一關：拿最新資料更新勝率和估的台彩賠率（你自己改過的賠率保留）
+  function slipLegs() {
+    return SLIP.legs.map((L) => {
+      const g = findGame(L.gid);
+      let o = null;
+      if (g && g.status === "upcoming") for (const grp of evOptions(g)) for (const x of grp.opts) if (optId(g, x) === L.id) o = x;
+      const odds = L.my > 1 ? L.my : o ? o.tw : L.odds, p = o ? o.p : L.p;
+      return {...L, live: !!o, odds, est: L.my > 1 ? false : o ? o.est : L.est, p, ev: p != null && odds > 1 ? p * odds - 1 : null, src: o ? o.src : L.src};
+    });
+  }
+  function slipHtml() {
+    const legs = slipLegs(), n = legs.length;
+    if (!n) return "";
+    const multi = n >= 2, prod = legs.reduce((a, L) => a * (L.odds || 1), 1), pAll = legs.every((L) => L.p != null) ? legs.reduce((a, L) => a * L.p, 1) : null;
+    const evP = pAll != null ? pAll * prod - 1 : null;
+    const sameGame = new Set(legs.map((L) => L.gid)).size < n;
+    const bar = `<button type="button" class="slip-bar" data-slipopen="1" aria-expanded="${SLIP.open}">
+      <span class="sb-n">投注單 <b>${n}</b></span>
+      <span class="sb-s">${multi ? `串 ${n} 關 @<b class="n">${odd(prod)}</b>・期望值 <b class="n ${gb(evP)}">${evTxt(evP)}</b>` : `@<b class="n">${odd(legs[0].odds)}</b>・期望值 <b class="n ${gb(legs[0].ev)}">${evTxt(legs[0].ev)}</b>`}</span>
+      <span class="sb-t">${SLIP.open ? "收起" : "打開"}</span></button>`;
+    if (!SLIP.open) return `<div class="slip">${bar}</div>`;
+    const tab = multi ? SLIP.tab : "single";
+    const legRow = (L, i) => `<div class="sl-leg${L.live ? "" : " gone"}">
+      <div class="sl-h"><span class="mut">${esc(L.league)}・${fmtMD.format(new Date(L.t))} ${fmtTime.format(new Date(L.t))}</span><button type="button" class="sl-x" data-slipx="${i}" aria-label="移除這關">×</button></div>
+      <div class="sl-pick"><b>${esc(L.lab)}</b><span class="mut">${esc(MKN[L.mkt] || "")}・${esc(L.match)}</span></div>
+      <div class="sl-row"><label>台彩賠率<input type="number" step="0.01" min="1.01" inputmode="decimal" data-slipodds="${i}" value="${L.my > 1 ? L.my : ""}" placeholder="${odd(L.odds)}">${L.my > 1 ? '<small class="good">實際</small>' : L.est ? '<small>估</small>' : ""}</label>
+        <span>勝率 <b class="n">${L.p == null ? "–" : (L.p * 100).toFixed(1) + "%"}</b></span><span>期望值 <b class="n ${gb(L.ev)}">${evTxt(L.ev)}</b></span>
+        ${tab === "single" ? `<button type="button" class="btn sm ghost" data-sliprec="${i}">記到我的投注</button>` : ""}</div>
+      ${L.live ? "" : `<div class="mut" style="font-size:11.5px">這場已經開打或資料不見了，賠率維持加入時的數字。</div>`}</div>`;
+    let body = legs.map(legRow).join("");
+    if (tab === "parlay") {
+      const st = pAll != null ? stakeFor(pAll, prod) : null, amt = parseFloat(SLIP.amt);
+      body += `<div class="sl-sum">
+        ${sameGame ? `<div class="st-warn">有兩關是同一場比賽：台彩不能這樣串，而且兩關會一起贏一起輸，機率不能直接相乘。</div>` : ""}
+        <div class="sl-grid"><div><span>串關總賠率</span><b class="n">${odd(prod)}</b></div><div><span>全部猜中的機率</span><b class="n">${pAll == null ? "–" : (pAll * 100).toFixed(1) + "%"}</b></div><div><span>串關期望值</span><b class="n ${gb(evP)}">${evTxt(evP)}</b></div></div>
+        <div class="sl-row"><label>下注金額<input type="number" min="10" step="10" inputmode="numeric" data-slipamt="1" value="${esc(String(SLIP.amt))}" placeholder="${st && st.amt ? st.amt : 100}"></label>
+          <span>全中可拿回 <b class="n" id="slwin">${amt > 0 ? ntdAmt(amt * prod) : "–"}</b></span></div>
+        <p class="mut" style="font-size:12.5px;margin:0">${evP == null ? "" : evP >= EV_GO ? (st && st.amt ? `照你的規則建議下 <b>${stkTxt(st)}</b>。` : "期望值夠，設定本金後會告訴你下多少。") : `期望值 ${evTxt(evP)}：每多串一關就多被抽一次水，<b class="bad">照規則不建議下</b>。`}台彩串關的賠率＝每一關賠率相乘。</p>
+        <button type="button" class="btn" data-sliprec="all">整組記到我的投注</button></div>`;
+    }
+    return `<div class="slip open">${bar}<div class="sl-panel">
+      ${multi ? `<div class="seg sl-tabs" role="group"><button type="button" data-sliptab="single" aria-pressed="${tab === "single"}">一關（各自下）</button><button type="button" data-sliptab="parlay" aria-pressed="${tab === "parlay"}">過關（串 ${n} 關）</button></div>` : ""}
+      ${body}
+      <div class="formbar" style="margin-top:4px"><button type="button" class="btn sm del" data-slipclr="1">全部刪除</button><span class="mut" style="font-size:12px">勝率：模型一或 Pinnacle／美國去抽水；賠率：估的台彩賠率（有記錄用實際的）</span></div>
+    </div></div>`;
+  }
+  function slipRefresh() { const el = $("slipwrap"); if (el) el.innerHTML = slipHtml(); $$(".sim-btn").forEach((b) => b.setAttribute("aria-pressed", String(SLIP.legs.some((L) => L.id === b.dataset.pk)))); }
+  function renderSim() {
+    const gs = simGames();
+    if (!gs.length) { $("sim").innerHTML = `<div class="empty">這個運動目前沒有還沒開打的比賽。</div><div id="slipwrap">${slipHtml()}</div>`; return; }
+    const sel = new Set(SLIP.legs.map((L) => L.id));
+    const groups = new Map();
+    for (const g of gs) { const k = g.sport + "|" + lgLabel(g); if (!groups.has(k)) groups.set(k, {sport: g.sport, lab: lgLabel(g), gs: []}); groups.get(k).gs.push(g); }
+    const btn = (g, o) => { const id = optId(g, o), tg = o.ev >= EV_GO ? "go" : o.ev >= 0 ? "edge" : "no";
+      const top = o.mkt === "ml" ? (o.sd.key === "draw" ? "和局" : o.sd.key === "home" ? "主" : o.sd.key === "away" ? "客" : "") : o.mkt === "sp" ? line(o.sd.ln) : (o.sd.key === "over" ? "大 " : "小 ") + (o.sd.ln ?? "");
+      return `<button type="button" class="sim-btn ${tg}" data-pk="${esc(id)}" aria-pressed="${sel.has(id)}" aria-label="${esc(o.lab)} ${odd(o.tw)}，期望值 ${evTxt(o.ev)}"><span class="t">${esc(top)}</span><b class="n">${odd(o.tw)}${o.est ? "<i>估</i>" : ""}</b><span class="e">${evTxt(o.ev)}</span></button>`; };
+    let h = `<div class="sim-legend"><span><i class="go"></i>期望值 ≥ +${Math.round(EV_GO * 100)}%</span><span><i class="edge"></i>0～${Math.round(EV_GO * 100)}%</span><span><i class="no"></i>負的</span><span class="mut">「估」＝推算的台彩賠率</span></div>`;
+    for (const [k, grp] of groups) {
+      const folded = SLIP.fold.has(k);
+      h += `<section class="sim-lg"><button type="button" class="sim-lgh" data-lgfold="${esc(k)}" aria-expanded="${!folded}"><span><span class="pill lg">${esc(spLabel(grp.sport))}</span> <b>${esc(grp.lab)}</b> <span class="mut">(${grp.gs.length})</span></span><span class="mut">${folded ? "＋" : "－"}</span></button>`;
+      if (!folded) h += grp.gs.map((g) => {
+        const groupsEv = evOptions(g); if (!groupsEv.length) return "";
+        const soc = g.sport === "soccer", t = new Date(g.t);
+        const rows = groupsEv.map((x) => {
+          const order = x.mkt === "ml" ? (x.opts.length === 3 ? ["away", "draw", "home"] : ["away", "home"]) : null;
+          const os = order ? order.map((k) => x.opts.find((o) => o.sd.key === k)).filter(Boolean) : x.opts;
+          const lab = x.mkt === "ml" ? (x.reg ? "不讓分<small>60分</small>" : "不讓分") : x.mkt === "sp" ? (soc ? "讓分<small>亞洲盤</small>" : "讓分") : (x.reg ? "大小<small>60分</small>" : "大小");
+          return `<div class="sim-row"><span class="k">${lab}</span><div class="sim-opts c${os.length}">${os.map((o) => btn(g, o)).join("")}</div></div>`;
+        }).join("");
+        return `<article class="sim-g"><div class="sim-gh"><span class="n">${fmtMD.format(t)} ${fmtTime.format(t)}</span><span><b>${esc(g.away_zh || g.away_ab)}</b> <span class="mut">@</span> <b>${esc(g.home_zh || g.home_ab)}</b></span></div>${rows}</article>`;
+      }).join("");
+      h += `</section>`;
+    }
+    h += `<div class="mut" style="font-size:12px;margin-top:6px">只列得出我們有收資料的聯賽（${[...new Set(gs.map((g) => lgLabel(g)))].length} 個）。足球讓分是美國的亞洲盤，台彩足球讓分是三選一（例如 1:0），不一樣；冰球台彩讓分是三選一，這裡不列。</div><div style="height:90px"></div><div id="slipwrap">${slipHtml()}</div>`;
+    $("sim").innerHTML = h;
+  }
+  function slipToForm(idx) {
+    const legs = slipLegs().filter((_, i) => idx === "all" || i === +idx);
+    if (!legs.length) return;
+    const MK2 = {ml: "獨贏", sp: "讓分", ou: "大小分"};
+    FORM.legs = legs.map((L) => { const g = findGame(L.gid); return {...newLeg(fmtISO.format(new Date(L.t))), league: g ? leagueOf(g) : L.league, gid: L.gid, market: MK2[L.mkt], pick: L.pick, odds: L.odds ? String(L.odds) : ""}; });
+    FORM.total = legs.length > 1 ? String(Math.round(legs.reduce((a, L) => a * L.odds, 1) * 100) / 100) : "";
+    FORM.placed = true; FORM.date = fmtISO.format(new Date());
+    if (idx === "all" && parseFloat(SLIP.amt) > 0) FORM.stake = String(SLIP.amt);
+    go("bets");
+  }
   // ═════════ 計算機（13 種）：賠率都用小數（台彩格式），金額以 10 元為單位；輸入的數字記在這台裝置上 ═════════
   const CALCS = [
     ["kelly", "凱利公式", "該下本金的幾 %"],
@@ -2633,6 +2767,7 @@ h4.hh{margin:14px 0 6px;font-size:14px}
     else if (state.view === "tw") renderTw();
     else if (state.view === "models") renderModels();
     else if (state.view === "calc") renderCalc();
+    else if (state.view === "sim") renderSim();
     else renderMethod();
   }
   function go(v) { state.view = v; store.set("view", v); try { history.replaceState(null, "", "#" + v); } catch (e) {} render(); window.scrollTo(0, 0); }
@@ -2647,6 +2782,25 @@ h4.hh{margin:14px 0 6px;font-size:14px}
     if (t.dataset.crm) { const [key, i] = t.dataset.crm.split("|"), arr = cst(CALC.cur)[key]; if (arr && arr.length > (+t.dataset.cmin || 1)) arr.splice(+i, 1); csave(); return renderCalc(); }
     if (t.dataset.cset) { cst(CALC.cur)[t.dataset.cset] = t.dataset.cv; csave(); return renderCalc(); }
     if (t.dataset.creset) { CALC.s[CALC.cur] = null; cst(CALC.cur); csave(); return renderCalc(); }
+    if (t.dataset.pk) {   // 選注：點一下加進投注單，再點一下拿掉
+      const id = t.dataset.pk, i = SLIP.legs.findIndex((L) => L.id === id);
+      if (i >= 0) SLIP.legs.splice(i, 1);
+      else {
+        const [sp, gid] = id.split("|"), g = findGame(sp + "|" + gid);
+        let o = null; if (g) for (const grp of evOptions(g)) for (const x of grp.opts) if (optId(g, x) === id) o = x;
+        if (!o) return;
+        if (SLIP.legs.length >= 10) return;
+        SLIP.legs.push({id, gid: g.sport + "|" + g.id, mkt: o.mkt, lab: o.lab, pick: o.pick, match: matchName(g), league: lgLabel(g), t: g.t, odds: o.tw, est: o.est, p: o.p, src: o.src});
+        if (SLIP.legs.length === 1) SLIP.open = false;
+      }
+      slipSave(); return slipRefresh();
+    }
+    if (t.dataset.slipopen) { SLIP.open = !SLIP.open; return slipRefresh(); }
+    if (t.dataset.slipx != null) { SLIP.legs.splice(+t.dataset.slipx, 1); slipSave(); return slipRefresh(); }
+    if (t.dataset.slipclr) { SLIP.legs = []; SLIP.amt = ""; store.set("slip_amt", ""); slipSave(); return slipRefresh(); }
+    if (t.dataset.sliptab) { SLIP.tab = t.dataset.sliptab; store.set("slip_tab", SLIP.tab); return slipRefresh(); }
+    if (t.dataset.sliprec) return slipToForm(t.dataset.sliprec);
+    if (t.dataset.lgfold) { const k = t.dataset.lgfold; SLIP.fold.has(k) ? SLIP.fold.delete(k) : SLIP.fold.add(k); store.set("sim_fold", [...SLIP.fold]); return renderSim(); }
     if (t.dataset.ks) { KS.s = t.dataset.ks; store.set("ks_s", KS.s); const c = $("kscard"); if (c) { c.outerHTML = stakeCard(); drawKs(); } return; }
     if (t.dataset.mc) { MC[t.dataset.mc] = t.dataset.mcv; store.set("mc_" + t.dataset.mc, t.dataset.mcv); return renderModels(); }
     if (t.dataset.s) { state.sport = t.dataset.s; store.set("sport", state.sport); return render(); }
@@ -2687,6 +2841,18 @@ h4.hh{margin:14px 0 6px;font-size:14px}
     }
   });
   document.addEventListener("input", (e) => {
+    if (e.target.dataset && e.target.dataset.slipodds != null) {   // 投注單：改成台彩上看到的實際賠率
+      const L = SLIP.legs[+e.target.dataset.slipodds]; if (!L) return;
+      const v = parseFloat(e.target.value); L.my = v > 1 ? v : null; slipSave();
+      clearTimeout(SLIP.tm); SLIP.tm = setTimeout(() => { const a = document.activeElement, idx = a && a.dataset ? a.dataset.slipodds : null, pos = a && a.selectionStart; slipRefresh(); if (idx != null) { const n = document.querySelector(`[data-slipodds="${idx}"]`); if (n) { n.focus(); try { n.setSelectionRange(pos, pos); } catch (er) {} } } }, 500);
+      return;
+    }
+    if (e.target.dataset && e.target.dataset.slipamt) {
+      SLIP.amt = e.target.value; store.set("slip_amt", SLIP.amt);
+      const w = $("slwin"), legs = slipLegs(), prod = legs.reduce((a, L) => a * (L.odds || 1), 1), amt = parseFloat(SLIP.amt);
+      if (w) w.textContent = amt > 0 ? ntdAmt(amt * prod) : "–";
+      return;
+    }
     if (e.target.dataset && e.target.dataset.herd) {
       const k = e.target.dataset.herd; HERD[k] = +e.target.value;
       store.set(k === "d" ? "herd_od" : "herd_b", HERD[k]);
