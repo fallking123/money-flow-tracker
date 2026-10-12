@@ -81,7 +81,7 @@ const DATA = /*__DATA__*/null;
     ["done", "第 0 階段：CLV 追蹤＋資料檢查", "建立「搶到的價錢比收盤好多少」的成績單，檢查每一份資料齊不齊全，並先拿現有的東西量一次。", !S1],
     [S1 ? "done" : "next", "第 1 階段：足球比分模型", "不看賠率，只用比分、射門、賽程，自己預測兩隊各進幾球，算出獨贏、讓球、大小的盤口，再跟收盤比。", S1 && !S2],
     [S2 ? "done" : S1 ? "next" : "wait", "第 2 階段：NFL、MLB、NHL", "用公開的比賽細節資料（每一個 play、每一球的打席結果、射門品質）建各自的模型。", S2 && !S3],
-    [S3 ? "done" : S2 ? "next" : "wait", "第 3 階段：NBA", "效率（每 100 回合得失分）、節奏、誰缺陣、背靠背。", S3],
+    [S3 ? "done" : S2 ? "next" : "wait", "第 3 階段：NBA", "第 1 版：球隊效率（每 100 回合得失分）、節奏、誰缺陣、背靠背。第 2 版：改用每位球員的評分組出球隊，交易、新秀、退休、休賽季換人都跟著球員走。", S3],
     [S3 ? "next" : "wait", "第 4 階段：混合＋每日對照表", "跟市場、資金流向混合，每天出「我們的盤口 vs 莊家」。"]];
 
   function head() {
@@ -245,6 +245,7 @@ const DATA = /*__DATA__*/null;
   function usStage() {
     const U = DATA.us; if (!U || !S2) return "";
     const M = U.mlb, N = U.nfl, H = U.nhl;
+    const N2 = U.nba2 && U.nba2.ref_test && U.nba2.open_model ? U.nba2 : null;
     const cu = (m) => (m ? (m.ll_base - m.ll_model) / (m.ll_base - m.ll_close) * 100 : null);
     const fmtCu = (m) => (m ? Math.round(cu(m)) + "%" : "–");
     const bl = (m) => { if (!m) return "–"; const b = m.blend; const x = {n: m.n, mean: b.gain, se: b.se}; return `${b.b.toFixed(2)}${luck(x)}`; };
@@ -254,7 +255,8 @@ const DATA = /*__DATA__*/null;
       <div class="scroll"><table><thead><tr><th style="min-width:110px">運動</th><th class="r">追上收盤<br>驗證／考試</th><th class="r">混合時<br>模型分量</th><th>收盤有沒有往模型移<br>（考試季，往這邊／反方向）</th></tr></thead><tbody>
         <tr><td><b>MLB</b><div class="s">先發投手、牛棚、打線、球場</div></td><td class="r n">${fmtCu(M.valid.ml)} / ${fmtCu(M.test.ml)}</td><td class="r n">${bl(M.test.ml)}</td><td class="n">${mv(M.test.ml, "calm_0.03")}</td></tr>
         <tr><td><b>NFL</b><div class="s">每一個 play 的 EPA、四分衛</div></td><td class="r n">${fmtCu(N.valid.ml)} / ${fmtCu(N.test.ml)}</td><td class="r n">${bl(N.test.ml)}</td><td class="n">${mv(N.test.ml, "calm_0.03")}</td></tr>
-        ${U.nba && U.nba.test ? `<tr><td><b>NBA</b><div class="s">效率、節奏、缺陣（第 3 階段）</div></td><td class="r n">${fmtCu(U.nba.valid.ml)} / ${fmtCu(U.nba.test.ml)}</td><td class="r n">${bl(U.nba.test.ml)}</td><td class="n">${mv(U.nba.test.ml, "calm_0.03")}</td></tr>` : ""}
+        ${U.nba && U.nba.test ? `<tr><td><b>NBA 第 1 版</b><div class="s">球隊效率、節奏、缺陣</div></td><td class="r n">${fmtCu(U.nba.valid.ml)} / ${fmtCu(U.nba.test.ml)}</td><td class="r n">${bl(U.nba.test.ml)}</td><td class="n">${mv(U.nba.test.ml, "calm_0.03")}<div class="s">模型知道今天誰上場，偏樂觀</div></td></tr>` : ""}
+        ${N2 ? `<tr><td><b>NBA 第 2 版</b><div class="s">用球員組出球隊（最後兩季只當參考）</div></td><td class="r n">${fmtCu(N2.valid.ml)} / ${fmtCu(N2.ref_test.ml)}</td><td class="r n">${bl(N2.ref_test.ml)}</td><td class="n">${mv(N2.ref_test.open_model.ml, "calm_0.03")}<div class="s">只用開盤時就知道的名單</div></td></tr>` : ""}
         <tr><td><b>NHL</b><div class="s">射門品質 xG、多一人、守門</div></td><td class="r n">– / ${fmtCu(H.test.ml)}</td><td class="r n">${bl(H.test.ml)}</td><td class="n">${mv(H.test.ml, "calm_0.03")}</td></tr>
       </tbody></table></div>
       <p class="note">「追上收盤」＝從亂猜到收盤的距離，模型走了幾成。「模型分量」正而且看得出，才代表模型有收盤沒有的東西。「收盤往模型移」只算開盤到收盤沒有大動（&lt; 8 個百分點）的比賽，避免把臨時換先發算進去。</p></section>`;
@@ -264,7 +266,8 @@ const DATA = /*__DATA__*/null;
       <div><b>MLB：有東西，但還不夠賺</b>模型跟開盤不一樣的時候，收盤往模型那邊移的比例是 ${Math.round(mv3.toward * 100)}%、反方向只有 ${Math.round(mv3.away * 100)}%（驗證季 ${Math.round(vv.toward * 100)}% / ${Math.round(vv.away * 100)}%），兩段時間都遠超過運氣範圍——代表模型（主要是先發投手的分析）比開盤早知道一些事。但收盤還是比模型準；用開盤的美國平均賠率下注，CLV 大約 ${pp(mv3.clv[0])}（模型看好 10% 以上才下：${pp(mv10.clv[0])}），差不多打平莊家抽成。</div>
       <div><b>NFL：沒有</b>效率模型追上收盤七成左右，混合後沒有比收盤準；照模型下讓分，命中率在運氣範圍內。NFL 沒有歷史開盤，沒辦法檢查盤口移動。</div>
       <div><b>NHL：沒有</b>追上收盤約六成，混合後沒有比較準。另外發現舊的冰球盤口資料有問題（見下面）。</div>
-      ${U.nba && U.nba.test ? (() => { const n = U.nba.test.ml.clv["calm_0.03"]; return `<div><b>NBA（第 3 階段）：有一點，但更弱</b>收盤往模型移 ${Math.round(n.toward * 100)}% vs 反方向 ${Math.round(n.away * 100)}%（平均 ${ppt(n.dp[0])} 個百分點），比 MLB 弱很多；用開盤價下注 CLV ${pp(n.clv[0])}，扣掉抽成是虧的。缺陣球員的影響，用正負值估得不夠好（職業團隊用更細的球員數據），這是 NBA 最可能改進的地方。</div>`; })() : ""}
+      ${N2 ? (() => { const o = N2.ref_test.open_model.ml.clv["calm_0.03"], c = N2.ref_test.ml.clv["calm_0.03"]; return `<div><b>NBA（第 3 階段）：準很多，但還是沒有優勢</b>第 2 版改用球員組出球隊，追上收盤從 ${fmtCu(U.nba.valid.ml)} 提高到 ${fmtCu(N2.valid.ml)}（驗證季）。但檢查後發現，之前看到的「收盤往模型移」大多是因為模型知道今天誰上場——開盤時市場還不知道，之後才跟著傷兵消息移。只用開盤時就知道的名單，往模型 ${Math.round(o.toward * 100)}% vs 反方向 ${Math.round(o.away * 100)}%（知道今天名單時是 ${Math.round(c.toward * 100)}% vs ${Math.round(c.away * 100)}%），用開盤價下注 CLV ${pp(o.clv[0])}，扣掉抽成是虧的。NBA 職業玩家的優勢主要在「傷兵消息一出來就搶先下注」的速度，不是模型本身。</div>`; })() : ""}
+      ${U.nba && U.nba.test && !N2 ? (() => { const n = U.nba.test.ml.clv["calm_0.03"]; return `<div><b>NBA（第 3 階段）：有一點，但更弱</b>收盤往模型移 ${Math.round(n.toward * 100)}% vs 反方向 ${Math.round(n.away * 100)}%（平均 ${ppt(n.dp[0])} 個百分點），比 MLB 弱很多；用開盤價下注 CLV ${pp(n.clv[0])}，扣掉抽成是虧的。缺陣球員的影響，用正負值估得不夠好（職業團隊用更細的球員數據），這是 NBA 最可能改進的地方。</div>`; })() : ""}
       <div><b>代表什麼</b>MLB 的開盤比較「軟」，先發投手的數據能預測盤口會往哪裡走——這正是職業玩家在 MLB 常用的做法：開盤就下、搶價錢。但要真的賺，需要比美國平均更好的價錢（例如 Pinnacle），而台彩抽 15%，差太多。</div></div></section>`;
     // MLB 詳細
     const cRow = (c, th, lab) => { const x = c && c[th]; if (!x) return ""; const dp = {n: x.n, mean: x.dp[0], se: x.dp[1]}, cl = {n: x.n, mean: x.clv[0], se: x.clv[1]}, roi = x.roi ? {n: x.n, mean: x.roi[0], se: x.roi[1]} : null;
@@ -287,7 +290,46 @@ const DATA = /*__DATA__*/null;
       const B = U.nba;
       h += `<section class="card"><h2>NBA：開盤下注，收盤有沒有往模型移</h2><p class="sub">只有 2023–24 起有開盤（驗證季只有 1 季）。已排除開盤到收盤大動（常是臨時傷兵）的比賽。</p>
         ${mlbT(B.valid.ml.clv, "驗證季（只有 2023–24 有開盤）")}${mlbT(B.test.ml.clv, "考試季 2024–25、2025–26")}
-        <p class="note">分差預測平均誤差：模型 ${B.test.mae.model} 分、收盤讓分 ${B.test.mae.market} 分。照模型下讓分、大小，命中率都在 50% 左右（要 52.4% 才打平）。</p></section>`;
+        <p class="note">分差預測平均誤差：模型 ${B.test.mae.model} 分、收盤讓分 ${B.test.mae.market} 分。照模型下讓分、大小，命中率都在 50% 左右（要 52.4% 才打平）。<b>注意：</b>第 1 版也知道今天誰上場，這張表的盤口移動偏樂觀（見下面第 2 版的公平檢查）。</p></section>`;
+    }
+    // NBA 第 2 版
+    if (N2) {
+      const V2 = N2.valid.ml, T2 = N2.ref_test.ml, O = N2.open_model.valid.ml, OT = N2.ref_test.open_model.ml, c = N2.chosen;
+      const r2 = (nm, a, b, sub) => `<tr><td>${nm}${sub ? `<div class="s">${sub}</div>` : ""}</td><td class="r n">${a}</td><td class="r n">${b}</td></tr>`;
+      h += `<section class="card"><span class="tag">STAGE 3 · NBA v2</span><h2>NBA 第 2 版：用球員組出球隊</h2>
+        <p class="sub">職業團隊的做法：先替每一位球員評分，再看今天誰上場、各打幾分鐘，加起來就是這隊今天的實力。</p>
+        <div class="gl">
+          <div><b>球員評分</b>每 36 分鐘的得分效率（投得準才高）、出手量、三分、進攻／防守籃板、助攻、抄截、火鍋、失誤、犯規，加上在場上時球隊的正負值。越近的比賽越重要（${Math.round(c.hp)} 天前的只算一半）；上場時間少的球員，數字往「新人／替補平均」拉（${Math.round(c.K)} 分鐘才算一半是自己的數字）。</div>
+          <div><b>交易</b>評分跟著球員走。被交易的球員，到新隊第一場就算進新隊，舊隊也不再算他。</div>
+          <div><b>新秀</b>還沒打過的新人用「新人平均」起步，再加上選秀順位（第 1 順位和第 50 順位起點不同），打越多場越靠自己的數字。</div>
+          <div><b>退休、長期傷停</b>不在名單上就不算，不會拖累球隊。很久沒上場的球員回來時，預計上場分鐘先打折。</div>
+          <div><b>休賽季換人</b>開季第一場就用新陣容算，不用等打了幾週才反映（第 1 版的弱點）。</div>
+          <div><b>年齡</b>年輕的會進步、30 歲以後會退步，模型自己從歷史學每一歲大概差多少。</div>
+          <div><b>教練、戰術</b>球員數據看不到的部分，用第 1 版的球隊效率補上；另外加主場、背靠背、休息天數。</div>
+          <div><b>怎麼考</b>每週只用之前的比賽重學一次。2015–16 到 2023–24 挑設定（試了 ${N2.grid_n || "多"} 種）。最後兩季第 1 版已經考過，所以第 2 版在那兩季的成績「只當參考」；真正的考試是 2026–27 季（第 4 階段每天記錄）。</div>
+        </div>
+        <h3>第 1 版 vs 第 2 版</h3>
+        <div class="scroll"><table><thead><tr><th></th><th class="r">第 1 版</th><th class="r">第 2 版</th></tr></thead><tbody>
+          ${r2("追上收盤・驗證季", fmtCu(U.nba.valid.ml), fmtCu(V2), "2015–16 到 2023–24")}
+          ${r2("追上收盤・最後兩季", fmtCu(U.nba.test.ml), fmtCu(T2) + '<div class="s">參考</div>', "2024–25、2025–26")}
+          ${r2("分差平均誤差（分）", U.nba.test.mae.model, N2.ref_test.mae.model, `最後兩季；收盤讓分是 ${N2.ref_test.mae.market} 分`)}
+          ${r2("混合時模型分量", bl(U.nba.test.ml), bl(T2), "最後兩季；正而且看得出才算有收盤沒有的東西")}
+        </tbody></table></div>
+        <p class="note">準度進步很多：從亂猜到收盤的距離，第 2 版走了快九成。但跟收盤混在一起之後，最後兩季沒有比收盤單獨準，代表收盤已經知道模型知道的事。</p>
+        <h3>公平檢查：開盤的時候，模型知道什麼</h3>
+        <p class="sub" style="margin-top:0">模型用「今天誰上場」，但開盤時（通常前一天）傷兵名單還沒出來。拿它跟開盤比，等於偷看答案。所以另外做一個「開盤版」：只知道這隊上一場誰上場。</p>
+        <div class="scroll"><table><thead><tr><th>最後兩季（參考）</th><th class="r">往模型／<br>反方向</th><th class="r">平均<br>移動</th><th class="r">CLV</th></tr></thead><tbody>
+          ${(() => { const row = (nm, x, sub) => { const dp = {n: x.n, mean: x.dp[0], se: x.dp[1]}, cl = {n: x.n, mean: x.clv[0], se: x.clv[1]}; return `<tr><td>${nm}<div class="s">${sub}</div></td><td class="r n">${Math.round(x.toward * 100)}% / ${Math.round(x.away * 100)}%</td><td class="r n ${gb(dp.mean)}">${ppt(dp.mean)}${luck(dp)}</td><td class="r n ${gb(cl.mean)}">${pp(cl.mean)}${luck(cl)}</td></tr>`; };
+            return row("知道今天誰上場", T2.clv["calm_0.03"], "不公平：開盤時還不知道") + row("<b>只知道上一場誰上場</b>", OT.clv["calm_0.03"], "公平：開盤時就知道"); })()}
+        </tbody></table></div>
+        <p class="note">差別很大：之前看到的「收盤往模型移」，大多是傷兵消息——模型先知道誰沒上，市場在開盤到收盤之間才知道。只用開盤時就知道的資訊，盤口幾乎沒有往模型移，用開盤價下注 CLV 是負的。</p>
+        ${mlbT(O.clv, "開盤版・驗證季（只有 2023–24 有開盤）")}${mlbT(OT.clv, "開盤版・最後兩季（參考）")}
+        <p class="note">照收盤版模型下讓分，最後兩季命中率 ${(N2.ref_test.spread["0.03"][0] * 100).toFixed(1)}%；大小分 ${(N2.ref_test.total["0.03"][0] * 100).toFixed(1)}%（要 52.4% 才打平）。</p>
+        ${N2.coefs ? (() => { const NM = {eff: "得分效率", usg: "出手量", fg3a: "三分出手", oreb: "進攻籃板", dreb: "防守籃板", ast: "助攻", stl: "抄截", blk: "火鍋", tov: "失誤", pf: "犯規", pm: "場上正負值", age: "年齡", age2: "年齡（太老／太年輕）", rookie_pick: "新秀順位", "球隊效率": "球隊效率（教練、戰術）", "背靠背": "背靠背", "休息差": "休息天數差", "季後賽": "季後賽"};
+          const rows = Object.entries(N2.coefs).sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]));
+          return `<details style="margin-top:10px"><summary><b>模型學到什麼</b>（每一項多一個「正常差距」，分差差幾分）</summary><div class="scroll" style="margin-top:8px"><table><tbody>${rows.map(([k, v]) => `<tr><td>${NM[k] || esc(k)}</td><td class="r n ${gb(v)}">${sgn(v, 2)}</td></tr>`).join("")}</tbody></table></div>
+            <p class="note">正的＝這項越高，球隊越強。場上正負值、球隊效率、得分效率影響最大；年紀大、背靠背扣分。新秀順位是負的：同樣的數字，新秀實際上比數字看起來弱一點。</p></details>`; })() : ""}
+      </section>`;
     }
     // NHL
     h += `<section class="card"><h2>NHL：資料問題</h2><p class="note" style="margin:0">${esc(H.odds_note || "")} 這也代表：原本看板「模型一」的冰球部分，訓練時用過這些有問題的盤口，之後值得回頭檢查（要動原本的模型，會先問你）。</p></section>`;

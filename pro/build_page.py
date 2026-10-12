@@ -20,7 +20,7 @@ def main():
     if os.path.exists(us):
         u = json.load(open(us, encoding="utf-8"))
         for k in u.values():           # 網頁不需要校準以外的大清單
-            k.pop("grid", None)
+            k["grid_n"] = len(k.pop("grid", None) or [])
         data["us"] = u
     tpl = open(os.path.join(HERE, "page.html"), encoding="utf-8").read()
     js = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
