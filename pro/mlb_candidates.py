@@ -395,6 +395,19 @@ def sp_form(games, feats):
     return out
 
 
+def doy(games, feats):
+    """開季第幾天（給樹模型找「開季時哪些東西特別重要」）"""
+    st = _season_start(games)
+    return {g["game_id"]: [min((g["dt"] - st[g["season"]]).days, 200)] for g in games}
+
+
+def combo(*fns):
+    def f(games, feats):
+        parts = [fn(games, feats) for fn in fns]
+        return {k: sum((p.get(k, [0.0] * len(next(iter(p.values())))) for p in parts), []) for k in parts[0]}
+    return f
+
+
 CANDIDATES = {
     "travel": {"fn": travel, "label": "移動與賽程疲勞",
                "why": "跨時區（尤其往東飛）、前一天夜場今天日場、最近 10 天打幾場、昨天有沒有休息——身體疲勞，莊家可能只粗略考慮"},
@@ -416,6 +429,10 @@ CANDIDATES = {
                "why": "終結者、布局投手前兩天投太多，今天可能不能上；開盤時常常沒算進去"},
     "sp_form": {"fn": sp_form, "label": "先發投手最近 3 場被打爆或很神",
                 "why": "一般人看最近防禦率，可能反應過度；我們的模型看長期，兩者不一樣時收盤往哪邊？"},
+    "gbm_base": {"fn": lambda g, f: {x["game_id"]: [] for x in f}, "model": "gbm", "label": "樹模型（同樣的特徵）",
+                 "why": "MySports.AI 用隨機森林：樹模型能抓「組合效果」（例如強打線遇到三振型投手），線性模型抓不到"},
+    "gbm_plus": {"fn": combo(doy, turnover_early, catcher, sp_exp), "model": "gbm", "label": "樹模型＋開季天數、換人、捕手、新秀投手",
+                 "why": "這些單獨加沒有通過，但可能只在某些情況有用（例如開季＋換很多人），樹模型可以自己找組合"},
     "weather": {"fn": weather, "kind": "total", "label": "天氣（大小分）",
                 "why": "氣溫高球飛比較遠、風往外吹全壘打多；大小盤可能沒完全算進當天的天氣"},
     "ump_zone": {"fn": ump_zone, "kind": "total", "label": "主審好球帶大小（大小分）",

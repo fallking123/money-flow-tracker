@@ -25,7 +25,7 @@ def main():
     # 特徵搜尋：每個運動一份紀錄；最終門檻依「這個運動總共試了幾次」重算
     from scipy.stats import norm
     data["search"] = {}
-    for sp, fn in (("mlb", "search_log.json"), ("soccer", "search_log_soccer.json"), ("nba", "search_log_nba.json"), ("nfl", "search_log_nfl.json")):
+    for sp, fn in (("mlb", "search_log.json"), ("soccer", "search_log_soccer.json"), ("nba", "search_log_nba.json"), ("nfl", "search_log_nfl.json"), ("nhl", "search_log_nhl.json")):
         sl = os.path.join(os.path.dirname(HERE), "docs", "data", "pro", fn)
         if not os.path.exists(sl):
             continue
@@ -38,6 +38,9 @@ def main():
                 t.pop(k, None) if sp != "mlb" else None
         L["final_threshold"], L["n_tries"] = thr, n
         data["search"][sp] = L
+    cp = os.path.join(os.path.dirname(HERE), "docs", "data", "pro", "combo_report.json")
+    if os.path.exists(cp):
+        data["combo"] = json.load(open(cp, encoding="utf-8"))
     rp = os.path.join(os.path.dirname(HERE), "docs", "data", "pro", "mlb_rule15.json")
     if os.path.exists(rp):
         data["rule15"] = json.load(open(rp, encoding="utf-8"))

@@ -22,17 +22,18 @@ from pro import mlb_search as S
 SIG = {"nba": 12.0, "nfl": 13.5}
 
 
-def mlb_bets(cond, edge, extra_name=None):
+def mlb_bets(cond, edge, extra_name=None, model="lr"):
     games, feats = S.base_features()
     fb = {f["game_id"]: f for f in feats}
     extra = {}
     if extra_name:
         from pro import mlb_candidates as C
         extra = C.CANDIDATES[extra_name]["fn"](games, feats)
+        model = C.CANDIDATES[extra_name].get("model", model)
     out = {}
     for blk in S.BLOCKS:
         bets = []
-        for r in S.predict(feats, extra, blk):
+        for r in S.predict(feats, extra, blk, model):
             if not (r["pc"] and r["po"]) or abs(r["pc"] - r["po"]) >= S.CALM:
                 continue
             f = fb[r["game_id"]]
@@ -68,6 +69,8 @@ RULES = {
                      lambda: mlb_bets(lambda f: MONTH(f, ("03", "04", "05")), 0.10)),
         "all_15": ("全季，模型比開盤看好 ≥ 15%", "只挑模型跟開盤差最多的",
                    lambda: mlb_bets(lambda f: True, 0.15)),
+        "gbm_15": ("樹模型＋開季天數、換人、捕手、新秀投手，看好 ≥ 15%", "同一條規則，換成樹模型",
+                   lambda: mlb_bets(lambda f: True, 0.15, "gbm_plus")),
         "early_turn_5": ("開季 3–5 月＋加上「換很多人的隊」特徵＋看好 ≥ 5%", "差一點通過的特徵，只用在它應該有用的開季",
                          lambda: mlb_bets(lambda f: MONTH(f, ("03", "04", "05")), 0.05, "turnover_early")),
     },

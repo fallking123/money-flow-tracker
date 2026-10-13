@@ -77,7 +77,7 @@ def base_features():
     return games, feats
 
 
-def predict(feats, extra, seasons):
+def predict(feats, extra, seasons, model="lr"):
     """第二層：羅吉斯迴歸，每一季只用之前的季學（跟第 2 版一樣），extra＝{game_id: [特徵…]}"""
     k = len(next(iter(extra.values()))) if extra else 0
     X = {f["game_id"]: np.array(f["x"] + (extra.get(f["game_id"], [0.0] * k) if k else [])) for f in feats}
@@ -87,7 +87,13 @@ def predict(feats, extra, seasons):
         te = [f for f in feats if f["season"] == s]
         A = np.array([X[f["game_id"]] for f in tr])
         mu, sd = A.mean(0), A.std(0) + 1e-9
-        lr = LogisticRegression(C=1.0, max_iter=2000).fit((A - mu) / sd, [int(f["hs"] > f["as"]) for f in tr])
+        if model == "gbm":
+            from sklearn.ensemble import HistGradientBoostingClassifier
+            lr = HistGradientBoostingClassifier(max_depth=3, learning_rate=0.04, max_iter=250, l2_regularization=1.0,
+                                                min_samples_leaf=200, random_state=0)
+        else:
+            lr = LogisticRegression(C=1.0, max_iter=2000)
+        lr.fit((A - mu) / sd, [int(f["hs"] > f["as"]) for f in tr])
         p = lr.predict_proba((np.array([X[f["game_id"]] for f in te]) - mu) / sd)[:, 1]
         for f, pp in zip(te, p):
             out.append({"game_id": f["game_id"], "season": s, "p": float(pp), "y": int(f["hs"] > f["as"]),
@@ -140,8 +146,8 @@ def compare(base, cand, blks=None):
     return out
 
 
-def blocks(feats, extra):
-    return {(a, b): score(predict(feats, extra, (a, b))) for (a, b) in BLOCKS}
+def blocks(feats, extra, model="lr"):
+    return {(a, b): score(predict(feats, extra, (a, b), model)) for (a, b) in BLOCKS}
 
 
 def total_eval(feats, extra):
@@ -195,7 +201,7 @@ def run(names):
     for nm in names:
         cand = C.CANDIDATES[nm]
         extra = cand["fn"](games, feats)
-        res = total_eval(feats, extra) if cand.get("kind") == "total" else compare(base, blocks(feats, extra))
+        res = total_eval(feats, extra) if cand.get("kind") == "total" else compare(base, blocks(feats, extra, cand.get("model", "lr")))
         n = len(log["tries"]) + 1
         thr = threshold(n)
         ok = res["z"] >= thr and res["better_blocks"] >= 3

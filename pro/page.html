@@ -436,7 +436,7 @@ const DATA = /*__DATA__*/null;
   function search() {
     const A = DATA.search; if (!A || !Object.keys(A).length) return "";
     const kind = {ml: "獨贏", total: "大小分", segment: "什麼時候下", "1x2": "主和客", spread: "讓分", rule: "下注規則（直接看 CLV 是不是正的）"};
-    const NM = {mlb: "MLB", soccer: "足球", nba: "NBA", nfl: "NFL"};
+    const NM = {mlb: "MLB", soccer: "足球", nba: "NBA", nfl: "NFL", nhl: "NHL"};
     const table = (sp, L) => `<h3>${NM[sp]}：試了 ${L.n_tries} 次，門檻 z ≥ ${L.final_threshold}</h3>
       <div class="scroll"><table><thead><tr><th>試過的想法</th><th class="r">z 值</th><th class="r">變好<br>段數</th><th class="r">通過</th></tr></thead><tbody>${L.tries.map((t) => `<tr${t.pass_final ? ' style="background:var(--accent-soft)"' : ""}><td>${t.n}. ${esc(t.label)}<div class="s">${kind[t.kind] || ""}・${esc(t.why)}</div></td><td class="r n ${t.pass_final ? "good" : t.z < 0 ? "bad" : ""}">${t.z.toFixed(2)}</td><td class="r n">${t.better_blocks}/4</td><td class="r n">${t.pass_final ? "<b>通過</b>" : "沒有"}</td></tr>`).join("")}</tbody></table></div>`;
     const tot = Object.values(A).reduce((a, L) => a + L.n_tries, 0), pass = Object.values(A).reduce((a, L) => a + L.tries.filter((t) => t.pass_final).length, 0);
@@ -445,12 +445,13 @@ const DATA = /*__DATA__*/null;
       <p class="sub">目標不是比收盤準，而是找「開盤時莊家沒算好」的東西：模型跟開盤不一樣的地方，收盤有沒有往模型移。四個運動一共試了 ${tot} 次，通過 ${pass} 個。</p>
       <div class="gl">
         <div><b>練習區</b>只用已經有開盤資料、而且不是考試的年份（MLB 2012–2021、足球 2016/17–2024/25、NBA 2010–11 到 2022–23、NFL 2011–2021），每個運動切成 4 段。每個想法都要先寫出「為什麼莊家可能沒算好」才測。考過的年份不看，新的年份留給最後的考試。</div>
-        <div><b>怎樣算通過（先訂好、不事後改）</b>4 段裡至少 3 段變好，而且整體 z 值超過門檻。每個運動試越多次門檻越高（大約是「隨便亂試這麼多次，全部都是假的機會只有 5%」）。冰球的舊開盤資料壞掉，沒辦法做。</div>
+        <div><b>怎樣算通過（先訂好、不事後改）</b>4 段裡至少 3 段變好，而且整體 z 值超過門檻。每個運動試越多次門檻越高（大約是「隨便亂試這麼多次，全部都是假的機會只有 5%」）。冰球的舊開盤只有 2007–2014 壞掉（欄位錯位），2014–15 起正常，練習區用 2014–15 到 2022–23。</div>
         <div><b>最大的發現：開季</b>MLB、足球、NBA 三個運動都是「開季初模型比開盤更有用」${nE && nE.move_in_all ? `（NBA 開季收盤平均往模型移 ${nE.move_in_all[0]} 分，其他時候 ${nE.move_out_all[0]} 分）` : ""}。很合理：開季時莊家還靠去年的數據和季前預測，模型會用每一場新比賽、而且跟著球員走。</div>
         <div><b>但還不夠賺</b>就算在開季，MLB 用美國平均開盤價的 CLV 約 ${mE ? pp(mE.clv_in_all[0]) : "–"}（打平）；NBA 讓分要移將近 1 分才贏得過 −110 的抽水，現在只有 0.3 分；足球模型離 Pinnacle 還很遠。</div>
+        <div><b>樹模型（MySports.AI 用的那種）比較差</b>運動比賽的運氣成分太大，複雜的模型會去學運氣；MLB 換成樹模型之後準度和 CLV 都明顯變差，所以其他運動不再試。</div>
         <div><b>市場學得很快</b>MLB 的捕手偷好球：2012–14 年收盤會往這個特徵移，2015 年之後就不會了。所以「歷史上能贏」不代表「現在還能贏」，最後一定要用新的比賽考。</div>
       </div>
-      ${["mlb", "nba", "nfl", "soccer"].filter((k) => A[k]).map((k) => table(k, A[k])).join("")}</section>`;
+      ${["mlb", "nhl", "nba", "nfl", "soccer"].filter((k) => A[k]).map((k) => table(k, A[k])).join("")}</section>`;
   }
   function rule15() {
     const R = DATA.rule15; if (!R) return "";
@@ -469,9 +470,17 @@ const DATA = /*__DATA__*/null;
         <div><b>還要注意</b>一季大約 50–90 注；要用「開盤價」才有這個 CLV，開盤的限額通常很小、價錢動得很快。這是練習區的結果，試了很多次才找到（門檻已經算進去），<b>還要通過 2026 整季的正式考試</b>（等 Retrosheet 年底公布資料），之後每天實戰記錄。</div>
       </div></section>`;
   }
+  function combo() {
+    const C = DATA.combo; if (!C) return "";
+    const NM = {mlb: ["MLB", "勝負 log loss"], nba: ["NBA", "分差平均誤差（分）"], nfl: ["NFL", "分差平均誤差（分）"], soccer: ["足球", "主和客 log loss"]};
+    const row = (k) => C[k].map((b) => `<tr><td>${NM[k][0]} ${esc(b.seasons)}</td><td class="r n">${b.open}</td><td class="r n">${b.model}</td><td class="r n"><b>${b.combo}</b></td><td class="r n">${b.close}</td><td class="r n ${b.catch > 0 ? "good" : "bad"}">${b.catch == null ? "–" : Math.round(b.catch) + "%"}</td></tr>`).join("");
+    return `<section class="card"><h2>至少跟莊家差不多：開盤＋我們的模型</h2><p class="sub">職業的做法是把自己的模型跟市場合起來。合併比例用其他年份學。「追上」＝從開盤到收盤的距離，合併後走了幾成（100% 以上＝比收盤還準）。數字越小越準。</p>
+      <div class="scroll"><table><thead><tr><th>練習區</th><th class="r">開盤</th><th class="r">模型</th><th class="r">合併</th><th class="r">收盤</th><th class="r">追上</th></tr></thead><tbody>${Object.keys(NM).filter((k) => C[k]).map(row).join("")}</tbody></table></div>
+      <p class="note">開盤和收盤本來就差很少——莊家一開盤就很準。MLB、NFL 合併後大多比開盤準、往收盤靠近（MLB 2018–19 甚至比收盤準一點）；NBA、足球合併沒有幫助，代表模型的資訊開盤已經有了。</p></section>`;
+  }
   function render() {
     if (!DATA) { $("app").innerHTML = `<div class="card">沒有資料。</div>`; return; }
-    $("app").innerHTML = head() + stages() + rule15() + search() + usStage() + soccer() + dataCheck() + clvIntro() + market() + signals() + model1() +
+    $("app").innerHTML = head() + stages() + rule15() + search() + combo() + usStage() + soccer() + dataCheck() + clvIntro() + market() + signals() + model1() +
       `<footer>職業版只做研究和驗證，跟原本的看板、模型一完全分開。</footer>`;
   }
   document.addEventListener("click", (e) => {
