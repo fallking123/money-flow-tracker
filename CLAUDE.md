@@ -50,6 +50,7 @@
 - 照職業團隊做法從頭建的新模型，**跟原本的看板和模型一完全分開，是獨立的成品**：
   - 網頁：https://claude.ai/artifact/2gU7YFcfAW7F5E2EJQr2F5（模板 `pro/page.html` → `python3 -m pro.build_page` → `pro/dist/index.html`，發布到這個網址）
   - 程式只放 `pro/`，輸出只寫 `docs/data/pro/` 和 `pro/dist/`。原本的看板沒有任何職業版的東西；不要改模型一或 model_picks.csv 來配合它。
+- **職業版不考慮台彩**（使用者 2026-10-13 指示）：只看能不能贏過國際／美國盤口，不用再提台彩抽成。
 - **每做完一個階段就停下來**：跟使用者說明這階段在做什麼、結果如何，等他確認才做下一階段。
 - 原則：核心模型不放賠率（自己先開盤再跟莊家比）、嚴格照時間順序、最後兩季留到最後才考、成績單看 log loss vs 收盤／機率校準／CLV／美國或 Pinnacle 賠率獲利＋運氣範圍。不用條款不允許抓取的網站。資料不齊全就從頭重建。
 - 階段：0 CLV 追蹤＋資料檢查（`pro/lines.py`、`pro/clv.py`、`pro/datacheck.py`）→ 1 足球比分模型 → 2 NFL、MLB、NHL → 3 NBA → 4 混合＋每日對照表。
