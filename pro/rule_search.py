@@ -65,14 +65,15 @@ def nba_bets(cond, dmin, sport="nba", extra_name=None):
 SIG_T = {"nba": 18.0, "nfl": 13.5}
 
 
-def total_bets(sport, dmin, cond=lambda f: True):
+def total_bets(sport, dmin, cond=lambda f: True, extra_fn=None):
     """大小分：模型總分跟開盤大小線差 ≥ dmin 分就下（−110），收盤時這注的勝率＝Φ（收盤−開盤）÷σ"""
     from pro import spread_search as SS
     games, feats, R = SS.base(sport)
+    extra = extra_fn(sport, feats) if extra_fn else None
     out = {}
     for blk in SS.CFG[sport]["blocks"]:
         bets = []
-        for r in SS.predict_total(sport, feats, blk, R.get("alpha", 5.0)):
+        for r in SS.predict_total(sport, feats, blk, R.get("alpha", 5.0), extra):
             if r["to"] is None or r["tc"] is None or abs(r["tc"] - r["to"]) >= SS.CFG[sport]["calm"] * 1.5 or not cond(r["f"]):
                 continue
             d = r["pt"] - r["to"]
@@ -87,6 +88,8 @@ MONTH = lambda f, ms: f["date"][5:7] in ms
 RULES_NFL = {
     "tot_3": ("大小分：模型總分跟開盤大小線差 ≥ 3 分", "大小分市場通常沒有讓分準", lambda: total_bets("nfl", 3.0)),
     "tot_5": ("大小分：差 ≥ 5 分", "同上，更嚴格", lambda: total_bets("nfl", 5.0)),
+    "tot_pace_3": ("大小分：加上節奏（每場幾個 play）、傳球比例＋差 ≥ 3 分", "總分主要看兩隊跑幾個 play、多常傳球；換教練團後節奏變了，市場可能慢一步",
+                   lambda: total_bets("nfl", 3.0, extra_fn=__import__("pro.spread_search", fromlist=["x"]).nfl_pace)),
     "sp_3": ("讓分：模型跟開盤差 ≥ 3 分", "跟 MLB 一樣只挑差很多的", lambda: nba_bets(lambda f: True, 3.0, sport="nfl")),
 }
 RULES = {

@@ -221,6 +221,32 @@ def tank(sport, feats):
     return out
 
 
+def nfl_pace(sport, feats):
+    """NFL 大小分用：每隊最近的進攻節奏（比賽還沒定局時每場幾個 play）、傳球比例，攻守兩邊都算，越近越重要"""
+    from pro import nfl_model as V1
+    _, tg = V1.load()
+    st = defaultdict(lambda: np.zeros(4))     # 隊 → [play 數, 傳球數, 被打的 play 數, 場數]（衰減）
+    out = {}
+    for f in sorted(feats, key=lambda f: f["date"]):
+        h, a = f["home"], f["away"]
+        def pace(t):
+            x = st[t]
+            return (x[0] + 60 * 2) / (x[3] + 2), (x[1] + 33 * 2) / (x[0] + 60 * 2), (x[2] + 60 * 2) / (x[3] + 2)
+        ph, rh, dh = pace(h)
+        pa, ra, da = pace(a)
+        out[f["game_id"]] = [(ph + da) / 2 + (pa + dh) / 2, rh + ra]
+        rows = tg.get(f["game_id"], {})
+        for t, o in ((h, a), (a, h)):
+            r = rows.get(t)
+            if not r:
+                continue
+            n = float(r.get("n_plays") or 0)
+            npa = float(r.get("n_pass") or 0)
+            st[t] = st[t] * 0.9 + np.array([n, npa, 0.0, 1.0])
+            st[o] = st[o] + np.array([0.0, 0.0, n, 0.0])
+    return out
+
+
 CANDIDATES = {
     "sched": {"fn": sched, "label": "賽程疲勞（密集賽程、客場連戰、跨時區、高海拔）",
               "why": "連續比賽、長途客場、到丹佛猶他高海拔的背靠背，體力差；開盤可能只粗略算"},
