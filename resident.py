@@ -31,7 +31,7 @@ RUN_MIN = 340           # 跑多久就交棒（5 小時 40 分；GitHub 一個�
 FINAL_LEAD_MIN = 5
 HANDOFF_GUARD_MIN = 8   # 要交棒時，這麼多分鐘內有比賽要截，就等截完再走
 ALIVE_MIN = 25
-US_STEPS = ["python scrape_extra.py", "python scrape_pinnacle.py mlb,nba,nfl,nhl",
+US_STEPS = ["python scrape_extra.py", "python scrape_pinnacle.py mlb,nba,nfl,nhl", "python -m pro.injury_watch nba",
             "python track_models.py mlb,nba,nfl,nhl", "python alerts.py mlb,nba,nfl,nhl"]
 SOCCER_STEPS = ["python scrape_soccer.py", "python scrape_pinnacle.py soccer",
                 "python track_models.py soccer", "python alerts.py soccer"]
