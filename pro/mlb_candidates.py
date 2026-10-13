@@ -252,6 +252,149 @@ def sp_exp(games, feats):
     return out
 
 
+def _lines():
+    if "lines" not in _cache:
+        from pro import mlb_player_model as M2
+        _cache["lines"] = M2.load_lines()
+    return _cache["lines"]
+
+
+def _season_start(games):
+    st = {}
+    for g in games:
+        st[g["season"]] = min(st.get(g["season"], g["dt"]), g["dt"])
+    return st
+
+
+def turnover_early(games, feats):
+    """開季 40 天內：今天（上一場）的打線＋先發投手裡，去年在別隊的人占幾成"""
+    bat, pit = _lines()
+    st = _season_start(games)
+    team_season = {}
+    last_lu = {}
+    out = {}
+    for day, gs in by_day(games):
+        for g in gs:
+            early = 1.0 if (day - st[g["season"]]).days <= 40 else 0.0
+            v = {}
+            for side, t, sp in (("h", g["home"], g["home_sp"]), ("a", g["vis"], g["vis_sp"])):
+                ppl = last_lu.get(t, []) + [sp]
+                prev = [team_season.get((p, g["season"] - 1)) for p in ppl]
+                known = [x for x in prev if x]
+                v[side] = (sum(1 for x in known if x != t) / len(known)) if known else 0.0
+            out[g["game_id"]] = [(v["h"] - v["a"]) * early]
+        for g in gs:
+            lu = defaultdict(list)
+            for (t, b, slot, stt, vv, vl) in bat.get(g["game_id"], []):
+                team_season[(b, g["season"])] = t
+                if stt:
+                    lu[t].append(b)
+            for (t, p, stt, n, vv, vl) in pit.get(g["game_id"], []):
+                team_season[(p, g["season"])] = t
+            for t, l in lu.items():
+                last_lu[t] = l
+    return out
+
+
+def pythag_early(games, feats):
+    """開季 40 天內：去年「實際勝率 − 得失分應有的勝率」（運氣），一般人看戰績，莊家可能跟著"""
+    st = _season_start(games)
+    rec = defaultdict(lambda: [0, 0, 0.0, 0.0])
+    luck = {}
+    out = {}
+    seen_season = None
+    for day, gs in by_day(games):
+        s = gs[0]["season"]
+        if s != seen_season:
+            for (t, ss), (w, n, rs, ra) in list(rec.items()):
+                if ss == s - 1 and n > 50 and rs + ra > 0:
+                    luck[t] = w / n - rs ** 1.83 / (rs ** 1.83 + ra ** 1.83)
+            seen_season = s
+        for g in gs:
+            early = 1.0 if (day - st[g["season"]]).days <= 40 else 0.0
+            out[g["game_id"]] = [(luck.get(g["home"], 0.0) - luck.get(g["vis"], 0.0)) * early]
+        for g in gs:
+            for t, rs, ra in ((g["home"], g["hs"], g["as"]), (g["vis"], g["as"], g["hs"])):
+                r = rec[(t, g["season"])]
+                r[0] += int(rs > ra)
+                r[1] += 1
+                r[2] += rs
+                r[3] += ra
+    return out
+
+
+def opener(games, feats):
+    """先發投手平常只投 1–2 局（「開局投手」、牛棚車輪戰）：莊家常照「先發投手」定價，可能不準"""
+    bat, pit = _lines()
+    bf = defaultdict(list)
+    out = {}
+    for day, gs in by_day(games):
+        for g in gs:
+            v = {}
+            for side, sp in (("h", g["home_sp"]), ("a", g["vis_sp"])):
+                x = bf[sp][-5:]
+                v[side] = 1.0 if len(x) >= 2 and np.mean(x) < 12 else 0.0
+            out[g["game_id"]] = [v["h"] - v["a"]]
+        for g in gs:
+            for (t, p, stt, n, vv, vl) in pit.get(g["game_id"], []):
+                if stt:
+                    bf[p].append(vv[0])
+    return out
+
+
+def closer(games, feats):
+    """這隊最常用的兩位後援（最近 30 天出場最多），今天能不能投（昨天投 20 球以上、或連投兩天＝不能）"""
+    bat, pit = _lines()
+    use = defaultdict(lambda: defaultdict(list))      # 隊 → 投手 → [日]
+    recent = defaultdict(list)                        # 投手 → [(日, 球數)]
+    out = {}
+    for day, gs in by_day(games):
+        for g in gs:
+            v = {}
+            for side, t in (("h", g["home"]), ("a", g["vis"])):
+                cnt = {p: sum(1 for d in ds if 0 < (day - d).days <= 30) for p, ds in use[t].items()}
+                top = sorted(cnt, key=cnt.get, reverse=True)[:2]
+                down = 0
+                for p in top:
+                    rp = recent[p]
+                    y = sum(n for d, n in rp if (day - d).days == 1)
+                    two = any((day - d).days == 1 for d, _ in rp) and any((day - d).days == 2 for d, _ in rp)
+                    down += int(y >= 20 or two)
+                v[side] = down
+            out[g["game_id"]] = [v["h"] - v["a"]]
+        for g in gs:
+            for (t, p, stt, n, vv, vl) in pit.get(g["game_id"], []):
+                if not stt:
+                    use[t][p] = [d for d in use[t][p] if (day - d).days <= 30] + [day]
+                recent[p] = [(d, k) for d, k in recent[p] if (day - d).days <= 3] + [(day, n)]
+    return out
+
+
+def sp_form(games, feats):
+    """先發投手最近 3 場被打成怎樣（每個打席的 wOBA）減掉長期：一般人看最近的防禦率，可能反應過度"""
+    bat, pit = _lines()
+    W = np.array([0.0, 0.70, 2.03, 0.88, 1.25, 1.58, 0.88])
+    hist = defaultdict(list)
+    out = {}
+    for day, gs in by_day(games):
+        for g in gs:
+            v = {}
+            for side, sp in (("h", g["home_sp"]), ("a", g["vis_sp"])):
+                h = hist[sp]
+                if len(h) >= 8:
+                    rec = np.sum(h[-3:], axis=0)
+                    lt = np.sum(h[-30:], axis=0)
+                    v[side] = float(W @ rec[1:] / rec[0] - W @ lt[1:] / lt[0]) if rec[0] and lt[0] else 0.0
+                else:
+                    v[side] = 0.0
+            out[g["game_id"]] = [v["h"] - v["a"]]
+        for g in gs:
+            for (t, p, stt, n, vv, vl) in pit.get(g["game_id"], []):
+                if stt:
+                    hist[p] = (hist[p] + [vv])[-30:]
+    return out
+
+
 CANDIDATES = {
     "travel": {"fn": travel, "label": "移動與賽程疲勞",
                "why": "跨時區（尤其往東飛）、前一天夜場今天日場、最近 10 天打幾場、昨天有沒有休息——身體疲勞，莊家可能只粗略考慮"},
@@ -263,6 +406,16 @@ CANDIDATES = {
                "why": "一般人愛追最近很熱的隊，開盤可能被拉向熱門；如果收盤會修正回來，模型就該知道"},
     "sp_exp": {"fn": sp_exp, "label": "先發投手經驗（新秀、剛升上來）",
                "why": "新投手的資料少，莊家開盤可能比較不準；我們的模型有「新人平均」可以參考"},
+    "turnover_early": {"fn": turnover_early, "label": "開季時換了很多人的隊",
+                       "why": "開季時莊家和一般人還靠去年的球隊數據；休賽季大換血的隊，去年的數據不準，我們的模型跟著球員走"},
+    "pythag_early": {"fn": pythag_early, "label": "開季時，去年戰績的運氣成分",
+                     "why": "去年靠運氣多贏的隊（戰績比得失分應有的好），一般人和開盤可能高估"},
+    "opener": {"fn": opener, "label": "開局投手（先發只投 1–2 局）",
+               "why": "牛棚車輪戰的比賽，盤口常照掛名的先發投手定價，可能不準"},
+    "closer": {"fn": closer, "label": "主力後援今天能不能投",
+               "why": "終結者、布局投手前兩天投太多，今天可能不能上；開盤時常常沒算進去"},
+    "sp_form": {"fn": sp_form, "label": "先發投手最近 3 場被打爆或很神",
+                "why": "一般人看最近防禦率，可能反應過度；我們的模型看長期，兩者不一樣時收盤往哪邊？"},
     "weather": {"fn": weather, "kind": "total", "label": "天氣（大小分）",
                 "why": "氣溫高球飛比較遠、風往外吹全壘打多；大小盤可能沒完全算進當天的天氣"},
     "ump_zone": {"fn": ump_zone, "kind": "total", "label": "主審好球帶大小（大小分）",

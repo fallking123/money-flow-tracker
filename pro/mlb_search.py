@@ -114,10 +114,10 @@ def score(preds):
             "ll": float(np.mean(ll)), "ll_each": dict(zip([r["game_id"] for r in preds], ll))}
 
 
-def compare(base, cand):
+def compare(base, cand, blks=None):
     out = {"blocks": [], "better_blocks": 0}
     all_d, all_dl = [], []
-    for (a, b) in BLOCKS:
+    for (a, b) in (blks or BLOCKS):
         sb, sc = base[(a, b)], cand[(a, b)]
         eb = dict(zip(sb["ids"], sb["err"]))
         ec = dict(zip(sc["ids"], sc["err"]))
