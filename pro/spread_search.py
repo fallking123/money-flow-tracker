@@ -63,11 +63,15 @@ def base(sport):
     n = 0
     for f in feats:
         dt = datetime.strptime(f["date"][:10], "%Y-%m-%d")
-        f["so"] = f["sc"] = None
+        f["so"] = f["sc"] = f["to"] = f["tc"] = None
         for dd in (0, -1, 1):
             c = lines.get(((dt + timedelta(days=dd)).strftime("%Y-%m-%d"), int(f["hs_"]), int(f["as_"])), [])
             if len(c) == 1 and c[0]["spread_open_home"] and c[0]["spread_close_home"]:
                 f["so"], f["sc"] = -float(c[0]["spread_open_home"]), -float(c[0]["spread_close_home"])     # 主隊預期贏幾分
+                try:
+                    f["to"], f["tc"] = float(c[0]["total_open"]), float(c[0]["total_close"])
+                except (TypeError, ValueError):
+                    f["to"] = f["tc"] = None
                 n += 1
                 break
     print(f"{sport}：{len(feats)} 場、對到開收盤讓分 {n}", flush=True)
@@ -92,6 +96,27 @@ def predict(sport, feats, extra, seasons, alpha):
         P = y.mean() + ((np.array([X[f["game_id"]] for f in te]) - mu) / sd) @ b
         for f, pm in zip(te, P):
             out.append({"game_id": f["game_id"], "pm": float(pm), "so": f["so"], "sc": f["sc"], "margin": f["margin"], "f": f})
+    return out
+
+
+def predict_total(sport, feats, seasons, alpha, extra=None):
+    """大小分：第 2 版的總分特徵（x_t）＋候選，嶺迴歸預測總分"""
+    K = len(next(iter(extra.values()))) if extra else 0
+    X = {f["game_id"]: np.array(list(f["x_t"]) + (extra.get(f["game_id"], [0.0] * K) if K else []), float) for f in feats}
+    out = []
+    for s in range(seasons[0], seasons[1] + 1):
+        tr = [f for f in feats if CFG[sport]["first"] <= f["season"] < s]
+        te = [f for f in feats if f["season"] == s]
+        if len(tr) < 300 or not te:
+            continue
+        A = np.array([X[f["game_id"]] for f in tr])
+        y = np.array([f["total"] for f in tr], float)
+        mu, sd = A.mean(0), A.std(0) + 1e-9
+        Z = (A - mu) / sd
+        b = np.linalg.solve(Z.T @ Z + alpha * np.eye(Z.shape[1]), Z.T @ (y - y.mean()))
+        P = y.mean() + ((np.array([X[f["game_id"]] for f in te]) - mu) / sd) @ b
+        for f, pt in zip(te, P):
+            out.append({"game_id": f["game_id"], "pt": float(pt), "to": f.get("to"), "tc": f.get("tc"), "total": f["total"], "f": f})
     return out
 
 

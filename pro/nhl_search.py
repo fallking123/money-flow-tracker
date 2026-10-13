@@ -98,7 +98,32 @@ def early(games, feats):
     return {f["game_id"]: [float((f["dt"] - st[f["season"]]).days <= 45)] for f in feats}
 
 
+TZ = {**{t: -6 for t in ("CHI", "DAL", "MIN", "NSH", "STL", "WPG")}, **{t: -7 for t in ("COL", "UTA", "ARI", "CGY", "EDM")},
+      **{t: -8 for t in ("ANA", "LAK", "SJS", "SEA", "VAN", "VGK")}}
+
+
+def sched(games, feats):
+    """跨時區飛行、4 天 3 賽、客場連戰（冰球體力消耗大）"""
+    hist = defaultdict(list)
+    out = {}
+    for f in sorted(feats, key=lambda f: f["dt"]):
+        tz = TZ.get(f["h"], -5)
+        v = {}
+        for side in ("h", "a"):
+            h = hist[f[side]]
+            last = h[-1] if h else None
+            in4 = sum(1 for d, _, _ in h if 0 < (f["dt"] - d).days <= 3)
+            road = sum(1 for d, _, aw in h if 0 < (f["dt"] - d).days <= 7 and aw)
+            v[side] = [abs(tz - last[1]) if last else 0, float(in4 >= 2), road]
+        out[f["game_id"]] = [a - b for a, b in zip(v["h"], v["a"])]
+        hist[f["h"]].append((f["dt"], tz, False))
+        hist[f["a"]].append((f["dt"], tz, True))
+    return out
+
+
 RULES = {
+    "sched_15": ("加上賽程（跨時區、4 天 3 賽、客場連戰）＋看好 ≥ 15%", "冰球體力消耗大，長途客場和密集賽程開盤可能沒算夠",
+                 lambda F: rule(F, 0.15, extra=sched(None, F))),
     "edge_10": ("模型比開盤多看好 ≥ 10%", "跟 MLB 一樣：只挑跟開盤差很多的", lambda F: rule(F, 0.10)),
     "edge_15": ("模型比開盤多看好 ≥ 15%", "MLB 打贏莊家的同一條規則", lambda F: rule(F, 0.15)),
     "early_10": ("開季 45 天內＋看好 ≥ 10%", "開季時莊家資料最少（MLB、NBA、足球都有這個現象）",

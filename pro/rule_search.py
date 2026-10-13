@@ -62,7 +62,33 @@ def nba_bets(cond, dmin, sport="nba", extra_name=None):
     return out
 
 
+SIG_T = {"nba": 18.0, "nfl": 13.5}
+
+
+def total_bets(sport, dmin, cond=lambda f: True):
+    """大小分：模型總分跟開盤大小線差 ≥ dmin 分就下（−110），收盤時這注的勝率＝Φ（收盤−開盤）÷σ"""
+    from pro import spread_search as SS
+    games, feats, R = SS.base(sport)
+    out = {}
+    for blk in SS.CFG[sport]["blocks"]:
+        bets = []
+        for r in SS.predict_total(sport, feats, blk, R.get("alpha", 5.0)):
+            if r["to"] is None or r["tc"] is None or abs(r["tc"] - r["to"]) >= SS.CFG[sport]["calm"] * 1.5 or not cond(r["f"]):
+                continue
+            d = r["pt"] - r["to"]
+            if abs(d) >= dmin:
+                pw = norm.cdf(np.sign(d) * (r["tc"] - r["to"]) / SIG_T[sport])
+                bets.append(pw * (1 + 100 / 110) - 1)
+        out[blk] = bets
+    return out
+
+
 MONTH = lambda f, ms: f["date"][5:7] in ms
+RULES_NFL = {
+    "tot_3": ("大小分：模型總分跟開盤大小線差 ≥ 3 分", "大小分市場通常沒有讓分準", lambda: total_bets("nfl", 3.0)),
+    "tot_5": ("大小分：差 ≥ 5 分", "同上，更嚴格", lambda: total_bets("nfl", 5.0)),
+    "sp_3": ("讓分：模型跟開盤差 ≥ 3 分", "跟 MLB 一樣只挑差很多的", lambda: nba_bets(lambda f: True, 3.0, sport="nfl")),
+}
 RULES = {
     "mlb": {
         "early_10": ("開季 3–5 月＋模型比開盤看好 ≥ 10%", "兩個已知的訊號合起來：開季模型比較有用、差很多時收盤移比較多",
@@ -75,6 +101,8 @@ RULES = {
                          lambda: mlb_bets(lambda f: MONTH(f, ("03", "04", "05")), 0.05, "turnover_early")),
     },
     "nba": {
+        "tot_6": ("大小分：模型總分跟開盤大小線差 ≥ 6 分", "大小分市場通常沒有讓分準；只挑差很多的", lambda: total_bets("nba", 6.0)),
+        "tot_10": ("大小分：模型總分跟開盤大小線差 ≥ 10 分", "同上，更嚴格", lambda: total_bets("nba", 10.0)),
         "early_3": ("開季 10–11 月＋模型跟開盤讓分差 ≥ 3 分", "開季收盤往模型移最多，再只挑差很多的",
                     lambda: nba_bets(lambda f: MONTH(f, ("10", "11")), 3.0)),
         "all_4": ("全季，模型跟開盤讓分差 ≥ 4 分", "只挑差最多的", lambda: nba_bets(lambda f: True, 4.0)),
@@ -88,7 +116,7 @@ def main(sport, names):
     log_path = S.LOG if sport == "mlb" else os.path.join(S.OUT, f"search_log_{sport}.json")
     log = json.load(open(log_path, encoding="utf-8"))
     for nm in names:
-        label, why, fn = RULES[sport][nm]
+        label, why, fn = (RULES_NFL if sport == "nfl" else RULES[sport])[nm]
         per = fn()
         res = {"blocks": [], "better_blocks": 0}
         allb = []
