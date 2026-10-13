@@ -432,9 +432,28 @@ const DATA = /*__DATA__*/null;
     h += `<section class="card"><p class="note" style="margin:0">資料來源：MLB 逐打席紀錄來自 Retrosheet——The information used here was obtained free of charge from and is copyrighted by Retrosheet. Interested parties may contact Retrosheet at www.retrosheet.org。MLB 球員生日來自 Chadwick Baseball Bureau register。NHL 射門品質來自 MoneyPuck.com；NHL 每場球員數據來自 fastRhockey / sportsdataverse。NFL 每一個 play、出場次數、傷兵報告來自 nflverse。NBA 球隊、球員數據來自 hoopR / sportsdataverse（CC BY 4.0）。</p></section>`;
     return h;
   }
+  // ═════════ 特徵搜尋（練習區）═════════
+  function search() {
+    const L = DATA.search; if (!L || !L.tries) return "";
+    const kind = {ml: "獨贏", total: "大小分", segment: "什麼時候下"};
+    const rows = L.tries.map((t) => `<tr${t.pass_final ? ' style="background:var(--accent-soft)"' : ""}><td>${t.n}. ${esc(t.label)}<div class="s">${kind[t.kind] || ""}・${esc(t.why)}</div></td><td class="r n ${t.z >= L.final_threshold ? "good" : t.z < 0 ? "bad" : ""}">${t.z.toFixed(2)}</td><td class="r n">${t.better_blocks}/4</td><td class="r n">${t.pass_final ? "<b>通過</b>" : "沒有"}</td></tr>`).join("");
+    const early = L.tries.find((t) => t.name === "seg_early");
+    return `<section class="card"><span class="tag">FEATURE SEARCH · MLB</span><h2>找能贏開盤的特徵（MLB 練習區）</h2>
+      <p class="sub">目標不是比收盤準，而是找「開盤時莊家沒算好」的東西：模型跟開盤不一樣的地方，收盤有沒有往模型移。</p>
+      <div class="gl">
+        <div><b>練習區</b>2012–2021（有開盤資料的年份），切成 4 段：2012–14、2015–17、2018–19、2020–21。每個想法都要先寫出「為什麼莊家可能沒算好」才測。2024–25 已考過不看，2026 整季留給最後的考試。</div>
+        <div><b>怎樣算通過（先訂好、不事後改）</b>4 段裡至少 3 段變好，而且整體的 z 值超過門檻。試越多次門檻越高：試了 ${L.n_tries} 次，門檻是 ${L.final_threshold}（大約是「隨便亂試 ${L.n_tries} 次，全部都假的機會只有 5%」）。</div>
+      </div>
+      <div class="scroll"><table><thead><tr><th>試過的想法</th><th class="r">z 值</th><th class="r">變好<br>段數</th><th class="r">通過</th></tr></thead><tbody>${rows}</tbody></table></div>
+      <div class="gl" style="margin-top:10px">
+        <div><b>唯一通過的：開季前兩個月</b>模型在 4、5 月比開盤更有用（4 段裡 3 段比其他月份好）。可能是因為開季時莊家還靠去年的數據，我們的模型會用每一個新打席。但就算在 4、5 月，用美國平均開盤價的 CLV 也只有 ${early ? pp(early.clv_in_all[0]) : "–"}，大約打平；要賺需要更低抽水的價錢。</div>
+        <div><b>一個有意思的例子：捕手偷好球</b>2012–14 年收盤明顯往這個特徵移（市場那時還沒算進去），2015 年之後就不會了——這幾年這個數據大家都知道了，開盤已經算進去。也說明了為什麼「歷史上贏」不代表「現在還能贏」。</div>
+        <div><b>其他</b>天氣、主審、先發休息、新秀投手、連勝連敗、移動疲勞：有的能讓「誰會贏」猜得準一點（新秀投手、捕手），但開盤已經算進去了；主審好球帶對大小分有一點幫助（4 段都變好），但沒達到門檻。</div>
+      </div></section>`;
+  }
   function render() {
     if (!DATA) { $("app").innerHTML = `<div class="card">沒有資料。</div>`; return; }
-    $("app").innerHTML = head() + stages() + usStage() + soccer() + dataCheck() + clvIntro() + market() + signals() + model1() +
+    $("app").innerHTML = head() + stages() + search() + usStage() + soccer() + dataCheck() + clvIntro() + market() + signals() + model1() +
       `<footer>職業版只做研究和驗證，跟原本的看板、模型一完全分開。</footer>`;
   }
   document.addEventListener("click", (e) => {

@@ -59,6 +59,7 @@
   - MLB（`pro/mlb_player_model.py`）：每位打者×投手勝算比對決、左右投打、棒次、牛棚疲勞。追上收盤 驗證 86%（第 1 版 80%）、參考 82%（67%）。只用上一場打線（開盤版）收盤往模型移 76% vs 16%、CLV +0.8%——但 2024–25 開盤是 ESPN，比 SBRO 軟很多，可能偏樂觀；SBRO 驗證季 −0.8%（看好 ≥10% 時 +0.7%）。**真正考試：2026 球季**（沒用過，docs/data/mlb/history/espn_2026.csv 有開收盤；等 Retrosheet 年底公布 2026 逐打席）。
   - NFL（`pro/nfl_player_model.py`）：先發四分衛跟著人、四分衛換人、七個位置完整度；三種名單 actual／report（傷兵報告＋每週名單）／prev。驗證 91%（79%），參考 67%（68%）；進步幾乎全靠開賽前 90 分鐘的不上場名單（收盤也知道）。
   - NHL（`pro/nhl_player_model.py`）：守門員 GSAx、每位球員每 60 分鐘評分、上場時間加權；開盤版猜守門員。參考 77%（第 1 版 62%），開盤版 71%；混合沒幫助。
+  - **MLB 特徵搜尋（2026-10-13 開始）**：`pro/mlb_search.py`（練習區 2012–2021 SBRO 開盤、分 4 段、成績＝用開盤＋模型預測收盤的誤差；門檻依總嘗試次數 Bonferroni）、候選在 `pro/mlb_candidates.py`、「什麼時候下」在 `pro/mlb_segments.py`，**每次嘗試都記在 docs/data/pro/search_log.json，不能刪**。天氣／主審好球帶／捕手／先發休息／新秀投手／連勝／移動（`docs/data/pro/mlb/game_info.csv`、`framing.csv.gz`）。第一輪 10 次只有「4、5 月」通過（CLV 約 −0.1%，打平）。基本特徵快取用環境變數 PRO_CACHE。
   - 足球：先發名單的合法來源找不到（FBref、Transfermarkt 條款不允許；Understat 條款不明），**還沒做，等使用者決定**。第 2 階段：MLB 收盤明顯往模型移（60–63% vs 26–33%），開盤 CLV 約 −1%～+0.5%；NFL、NHL 沒有優勢。四個美國運動都已考過（test_log.json，不能重考）。
 - 資料：MLB＝Retrosheet（`pro/fetch_us.py` 在 GitHub Actions `pro_data.yml` 下載整理，網頁要附 Retrosheet 聲明）；NHL＝MoneyPuck；NFL＝nflverse（`pro/nfl_data.py`，工作環境可直接下載）。**ESPN 冰球盤 2022–23、2023–24 的收盤獨贏是壞的（兩邊機率加起來 83%），SBRO 冰球盤也有問題**；原本模型一的冰球訓練用過這些盤口，要修先問使用者。
 - 資料：football-data 2025/26 季中起沒有 Pinnacle 收盤 → 最後兩季用 Betfair 交易所收盤（BFEC*）當標準答案。Pinnacle 檔案 period：0＝全場；NHL 的 6＝60 分鐘三選一（有和局賠率）。

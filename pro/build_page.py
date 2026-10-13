@@ -22,6 +22,9 @@ def main():
         for k in u.values():           # 網頁不需要校準以外的大清單
             k["grid_n"] = len(k.pop("grid", None) or [])
         data["us"] = u
+    sl = os.path.join(os.path.dirname(HERE), "docs", "data", "pro", "search_log.json")
+    if os.path.exists(sl):
+        data["search"] = json.load(open(sl, encoding="utf-8"))
     tpl = open(os.path.join(HERE, "page.html"), encoding="utf-8").read()
     js = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     out = tpl.replace("/*__DATA__*/null", js)
