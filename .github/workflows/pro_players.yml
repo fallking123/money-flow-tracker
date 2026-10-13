@@ -10,6 +10,7 @@ on:
   push:
     paths:
       - pro/fetch_players.py
+      - pro/fetch_sbro_open.py
 
 permissions:
   contents: write
@@ -25,12 +26,16 @@ jobs:
           python-version: "3.11"
       - run: pip install requests==2.32.3 pandas==2.2.3 pyarrow==17.0.0
       - name: Download and summarize
+        if: "!contains(github.event.head_commit.message, 'SBRO')"
         run: python -m pro.fetch_players ${{ github.event.inputs.what || 'mlbinfo' }}
+      - name: SBRO opening spreads/totals (NBA, NFL)
+        if: contains(github.event.head_commit.message, 'SBRO')
+        run: python -m pro.fetch_sbro_open
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/data/pro/mlb docs/data/pro/nhl
+          git add docs/data/pro/mlb docs/data/pro/nhl docs/data/pro/nba docs/data/pro/nfl
           if git diff --cached --quiet; then echo "沒有新資料"; exit 0; fi
           git commit -m "職業版：MLB／NHL 球員逐場資料（${{ github.event.inputs.what || 'mlbinfo' }}）"
           for i in 1 2 3 4 5; do
