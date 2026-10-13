@@ -2,7 +2,11 @@ name: Pro model player data (Retrosheet, sportsdataverse, MoneyPuck)
 
 # 職業版各運動第 2 版（球員為主）的資料：改 pro/fetch_players.py 推上來時跑，或手動跑
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      what:
+        description: "要下載哪些（nhl mlb mlbinfo）"
+        default: "mlbinfo"
   push:
     paths:
       - pro/fetch_players.py
@@ -20,15 +24,15 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install requests==2.32.3 pandas==2.2.3 pyarrow==17.0.0
-      - name: Download and summarize (NHL, MLB)
-        run: python -m pro.fetch_players nhl mlb
+      - name: Download and summarize
+        run: python -m pro.fetch_players ${{ github.event.inputs.what || 'mlbinfo' }}
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/data/pro/mlb docs/data/pro/nhl
           if git diff --cached --quiet; then echo "沒有新資料"; exit 0; fi
-          git commit -m "職業版：MLB／NHL 球員逐場資料"
+          git commit -m "職業版：MLB／NHL 球員逐場資料（${{ github.event.inputs.what || 'mlbinfo' }}）"
           for i in 1 2 3 4 5; do
             git pull --rebase && git push && exit 0
             sleep 15

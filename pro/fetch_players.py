@@ -12,7 +12,10 @@ NHL：
       每場每位球員的上場時間、得分、射門…（fastRhockey／sportsdataverse，MIT）
   docs/data/pro/nhl/shot_players.csv.gz   每場每位球員的射門品質 xG（MoneyPuck.com 逐球射門資料，非商業使用）
   docs/data/pro/nhl/shot_goalies.csv.gz   每場每位守門員面對的 xG、失分（同上）
-用法：python -m pro.fetch_players mlb nhl
+MLB 每場資訊（mlbinfo）：
+  docs/data/pro/mlb/game_info.csv      每場：溫度、風向風速、天空、場地、主審、開賽時間、日夜、兩隊先發捕手
+  docs/data/pro/mlb/framing.csv.gz     每場每組投手＋捕手：打者沒揮棒的球裡，被判好球／壞球幾顆（捕手偷好球）
+用法：python -m pro.fetch_players mlb nhl mlbinfo
 """
 import csv
 import gzip
@@ -270,6 +273,74 @@ def nhl_shots():
     write_gz(os.path.join(d, "shot_goalies.csv.gz"), rg, ["game_id", "team", "goalie", "att", "xg", "ga", "sog", "xg5", "ga5"])
 
 
+INFO_KEYS = ("temp", "winddir", "windspeed", "sky", "precip", "fieldcond", "umphome", "starttime", "daynight", "site")
+
+
+def mlb_info_year(year):
+    raw = get(f"https://www.retrosheet.org/events/{year}eve.zip")
+    if not raw:
+        return [], []
+    zf = zipfile.ZipFile(io.BytesIO(raw))
+    from pro.fetch_us import classify
+    infos, fr = [], []
+    for name in zf.namelist():
+        if not name.upper().endswith((".EVA", ".EVN")):
+            continue
+        gid, info, pit, cat, teams, cnt = None, {}, {}, {}, {}, None
+
+        def flush():
+            if gid:
+                infos.append({"game_id": gid, **info})
+                for (team, p, c), v in cnt.items():
+                    fr.append({"game_id": gid, "team": team, "pitcher": p, "catcher": c, "cs": v[0], "b": v[1]})
+
+        for ln in zf.read(name).decode("latin-1").splitlines():
+            f = ln.split(",")
+            if f[0] == "id":
+                flush()
+                gid, info, pit, cat, teams, cnt = f[1], {}, {}, {}, {}, defaultdict(lambda: [0, 0])
+            elif gid is None:
+                continue
+            elif f[0] == "info" and len(f) >= 3:
+                if f[1] in ("visteam", "hometeam"):
+                    teams[0 if f[1] == "visteam" else 1] = f[2]
+                elif f[1] in INFO_KEYS:
+                    info[f[1]] = f[2].strip()
+            elif f[0] in ("start", "sub") and len(f) >= 6:
+                side, pos = int(f[3]), f[5].strip()
+                if pos == "1":
+                    pit[side] = f[1]
+                elif pos == "2":
+                    if f[0] == "start":
+                        info[("home" if side == 1 else "vis") + "_catcher"] = f[1]
+                    cat[side] = f[1]
+            elif f[0] == "play" and len(f) >= 7 and classify(f[6]):
+                fs = 1 - int(f[2])
+                k = cnt[(teams.get(fs), pit.get(fs), cat.get(fs))]
+                for ch in f[5]:
+                    if ch == "C":
+                        k[0] += 1
+                    elif ch == "B":
+                        k[1] += 1
+        flush()
+    return infos, fr
+
+
+def mlb_info():
+    I, F = [], []
+    for y in range(2005, 2026):
+        i, f = mlb_info_year(y)
+        I += i
+        F += f
+        print(f"MLB info {y}：{len(i)} 場、{len(f)} 組投捕", flush=True)
+    d = os.path.join(OUT, "mlb")
+    with open(os.path.join(d, "game_info.csv"), "w", newline="", encoding="utf-8") as fh:
+        w = csv.DictWriter(fh, fieldnames=["game_id", *INFO_KEYS, "home_catcher", "vis_catcher"], extrasaction="ignore", restval="")
+        w.writeheader()
+        w.writerows(I)
+    write_gz(os.path.join(d, "framing.csv.gz"), F, ["game_id", "team", "pitcher", "catcher", "cs", "b"])
+
+
 if __name__ == "__main__":
     which = sys.argv[1:] or ["mlb", "nhl"]
     if "nhl" in which:
@@ -277,3 +348,5 @@ if __name__ == "__main__":
         nhl_shots()
     if "mlb" in which:
         mlb()
+    if "mlbinfo" in which:
+        mlb_info()
