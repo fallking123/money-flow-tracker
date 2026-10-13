@@ -22,9 +22,22 @@ def main():
         for k in u.values():           # 網頁不需要校準以外的大清單
             k["grid_n"] = len(k.pop("grid", None) or [])
         data["us"] = u
-    sl = os.path.join(os.path.dirname(HERE), "docs", "data", "pro", "search_log.json")
-    if os.path.exists(sl):
-        data["search"] = json.load(open(sl, encoding="utf-8"))
+    # 特徵搜尋：每個運動一份紀錄；最終門檻依「這個運動總共試了幾次」重算
+    from scipy.stats import norm
+    data["search"] = {}
+    for sp, fn in (("mlb", "search_log.json"), ("soccer", "search_log_soccer.json"), ("nba", "search_log_nba.json"), ("nfl", "search_log_nfl.json")):
+        sl = os.path.join(os.path.dirname(HERE), "docs", "data", "pro", fn)
+        if not os.path.exists(sl):
+            continue
+        L = json.load(open(sl, encoding="utf-8"))
+        n = len(L["tries"])
+        thr = round(float(norm.ppf(1 - 0.05 / max(1, n))), 2)
+        for t in L["tries"]:
+            t["pass_final"] = bool(t["z"] >= thr and t["better_blocks"] >= 3)
+            for k in ("blocks",):
+                t.pop(k, None) if sp != "mlb" else None
+        L["final_threshold"], L["n_tries"] = thr, n
+        data["search"][sp] = L
     tpl = open(os.path.join(HERE, "page.html"), encoding="utf-8").read()
     js = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     out = tpl.replace("/*__DATA__*/null", js)

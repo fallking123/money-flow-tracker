@@ -434,22 +434,23 @@ const DATA = /*__DATA__*/null;
   }
   // ═════════ 特徵搜尋（練習區）═════════
   function search() {
-    const L = DATA.search; if (!L || !L.tries) return "";
-    const kind = {ml: "獨贏", total: "大小分", segment: "什麼時候下"};
-    const rows = L.tries.map((t) => `<tr${t.pass_final ? ' style="background:var(--accent-soft)"' : ""}><td>${t.n}. ${esc(t.label)}<div class="s">${kind[t.kind] || ""}・${esc(t.why)}</div></td><td class="r n ${t.z >= L.final_threshold ? "good" : t.z < 0 ? "bad" : ""}">${t.z.toFixed(2)}</td><td class="r n">${t.better_blocks}/4</td><td class="r n">${t.pass_final ? "<b>通過</b>" : "沒有"}</td></tr>`).join("");
-    const early = L.tries.find((t) => t.name === "seg_early");
-    return `<section class="card"><span class="tag">FEATURE SEARCH · MLB</span><h2>找能贏開盤的特徵（MLB 練習區）</h2>
-      <p class="sub">目標不是比收盤準，而是找「開盤時莊家沒算好」的東西：模型跟開盤不一樣的地方，收盤有沒有往模型移。</p>
+    const A = DATA.search; if (!A || !Object.keys(A).length) return "";
+    const kind = {ml: "獨贏", total: "大小分", segment: "什麼時候下", "1x2": "主和客", spread: "讓分"};
+    const NM = {mlb: "MLB", soccer: "足球", nba: "NBA", nfl: "NFL"};
+    const table = (sp, L) => `<h3>${NM[sp]}：試了 ${L.n_tries} 次，門檻 z ≥ ${L.final_threshold}</h3>
+      <div class="scroll"><table><thead><tr><th>試過的想法</th><th class="r">z 值</th><th class="r">變好<br>段數</th><th class="r">通過</th></tr></thead><tbody>${L.tries.map((t) => `<tr${t.pass_final ? ' style="background:var(--accent-soft)"' : ""}><td>${t.n}. ${esc(t.label)}<div class="s">${kind[t.kind] || ""}・${esc(t.why)}</div></td><td class="r n ${t.pass_final ? "good" : t.z < 0 ? "bad" : ""}">${t.z.toFixed(2)}</td><td class="r n">${t.better_blocks}/4</td><td class="r n">${t.pass_final ? "<b>通過</b>" : "沒有"}</td></tr>`).join("")}</tbody></table></div>`;
+    const tot = Object.values(A).reduce((a, L) => a + L.n_tries, 0), pass = Object.values(A).reduce((a, L) => a + L.tries.filter((t) => t.pass_final).length, 0);
+    const mE = (A.mlb || {tries: []}).tries.find((t) => t.name === "seg_early"), nE = (A.nba || {tries: []}).tries.find((t) => t.name === "seg_early");
+    return `<section class="card"><span class="tag">FEATURE SEARCH</span><h2>找能贏開盤的特徵（練習區）</h2>
+      <p class="sub">目標不是比收盤準，而是找「開盤時莊家沒算好」的東西：模型跟開盤不一樣的地方，收盤有沒有往模型移。四個運動一共試了 ${tot} 次，通過 ${pass} 個。</p>
       <div class="gl">
-        <div><b>練習區</b>2012–2021（有開盤資料的年份），切成 4 段：2012–14、2015–17、2018–19、2020–21。每個想法都要先寫出「為什麼莊家可能沒算好」才測。2024–25 已考過不看，2026 整季留給最後的考試。</div>
-        <div><b>怎樣算通過（先訂好、不事後改）</b>4 段裡至少 3 段變好，而且整體的 z 值超過門檻。試越多次門檻越高：試了 ${L.n_tries} 次，門檻是 ${L.final_threshold}（大約是「隨便亂試 ${L.n_tries} 次，全部都假的機會只有 5%」）。</div>
+        <div><b>練習區</b>只用已經有開盤資料、而且不是考試的年份（MLB 2012–2021、足球 2016/17–2024/25、NBA 2010–11 到 2022–23、NFL 2011–2021），每個運動切成 4 段。每個想法都要先寫出「為什麼莊家可能沒算好」才測。考過的年份不看，新的年份留給最後的考試。</div>
+        <div><b>怎樣算通過（先訂好、不事後改）</b>4 段裡至少 3 段變好，而且整體 z 值超過門檻。每個運動試越多次門檻越高（大約是「隨便亂試這麼多次，全部都是假的機會只有 5%」）。冰球的舊開盤資料壞掉，沒辦法做。</div>
+        <div><b>最大的發現：開季</b>MLB、足球、NBA 三個運動都是「開季初模型比開盤更有用」${nE && nE.move_in_all ? `（NBA 開季收盤平均往模型移 ${nE.move_in_all[0]} 分，其他時候 ${nE.move_out_all[0]} 分）` : ""}。很合理：開季時莊家還靠去年的數據和季前預測，模型會用每一場新比賽、而且跟著球員走。</div>
+        <div><b>但還不夠賺</b>就算在開季，MLB 用美國平均開盤價的 CLV 約 ${mE ? pp(mE.clv_in_all[0]) : "–"}（打平）；NBA 讓分要移將近 1 分才贏得過 −110 的抽水，現在只有 0.3 分；足球模型離 Pinnacle 還很遠。</div>
+        <div><b>市場學得很快</b>MLB 的捕手偷好球：2012–14 年收盤會往這個特徵移，2015 年之後就不會了。所以「歷史上能贏」不代表「現在還能贏」，最後一定要用新的比賽考。</div>
       </div>
-      <div class="scroll"><table><thead><tr><th>試過的想法</th><th class="r">z 值</th><th class="r">變好<br>段數</th><th class="r">通過</th></tr></thead><tbody>${rows}</tbody></table></div>
-      <div class="gl" style="margin-top:10px">
-        <div><b>唯一通過的：開季前兩個月</b>模型在 4、5 月比開盤更有用（4 段裡 3 段比其他月份好）。可能是因為開季時莊家還靠去年的數據，我們的模型會用每一個新打席。但就算在 4、5 月，用美國平均開盤價的 CLV 也只有 ${early ? pp(early.clv_in_all[0]) : "–"}，大約打平；要賺需要更低抽水的價錢。</div>
-        <div><b>一個有意思的例子：捕手偷好球</b>2012–14 年收盤明顯往這個特徵移（市場那時還沒算進去），2015 年之後就不會了——這幾年這個數據大家都知道了，開盤已經算進去。也說明了為什麼「歷史上贏」不代表「現在還能贏」。</div>
-        <div><b>其他</b>天氣、主審、先發休息、新秀投手、連勝連敗、移動疲勞：有的能讓「誰會贏」猜得準一點（新秀投手、捕手），但開盤已經算進去了；主審好球帶對大小分有一點幫助（4 段都變好），但沒達到門檻。</div>
-      </div></section>`;
+      ${["mlb", "nba", "nfl", "soccer"].filter((k) => A[k]).map((k) => table(k, A[k])).join("")}</section>`;
   }
   function render() {
     if (!DATA) { $("app").innerHTML = `<div class="card">沒有資料。</div>`; return; }
