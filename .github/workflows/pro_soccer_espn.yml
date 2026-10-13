@@ -1,0 +1,39 @@
+name: Pro soccer lineups (ESPN)
+
+# 職業版足球第 2 版資料：每個聯賽一個工作，抓每場先發名單、換人、球員數據（已經抓過的比賽會跳過）
+on:
+  workflow_dispatch: {}
+  push:
+    paths:
+      - pro/fetch_espn_soccer.py
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      max-parallel: 10
+      matrix:
+        league: [eng.1, eng.2, esp.1, esp.2, ita.1, ita.2, ger.1, ger.2, fra.1, fra.2]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install requests==2.32.3
+      - run: python -m pro.fetch_espn_soccer ${{ matrix.league }}
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/pro/soccer
+          git commit -m "職業版：足球名單 ${{ matrix.league }}" || exit 0
+          for i in $(seq 1 12); do
+            git pull --rebase -X theirs && git push && exit 0
+            sleep $((RANDOM % 30 + 10))
+          done
+          exit 1
