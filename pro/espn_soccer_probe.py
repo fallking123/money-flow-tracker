@@ -17,7 +17,9 @@ def get(url):
             r = requests.get(url, headers=UA, timeout=30)
             if r.status_code == 200:
                 return r.json()
-            print("  ", r.status_code, url)
+            if r.status_code != 404:
+                print("  ", r.status_code, url)
+            return None
         except Exception as e:
             print("  失敗", e)
         time.sleep(2)
@@ -26,8 +28,8 @@ def get(url):
 
 def main():
     for lg in LEAGUES:
-        for y in (2010, 2013, 2016, 2019, 2022, 2025):
-            sb = get(f"https://site.api.espn.com/apis/site/v2/sports/soccer/{lg}/scoreboard?dates={y}1015-{y}1031")
+        for y, d in ((2010, "1016"), (2013, "1019"), (2016, "1015"), (2019, "1019"), (2022, "1015"), (2025, "1018")):
+            sb = get(f"https://site.api.espn.com/apis/site/v2/sports/soccer/{lg}/scoreboard?dates={y}{d}")
             evs = (sb or {}).get("events") or []
             if not evs:
                 print(lg, y, "沒有比賽")
