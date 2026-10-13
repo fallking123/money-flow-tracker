@@ -38,6 +38,9 @@ def main():
                 t.pop(k, None) if sp != "mlb" else None
         L["final_threshold"], L["n_tries"] = thr, n
         data["search"][sp] = L
+    rp = os.path.join(os.path.dirname(HERE), "docs", "data", "pro", "mlb_rule15.json")
+    if os.path.exists(rp):
+        data["rule15"] = json.load(open(rp, encoding="utf-8"))
     tpl = open(os.path.join(HERE, "page.html"), encoding="utf-8").read()
     js = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     out = tpl.replace("/*__DATA__*/null", js)

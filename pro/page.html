@@ -435,7 +435,7 @@ const DATA = /*__DATA__*/null;
   // ═════════ 特徵搜尋（練習區）═════════
   function search() {
     const A = DATA.search; if (!A || !Object.keys(A).length) return "";
-    const kind = {ml: "獨贏", total: "大小分", segment: "什麼時候下", "1x2": "主和客", spread: "讓分"};
+    const kind = {ml: "獨贏", total: "大小分", segment: "什麼時候下", "1x2": "主和客", spread: "讓分", rule: "下注規則（直接看 CLV 是不是正的）"};
     const NM = {mlb: "MLB", soccer: "足球", nba: "NBA", nfl: "NFL"};
     const table = (sp, L) => `<h3>${NM[sp]}：試了 ${L.n_tries} 次，門檻 z ≥ ${L.final_threshold}</h3>
       <div class="scroll"><table><thead><tr><th>試過的想法</th><th class="r">z 值</th><th class="r">變好<br>段數</th><th class="r">通過</th></tr></thead><tbody>${L.tries.map((t) => `<tr${t.pass_final ? ' style="background:var(--accent-soft)"' : ""}><td>${t.n}. ${esc(t.label)}<div class="s">${kind[t.kind] || ""}・${esc(t.why)}</div></td><td class="r n ${t.pass_final ? "good" : t.z < 0 ? "bad" : ""}">${t.z.toFixed(2)}</td><td class="r n">${t.better_blocks}/4</td><td class="r n">${t.pass_final ? "<b>通過</b>" : "沒有"}</td></tr>`).join("")}</tbody></table></div>`;
@@ -452,9 +452,26 @@ const DATA = /*__DATA__*/null;
       </div>
       ${["mlb", "nba", "nfl", "soccer"].filter((k) => A[k]).map((k) => table(k, A[k])).join("")}</section>`;
   }
+  function rule15() {
+    const R = DATA.rule15; if (!R) return "";
+    const P = R.practice, C = R.checks, F = R.reference_2024_25;
+    return `<section class="card" style="border-color:var(--accent)"><span class="tag">FOUND · MLB</span><h2>找到一個在練習區打贏莊家的規則</h2>
+      <p class="sub">${esc(R.rule)}。</p>
+      <div class="kpis"><div class="kpi"><span>練習區注數</span><b>${P.n}</b></div><div class="kpi"><span>對收盤的期望值 CLV</span><b class="good">${pp(P.clv)}</b><div class="lk real">看得出（z ${P.z}）</div></div><div class="kpi"><span>4 段都是正的</span><b>4/4</b></div></div>
+      <div class="scroll"><table><thead><tr><th>練習區</th><th class="r">注數</th><th class="r">CLV</th></tr></thead><tbody>${P.blocks.map((b) => `<tr><td>${b[0]}</td><td class="r n">${b[1]}</td><td class="r n good">${pp(b[2])}</td></tr>`).join("")}</tbody></table></div>
+      <h3>檢查：是不是假的</h3>
+      <div class="scroll"><table><thead><tr><th>同樣價錢範圍的冷門</th><th class="r">注數</th><th class="r">CLV</th></tr></thead><tbody>${C.control.map((c) => `<tr><td>${c[0]}</td><td class="r n">${c[1].toLocaleString("en-US")}</td><td class="r n ${gb(c[2])}">${pp(c[2])}</td></tr>`).join("")}</tbody></table></div>
+      <div class="scroll"><table><thead><tr><th>模型比開盤多看好</th><th class="r">注數</th><th class="r">CLV</th></tr></thead><tbody>${C.by_edge.map((c) => `<tr><td>${c[0]}</td><td class="r n">${c[1].toLocaleString("en-US")}</td><td class="r n ${gb(c[2])}">${pp(c[2])}</td></tr>`).join("")}</tbody></table></div>
+      <div class="gl">
+        <div><b>不是資料錯誤</b>拿掉開盤價格看起來怪怪的比賽，CLV 還是 ${pp(C.normal_overround.clv)}。</div>
+        <div><b>不是「押冷門」本身</b>同樣價錢的冷門全部押是 ${pp(C.control[0][2])}；模型看好的才是正的，模型不看好的更差。差越多、CLV 越高，很一致。</div>
+        <div><b>參考：2024–25</b>${F.n} 注，CLV ${pp(F.clv)}，方向一樣；但那兩季的開盤比較軟、而且考過，只當參考。實際輸贏 ${pp(P.roi)}（練習區），還在運氣範圍內——要看的是 CLV。</div>
+        <div><b>還要注意</b>一季大約 50–90 注；要用「開盤價」才有這個 CLV，開盤的限額通常很小、價錢動得很快。這是練習區的結果，試了很多次才找到（門檻已經算進去），<b>還要通過 2026 整季的正式考試</b>（等 Retrosheet 年底公布資料），之後每天實戰記錄。</div>
+      </div></section>`;
+  }
   function render() {
     if (!DATA) { $("app").innerHTML = `<div class="card">沒有資料。</div>`; return; }
-    $("app").innerHTML = head() + stages() + search() + usStage() + soccer() + dataCheck() + clvIntro() + market() + signals() + model1() +
+    $("app").innerHTML = head() + stages() + rule15() + search() + usStage() + soccer() + dataCheck() + clvIntro() + market() + signals() + model1() +
       `<footer>職業版只做研究和驗證，跟原本的看板、模型一完全分開。</footer>`;
   }
   document.addEventListener("click", (e) => {
