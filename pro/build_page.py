@@ -38,6 +38,11 @@ def main():
                 t.pop(k, None) if sp != "mlb" else None
         L["final_threshold"], L["n_tries"] = thr, n
         data["search"][sp] = L
+    lv = os.path.join(os.path.dirname(HERE), "docs", "data", "pro", "live")
+    if os.path.exists(os.path.join(lv, "nhl_summary.json")):
+        import csv as _csv
+        data["live_nhl"] = json.load(open(os.path.join(lv, "nhl_summary.json"), encoding="utf-8"))
+        data["live_nhl"]["picks_list"] = [r for r in _csv.DictReader(open(os.path.join(lv, "nhl.csv"), encoding="utf-8")) if r.get("pick")]
     cp = os.path.join(os.path.dirname(HERE), "docs", "data", "pro", "combo_report.json")
     if os.path.exists(cp):
         data["combo"] = json.load(open(cp, encoding="utf-8"))

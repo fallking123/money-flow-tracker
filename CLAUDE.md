@@ -45,6 +45,7 @@
 | 立即更新賽果 | 只能手動觸發（看板「更新賽果」按鈕）：跑 backfill workflow → 本機 track_models → 重建發布 |
 | 台彩截圖需求清單 | 每天 21:03，列出還沒記台彩賠率的比賽 |
 | 改押對面策略提醒 | 每週日 20:50，check_flip.py 改過的注滿 100 注就推播一次並自動停用 |
+| 職業版網頁更新＋NHL 新注通知 | 每天 11:41、21:41，重建發布職業版網頁；NHL 實戰記錄有新注就推播 |
 
 ## 職業版（pro/，進行中）
 - 照職業團隊做法從頭建的新模型，**跟原本的看板和模型一完全分開，是獨立的成品**：
@@ -64,6 +65,7 @@
   - **下注規則測試（`pro/rule_search.py`，直接看開盤價下注對收盤的 CLV 是否 > 0）**：**MLB「模型比開盤多看好 ≥15%」練習區 554 注 CLV +1.57%（z 5.3，4 段都正）**——檢查過不是資料錯誤、不是押冷門本身（同價位冷門 −3.8%）；2024–25 參考 +5.5%（ESPN 開盤偏軟）。細節 `docs/data/pro/mlb_rule15.json`。還沒正式考：2026 整季（Retrosheet 年底公布後），之後每天實戰。MLB 開季＋≥10% 也過（+0.9%）。NBA 規則全部 −2～−3%（移動太小贏不過 −110）。
   - **10/13 第三輪**：樹模型（梯度提升）在 MLB 明顯變差，不再試。`pro/combo_eval.py`（開盤＋模型合併 vs 收盤，`combo_report.json`）。**NHL：SBRO 冰球開盤只有 2007–2014 欄位錯位，2014–15 起正常**；`pro/nhl_search.py` 練習區 2014–2022，收盤往模型移（b 0.17–0.26）；規則「≥15%」CLV +0.57%、4 段都正、z 1.62 差一點（門檻 1.64）。
   - **10/13 第四輪（大小分、各聯賽）**：NBA 大小分 −2～−3%；NFL 大小分 +0.4%（差 ≥5 分 +0.8%，拿掉實際天氣也差不多），讓分 −3%；NHL 加賽程特徵還是 +0.6%（4 段正、z 1.66 未過）；足球 `pro/soccer_rules.py` 大小 2.5 −3.6%、亞洲讓分樣本太少。結論：MLB 贏、NHL／NFL 大小分差不多、NBA／足球輸。
+  - **NHL 實戰記錄（10/13 上線）**：`.github/workflows/pro_live.yml`（每天台灣 11:17、21:17、03:47）→ `pro/live_data.py nhl`（這一季資料存成 `docs/data/pro/nhl/*_cur.*`，**不 commit**，讀檔時自動合併）→ `pro/live_nhl.py`（規則：模型開盤版 × Pinnacle 當下賠率 − 1 ≥ 15%；每場第一次看到時決定、之後不改；季初已打完的「回補」）。輸出 `docs/data/pro/live/nhl.csv`、`nhl_summary.json`。排程任務「職業版網頁更新＋NHL 新注通知」台灣 11:41、21:41 重建發布職業版網頁、有新注就推播。MLB 等 2027 開季＋Retrosheet 2026 資料再接。
   - 足球：先發名單的合法來源找不到（FBref、Transfermarkt 條款不允許；Understat 條款不明），**還沒做，等使用者決定**。第 2 階段：MLB 收盤明顯往模型移（60–63% vs 26–33%），開盤 CLV 約 −1%～+0.5%；NFL、NHL 沒有優勢。四個美國運動都已考過（test_log.json，不能重考）。
 - 資料：MLB＝Retrosheet（`pro/fetch_us.py` 在 GitHub Actions `pro_data.yml` 下載整理，網頁要附 Retrosheet 聲明）；NHL＝MoneyPuck；NFL＝nflverse（`pro/nfl_data.py`，工作環境可直接下載）。**ESPN 冰球盤 2022–23、2023–24 的收盤獨贏是壞的（兩邊機率加起來 83%），SBRO 冰球盤也有問題**；原本模型一的冰球訓練用過這些盤口，要修先問使用者。
 - 資料：football-data 2025/26 季中起沒有 Pinnacle 收盤 → 最後兩季用 Betfair 交易所收盤（BFEC*）當標準答案。Pinnacle 檔案 period：0＝全場；NHL 的 6＝60 分鐘三選一（有和局賠率）。

@@ -479,9 +479,21 @@ const DATA = /*__DATA__*/null;
       <div class="scroll"><table><thead><tr><th>練習區</th><th class="r">開盤</th><th class="r">模型</th><th class="r">合併</th><th class="r">收盤</th><th class="r">追上</th></tr></thead><tbody>${Object.keys(NM).filter((k) => C[k]).map(row).join("")}</tbody></table></div>
       <p class="note">開盤和收盤本來就差很少——莊家一開盤就很準。MLB、NFL 合併後大多比開盤準、往收盤靠近（MLB 2018–19 甚至比收盤準一點）；NBA、足球合併沒有幫助，代表模型的資訊開盤已經有了。</p></section>`;
   }
+  function liveNhl() {
+    const L = DATA.live_nhl; if (!L) return "";
+    const ms = (m) => m ? {n: m[2], mean: m[0], se: m[1]} : null;
+    const c = ms(L.clv), pr = ms(L.profit);
+    const rows = (L.picks_list || []).slice().reverse().map((r) => { const side = r.pick === "home" ? r.home : r.away, o = r.pick === "home" ? r.odds_home : r.odds_away;
+      return `<tr><td class="n">${esc(r.date.slice(5))}<div class="s">${esc(r.how)}</div></td><td>${esc(r.away)} @ ${esc(r.home)}<div class="s">押 <b>${esc(side)}</b>・模型 ${Math.round((r.pick === "home" ? +r.p_model : 1 - r.p_model) * 100)}%</div></td><td class="r n">${(+o).toFixed(2)}</td><td class="r n ${r.clv ? gb(+r.clv) : ""}">${r.clv ? pp(+r.clv) : "–"}</td><td class="r n ${r.profit ? gb(+r.profit) : ""}">${r.result ? (r.profit > 0 ? "贏" : "輸") : "未開打"}</td></tr>`; }).join("");
+    return `<section class="card" style="border-color:var(--accent)"><span class="tag">LIVE · NHL ${esc(L.season)}</span><h2>NHL 實戰記錄</h2>
+      <p class="sub">${esc(L.rule)}就記一注（每場只在第一次看到時決定，用那一刻的 Pinnacle 賠率）；打完跟 Pinnacle 收盤比。每天自動跑 3 次・更新 ${esc((L.updated_utc || "").replace("T", " ").replace("Z", " UTC"))}</p>
+      <div class="kpis"><div class="kpi"><span>注數（已結算）</span><b>${L.picks}${c ? `（${c.n}）` : ""}</b></div><div class="kpi"><span>對收盤的期望值</span><b class="${c ? gb(c.mean) : ""}">${c ? pp(c.mean) : "–"}</b>${luck(c)}</div><div class="kpi"><span>實際輸贏（每注）</span><b class="${pr ? gb(pr.mean) : ""}">${pr ? pp(pr.mean) : "–"}</b>${luck(pr)}</div></div>
+      <p class="note">全部 ${L.games_settled} 場打完的比賽裡，收盤往模型那邊移 ${L.move_toward} 場、反方向 ${L.move_away} 場。「回補」＝系統上線前、這一季已經打完的比賽，用我們第一次記到的賠率補記（模型只用比賽前的資料）。注數要到幾百注才看得出真假，前面大多是運氣。</p>
+      ${rows ? `<div class="scroll"><table><thead><tr><th>日期</th><th>比賽</th><th class="r">賠率</th><th class="r">CLV</th><th class="r">結果</th></tr></thead><tbody>${rows}</tbody></table></div>` : ""}</section>`;
+  }
   function render() {
     if (!DATA) { $("app").innerHTML = `<div class="card">沒有資料。</div>`; return; }
-    $("app").innerHTML = head() + stages() + rule15() + search() + combo() + usStage() + soccer() + dataCheck() + clvIntro() + market() + signals() + model1() +
+    $("app").innerHTML = head() + stages() + liveNhl() + rule15() + search() + combo() + usStage() + soccer() + dataCheck() + clvIntro() + market() + signals() + model1() +
       `<footer>職業版只做研究和驗證，跟原本的看板、模型一完全分開。</footer>`;
   }
   document.addEventListener("click", (e) => {
