@@ -1,0 +1,44 @@
+name: Pro live record (NHL)
+
+# 職業版實戰記錄：每天下載這一季的 NHL 球員資料（不 commit），算還沒開打的比賽，記下「模型比 Pinnacle 多看好 ≥15%」的注，
+# 打完的比賽跟收盤比。只 commit docs/data/pro/live/（很小）。
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "17 3 * * *"     # 台灣 11:17
+    - cron: "17 13 * * *"    # 台灣 21:17
+    - cron: "47 19 * * *"    # 台灣 03:47（美東下午，大部分比賽開打前）
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pro-live
+  cancel-in-progress: false
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install requests==2.32.3 pandas==2.2.3 pyarrow==17.0.0 numpy scipy scikit-learn
+      - name: This season's NHL player data (not committed)
+        run: python -m pro.live_data nhl
+      - name: Live record
+        run: python -m pro.live_nhl
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/pro/live
+          if git diff --cached --quiet; then echo "沒有變動"; exit 0; fi
+          git commit -m "職業版實戰記錄：NHL"
+          for i in 1 2 3 4 5; do
+            git pull --rebase && git push && exit 0
+            sleep 15
+          done
+          exit 1

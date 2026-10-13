@@ -63,8 +63,11 @@ def fnum(x):
 
 def load():
     tg = defaultdict(dict)
-    for r in csv.DictReader(open(os.path.join(D, "team_games.csv"), encoding="utf-8")):
-        tg[(r["gameId"], CODE.get(r["playerTeam"], r["playerTeam"]))][r["situation"]] = r
+    for fn in ("team_games.csv", "team_games_cur.csv"):          # _cur＝實戰時每天下載的這一季（不 commit），蓋過舊的
+        if not os.path.exists(os.path.join(D, fn)):
+            continue
+        for r in csv.DictReader(open(os.path.join(D, fn), encoding="utf-8")):
+            tg[(r["gameId"], CODE.get(r["playerTeam"], r["playerTeam"]))][r["situation"]] = r
     games = {}
     for (gid, team), sits in tg.items():
         a = sits.get("all")
@@ -125,6 +128,8 @@ class Ratings:
         self.ti = {t: i for i, t in enumerate(self.teams)}
         rows = []
         for g in games:
+            if "h_s" not in g:            # 還沒打的比賽（實戰預測用）沒有數據
+                continue
             for side, opp, hm in (("h", "a", 1), ("a", "h", -1)):
                 s = g[side + "_s"]
                 x5, w5 = per60(s, "5on5", "scoreVenueAdjustedxGoalsFor")

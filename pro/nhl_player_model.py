@@ -52,18 +52,31 @@ def toi(s):
         return 0.0
 
 
+def _rows(name):
+    """舊檔＋這一季的小檔（實戰時每天下載，不 commit）；同一場以小檔為準"""
+    cur = os.path.join(D, name.replace(".csv.gz", "_cur.csv.gz"))
+    cur_rows = []
+    if os.path.exists(cur):
+        with gzip.open(cur, "rt", encoding="utf-8") as f:
+            cur_rows = list(csv.DictReader(f))
+    cur_games = {r["game_id"] for r in cur_rows}
+    with gzip.open(os.path.join(D, name), "rt", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            if r["game_id"] not in cur_games:
+                yield r
+    yield from cur_rows
+
+
 def load_players():
     ixg = defaultdict(float)
-    with gzip.open(os.path.join(D, "shot_players.csv.gz"), "rt", encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            ixg[(r["game_id"], r["player"])] += fnum(r["xg"])
+    for r in _rows("shot_players.csv.gz"):
+        ixg[(r["game_id"], r["player"])] += fnum(r["xg"])
     gk = {}
-    with gzip.open(os.path.join(D, "shot_goalies.csv.gz"), "rt", encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            gk[(r["game_id"], r["goalie"])] = (fnum(r["att"]), fnum(r["xg"]), fnum(r["ga"]))
+    for r in _rows("shot_goalies.csv.gz"):
+        gk[(r["game_id"], r["goalie"])] = (fnum(r["att"]), fnum(r["xg"]), fnum(r["ga"]))
     sk = defaultdict(list)
-    with gzip.open(os.path.join(D, "skater_box.csv.gz"), "rt", encoding="utf-8") as f:
-        for r in csv.DictReader(f):
+    if True:
+        for r in _rows("skater_box.csv.gz"):
             gid, pid = r["game_id"], r["player_id"]
             t = toi(r["toi"])
             if t <= 0:
@@ -72,8 +85,8 @@ def load_players():
                           fnum(r["blocked_shots"]), fnum(r["takeaways"]) - fnum(r["giveaways"]), fnum(r["hits"]), fnum(r["pim"])])
             sk[gid].append((r["home_away"], pid, "D" if r["position"] == "D" else "F", v))
     gb = defaultdict(list)
-    with gzip.open(os.path.join(D, "goalie_box.csv.gz"), "rt", encoding="utf-8") as f:
-        for r in csv.DictReader(f):
+    if True:
+        for r in _rows("goalie_box.csv.gz"):
             gid, pid = r["game_id"], r["player_id"]
             att, xg, ga = gk.get((gid, pid), (0.0, 0.0, 0.0))
             gb[gid].append((r["home_away"], pid, r["starter"] == "True", toi(r["toi"]), att, xg, ga))
@@ -135,7 +148,7 @@ def features(games, box, cfg, v1feat):
         for g in by_day[day]:
             gid = g["game_id"]
             vf = v1feat.get(gid)
-            if vf is None or gid not in sk:
+            if vf is None or (gid not in sk and not g.get("upcoming")):      # upcoming＝還沒打的比賽（實戰用，只能用開盤版名單）
                 continue
             f = {}
             for side, ha in (("h", "home"), ("a", "away")):
@@ -152,7 +165,7 @@ def features(games, box, cfg, v1feat):
                     else:
                         goalie = None
                 else:
-                    lu = [pid for (h, pid, pos, v) in sk[gid] if h == ha]
+                    lu = [pid for (h, pid, pos, v) in sk.get(gid, []) if h == ha]
                     goalie = next((pid for (h, pid, st, t, *_) in gb.get(gid, []) if h == ha and st), None)
                 w = np.array([etoi.get(p, 12.0) for p in lu]) if lu else np.array([1.0])
                 w = w / w.sum() * 5.0               # 場上 5 個人
