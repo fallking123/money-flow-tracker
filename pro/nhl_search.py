@@ -25,6 +25,7 @@ OUT = S.OUT
 LOG = os.path.join(OUT, "search_log_nhl.json")
 BLOCKS = [(2014, 2015), (2016, 2017), (2018, 2019), (2020, 2022)]       # MoneyPuck 季別＝開始那一年
 CALM = 0.08
+EDGE_MAX = 0.30
 
 
 def base():
@@ -82,10 +83,12 @@ def rule(feats, edge, cond=lambda f: True, extra=None):
     for blk in BLOCKS:
         b = []
         for r in predict(feats, extra or {}, blk):
-            if not r["po"] or abs(r["pc"] - r["po"]) >= CALM or not cond(r["f"]):
+            # 10/15 地基檢查後：不再排除「之後盤口大移動」的比賽（那是偷看未來）；改用下注當下就知道的條件：
+            # 開盤兩邊一樣（佔位價）不下、模型比開盤多看好 > 30%（像資料錯）不下。見 audit_clean.json
+            if not r["po"] or abs(r["oo_h"] - r["oo_a"]) < 1e-9 or not cond(r["f"]):
                 continue
             for p, pc, o in ((r["p"], r["pc"], r["oo_h"]), (1 - r["p"], 1 - r["pc"], r["oo_a"])):
-                if p * o - 1 >= edge:
+                if edge <= p * o - 1 <= EDGE_MAX:
                     b.append(pc * o - 1)
         out[blk] = b
     return out
@@ -126,6 +129,9 @@ RULES = {
                  lambda F: rule(F, 0.15, extra=sched(None, F))),
     "edge_10": ("模型比開盤多看好 ≥ 10%", "跟 MLB 一樣：只挑跟開盤差很多的", lambda F: rule(F, 0.10)),
     "edge_15": ("模型比開盤多看好 ≥ 15%", "MLB 打贏莊家的同一條規則", lambda F: rule(F, 0.15)),
+    "edge_15_clean": ("看好 15%–30%（地基檢查後的乾淨算法）", "重算同一條規則：不再用未來挑比賽，改排除佔位價和差太多的", lambda F: rule(F, 0.15)),
+    "sched_15_clean": ("賽程＋看好 15%–30%（乾淨算法）", "冰球體力消耗大，長途客場和密集賽程開盤可能沒算夠", lambda F: rule(F, 0.15, extra=sched(None, F))),
+    "edge_20_clean": ("看好 20%–30%（乾淨算法）", "只挑更確定的，看注數少了以後每注是不是更好", lambda F: rule(F, 0.20)),
     "early_10": ("開季 45 天內＋看好 ≥ 10%", "開季時莊家資料最少（MLB、NBA、足球都有這個現象）",
                  lambda F: rule(F, 0.10, lambda f: f["dt"].month in (10, 11))),
 }
@@ -152,6 +158,10 @@ def main(names):
         a = np.array(allb)
         res["z"] = round(float(a.mean() / (a.std() / math.sqrt(len(a)))), 2) if len(a) > 1 else 0.0
         res["clv_all"] = [round(float(a.mean()), 4), round(float(a.std() / math.sqrt(len(a))), 4), len(a)]
+        w = np.clip(a, -0.1, 0.1)               # 截掉極端值（防止少數資料錯拉高平均）
+        res["robust"] = {"median": round(float(np.median(a)), 4), "beat_close": round(float((a > 0).mean()), 3),
+                         "trimmed": round(float(w.mean()), 4), "z_trimmed": round(float(w.mean() / (w.std() / math.sqrt(len(w)))), 2)}
+        res["z"] = min(res["z"], res["robust"]["z_trimmed"])     # 兩種算法取比較差的那個
         n = len(log["tries"]) + 1
         thr = S.threshold(n)
         ok = res["z"] >= thr and res["better_blocks"] >= 3

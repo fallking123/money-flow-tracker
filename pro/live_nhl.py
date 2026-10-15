@@ -23,6 +23,7 @@ from pro import nhl_player_model as NH
 OUT = os.path.join(NH.OUT, "live")
 PATH = os.path.join(OUT, "nhl.csv")
 EDGE = 0.15
+EDGE_MAX = 0.30          # 10/15 地基檢查後加上：比 Pinnacle 多看好 > 30% 通常是資料錯或我們漏了消息，不下
 FIELDS = ["game_id", "date", "home", "away", "decided_utc", "how", "p_model", "odds_home", "odds_away", "fair_home_dec",
           "pick", "edge", "close_fair_home", "clv", "result", "profit"]
 
@@ -82,7 +83,8 @@ def main():
             oh, oa = st[("moneyline", "home")][1], st[("moneyline", "away")][1]
             ph = p["p"]
             eh, ea = ph * oh - 1, (1 - ph) * oa - 1
-            pick = "home" if eh >= EDGE and eh >= ea else "away" if ea >= EDGE else ""
+            ok = lambda e: EDGE <= e <= EDGE_MAX
+            pick = "home" if ok(eh) and eh >= ea else "away" if ok(ea) else ""
             r = {"game_id": key, "date": d.isoformat(), "home": f["h"], "away": f["a"], "decided_utc": when.strftime("%Y-%m-%dT%H:%MZ"),
                  "how": "回補" if started else "實戰", "p_model": round(ph, 4), "odds_home": oh, "odds_away": oa,
                  "fair_home_dec": round(fair["home"], 4), "pick": pick, "edge": round(max(eh, ea), 4)}
@@ -116,7 +118,7 @@ def main():
     tow = sum(1 for d, m in mv if d * m > 0 and abs(m) > 0.005)
     awy = sum(1 for d, m in mv if d * m < 0 and abs(m) > 0.005)
     ms = lambda xs: [round(float(np.mean(xs)), 4), round(float(np.std(xs) / math.sqrt(len(xs))), 4) if len(xs) > 1 else None, len(xs)] if xs else None
-    summ = {"updated_utc": now.strftime("%Y-%m-%dT%H:%MZ"), "season": f"{season}-{(season + 1) % 100:02d}", "rule": "模型比 Pinnacle 多看好 ≥ 15%",
+    summ = {"updated_utc": now.strftime("%Y-%m-%dT%H:%MZ"), "season": f"{season}-{(season + 1) % 100:02d}", "rule": "模型比 Pinnacle 多看好 15%–30%",
             "games": len(out), "games_settled": len(mv), "picks": len(picks), "clv": ms(clv), "profit": ms(prof),
             "move_toward": tow, "move_away": awy, "pending": [r for r in out if r.get("pick") and not r.get("result")]}
     json.dump(summ, open(os.path.join(OUT, "nhl_summary.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
