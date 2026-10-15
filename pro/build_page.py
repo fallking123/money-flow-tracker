@@ -33,7 +33,7 @@ def main():
         n = len(L["tries"])
         thr = round(float(norm.ppf(1 - 0.05 / max(1, n))), 2)
         for t in L["tries"]:
-            t["pass_final"] = bool(t["z"] >= thr and t["better_blocks"] >= 3)
+            t["pass_final"] = bool(t["z"] >= thr and t["better_blocks"] >= 3 and not t.get("peek"))
             for k in ("blocks",):
                 t.pop(k, None) if sp != "mlb" else None
         L["final_threshold"], L["n_tries"] = thr, n

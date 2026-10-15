@@ -161,7 +161,25 @@ def promoted_early(rows, preds):
     return out
 
 
+_PL = {}
+
+
+def _lineup(kind):
+    def fn(rows, preds):
+        if not _PL:
+            from pro import soccer_player as SP
+            _PL.update(SP.feature_sets(rows)[0])
+        return _PL[kind]
+    return fn
+
+
 CANDIDATES = {
+    "lineup_prev": {"fn": _lineup("prev"), "label": "球員陣容強度（開盤版：只用上一場的名單）",
+                    "why": "球員評分跟著人走（轉隊、新人），陣容強度用上一場先發＋換人估；開盤時莊家不知道今天誰上，這是公平版本"},
+    "lineup_dev": {"fn": _lineup("dev"), "label": "今天陣容比平常弱／強多少（缺人程度）",
+                   "why": "用今天實際名單，比對這隊平常的陣容；收盤已經知道名單，所以只當對照（偷看版），不能拿來下注"},
+    "lineup_actual": {"fn": _lineup("actual"), "label": "今天實際名單的陣容強度（偷看版）",
+                      "why": "用今天實際先發＋換人，收盤已經知道名單，只當對照：看開盤到收盤的移動有多少是『名單出來』造成的"},
     "rest": {"fn": rest, "label": "休息天數", "why": "賽程密（一週兩賽）比較累；早盤可能沒完全算進去"},
     "motivation": {"fn": motivation, "label": "球季末的戰意（沒有目標／還在保級）",
                    "why": "球季最後幾場，已經沒有目標的隊可能放水、還在保級的隊特別拚；職業圈常用，早盤可能低估"},
