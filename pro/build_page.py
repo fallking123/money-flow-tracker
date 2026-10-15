@@ -42,10 +42,19 @@ def main():
     if os.path.exists(os.path.join(lv, "nhl_summary.json")):
         import csv as _csv
         data["live_nhl"] = json.load(open(os.path.join(lv, "nhl_summary.json"), encoding="utf-8"))
-        data["live_nhl"]["picks_list"] = [r for r in _csv.DictReader(open(os.path.join(lv, "nhl.csv"), encoding="utf-8")) if r.get("pick")]
+        allr = list(_csv.DictReader(open(os.path.join(lv, "nhl.csv"), encoding="utf-8")))
+        data["live_nhl"]["picks_list"] = [r for r in allr if r.get("pick")]
+        # 每日對照表：還沒打的＋最近 2 天打完的，每一場都列（不只有下注的）
+        from datetime import timedelta as _td
+        cut = (datetime.now(timezone.utc) - _td(days=2, hours=6)).date().isoformat()
+        data["live_nhl"]["board"] = [{k: r.get(k) for k in ("date", "home", "away", "p_model", "fair_home_dec", "pick", "edge", "close_fair_home", "result", "how")}
+                                     for r in allr if r["date"] >= cut or not r.get("result")]
     cp = os.path.join(os.path.dirname(HERE), "docs", "data", "pro", "combo_report.json")
     if os.path.exists(cp):
         data["combo"] = json.load(open(cp, encoding="utf-8"))
+    au = os.path.join(os.path.dirname(HERE), "docs", "data", "pro", "audit_clean.json")
+    if os.path.exists(au):
+        data["audit"] = json.load(open(au, encoding="utf-8")).get("robust")
     rp = os.path.join(os.path.dirname(HERE), "docs", "data", "pro", "mlb_rule15.json")
     if os.path.exists(rp):
         data["rule15"] = json.load(open(rp, encoding="utf-8"))

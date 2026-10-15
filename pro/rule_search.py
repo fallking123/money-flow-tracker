@@ -84,12 +84,55 @@ def total_bets(sport, dmin, cond=lambda f: True, extra_fn=None):
     return out
 
 
+def _xt_clean(f, extra_static=False):
+    """10/15 地基檢查：拿掉「比賽當天實際」的風速、氣溫、伸縮屋頂開關（下注時不知道），換成事先就知道的場地資訊"""
+    xt = list(f["x_t"])
+    roof = f.get("roof")
+    new = [1.0 if roof == "dome" else 0.0, 1.0 if roof in ("closed", "open") else 0.0]
+    if extra_static:
+        new += [1.0 if (f.get("surface") or "").strip() == "grass" else 0.0, 1.0 if str(f.get("div_game")) in ("1", "True", "1.0") else 0.0,
+                1.0 if (f.get("dt").month in (12, 1)) else 0.0]
+    return xt[:2] + new + xt[5:]
+
+
+def total_bets_clean(sport, dmin, extra_static=False, peek_weather=False, dmax=10.0):
+    """乾淨版大小分：不排除之後大移動的比賽（偷看未來）、不用當天實際天氣；差 > dmax 分（像資料錯）不下"""
+    from pro import spread_search as SS
+    games, feats, R = SS.base(sport)
+    saved = {f["game_id"]: f["x_t"] for f in feats}
+    if not peek_weather:
+        for f in feats:
+            f["x_t"] = _xt_clean(f, extra_static)
+    out = {}
+    try:
+        for blk in SS.CFG[sport]["blocks"]:
+            bets = []
+            for r in SS.predict_total(sport, feats, blk, R.get("alpha", 5.0)):
+                if r["to"] is None or r["tc"] is None:
+                    continue
+                d = r["pt"] - r["to"]
+                if dmin <= abs(d) <= dmax:
+                    pw = norm.cdf(np.sign(d) * (r["tc"] - r["to"]) / SIG_T[sport])
+                    bets.append(pw * (1 + 100 / 110) - 1)
+            out[blk] = bets
+    finally:
+        for f in feats:
+            f["x_t"] = saved[f["game_id"]]
+    return out
+
+
 MONTH = lambda f, ms: f["date"][5:7] in ms
 RULES_NFL = {
     "tot_3": ("大小分：模型總分跟開盤大小線差 ≥ 3 分", "大小分市場通常沒有讓分準", lambda: total_bets("nfl", 3.0)),
     "tot_5": ("大小分：差 ≥ 5 分", "同上，更嚴格", lambda: total_bets("nfl", 5.0)),
     "tot_pace_3": ("大小分：加上節奏（每場幾個 play）、傳球比例＋差 ≥ 3 分", "總分主要看兩隊跑幾個 play、多常傳球；換教練團後節奏變了，市場可能慢一步",
                    lambda: total_bets("nfl", 3.0, extra_fn=__import__("pro.spread_search", fromlist=["x"]).nfl_pace)),
+    "tot_3_clean": ("大小分差 3–10 分（乾淨算法：不用當天實際天氣、不排除之後大移動）", "地基檢查後重算同一條規則",
+                    lambda: total_bets_clean("nfl", 3.0)),
+    "tot_3_static": ("大小分差 3–10 分＋事先知道的場地資訊（真草皮、同分區、12–1 月）", "場地和季節事先就知道；冬天、草皮、熟悉對手可能影響得分",
+                     lambda: total_bets_clean("nfl", 3.0, extra_static=True)),
+    "tot_3_weather_peek": ("大小分差 3–10 分＋當天實際風速氣溫（偷看版，只當對照）", "實際天氣下注時不知道（只有預報），所以只當對照、不算通過",
+                           lambda: total_bets_clean("nfl", 3.0, peek_weather=True)),
     "sp_3": ("讓分：模型跟開盤差 ≥ 3 分", "跟 MLB 一樣只挑差很多的", lambda: nba_bets(lambda f: True, 3.0, sport="nfl")),
 }
 RULES = {
@@ -132,9 +175,16 @@ def main(sport, names):
         a = np.array(allb)
         res["z"] = round(float(a.mean() / (a.std() / math.sqrt(len(a)))), 2) if len(a) > 1 else 0.0
         res["clv_all"] = [round(float(a.mean()), 4), round(float(a.std() / math.sqrt(len(a))), 4), len(a)]
+        if nm.endswith("_clean") or nm.endswith("_static") or nm.endswith("_peek"):
+            w = np.clip(a, -0.1, 0.1)
+            res["robust"] = {"median": round(float(np.median(a)), 4), "beat_close": round(float((a > 0).mean()), 3),
+                             "trimmed": round(float(w.mean()), 4), "z_trimmed": round(float(w.mean() / (w.std() / math.sqrt(len(w)))), 2)}
+            res["z"] = min(res["z"], res["robust"]["z_trimmed"])
+        if nm.endswith("_peek"):
+            res["peek"] = True
         n = len(log["tries"]) + 1
         thr = S.threshold(n)
-        ok = res["z"] >= thr and res["better_blocks"] >= 3
+        ok = res["z"] >= thr and res["better_blocks"] >= 3 and not res.get("peek")
         log["tries"].append({"n": n, "name": "rule_" + nm, "kind": "rule", "label": label, "why": why,
                              "time_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"), "z_needed": thr, "pass": ok, **res})
         json.dump(log, open(log_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)

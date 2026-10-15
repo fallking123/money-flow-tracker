@@ -89,6 +89,14 @@ def main():
                  "how": "回補" if started else "實戰", "p_model": round(ph, 4), "odds_home": oh, "odds_away": oa,
                  "fair_home_dec": round(fair["home"], 4), "pick": pick, "edge": round(max(eh, ea), 4)}
             rows[key] = r
+    # 結算：每一筆都獨立結算（以前只結算「今天模型還算得出來」的比賽，球員資料還沒進來的就一直沒結果）
+    pin_by_id = {str(pg.pid): pg for pg in pins}
+    for key, r in rows.items():
+        pg = pin_by_id.get(key)
+        if pg is None or not r.get("decided_utc"):
+            continue
+        d = datetime.strptime(r["date"], "%Y-%m-%d").date()
+        f = {"h": r["home"], "a": r["away"]}
         # 結算
         if pg.t <= now and not r.get("close_fair_home"):
             cf = L.fair_ml(pg.close(), False)

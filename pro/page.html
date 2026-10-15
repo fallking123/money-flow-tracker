@@ -491,9 +491,33 @@ const DATA = /*__DATA__*/null;
       <p class="note">全部 ${L.games_settled} 場打完的比賽裡，收盤往模型那邊移 ${L.move_toward} 場、反方向 ${L.move_away} 場。「回補」＝系統上線前、這一季已經打完的比賽，用我們第一次記到的賠率補記（模型只用比賽前的資料）。注數要到幾百注才看得出真假，前面大多是運氣。</p>
       ${rows ? `<div class="scroll"><table><thead><tr><th>日期</th><th>比賽</th><th class="r">賠率</th><th class="r">CLV</th><th class="r">結果</th></tr></thead><tbody>${rows}</tbody></table></div>` : ""}</section>`;
   }
+  function board() {
+    const L = DATA.live_nhl; if (!L || !L.board || !L.board.length) return "";
+    const rows = L.board.slice().sort((a, b) => (b.date + b.home).localeCompare(a.date + a.home)).map((r) => {
+      const m = +r.p_model, f = +r.fair_home_dec, d = m - f;
+      const today = new Date(Date.now() - 6 * 3600e3).toISOString().slice(0, 10);
+      const st = r.result ? `打完：${r.result === "home" ? esc(r.home) : esc(r.away)} 贏` : (r.date < today ? "結果待補" : "未開打");
+      const mv = r.close_fair_home ? (+r.close_fair_home - f) : null;
+      const mvt = mv === null ? "" : `<div class="s">收盤 ${Math.round(+r.close_fair_home * 100)}%（${Math.abs(mv) < 0.005 ? "沒動" : (mv * d > 0 ? "往我們移" : "反方向")}）</div>`;
+      return `<tr><td>${esc(r.away)} @ <b>${esc(r.home)}</b><div class="s">${esc(r.date.slice(5))}・${st}${r.pick ? "・<b>規則觸發</b>" : ""}</div></td><td class="r n">${Math.round(m * 100)}%</td><td class="r n">${Math.round(f * 100)}%${mvt}</td><td class="r n">${d >= 0 ? "+" : ""}${Math.round(d * 100)}</td></tr>`;
+    }).join("");
+    return `<section class="card"><span class="tag">每日對照表 · NHL</span><h2>我們開的盤 vs Pinnacle</h2>
+      <p class="sub">每一場都列：我們模型（開盤版：上一場名單、守門員用猜的）算的主隊勝率，跟 Pinnacle 去掉抽水後的主隊勝率。「差」是百分點。這張表是給你看兩邊差在哪，<b>不是叫你每場都下</b>——差很多的場次大多是我們漏了消息（傷兵、守門員），只有規則觸發的才算數。</p>
+      <div class="scroll"><table><thead><tr><th>比賽（粗體＝主隊）</th><th class="r">我們</th><th class="r">Pinnacle</th><th class="r">差</th></tr></thead><tbody>${rows}</tbody></table></div>
+      <p class="note">其他運動：MLB 等 2027 開季；NBA、NFL 的模型在練習區都沒贏過莊家，先不放進來。</p></section>`;
+  }
+  function audit() {
+    const A = DATA.audit; if (!A) return "";
+    const row = (name, lo, hi) => lo && hi ? `<tr><td>${name}</td><td class="r n ${gb(lo.wins)}">${pp(lo.wins)}</td><td class="r n ${gb(hi.wins)}">${pp(hi.wins)}</td><td class="r n">${Math.round(hi.pos * 100)}%</td><td class="r n">${hi.n}</td></tr>` : "";
+    return `<section class="card"><span class="tag">地基檢查 · 10/15</span><h2>補漏洞後重算</h2>
+      <p class="sub">發現兩個漏洞：①以前排除「之後盤口大移動」的比賽——下注時不可能知道，等於偷看未來；②舊的歷史開盤有錯價（1.08／9.10、兩邊對調、1.91／1.91 佔位價），實際下不到；MLB 還有先發投手臨時換人。現在只用下注當下就知道的條件：佔位價不下、比莊家多看好 &gt; 30% 不下、MLB 只算正常輪值先發。極端值截到 ±10% 再平均。</p>
+      <div class="scroll"><table><thead><tr><th>規則</th><th class="r">保守下限</th><th class="r">補漏洞後</th><th class="r">打贏收盤</th><th class="r">注數</th></tr></thead><tbody>
+      ${row("MLB 看好 15–30%（正常輪值）", A.mlb15_rot_calm, A.mlb15_rot)}${row("NHL 看好 15–30%", A.nhl15_calm, A.nhl15)}</tbody></table></div>
+      <p class="note">「保守下限」＝把大移動的比賽拿掉（那些幾乎都往我們這邊移，像資料錯），所以是偏低的估計。NFL 大小分：補漏洞後 +1.5%，但保守下限 −0.2%，大約打平，不夠有把握。歷史開盤本身有錯，真正的證明要靠實戰（Pinnacle 真的下得到的價）。</p></section>`;
+  }
   function render() {
     if (!DATA) { $("app").innerHTML = `<div class="card">沒有資料。</div>`; return; }
-    $("app").innerHTML = head() + stages() + liveNhl() + rule15() + search() + combo() + usStage() + soccer() + dataCheck() + clvIntro() + market() + signals() + model1() +
+    $("app").innerHTML = head() + stages() + liveNhl() + board() + audit() + rule15() + search() + combo() + usStage() + soccer() + dataCheck() + clvIntro() + market() + signals() + model1() +
       `<footer>職業版只做研究和驗證，跟原本的看板、模型一完全分開。</footer>`;
   }
   document.addEventListener("click", (e) => {
