@@ -1,10 +1,10 @@
 {
- "updated_utc": "2026-10-17T20:00Z",
+ "updated_utc": "2026-10-18T03:42Z",
  "season": "2026-27",
  "rule": "模型比 Pinnacle 多看好 15%–30%",
- "games": 121,
- "games_settled": 110,
- "picks": 3,
+ "games": 123,
+ "games_settled": 121,
+ "picks": 4,
  "clv": [
   -0.0321,
   0.0341,
@@ -15,7 +15,22 @@
   0.0,
   3
  ],
- "move_toward": 51,
- "move_away": 35,
- "pending": []
+ "move_toward": 56,
+ "move_away": 38,
+ "pending": [
+  {
+   "game_id": "1638241152",
+   "date": "2026-10-18",
+   "home": "MIN",
+   "away": "CBJ",
+   "decided_utc": "2026-10-18T03:42Z",
+   "how": "實戰",
+   "p_model": 0.5494,
+   "odds_home": 1.5495,
+   "odds_away": 2.6,
+   "fair_home_dec": 0.6266,
+   "pick": "away",
+   "edge": 0.1717
+  }
+ ]
 }
