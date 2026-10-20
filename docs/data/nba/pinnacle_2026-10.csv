@@ -1115,174 +1115,108 @@ timestamp_utc,sport,league,pin_id,units,game_time_utc,hours_until_game,home_team
 2026-10-20T13:40:08.419489+00:00,nba,nba,1637443876,Regular,2026-10-21T23:30:00+00:00,33.83,Toronto Raptors,Chicago Bulls,0,spread,,home,-9.0,1.9009,3000
 2026-10-20T13:40:08.419489+00:00,nba,nba,1637443876,Regular,2026-10-21T23:30:00+00:00,33.83,Toronto Raptors,Chicago Bulls,0,total,,over,236.5,1.9009,1125
 2026-10-20T13:40:08.419489+00:00,nba,nba,1637443876,Regular,2026-10-21T23:30:00+00:00,33.83,Toronto Raptors,Chicago Bulls,0,total,,under,236.5,1.9709,1125
-2026-10-20T13:50:08.074563+00:00,nba,nba,1637438611,Regular,2026-10-21T23:30:00+00:00,33.66,Brooklyn Nets,Charlotte Hornets,0,moneyline,,home,,1.6944,1800
-2026-10-20T13:50:08.074563+00:00,nba,nba,1637438611,Regular,2026-10-21T23:30:00+00:00,33.66,Brooklyn Nets,Charlotte Hornets,0,moneyline,,away,,2.27,1800
-2026-10-20T13:50:08.074563+00:00,nba,nba,1637438611,Regular,2026-10-21T23:30:00+00:00,33.66,Brooklyn Nets,Charlotte Hornets,0,team_total,home,over,110.5,1.8621,300
-2026-10-20T13:50:08.074563+00:00,nba,nba,1637438611,Regular,2026-10-21T23:30:00+00:00,33.66,Brooklyn Nets,Charlotte Hornets,0,team_total,home,under,110.5,1.9709,300
-2026-10-20T13:50:08.074563+00:00,nba,nba,1637438611,Regular,2026-10-21T23:30:00+00:00,33.66,Brooklyn Nets,Charlotte Hornets,0,team_total,away,over,108.5,1.8929,300
-2026-10-20T13:50:08.074563+00:00,nba,nba,1637438611,Regular,2026-10-21T23:30:00+00:00,33.66,Brooklyn Nets,Charlotte Hornets,0,team_total,away,under,108.5,1.9434,300
-2026-10-20T13:50:08.074563+00:00,nba,nba,1637438611,Regular,2026-10-21T23:30:00+00:00,33.66,Brooklyn Nets,Charlotte Hornets,0,spread,,home,-3.5,1.9709,3000
-2026-10-20T13:50:08.074563+00:00,nba,nba,1637438611,Regular,2026-10-21T23:30:00+00:00,33.66,Brooklyn Nets,Charlotte Hornets,0,spread,,away,3.5,1.9174,3000
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,0,team_total,home,over,118.5,1.9524,500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,0,team_total,home,under,118.5,1.8929,500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,0,team_total,away,over,113.5,1.8772,500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,0,team_total,away,under,113.5,1.9709,500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,0,total,,over,232.5,1.9804,3000
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,0,total,,under,232.5,1.9091,3000
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,1,team_total,home,over,60.5,1.9346,500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,1,team_total,home,under,60.5,1.9174,500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,1,team_total,away,over,58.5,2.02,500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,1,team_total,away,under,58.5,1.8333,500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,1,total,,over,119.0,1.9804,1000
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,1,total,,under,119.0,1.8929,1000
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,3,team_total,home,over,30.5,1.8547,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,3,team_total,home,under,30.5,1.9804,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,3,team_total,away,over,29.5,1.9615,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,3,team_total,away,under,29.5,1.8696,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,3,total,,over,60.0,1.885,500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,3,total,,under,60.0,1.9434,500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,4,team_total,home,over,30.5,2.04,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,4,team_total,home,under,30.5,1.8065,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,4,team_total,away,over,28.5,1.8929,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,4,team_total,away,under,28.5,1.9434,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,4,total,,over,58.5,1.8929,500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801639,Regular,2026-10-20T23:00:00+00:00,9.16,New York Knicks,Philadelphia 76ers,4,total,,under,58.5,1.9434,500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801640,Regular,2026-10-21T01:30:00+00:00,11.66,San Antonio Spurs,Oklahoma City Thunder,3,team_total,home,over,28.5,1.885,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801640,Regular,2026-10-21T01:30:00+00:00,11.66,San Antonio Spurs,Oklahoma City Thunder,3,team_total,home,under,28.5,1.9434,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801640,Regular,2026-10-21T01:30:00+00:00,11.66,San Antonio Spurs,Oklahoma City Thunder,3,team_total,away,over,28.5,1.9091,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801640,Regular,2026-10-21T01:30:00+00:00,11.66,San Antonio Spurs,Oklahoma City Thunder,3,team_total,away,under,28.5,1.9259,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801640,Regular,2026-10-21T01:30:00+00:00,11.66,San Antonio Spurs,Oklahoma City Thunder,3,total,,over,57.0,1.885,500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801640,Regular,2026-10-21T01:30:00+00:00,11.66,San Antonio Spurs,Oklahoma City Thunder,3,total,,under,57.0,1.9434,500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,0,team_total,home,over,109.5,1.9009,500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,0,team_total,home,under,109.5,1.9524,500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,0,team_total,away,over,110.5,1.9259,500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,0,team_total,away,under,110.5,1.9259,500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,0,total,,over,220.0,1.9524,5000
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,0,total,,under,220.0,1.9346,5000
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,1,moneyline,,home,,1.9174,1500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,1,moneyline,,away,,1.9346,1500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,1,team_total,home,over,56.5,1.8621,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,1,team_total,home,under,56.5,1.9615,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,1,team_total,away,over,56.5,1.8696,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,1,team_total,away,under,56.5,1.9434,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,1,total,,over,114.0,1.9524,750
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,1,total,,under,114.0,1.9009,750
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,3,moneyline,,away,,1.9524,500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,3,team_total,home,over,29.5,2.02,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,3,team_total,home,under,29.5,1.8197,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,3,team_total,away,over,28.5,1.8065,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,3,team_total,away,under,28.5,2.04,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,3,total,,over,58.5,1.9615,500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,3,total,,under,58.5,1.8772,500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,4,team_total,home,over,28.5,2.01,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,4,team_total,home,under,28.5,1.8333,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,4,team_total,away,over,27.5,1.8,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,4,team_total,away,under,27.5,2.05,250
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,4,total,,over,56.5,1.9804,500
-2026-10-20T13:50:08.074563+00:00,nba,nba,1633801637,Regular,2026-10-20T19:00:00+00:00,5.16,Detroit Pistons,Boston Celtics,4,total,,under,56.5,1.8547,500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1637438612,Regular,2026-10-22T02:00:00+00:00,35.5,Portland Trail Blazers,Phoenix Suns,0,moneyline,,home,,1.6329,1800
-2026-10-20T14:30:12.992724+00:00,nba,nba,1637438612,Regular,2026-10-22T02:00:00+00:00,35.5,Portland Trail Blazers,Phoenix Suns,0,moneyline,,away,,2.4,1800
-2026-10-20T14:30:12.992724+00:00,nba,nba,1637438612,Regular,2026-10-22T02:00:00+00:00,35.5,Portland Trail Blazers,Phoenix Suns,0,team_total,home,under,118.5,1.8929,300
-2026-10-20T14:30:12.992724+00:00,nba,nba,1637438612,Regular,2026-10-22T02:00:00+00:00,35.5,Portland Trail Blazers,Phoenix Suns,0,team_total,away,over,115.5,1.9615,300
-2026-10-20T14:30:12.992724+00:00,nba,nba,1637438612,Regular,2026-10-22T02:00:00+00:00,35.5,Portland Trail Blazers,Phoenix Suns,0,team_total,away,under,115.5,1.8772,300
-2026-10-20T14:30:12.992724+00:00,nba,nba,1637438612,Regular,2026-10-22T02:00:00+00:00,35.5,Portland Trail Blazers,Phoenix Suns,0,spread,,home,-3.5,1.9174,3000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1637438612,Regular,2026-10-22T02:00:00+00:00,35.5,Portland Trail Blazers,Phoenix Suns,0,spread,,away,3.5,1.9709,3000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,0,moneyline,,home,,2.02,12000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,0,moneyline,,away,,1.885,12000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,0,team_total,home,over,109.5,1.8621,2000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,0,team_total,home,under,109.5,2.0,2000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,0,team_total,away,over,110.5,1.9009,2000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,0,team_total,away,under,110.5,1.9524,2000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,0,spread,,home,1.5,1.9346,20000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,0,spread,,away,-1.5,1.9709,20000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,0,total,,over,220.0,1.9091,7500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,0,total,,under,220.0,1.9804,7500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,1,moneyline,,home,,1.9009,3000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,1,moneyline,,away,,1.9524,3000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,1,team_total,home,over,56.5,1.8264,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,1,team_total,home,under,56.5,2.0,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,1,team_total,away,over,56.5,1.8547,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,1,team_total,away,under,56.5,1.9709,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,1,spread,,home,-0.5,1.9804,5000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,1,spread,,away,0.5,1.8772,5000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,1,total,,over,114.0,1.9174,3000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,1,total,,under,114.0,1.9346,3000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,3,moneyline,,home,,1.9009,2000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,3,team_total,home,over,29.5,2.0,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,3,team_total,home,under,29.5,1.8403,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,3,team_total,away,over,29.5,2.04,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,3,team_total,away,under,29.5,1.8065,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,3,total,,over,58.5,1.9346,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,3,total,,under,58.5,1.9009,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,4,moneyline,,home,,1.8772,2000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,4,moneyline,,away,,1.9804,2000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,4,team_total,home,over,28.5,2.0,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,4,team_total,home,under,28.5,1.8403,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,4,spread,,home,-0.5,1.9709,3000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,4,total,,over,56.5,1.9709,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.66,Detroit Pistons,Boston Celtics,4,total,,under,56.5,1.8621,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1637443985,Regular,2026-10-22T02:00:00+00:00,35.5,Los Angeles Lakers,Golden State Warriors,0,moneyline,,home,,1.4926,900
-2026-10-20T14:30:12.992724+00:00,nba,nba,1637443985,Regular,2026-10-22T02:00:00+00:00,35.5,Los Angeles Lakers,Golden State Warriors,0,moneyline,,away,,2.76,900
-2026-10-20T14:30:12.992724+00:00,nba,nba,1637443985,Regular,2026-10-22T02:00:00+00:00,35.5,Los Angeles Lakers,Golden State Warriors,0,team_total,home,under,119.5,1.9804,300
-2026-10-20T14:30:12.992724+00:00,nba,nba,1637443985,Regular,2026-10-22T02:00:00+00:00,35.5,Los Angeles Lakers,Golden State Warriors,0,spread,,home,-6.0,1.9615,1500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1637443985,Regular,2026-10-22T02:00:00+00:00,35.5,Los Angeles Lakers,Golden State Warriors,0,spread,,away,6.0,1.9259,1500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1637443985,Regular,2026-10-22T02:00:00+00:00,35.5,Los Angeles Lakers,Golden State Warriors,0,total,,under,234.0,1.9524,575
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.16,San Antonio Spurs,Oklahoma City Thunder,0,team_total,home,under,116.5,1.8475,500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.16,San Antonio Spurs,Oklahoma City Thunder,0,team_total,away,over,115.5,1.8929,500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.16,San Antonio Spurs,Oklahoma City Thunder,0,team_total,away,under,115.5,1.9615,500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.16,San Antonio Spurs,Oklahoma City Thunder,0,spread,,home,-1.0,1.9709,10000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.16,San Antonio Spurs,Oklahoma City Thunder,0,spread,,away,1.0,1.9346,10000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.16,San Antonio Spurs,Oklahoma City Thunder,0,total,,over,231.5,1.9709,3000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.16,San Antonio Spurs,Oklahoma City Thunder,0,total,,under,231.5,1.9174,3000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.16,San Antonio Spurs,Oklahoma City Thunder,1,moneyline,,home,,1.8772,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.16,San Antonio Spurs,Oklahoma City Thunder,1,moneyline,,away,,2.01,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.16,San Antonio Spurs,Oklahoma City Thunder,1,team_total,away,over,56.5,1.9174,500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.16,San Antonio Spurs,Oklahoma City Thunder,1,team_total,away,under,56.5,1.9346,500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.16,San Antonio Spurs,Oklahoma City Thunder,1,total,,over,113.5,1.9524,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.16,San Antonio Spurs,Oklahoma City Thunder,1,total,,under,113.5,1.9174,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.16,San Antonio Spurs,Oklahoma City Thunder,3,team_total,home,over,28.5,1.8929,250
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.16,San Antonio Spurs,Oklahoma City Thunder,3,spread,,away,0.5,1.8403,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.16,San Antonio Spurs,Oklahoma City Thunder,3,total,,over,57.0,1.8929,500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.16,San Antonio Spurs,Oklahoma City Thunder,4,team_total,away,over,27.5,1.8475,250
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.16,San Antonio Spurs,Oklahoma City Thunder,4,spread,,home,-0.5,1.9804,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1637443878,Regular,2026-10-22T02:30:00+00:00,36.0,Los Angeles Clippers,Sacramento Kings,0,moneyline,,home,,1.5025,1800
-2026-10-20T14:30:12.992724+00:00,nba,nba,1637443878,Regular,2026-10-22T02:30:00+00:00,36.0,Los Angeles Clippers,Sacramento Kings,0,moneyline,,away,,2.69,1800
-2026-10-20T14:30:12.992724+00:00,nba,nba,1637443878,Regular,2026-10-22T02:30:00+00:00,36.0,Los Angeles Clippers,Sacramento Kings,0,team_total,home,over,116.5,1.8772,300
-2026-10-20T14:30:12.992724+00:00,nba,nba,1637443878,Regular,2026-10-22T02:30:00+00:00,36.0,Los Angeles Clippers,Sacramento Kings,0,team_total,home,under,116.5,1.9615,300
-2026-10-20T14:30:12.992724+00:00,nba,nba,1637443878,Regular,2026-10-22T02:30:00+00:00,36.0,Los Angeles Clippers,Sacramento Kings,0,team_total,away,over,112.5,1.9901,300
-2026-10-20T14:30:12.992724+00:00,nba,nba,1637443878,Regular,2026-10-22T02:30:00+00:00,36.0,Los Angeles Clippers,Sacramento Kings,0,team_total,away,under,112.5,1.8475,300
-2026-10-20T14:30:12.992724+00:00,nba,nba,1637443878,Regular,2026-10-22T02:30:00+00:00,36.0,Los Angeles Clippers,Sacramento Kings,0,spread,,home,-5.0,1.8929,3000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1637443878,Regular,2026-10-22T02:30:00+00:00,36.0,Los Angeles Clippers,Sacramento Kings,0,spread,,away,5.0,1.9804,3000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,3,moneyline,,away,,2.26,500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,3,team_total,home,over,30.5,1.8403,250
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,3,team_total,home,under,30.5,2.0,250
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,3,team_total,away,over,29.5,1.9524,250
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,3,team_total,away,under,29.5,1.885,250
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,3,total,,over,60.0,1.8696,500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,3,total,,under,60.0,1.9709,500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,4,team_total,home,over,30.5,2.03,250
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,4,team_total,home,under,30.5,1.813,250
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,4,team_total,away,over,28.5,1.885,250
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,4,team_total,away,under,28.5,1.9524,250
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,4,total,,over,58.5,1.8772,500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,4,total,,under,58.5,1.9524,500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,1,moneyline,,home,,1.6329,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,1,moneyline,,away,,2.4,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,1,team_total,home,over,60.5,1.9259,500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,1,team_total,home,under,60.5,1.9259,500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,1,team_total,away,over,58.5,2.0,500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,1,team_total,away,under,58.5,1.8547,500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,1,spread,,home,-2.5,1.9615,2000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,1,spread,,away,2.5,1.9259,2000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,1,total,,over,119.0,1.9524,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,1,total,,under,119.0,1.9091,1000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,0,moneyline,,home,,1.5917,5000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,0,moneyline,,away,,2.52,5000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,0,team_total,home,over,118.5,1.9174,500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,0,team_total,home,under,118.5,1.9346,500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,0,team_total,away,over,113.5,1.8547,500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,0,team_total,away,under,113.5,2.0,500
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,0,spread,,home,-4.5,1.9434,10000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,0,spread,,away,4.5,1.9615,10000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,0,total,,over,232.5,1.9524,3000
-2026-10-20T14:30:12.992724+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.66,New York Knicks,Philadelphia 76ers,0,total,,under,232.5,1.9346,3000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,0,moneyline,,home,,2.02,12000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,0,moneyline,,away,,1.885,12000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,0,team_total,home,over,109.5,1.8621,2000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,0,team_total,home,under,109.5,1.9901,2000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,0,team_total,away,over,110.5,1.9174,2000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,0,team_total,away,under,110.5,1.9346,2000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,0,spread,,home,1.5,1.9346,20000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,0,spread,,away,-1.5,1.9709,20000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,0,total,,over,220.5,1.9615,7500
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,0,total,,under,220.5,1.9259,7500
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,1,moneyline,,home,,1.9009,3000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,1,moneyline,,away,,1.9524,3000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,1,team_total,home,over,56.5,1.8333,1000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,1,team_total,home,under,56.5,1.9901,1000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,1,spread,,home,-0.5,1.9804,5000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,1,spread,,away,0.5,1.8772,5000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,3,moneyline,,home,,1.9009,2000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,3,moneyline,,away,,1.9524,2000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,4,moneyline,,home,,1.8772,2000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,4,moneyline,,away,,1.9804,2000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,4,team_total,home,over,28.5,2.0,1000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,4,team_total,home,under,28.5,1.8403,1000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,4,team_total,away,over,27.5,1.8,1000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,4,team_total,away,under,27.5,2.05,1000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,4,spread,,home,-0.5,1.9709,3000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,4,total,,over,56.5,1.9804,1000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801637,Regular,2026-10-20T19:10:00+00:00,4.54,Detroit Pistons,Boston Celtics,4,total,,under,56.5,1.8621,1000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637438612,Regular,2026-10-22T02:00:00+00:00,35.38,Portland Trail Blazers,Phoenix Suns,0,moneyline,,home,,1.6329,1800
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637438612,Regular,2026-10-22T02:00:00+00:00,35.38,Portland Trail Blazers,Phoenix Suns,0,moneyline,,away,,2.4,1800
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637438612,Regular,2026-10-22T02:00:00+00:00,35.38,Portland Trail Blazers,Phoenix Suns,0,team_total,home,under,118.5,1.8929,300
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637438612,Regular,2026-10-22T02:00:00+00:00,35.38,Portland Trail Blazers,Phoenix Suns,0,team_total,away,over,115.5,1.9615,300
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637438612,Regular,2026-10-22T02:00:00+00:00,35.38,Portland Trail Blazers,Phoenix Suns,0,team_total,away,under,115.5,1.8772,300
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637438612,Regular,2026-10-22T02:00:00+00:00,35.38,Portland Trail Blazers,Phoenix Suns,0,spread,,home,-3.5,1.9174,3000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637438612,Regular,2026-10-22T02:00:00+00:00,35.38,Portland Trail Blazers,Phoenix Suns,0,spread,,away,3.5,1.9709,3000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,3,moneyline,,away,,2.26,500
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,3,team_total,away,over,29.5,1.9524,250
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,3,team_total,away,under,29.5,1.885,250
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,4,team_total,home,over,30.5,2.03,250
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,4,team_total,home,under,30.5,1.813,250
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,4,team_total,away,over,28.5,1.885,250
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,4,team_total,away,under,28.5,1.9524,250
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,4,total,,over,58.5,1.8772,500
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,4,total,,under,58.5,1.9524,500
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,1,moneyline,,home,,1.6329,1000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,1,moneyline,,away,,2.4,1000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,1,team_total,home,over,60.5,1.9259,500
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,1,team_total,home,under,60.5,1.9259,500
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,1,spread,,home,-2.5,1.9615,2000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,1,spread,,away,2.5,1.9259,2000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,1,total,,over,119.0,1.9524,1000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,1,total,,under,119.0,1.9091,1000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,0,moneyline,,home,,1.5917,5000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,0,moneyline,,away,,2.52,5000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,0,team_total,home,over,118.5,1.9174,500
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,0,team_total,home,under,118.5,1.9346,500
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,0,team_total,away,over,113.5,1.8547,500
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,0,team_total,away,under,113.5,2.0,500
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,0,spread,,home,-4.5,1.9434,10000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,0,spread,,away,4.5,1.9615,10000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,0,total,,over,232.5,1.9524,3000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801639,Regular,2026-10-20T23:10:00+00:00,8.54,New York Knicks,Philadelphia 76ers,0,total,,under,232.5,1.9346,3000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637438611,Regular,2026-10-21T23:30:00+00:00,32.88,Brooklyn Nets,Charlotte Hornets,0,moneyline,,home,,1.6944,1800
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637438611,Regular,2026-10-21T23:30:00+00:00,32.88,Brooklyn Nets,Charlotte Hornets,0,moneyline,,away,,2.27,1800
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637438611,Regular,2026-10-21T23:30:00+00:00,32.88,Brooklyn Nets,Charlotte Hornets,0,team_total,home,over,110.5,1.8621,300
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637438611,Regular,2026-10-21T23:30:00+00:00,32.88,Brooklyn Nets,Charlotte Hornets,0,team_total,home,under,110.5,1.9709,300
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637438611,Regular,2026-10-21T23:30:00+00:00,32.88,Brooklyn Nets,Charlotte Hornets,0,team_total,away,over,108.5,1.8929,300
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637438611,Regular,2026-10-21T23:30:00+00:00,32.88,Brooklyn Nets,Charlotte Hornets,0,team_total,away,under,108.5,1.9434,300
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637438611,Regular,2026-10-21T23:30:00+00:00,32.88,Brooklyn Nets,Charlotte Hornets,0,spread,,home,-3.5,1.9709,3000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637438611,Regular,2026-10-21T23:30:00+00:00,32.88,Brooklyn Nets,Charlotte Hornets,0,spread,,away,3.5,1.9174,3000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.04,San Antonio Spurs,Oklahoma City Thunder,0,team_total,home,under,116.5,1.8475,500
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.04,San Antonio Spurs,Oklahoma City Thunder,0,team_total,away,over,115.5,1.8929,500
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.04,San Antonio Spurs,Oklahoma City Thunder,0,team_total,away,under,115.5,1.9615,500
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.04,San Antonio Spurs,Oklahoma City Thunder,0,spread,,home,-1.0,1.9709,10000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.04,San Antonio Spurs,Oklahoma City Thunder,0,spread,,away,1.0,1.9346,10000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.04,San Antonio Spurs,Oklahoma City Thunder,0,total,,over,231.5,1.9709,3000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.04,San Antonio Spurs,Oklahoma City Thunder,0,total,,under,231.5,1.9174,3000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.04,San Antonio Spurs,Oklahoma City Thunder,1,moneyline,,home,,1.8772,1000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.04,San Antonio Spurs,Oklahoma City Thunder,1,moneyline,,away,,2.01,1000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.04,San Antonio Spurs,Oklahoma City Thunder,1,team_total,away,over,56.5,1.9174,500
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.04,San Antonio Spurs,Oklahoma City Thunder,1,team_total,away,under,56.5,1.9346,500
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.04,San Antonio Spurs,Oklahoma City Thunder,1,total,,over,113.5,1.9524,1000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.04,San Antonio Spurs,Oklahoma City Thunder,1,total,,under,113.5,1.9174,1000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.04,San Antonio Spurs,Oklahoma City Thunder,3,team_total,home,over,28.5,1.8929,250
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.04,San Antonio Spurs,Oklahoma City Thunder,3,team_total,home,under,28.5,1.9434,250
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.04,San Antonio Spurs,Oklahoma City Thunder,3,team_total,away,over,28.5,1.9091,250
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.04,San Antonio Spurs,Oklahoma City Thunder,3,team_total,away,under,28.5,1.9259,250
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.04,San Antonio Spurs,Oklahoma City Thunder,3,spread,,away,0.5,1.8403,1000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.04,San Antonio Spurs,Oklahoma City Thunder,3,total,,over,57.0,1.8929,500
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.04,San Antonio Spurs,Oklahoma City Thunder,3,total,,under,57.0,1.9434,500
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.04,San Antonio Spurs,Oklahoma City Thunder,4,team_total,away,over,27.5,1.8475,250
+2026-10-20T14:37:27.195188+00:00,nba,nba,1633801640,Regular,2026-10-21T01:40:00+00:00,11.04,San Antonio Spurs,Oklahoma City Thunder,4,spread,,home,-0.5,1.9804,1000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637443985,Regular,2026-10-22T02:00:00+00:00,35.38,Los Angeles Lakers,Golden State Warriors,0,moneyline,,home,,1.4926,900
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637443985,Regular,2026-10-22T02:00:00+00:00,35.38,Los Angeles Lakers,Golden State Warriors,0,moneyline,,away,,2.76,900
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637443985,Regular,2026-10-22T02:00:00+00:00,35.38,Los Angeles Lakers,Golden State Warriors,0,team_total,home,under,119.5,1.9804,300
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637443985,Regular,2026-10-22T02:00:00+00:00,35.38,Los Angeles Lakers,Golden State Warriors,0,spread,,home,-6.0,1.9615,1500
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637443985,Regular,2026-10-22T02:00:00+00:00,35.38,Los Angeles Lakers,Golden State Warriors,0,spread,,away,6.0,1.9259,1500
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637443985,Regular,2026-10-22T02:00:00+00:00,35.38,Los Angeles Lakers,Golden State Warriors,0,total,,under,234.0,1.9524,575
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637443878,Regular,2026-10-22T02:30:00+00:00,35.88,Los Angeles Clippers,Sacramento Kings,0,moneyline,,home,,1.5025,1800
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637443878,Regular,2026-10-22T02:30:00+00:00,35.88,Los Angeles Clippers,Sacramento Kings,0,moneyline,,away,,2.69,1800
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637443878,Regular,2026-10-22T02:30:00+00:00,35.88,Los Angeles Clippers,Sacramento Kings,0,team_total,home,over,116.5,1.8772,300
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637443878,Regular,2026-10-22T02:30:00+00:00,35.88,Los Angeles Clippers,Sacramento Kings,0,team_total,home,under,116.5,1.9615,300
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637443878,Regular,2026-10-22T02:30:00+00:00,35.88,Los Angeles Clippers,Sacramento Kings,0,team_total,away,over,112.5,1.9901,300
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637443878,Regular,2026-10-22T02:30:00+00:00,35.88,Los Angeles Clippers,Sacramento Kings,0,team_total,away,under,112.5,1.8475,300
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637443878,Regular,2026-10-22T02:30:00+00:00,35.88,Los Angeles Clippers,Sacramento Kings,0,spread,,home,-5.0,1.8929,3000
+2026-10-20T14:37:27.195188+00:00,nba,nba,1637443878,Regular,2026-10-22T02:30:00+00:00,35.88,Los Angeles Clippers,Sacramento Kings,0,spread,,away,5.0,1.9804,3000
