@@ -73,6 +73,12 @@
 - 資料：MLB＝Retrosheet（`pro/fetch_us.py` 在 GitHub Actions `pro_data.yml` 下載整理，網頁要附 Retrosheet 聲明）；NHL＝MoneyPuck；NFL＝nflverse（`pro/nfl_data.py`，工作環境可直接下載）。**ESPN 冰球盤 2022–23、2023–24 的收盤獨贏是壞的（兩邊機率加起來 83%），SBRO 冰球盤也有問題**；原本模型一的冰球訓練用過這些盤口，要修先問使用者。
 - 資料：football-data 2025/26 季中起沒有 Pinnacle 收盤 → 最後兩季用 Betfair 交易所收盤（BFEC*）當標準答案。Pinnacle 檔案 period：0＝全場；NHL 的 6＝60 分鐘三選一（有和局賠率）。
 
+## 五大聯賽以外的足球（2026-10-21）
+- 使用者要「歐冠／歐霸／歐協聯、國內盃賽、國家隊、其他國家聯賽全部都要，模型一也要預測」；冷門賽事不收資金流向。
+- 賽事清單 `soccer_comps.py`（代號、中文、分組 big5/euro/cup/intl/league、ESPN 路徑、Pinnacle 名稱、Action Network）。
+- 資金流向（Action Network）只有五大聯賽＋歐冠、歐霸、美職；其他只有 Pinnacle 盤口：`scrape_pinnacle.py soccer` 每次先問 Pinnacle 現有聯賽、對到清單的都記。看板用 `soccer_dashboard.pin_game()` 做成比賽（id＝pin<編號>、`pin_only`），賽果 `scrape_soccer.backfill_pin_results()` 用 ESPN 補。淘汰賽有延長賽只算 90 分鐘。
+- 全球足球模型 `world_model.py`（俱樂部 Elo＝ESPN 47 個賽事 2014 起、`fetch_world_soccer.py` 在 `world_soccer_data.yml` 每天補＋重練；國家隊 Elo＝martj42 CC0）→ `docs/data/soccer/model/world_params.json`；看板 `world_predict.py`（隊名比對＋模型跟市場差 >15 點就不給）。跟模型一一樣「市場賠率＋Elo」，考試季 log loss 1.0018 vs 市場 1.0023（≈市場）。五大聯賽仍用原本 soccer_model.py。韓職 ESPN 沒資料（沒有模型）。
+
 ## 重要的運彩規則（算錯會差很多）
 - 期望值 EV = 勝率 × 賠率 − 1；「划算」門檻 EV ≥ +2%。
 - 台彩抽成約 15%（美國約 4.5%）；沒有實際台彩賠率時用「美國賠率 ×（1 + 折扣）」估，折扣由 tw_odds.csv 算（約 −9.5%）。

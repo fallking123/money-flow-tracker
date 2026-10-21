@@ -1021,7 +1021,7 @@ td.luck{color:var(--muted)!important}
     items.sort((a, b) => Math.max(b.o.ev, b.o.evUs ?? -1) - Math.max(a.o.ev, a.o.evUs ?? -1));
     const row = ({g, o}) => {
       const tw = o.ev >= EV_GO, st = tw ? stakeFor(o.p, o.tw, g.sport + "|" + g.id) : null;
-      const right = tw ? `台彩 ${odd(o.tw)}${o.est ? "（估）" : ""}` : `美國 ${odd(o.us)}`;
+      const right = tw ? `台彩 ${odd(o.tw)}${o.est ? "（估）" : ""}` : `${g.pin_only ? "國際" : "美國"} ${odd(o.us)}`;
       const sub = tw ? (st && st.amt ? `建議下 ${stkTxt(st)}` : st && st.pause ? "回撤太大，先暫停" : st ? "今天額度用完" : "設定本金看建議金額") : `台彩要 ≥ ${odd(needOdds(o))} 才下`;
       return `<button type="button" class="it${tw ? "" : " us"}" data-bet="${esc(g.sport + "|" + g.id)}" data-mk="${o.mkt}" data-pick="${esc(o.pick)}">
         <span class="m">${fmtMD.format(new Date(g.t))} ${fmtTime.format(new Date(g.t))}・${esc(lgLabel(g))}・${esc(matchName(g))}</span><span class="e">${evTxt(tw ? o.ev : o.evUs)}</span>
@@ -1122,7 +1122,8 @@ td.luck{color:var(--muted)!important}
       return `<div class="mdl"><b>模型一・實力</b>${esc(g.away_zh || g.away_ab)} ${f(P[0])}・${esc(g.home_zh || g.home_ab)} ${f(P[1])}${g.r3 ? `<small>60 分鐘（台彩算法）：${esc(g.away_zh || g.away_ab)} ${f(g.r3.p[0])}・和局 ${f(g.r3.p[1])}・${esc(g.home_zh || g.home_ab)} ${f(g.r3.p[2])}</small>` : ""}<small>用${g.m1.src === "pin" ? " Pinnacle 最新賠率" : "美國共識賠率"}＋休息天數算的真實勝率（含延長賽）；模型二（資金）還在累積資料</small></div>`;
     })() : "";
     if (!has) {
-      h += `<div class="say">${MK[mkt]}的下注比例，網站還沒出來（最後截圖 ${when(s.ts)}）。出來後會自動補抓。</div>`;
+      h += g.pin_only ? `<div class="say">這個賽事沒有下注比例（冷門賽事不收資金流向），只看 Pinnacle 盤口和模型一（全球足球版）。最後更新 ${when(s.ts)}。</div>`
+        : `<div class="say">${MK[mkt]}的下注比例，網站還沒出來（最後截圖 ${when(s.ts)}）。出來後會自動補抓。</div>`;
       h += m1Html;
     } else {
       if (sig) {
@@ -2155,7 +2156,7 @@ td.luck{color:var(--muted)!important}
     const sum = (k) => aggSer(serF().filter((x) => x[1] === k));
     const a1 = sum("model1_us"), a2 = sum("model1");
     const empty = MLG.sel.size && ![...MLG.sel].some((k) => have.has(k));
-    const sumLine = (MDT.from || MDT.to || MLG.sel.size) ? `<p style="font-size:13.5px;margin:8px 0 0">這段期間・${MLG.sel.size ? nm.join("、") : "全部聯賽"}：模型一・美國賠率 <b>${a1.n}</b> 注、賺賠 <b class="${gb(a1.pl)}">${a1.n ? ntd(a1.pl * UNIT) : "–"}</b>；模型一・台彩 <b>${a2.n}</b> 注、賺賠 <b class="${gb(a2.pl)}">${a2.n ? ntd(a2.pl * UNIT) : "–"}</b>${empty ? `<br><span class="mut" style="font-size:12.5px">你選的聯賽還沒有開獎的比賽（剛開季），打完就會算進來。</span>` : ""}</p>` : "";
+    const sumLine = (MDT.from || MDT.to || MLG.sel.size) ? `<p style="font-size:13.5px;margin:8px 0 0">這段期間・${MLG.sel.size ? nm.join("、") : "全部聯賽"}：模型一・美國賠率 <b>${a1.n}</b> 注、賺賠 <b class="${gb(a1.pl)}">${a1.n ? ntd(a1.pl * UNIT) : "–"}</b>；模型一・台彩 <b>${a2.n}</b> 注、賺賠 <b class="${gb(a2.pl)}">${a2.n ? ntd(a2.pl * UNIT) : "–"}</b>${empty ? `<br><span class="mut" style="font-size:12.5px">你選的聯賽還沒有開獎的比賽（剛開季或剛開始記錄），打完就會算進來。</span>` : ""}</p>` : "";
     return `<div class="card" id="lgcard"><h3>只看哪些聯賽、哪幾天<small>可以複選・成績、曲線、下多少、賠率區間、每一注都只算你選的</small></h3>
       <div class="chips" style="flex-wrap:wrap"><button type="button" class="chip" data-mlg="*" aria-pressed="${!MLG.sel.size}">全部</button>${socAll.length ? `<button type="button" class="chip" data-mlg="soccer" aria-pressed="${!!socOn}">足球（五大聯賽）</button>` : ""}${opts.map(([k, n]) => `<button type="button" class="chip" data-mlg="${k}" aria-pressed="${MLG.sel.has(k)}">${n}</button>`).join("")}</div>
       <div class="chips" style="flex-wrap:wrap;margin-top:8px">${SOC_GROUPS.map(([g, n, ks]) => `<button type="button" class="chip" data-mlg="grp:${g}" aria-pressed="${grpOn(ks)}">${n}</button>`).join("")}${extra.map((k) => `<button type="button" class="chip" data-mlg="${k}" aria-pressed="${MLG.sel.has(k)}">${SOC_NAME[k]}</button>`).join("")}</div>
