@@ -1,0 +1,60 @@
+name: World soccer history
+
+# 全球足球模型用的歷史賽果：ESPN 各賽事（一個賽事一個工作）＋國家隊（martj42，CC0）
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "40 21 * * *"        # 每天補新的（台灣 05:40）
+  push:
+    paths:
+      - fetch_world_soccer.py
+      - .github/workflows/world_soccer_data.yml
+
+permissions:
+  contents: write
+
+jobs:
+  intl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install requests==2.32.3
+      - run: python fetch_world_soccer.py intl
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/soccer/world/
+          git commit -m "全球足球：國家隊賽果" || exit 0
+          for i in 1 2 3 4 5 6 7 8; do git pull --rebase && git push && exit 0; sleep $((RANDOM % 20 + 5)); done
+  espn:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        comp: [uefa.champions, uefa.europa, uefa.europa.conf, uefa.champions_qual, uefa.europa_qual, uefa.europa.conf_qual,
+               eng.fa, eng.league_cup, esp.copa_del_rey, ita.coppa_italia, ger.dfb_pokal, fra.coupe_de_france,
+               eng.1, eng.2, eng.3, eng.4, esp.1, esp.2, ita.1, ita.2, ger.1, ger.2, fra.1, fra.2,
+               por.1, ned.1, bel.1, tur.1, sco.1, gre.1, aut.1, sui.1, den.1, nor.1, swe.1, rus.1,
+               usa.1, mex.1, bra.1, arg.1, jpn.1, chn.1, kor.1, ksa.1, aus.1,
+               conmebol.libertadores, conmebol.sudamericana]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install requests==2.32.3
+      - run: python fetch_world_soccer.py espn ${{ matrix.comp }}
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/soccer/world/
+          git commit -m "全球足球：ESPN ${{ matrix.comp }} 賽果" || exit 0
+          for i in 1 2 3 4 5 6 7 8; do git pull --rebase && git push && exit 0; sleep $((RANDOM % 20 + 5)); done
