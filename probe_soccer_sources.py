@@ -61,3 +61,37 @@ for slug in ESPN:
         print(slug, n)
     except Exception as e:
         print(slug, "失敗", e)
+
+print("\n=== Action Network soccer：聯賽欄位 ===")
+import collections
+cnt = collections.Counter()
+ex = {}
+for i in range(8):
+    d = (now + timedelta(days=i)).strftime("%Y%m%d")
+    try:
+        gs = requests.get("https://api.actionnetwork.com/web/v2/scoreboard/soccer", params={"bookIds": "15", "date": d},
+                          headers={"User-Agent": UA["User-Agent"]}, timeout=20).json().get("games") or []
+        for g in gs:
+            k = tuple(str(g.get(x)) for x in ("league_id", "league_name") )
+            cnt[k] += 1
+            ex.setdefault(k, (sorted(g.keys()), [t.get("full_name") for t in g.get("teams") or []]))
+    except Exception as e:
+        print("失敗", e)
+for k, v in cnt.most_common():
+    print(k, v, ex[k][1])
+print("欄位", ex[next(iter(ex))][0] if ex else None)
+
+print("\n=== ESPN 其他代號 ===")
+for slug in ["ksa.1", "kor.1", "aus.1", "sui.1", "rus.1", "eng.3", "eng.4", "uefa.champions_qual", "uefa.europa_qual", "uefa.europa.conf_qual",
+             "conmebol.libertadores", "conmebol.sudamericana", "concacaf.champions", "afc.champions", "fifa.worldq.uefa", "fifa.worldq"]:
+    n = 0
+    for k in range(0, 400, 10):
+        dd = (now - timedelta(days=k)).strftime("%Y%m%d")
+        try:
+            r = requests.get(f"https://site.api.espn.com/apis/site/v2/sports/soccer/{slug}/scoreboard", params={"dates": dd}, timeout=20)
+            if r.status_code == 200:
+                n += len(r.json().get("events") or [])
+        except Exception:
+            pass
+        time.sleep(0.15)
+    print(slug, n)
