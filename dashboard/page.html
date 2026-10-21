@@ -1620,7 +1620,7 @@ td.luck{color:var(--muted)!important}
   }
 
   // ═════════ 我的投注（存在這個看板自己的資料庫）═════════
-  const LEAGUES = ["MLB", "NBA", "NFL", "NHL", "英超", "西甲", "義甲", "德甲", "法甲", "歐冠", "KBO", "NPB", "CPBL", "其他足球", "其他"];
+  const LEAGUES = ["MLB", "NBA", "NFL", "NHL", "英超", "西甲", "義甲", "德甲", "法甲", "歐冠", "歐霸", "歐協聯", "足球盃賽", "國家隊", "KBO", "NPB", "CPBL", "其他足球", "其他"];
   const BTYPES = ["獨贏", "讓分", "大小分", "單隊大小", "和局", "其他"];
   const RES = {pending: "還沒開獎", win: "贏", loss: "輸", push: "走水", void: "退款"};
   const betPL = (b) => (b.result === "win" ? b.stake * (b.odds - 1) : b.result === "loss" ? -b.stake : 0);
@@ -2115,6 +2115,9 @@ td.luck{color:var(--muted)!important}
   // ═════════ 模型頁：只看你選的聯賽 ═════════
   const MLG_LIST = [["nfl", "NFL"], ["mlb", "MLB"], ["nhl", "NHL"], ["nba", "NBA"], ["epl", "英超"], ["laliga", "西甲"], ["seriea", "義甲"], ["bundesliga", "德甲"], ["ligue1", "法甲"]];
   const SOCCER_LG = ["epl", "laliga", "seriea", "bundesliga", "ligue1"];
+  // 五大聯賽以外的足球（全球足球模型）：分組按鈕＋有資料的賽事各自一個按鈕
+  const SOC_GROUPS = [["euro", "歐洲賽事", ["ucl", "uel", "uecl"]], ["cup", "盃賽", ["facup", "eflcup", "cdr", "coppa", "dfb", "cdf", "libertadores", "sudamericana"]], ["intl", "國家隊", ["wc", "wcq", "unl", "euro", "copa", "asian", "friendly"]], ["league", "其他聯賽", ["champ", "mls", "ligamx", "ered", "por", "bel", "tur", "sco", "gre", "aut", "sui", "den", "nor", "swe", "rus", "bra", "arg", "jpn", "kor", "chn", "ksa", "aus"]]];
+  const SOC_NAME = {"ucl": "歐冠", "uel": "歐霸", "uecl": "歐協聯", "facup": "英足總盃", "eflcup": "英聯賽盃", "cdr": "國王盃", "coppa": "義大利盃", "dfb": "德國盃", "cdf": "法國盃", "libertadores": "南美解放者盃", "sudamericana": "南美球會盃", "wc": "世界盃", "wcq": "世界盃資格賽", "unl": "歐國聯", "euro": "歐洲盃", "copa": "美洲盃", "asian": "亞洲盃", "friendly": "國際友誼賽", "champ": "英冠", "mls": "美職", "ligamx": "墨超", "ered": "荷甲", "por": "葡超", "bel": "比甲", "tur": "土超", "sco": "蘇超", "gre": "希超", "aut": "奧超", "sui": "瑞士超", "den": "丹超", "nor": "挪超", "swe": "瑞典超", "rus": "俄超", "bra": "巴甲", "arg": "阿甲", "jpn": "日職", "kor": "韓職", "chn": "中超", "ksa": "沙烏地聯", "aus": "澳職"};
   const MLG = {sel: new Set(store.get("mdl_lg", []))};    // 空的＝全部
   const lgOk = (lg) => !MLG.sel.size || MLG.sel.has(lg);
   // 日期篩選（台灣時間的開賽日期；空的＝不限）
@@ -2125,7 +2128,7 @@ td.luck{color:var(--muted)!important}
   const dTag = () => (!MDT.from && !MDT.to ? "" : MDT.from === MDT.to ? `${dShort(MDT.from)}・` : `${MDT.from ? dShort(MDT.from) : "最早"}–${MDT.to ? dShort(MDT.to) : "今天"}・`);
   const serAll = () => (DATA.live && DATA.live.series) || [];
   const serF = () => serAll().filter((x) => (x[7] == null || lgOk(x[7])) && dOk(x[0]));
-  const lgNames = () => MLG_LIST.filter(([k]) => MLG.sel.has(k)).map(([, n]) => n);
+  const lgNames = () => [...MLG_LIST.filter(([k]) => MLG.sel.has(k)).map(([, n]) => n), ...[...MLG.sel].filter((k) => SOC_NAME[k]).map((k) => SOC_NAME[k])];
   function aggSer(rs) {
     const n = rs.length, pl = rs.reduce((a, x) => a + (x[6] || 0), 0), sq = rs.reduce((a, x) => a + (x[6] || 0) ** 2, 0);
     const m = n ? pl / n : 0, se = n > 1 ? Math.sqrt(Math.max(sq / n - m * m, 0) * n / (n - 1) / n) * 100 : null;
@@ -2142,6 +2145,8 @@ td.luck{color:var(--muted)!important}
     const have = new Set(serAll().map((x) => x[7]).filter(Boolean));
     const opts = MLG_LIST;
     const socAll = SOCCER_LG, socOn = SOCCER_LG.every((k) => MLG.sel.has(k));
+    const grpOn = (ks) => ks.every((k) => MLG.sel.has(k));
+    const extra = Object.keys(SOC_NAME).filter((k) => have.has(k));
     const nm = lgNames();
     const today = fmtISO.format(new Date()), ago = (n) => fmtISO.format(new Date(Date.now() - n * 864e5));
     const QD = [["all", "全部日期", "", ""], ["today", "今天", today, today], ["yday", "昨天", ago(1), ago(1)], ["7", "最近 7 天", ago(6), today], ["30", "最近 30 天", ago(29), today]];
@@ -2153,6 +2158,7 @@ td.luck{color:var(--muted)!important}
     const sumLine = (MDT.from || MDT.to || MLG.sel.size) ? `<p style="font-size:13.5px;margin:8px 0 0">這段期間・${MLG.sel.size ? nm.join("、") : "全部聯賽"}：模型一・美國賠率 <b>${a1.n}</b> 注、賺賠 <b class="${gb(a1.pl)}">${a1.n ? ntd(a1.pl * UNIT) : "–"}</b>；模型一・台彩 <b>${a2.n}</b> 注、賺賠 <b class="${gb(a2.pl)}">${a2.n ? ntd(a2.pl * UNIT) : "–"}</b>${empty ? `<br><span class="mut" style="font-size:12.5px">你選的聯賽還沒有開獎的比賽（剛開季），打完就會算進來。</span>` : ""}</p>` : "";
     return `<div class="card" id="lgcard"><h3>只看哪些聯賽、哪幾天<small>可以複選・成績、曲線、下多少、賠率區間、每一注都只算你選的</small></h3>
       <div class="chips" style="flex-wrap:wrap"><button type="button" class="chip" data-mlg="*" aria-pressed="${!MLG.sel.size}">全部</button>${socAll.length ? `<button type="button" class="chip" data-mlg="soccer" aria-pressed="${!!socOn}">足球（五大聯賽）</button>` : ""}${opts.map(([k, n]) => `<button type="button" class="chip" data-mlg="${k}" aria-pressed="${MLG.sel.has(k)}">${n}</button>`).join("")}</div>
+      <div class="chips" style="flex-wrap:wrap;margin-top:8px">${SOC_GROUPS.map(([g, n, ks]) => `<button type="button" class="chip" data-mlg="grp:${g}" aria-pressed="${grpOn(ks)}">${n}</button>`).join("")}${extra.map((k) => `<button type="button" class="chip" data-mlg="${k}" aria-pressed="${MLG.sel.has(k)}">${SOC_NAME[k]}</button>`).join("")}</div>
       <div class="chips" style="flex-wrap:wrap;margin-top:10px">${QD.map(([k, n, f, t]) => `<button type="button" class="chip" data-mdt="${k}" data-mdtf="${f}" data-mdtt="${t}" aria-pressed="${qOn(f, t)}">${n}</button>`).join("")}</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px;font-size:13px"><label>從 <input type="date" data-mdtin="from" value="${MDT.from}" max="${today}"></label><label>到 <input type="date" data-mdtin="to" value="${MDT.to}" max="${today}"></label></div>
       <p class="mut" style="font-size:12.5px;margin:8px 0 0">${MLG.sel.size ? `現在只算：<b>${nm.join("、")}</b>` : "現在算全部聯賽"}・${MDT.from || MDT.to ? `日期 <b>${dTag().replace(/・$/, "")}</b>（台灣時間開賽日）` : "全部日期"}</p>${sumLine}</div>`;
@@ -2334,7 +2340,7 @@ td.luck{color:var(--muted)!important}
       const tdone = ub.filter((x) => x.twr && ["win", "loss", "push"].includes(x.twr[2])), tpl = tdone.reduce((a, x) => a + (x.twr[3] || 0), 0);
       const RS = {win: ["贏", "w"], loss: ["輸", "l"], push: ["平", "p"], void: ["取消", "p"]};
       const done = ub.filter((x) => RS[x.result]), pl = done.reduce((a, x) => a + (x.profit || 0), 0);
-      const tr = (x) => `<tr><td class="n" style="line-height:1.3">${fmtMD.format(new Date(x.t))}<div class="mut" style="font-size:11px;font-weight:400">${esc(x.sport === "soccer" ? ((MLG_LIST.find(([k]) => k === x.lg) || [])[1] || "足球") : spLabel(x.sport))}</div></td>
+      const tr = (x) => `<tr><td class="n" style="line-height:1.3">${fmtMD.format(new Date(x.t))}<div class="mut" style="font-size:11px;font-weight:400">${esc(x.sport === "soccer" ? ((MLG_LIST.find(([k]) => k === x.lg) || [])[1] || SOC_NAME[x.lg] || "足球") : spLabel(x.sport))}</div></td>
         <td style="white-space:normal;line-height:1.35"><b>${esc(x.pick)}</b> <span class="n">${odd(x.us)}</span><div class="mut" style="font-size:11.5px">${esc(x.away)} @ ${esc(x.home)}</div>
           <div class="mut" style="font-size:11px">勝率 ${x.p == null ? "–" : Math.round(x.p * 100) + "%"}${x.ev == null ? "" : "・期望值 " + evTxt(x.ev)}</div></td>
         <td class="r" style="line-height:1.4"><div class="mut" style="font-size:10.5px">美國</div>${RS[x.result] ? `<span class="res ${RS[x.result][1]}">${RS[x.result][0]}</span><div class="n ${gb(x.profit)}">${x.profit != null ? sgn(x.profit * UNIT, 0) : ""}</div>` : '<span class="mut">未開賽</span>'}</td>
@@ -2908,6 +2914,7 @@ td.luck{color:var(--muted)!important}
       const k = t.dataset.mlg;
       if (k === "*") MLG.sel.clear();
       else if (k === "soccer") { const on = SOCCER_LG.every((x) => MLG.sel.has(x)); SOCCER_LG.forEach((x) => (on ? MLG.sel.delete(x) : MLG.sel.add(x))); }
+      else if (k.startsWith("grp:")) { const ks = (SOC_GROUPS.find(([g]) => g === k.slice(4)) || [, , []])[2]; const on = ks.every((x) => MLG.sel.has(x)); ks.forEach((x) => (on ? MLG.sel.delete(x) : MLG.sel.add(x))); }
       else MLG.sel.has(k) ? MLG.sel.delete(k) : MLG.sel.add(k);
       store.set("mdl_lg", [...MLG.sel]); return renderModels();
     }

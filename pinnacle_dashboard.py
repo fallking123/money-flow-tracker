@@ -40,7 +40,7 @@ def load(sport, now, recent_days):
             t = parse_time(r["game_time_utc"])
             if t < now - timedelta(days=recent_days):
                 continue
-            g = games.setdefault(r["pin_id"], {"league": r["league"], "home": r["home_team"], "away": r["away_team"], "t": t,
+            g = games.setdefault(r["pin_id"], {"pid": r["pin_id"], "league": r["league"], "home": r["home_team"], "away": r["away_team"], "t": t,
                                                 "first": {}, "last": {}, "ts": set(), "lim": None})
             k = (r["market"], r["team"], r["side"])
             v = (num(r["line"]), num(r["odds"]))
@@ -53,7 +53,7 @@ def load(sport, now, recent_days):
     out = []
     for g in games.values():
         ts = sorted(g["ts"])
-        out.append({"league": g["league"], "home": g["home"], "away": g["away"], "t": g["t"],
+        out.append({"pid": g["pid"], "league": g["league"], "home": g["home"], "away": g["away"], "t": g["t"],
                     "o": _snap(g["first"]), "l": _snap(g["last"]), "first_ts": ts[0] + "Z", "ts": ts[-1] + "Z",
                     "n": len(ts), "lim": g["lim"]})
     return out

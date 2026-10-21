@@ -20,7 +20,8 @@ import pinnacle_dashboard
 from sports_common import all_monthly_files, parse_time, read_rows, recent_monthly_files, sport_dir
 
 LONDON = ZoneInfo("Europe/London")
-LEAGUE_ZH = {"epl": "英超", "laliga": "西甲", "seriea": "義甲", "bundesliga": "德甲", "ligue1": "法甲", "ucl": "歐冠"}
+from soccer_comps import BIG5, COMPS
+LEAGUE_ZH = {k: v["zh"] for k, v in COMPS.items()}
 
 # 台灣常用中文隊名（依 Action Network 的隊名；沒有的就顯示英文）
 ZH = {
@@ -183,7 +184,11 @@ def model_for(league, home, away, last, eu, pin=None):
         tries.append(("pre", pn, "pin"))
     tries.append(("pre", an, "us"))
     for version, odds, src in tries:
-        r = predict(league, home, away, odds, version)
+        if league not in BIG5:          # 五大聯賽以外：全球足球模型（world_model.py）
+            import world_predict
+            r = world_predict.predict(league, home, away, odds)
+        else:
+            r = predict(league, home, away, odds, version)
         if r:
             r["src"] = src
             return r
@@ -294,6 +299,44 @@ def game_of(aid, rows, res, now, snaps_k=None):
     }
 
 
+def pin_snap(vals, ts, hrs):
+    """Pinnacle 盤口 → 看板 snaps 格式（沒有下注比例，比例欄位留空）"""
+    ml, sp, ou = vals.get("ml") or {}, vals.get("sp") or {}, vals.get("ou") or {}
+    away_sp = (sp.get("away") or [None, None])
+    return {"ts": ts, "hrs": hrs,
+            "ml": [None] * 6 + [ml.get("home"), ml.get("draw"), ml.get("away")],
+            "sp": [None] * 4 + [away_sp[0], away_sp[1], (sp.get("home") or [None, None])[1]],
+            "ou": [None] * 4 + [ou.get("line"), ou.get("over"), ou.get("under")], "th": None, "ta": None}
+
+
+def pin_game(e, res, now):
+    """只有 Pinnacle 盤口的比賽（盃賽、國家隊、其他聯賽）"""
+    t = e["t"]
+    status = "final" if res and res.get("status") == "final" else ("upcoming" if t > now else "started")
+    hrs_l = round((t - parse_time(e["ts"])).total_seconds() / 3600, 2)
+    hrs_o = round((t - parse_time(e["first_ts"])).total_seconds() / 3600, 2)
+    o = e["o"]
+    g = {"sport": "soccer", "league": e["league"], "league_zh": LEAGUE_ZH.get(e["league"], e["league"]),
+         "id": f"pin{e['pid']}", "t": t.strftime("%Y-%m-%dT%H:%MZ"), "season": "",
+         "away": e["away"], "home": e["home"], "away_zh": ZH.get(e["away"], ""), "home_zh": ZH.get(e["home"], ""),
+         "away_ab": e["away"][:3].upper(), "home_ab": e["home"][:3].upper(), "away_c": None, "home_c": None,
+         "status": status, "pin_only": True,
+         "open": {"ml3": [(o.get("ml") or {}).get(k) for k in ("home", "draw", "away")],
+                  "sp": ((o.get("sp") or {}).get("away") or [None])[0], "ou": (o.get("ou") or {}).get("line")},
+         "model": None, "snaps": [pin_snap(e["o"], e["first_ts"], hrs_o), pin_snap(e["l"], e["ts"], hrs_l)],
+         "result": None if status != "final" else {
+             "away": num(res["away_score"]), "home": num(res["home_score"]), "winner": res["winner"],
+             "margin": num(res["margin"]), "total": num(res["total_points"]), "halves": ["", ""]},
+         "ctx": None, "eu": None, "pin": {k: e[k] for k in ("o", "l", "first_ts", "ts", "n", "lim")}}
+    if status != "final":
+        import world_predict
+        ml = (e["l"].get("ml") or {})
+        g["model"] = world_predict.predict(e["league"], e["home"], e["away"], [ml.get("home"), ml.get("draw"), ml.get("away")])
+        if g["model"]:
+            g["model"]["src"] = "pin"
+    return g
+
+
 def build_soccer(now, recent_days=14, closed_snaps=8):
     d = sport_dir("soccer")
     results = {r["an_id"]: r for r in read_rows(os.path.join(d, "results.csv"))}
@@ -321,6 +364,17 @@ def build_soccer(now, recent_days=14, closed_snaps=8):
                 allrows.setdefault(r["an_id"], []).append(r)
     for aid, rows in allrows.items():
         closed.append(game_of(aid, rows, results[aid], now, snaps_k=closed_snaps))
+    # 只有 Pinnacle 的賽事（沒有 Action Network 下注比例）
+    an_lg = {k for k, v in COMPS.items() if v.get("an")}
+    for e in pinnacle_dashboard.load("soccer", now, 60):
+        if e["league"] in an_lg or e["league"] not in COMPS:
+            continue
+        res = results.get(f"pin{e['pid']}")
+        g = pin_game(e, res, now)
+        if g["status"] == "final":
+            closed.append(g)
+        if e["t"] >= now - timedelta(days=recent_days):
+            games.append(g)
     return games, closed
 
 
