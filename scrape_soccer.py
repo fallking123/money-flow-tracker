@@ -37,6 +37,8 @@ LEAGUES = {
     "bundesliga": {"name": "德甲", "an": "bundesliga", "espn": "soccer/ger.1", "fd": "D1"},
     "ligue1":     {"name": "法甲", "an": "ligue1",     "espn": "soccer/fra.1", "fd": "F1"},
     "ucl":        {"name": "歐冠", "an": "champions",  "espn": "soccer/uefa.champions", "fd": None},
+    "uel":        {"name": "歐霸", "an": "europa",     "espn": "soccer/uefa.europa", "fd": None},
+    "mls":        {"name": "美職", "an": "mls",        "espn": "soccer/usa.1", "fd": None},
 }
 FD_DIV = {v["fd"]: k for k, v in LEAGUES.items() if v["fd"]}
 HORIZON_DAYS = 12         # 開賽前 12 天內開始記錄（國際賽空檔時兩輪之間會隔比較久）
@@ -283,6 +285,9 @@ def backfill_results(now):
             continue
         try:
             a, h = int(float(ev["away"]["score"])), int(float(ev["home"]["score"]))
+            pa, ph = ev["away"].get("periods") or [], ev["home"].get("periods") or []
+            if len(pa) > 2 and len(ph) > 2:      # 有延長賽（歐冠淘汰賽）：只算 90 分鐘
+                a, h = int(sum(float(x or 0) for x in pa[:2])), int(sum(float(x or 0) for x in ph[:2]))
         except (TypeError, ValueError):
             continue
         per = lambda s: "-".join(str(int(float(v))) for v in (ev[s].get("periods") or []) if v is not None)
@@ -293,6 +298,56 @@ def backfill_results(now):
                     "away_periods": per("away"), "home_periods": per("home")})
     append_rows(path, RESULT_FIELDS, out)
     print(f"足球賽果：回填 {len(out)} 場")
+    backfill_pin_results(now)
+
+
+def backfill_pin_results(now):
+    """只有 Pinnacle 盤口（沒有 Action Network）的賽事：盃賽、國家隊、其他聯賽。賽果一樣用 ESPN 補，代號 pin<編號>"""
+    from soccer_comps import COMPS
+    path = os.path.join(sport_dir(SPORT), "results.csv")
+    done = {r["an_id"] for r in read_rows(path)}
+    an_lg = set(LEAGUES)
+    games = {}
+    for p in recent_monthly_files(SPORT, "pinnacle"):
+        for r in read_rows(p):
+            if r["league"] in an_lg or r["league"] not in COMPS:
+                continue
+            aid = f"pin{r['pin_id']}"
+            if aid in done:
+                continue
+            t = parse_time(r["game_time_utc"])
+            if now - timedelta(days=7) <= t <= now - timedelta(hours=2, minutes=30):
+                games[aid] = r
+    cache, out = {}, []
+    for aid, g in games.items():
+        t = parse_time(g["game_time_utc"])
+        evs = []
+        for slug in COMPS[g["league"]]["espn"]:
+            for day in {t.astimezone(ET).date(), (t.astimezone(ET) - timedelta(days=1)).date()}:
+                k = (slug, day)
+                if k not in cache:
+                    try:
+                        cache[k] = espn_day("soccer/" + slug, datetime.combine(day, datetime.min.time()))
+                    except Exception:
+                        cache[k] = []
+                evs += cache[k]
+        ok = lambda e: abs((e["time"] - t).total_seconds()) <= 5400
+        ev = next((e for e in evs if ok(e) and same_team(g["home_team"], e["home"]) and same_team(g["away_team"], e["away"])), None)
+        if ev is None or not ev["completed"]:
+            continue
+        try:
+            a, h = int(float(ev["away"]["score"])), int(float(ev["home"]["score"]))
+            pa, ph = ev["away"].get("periods") or [], ev["home"].get("periods") or []
+            if len(pa) > 2 and len(ph) > 2:      # 有延長賽：台彩和美國盤都只算 90 分鐘
+                a, h = int(sum(float(x or 0) for x in pa[:2])), int(sum(float(x or 0) for x in ph[:2]))
+        except (TypeError, ValueError):
+            continue
+        out.append({"sport": SPORT, "league": g["league"], "an_id": aid, "event_id": ev["event_id"],
+                    "game_time_utc": g["game_time_utc"], "home_team": g["home_team"], "away_team": g["away_team"],
+                    "away_score": a, "home_score": h, "winner": "home" if h > a else "away" if a > h else "tie",
+                    "margin": h - a, "total_points": a + h, "status": "final", "away_periods": "", "home_periods": ""})
+    append_rows(path, RESULT_FIELDS, out)
+    print(f"足球賽果（只有 Pinnacle 的賽事）：回填 {len(out)} 場")
 
 
 # ---------------- 3. 歐洲賠率（football-data.co.uk）----------------

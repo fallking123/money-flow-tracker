@@ -98,12 +98,27 @@ def last_known(sport):
     return last
 
 
+def soccer_leagues():
+    """足球：每次先問 Pinnacle 現在有哪些聯賽有比賽，對到 soccer_comps 清單裡的都記（盃賽、國家隊賽事沒比賽時不會出現）"""
+    from soccer_comps import pin_comp
+    fixed = dict((v, k) for k, v in LEAGUES["soccer"])
+    out = list(LEAGUES["soccer"])
+    try:
+        for x in get("sports/29/leagues?all=false"):
+            code = pin_comp(x.get("name"))
+            if code and (x.get("matchupCount") or 0) > 0 and x.get("id") not in fixed:
+                out.append((code, x["id"]))
+    except Exception as e:
+        print(f"  Pinnacle 足球聯賽清單讀取失敗 {e}")
+    return out
+
+
 def run(sports):
     now = datetime.now(timezone.utc)
     for sport in sports:
         last = last_known(sport)
         new = []
-        for league, lid in LEAGUES[sport]:
+        for league, lid in (soccer_leagues() if sport == "soccer" else LEAGUES[sport]):
             try:
                 by_parent = league_rows(sport, league, lid, now)
             except Exception as e:
