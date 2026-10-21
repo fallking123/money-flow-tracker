@@ -37,7 +37,7 @@ COMPS = {
     "friendly": {"zh": "國際友誼賽", "group": "intl", "kind": "national", "espn": ["fifa.friendly"], "pin": ["International - Friendlies", "FIFA - Friendlies", "International Friendlies", "Friendlies - International*"]},
     # 其他聯賽
     "champ": {"zh": "英冠", "group": "league", "kind": "club", "espn": ["eng.2"], "pin": ["England - Championship"]},
-    "mls":   {"zh": "美職", "group": "league", "kind": "club", "espn": ["usa.1"], "pin": ["USA - Major League Soccer"], "an": "mls"},
+    "mls":   {"zh": "美職足球MLS", "group": "league", "kind": "club", "espn": ["usa.1"], "pin": ["USA - Major League Soccer"], "an": "mls"},
     "ligamx": {"zh": "墨超", "group": "league", "kind": "club", "espn": ["mex.1"], "pin": ["Mexico - Liga MX"]},
     "ered":  {"zh": "荷甲", "group": "league", "kind": "club", "espn": ["ned.1"], "pin": ["Netherlands - Eredivisie"]},
     "por":   {"zh": "葡超", "group": "league", "kind": "club", "espn": ["por.1"], "pin": ["Portugal - Primeira Liga"]},
@@ -53,11 +53,11 @@ COMPS = {
     "rus":   {"zh": "俄超", "group": "league", "kind": "club", "espn": ["rus.1"], "pin": ["Russia - Premier League"]},
     "bra":   {"zh": "巴甲", "group": "league", "kind": "club", "espn": ["bra.1"], "pin": ["Brazil - Serie A"]},
     "arg":   {"zh": "阿甲", "group": "league", "kind": "club", "espn": ["arg.1"], "pin": ["Argentina - Liga Pro", "Argentina - Primera Division"]},
-    "jpn":   {"zh": "日職", "group": "league", "kind": "club", "espn": ["jpn.1"], "pin": ["Japan - J League"]},
-    "kor":   {"zh": "韓職", "group": "league", "kind": "club", "espn": ["kor.1"], "pin": ["Korea Republic - K League 1"]},
+    "jpn":   {"zh": "日本J聯賽", "group": "league", "kind": "club", "espn": ["jpn.1"], "pin": ["Japan - J League"]},
+    "kor":   {"zh": "韓國K聯賽", "group": "league", "kind": "club", "espn": ["kor.1"], "pin": ["Korea Republic - K League 1"]},
     "chn":   {"zh": "中超", "group": "league", "kind": "club", "espn": ["chn.1"], "pin": ["China - Super League"]},
-    "ksa":   {"zh": "沙烏地聯", "group": "league", "kind": "club", "espn": ["ksa.1"], "pin": ["Saudi Arabia - Pro League"]},
-    "aus":   {"zh": "澳職", "group": "league", "kind": "club", "espn": ["aus.1"], "pin": ["Australia - A League"]},
+    "ksa":   {"zh": "沙烏地聯賽", "group": "league", "kind": "club", "espn": ["ksa.1"], "pin": ["Saudi Arabia - Pro League"]},
+    "aus":   {"zh": "澳洲A聯賽", "group": "league", "kind": "club", "espn": ["aus.1"], "pin": ["Australia - A League"]},
 }
 GROUP_ZH = {"big5": "五大聯賽", "euro": "歐洲賽事", "cup": "盃賽", "intl": "國家隊", "league": "其他聯賽"}
 BIG5 = [k for k, v in COMPS.items() if v["group"] == "big5"]

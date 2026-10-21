@@ -579,7 +579,7 @@ td.luck{color:var(--muted)!important}
   const tcol = (c, fb) => (c ? c[0] : fb);
   const SPN = {soccer: "足球"};
   const spLabel = (k) => SPN[k] || k.toUpperCase();
-  const lgLabel = (g) => (g.sport === "soccer" ? g.league_zh || "足球" : g.sport.toUpperCase());
+  const lgLabel = (g) => (g.sport === "soccer" ? "⚽" + (g.league_zh || "足球") : g.sport.toUpperCase());
 
   // ═════════ 計算（跟 Python 回測一致）═════════
   function sides(g, s, mkt) {
@@ -1113,9 +1113,9 @@ td.luck{color:var(--muted)!important}
     let h = `<article class="card game">
       <div class="g-top"><div class="l"><span class="t">${fmtTime.format(t)}</span><span>${rel}</span></div><div class="l">${state.sport === "all" || soc ? `<span class="pill lg">${esc(lgLabel(g))}</span>` : ""}${g.season === "postseason" ? `<span class="pill post">季後賽</span>` : ""}${sig ? `<span class="pill sig">有訊號</span>` : ""}${flags(g)}</div></div>
       <div class="teams">
-        <div class="tm">${dot(g[L + "_ab"], g[L + "_c"])}<div><div class="nm">${esc(g[L + "_zh"] || g[L])}</div><div class="od">${tag(L)}${rec(L)}${mkt === "ou" ? "" : "　" + esc(oddTxt(sdOf(L)))}</div></div></div>
+        <div class="tm">${dot(g[L + "_ab"], g[L + "_c"])}<div><div class="nm">${esc(g[L + "_zh"] || g[L])}</div>${g.sport === "soccer" && g[L + "_zh"] && !SOCCER_LG.includes(g.league) ? `<div class="mut" style="font-size:10.5px;line-height:1.2">${esc(g[L])}</div>` : ""}<div class="od">${tag(L)}${rec(L)}${mkt === "ou" ? "" : "　" + esc(oddTxt(sdOf(L)))}</div></div></div>
         ${mid}
-        <div class="tm r">${dot(g[R + "_ab"], g[R + "_c"])}<div><div class="nm">${esc(g[R + "_zh"] || g[R])}</div><div class="od">${mkt === "ou" ? "" : esc(oddTxt(sdOf(R))) + "　"}${tag(R)}${rec(R)}</div></div></div>
+        <div class="tm r">${dot(g[R + "_ab"], g[R + "_c"])}<div><div class="nm">${esc(g[R + "_zh"] || g[R])}</div>${g.sport === "soccer" && g[R + "_zh"] && !SOCCER_LG.includes(g.league) ? `<div class="mut" style="font-size:10.5px;line-height:1.2">${esc(g[R])}</div>` : ""}<div class="od">${mkt === "ou" ? "" : esc(oddTxt(sdOf(R))) + "　"}${tag(R)}${rec(R)}</div></div></div>
       </div>`;
     const m1Html = !soc && mkt === "ml" && g.m1 ? (() => {
       const P = g.m1.p, f = (v) => Math.round(v * 100) + "%";
@@ -2118,7 +2118,7 @@ td.luck{color:var(--muted)!important}
   const SOCCER_LG = ["epl", "laliga", "seriea", "bundesliga", "ligue1"];
   // 五大聯賽以外的足球（全球足球模型）：分組按鈕＋有資料的賽事各自一個按鈕
   const SOC_GROUPS = [["euro", "歐洲賽事", ["ucl", "uel", "uecl"]], ["cup", "盃賽", ["facup", "eflcup", "cdr", "coppa", "dfb", "cdf", "libertadores", "sudamericana"]], ["intl", "國家隊", ["wc", "wcq", "unl", "euro", "copa", "asian", "friendly"]], ["league", "其他聯賽", ["champ", "mls", "ligamx", "ered", "por", "bel", "tur", "sco", "gre", "aut", "sui", "den", "nor", "swe", "rus", "bra", "arg", "jpn", "kor", "chn", "ksa", "aus"]]];
-  const SOC_NAME = {"ucl": "歐冠", "uel": "歐霸", "uecl": "歐協聯", "facup": "英足總盃", "eflcup": "英聯賽盃", "cdr": "國王盃", "coppa": "義大利盃", "dfb": "德國盃", "cdf": "法國盃", "libertadores": "南美解放者盃", "sudamericana": "南美球會盃", "wc": "世界盃", "wcq": "世界盃資格賽", "unl": "歐國聯", "euro": "歐洲盃", "copa": "美洲盃", "asian": "亞洲盃", "friendly": "國際友誼賽", "champ": "英冠", "mls": "美職", "ligamx": "墨超", "ered": "荷甲", "por": "葡超", "bel": "比甲", "tur": "土超", "sco": "蘇超", "gre": "希超", "aut": "奧超", "sui": "瑞士超", "den": "丹超", "nor": "挪超", "swe": "瑞典超", "rus": "俄超", "bra": "巴甲", "arg": "阿甲", "jpn": "日職", "kor": "韓職", "chn": "中超", "ksa": "沙烏地聯", "aus": "澳職"};
+  const SOC_NAME = {"ucl": "歐冠", "uel": "歐霸", "uecl": "歐協聯", "facup": "英足總盃", "eflcup": "英聯賽盃", "cdr": "國王盃", "coppa": "義大利盃", "dfb": "德國盃", "cdf": "法國盃", "libertadores": "南美解放者盃", "sudamericana": "南美球會盃", "wc": "世界盃", "wcq": "世界盃資格賽", "unl": "歐國聯", "euro": "歐洲盃", "copa": "美洲盃", "asian": "亞洲盃", "friendly": "國際友誼賽", "champ": "英冠", "mls": "美職足球MLS", "ligamx": "墨超", "ered": "荷甲", "por": "葡超", "bel": "比甲", "tur": "土超", "sco": "蘇超", "gre": "希超", "aut": "奧超", "sui": "瑞士超", "den": "丹超", "nor": "挪超", "swe": "瑞典超", "rus": "俄超", "bra": "巴甲", "arg": "阿甲", "jpn": "日本J聯賽", "kor": "韓國K聯賽", "chn": "中超", "ksa": "沙烏地聯賽", "aus": "澳洲A聯賽"};
   const MLG = {sel: new Set(store.get("mdl_lg", []))};    // 空的＝全部
   const lgOk = (lg) => !MLG.sel.size || MLG.sel.has(lg);
   // 日期篩選（台灣時間的開賽日期；空的＝不限）

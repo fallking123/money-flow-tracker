@@ -21,6 +21,7 @@ from sports_common import all_monthly_files, parse_time, read_rows, recent_month
 
 LONDON = ZoneInfo("Europe/London")
 from soccer_comps import BIG5, COMPS
+from soccer_zh import CLUBS as _ZH_CLUBS, NATIONS as _ZH_NATIONS
 LEAGUE_ZH = {k: v["zh"] for k, v in COMPS.items()}
 
 # 台灣常用中文隊名（依 Action Network 的隊名；沒有的就顯示英文）
@@ -59,6 +60,9 @@ ZH = {
     "Toulouse": "土魯斯", "Auxerre": "歐塞爾", "Angers": "昂熱", "Le Havre": "勒哈佛", "Lorient": "洛里昂", "Metz": "梅斯",
     "Paris FC": "巴黎FC", "Le Mans": "勒芒", "Saint-Etienne": "聖埃蒂安", "Reims": "漢斯", "Montpellier": "蒙彼利埃",
 }
+
+ZH.update({k: v for k, v in _ZH_CLUBS.items() if k not in ZH})      # 五大聯賽以外的球隊（soccer_zh.py）
+ZH.update({k: v for k, v in _ZH_NATIONS.items() if k not in ZH})
 
 # Action Network 主色是白色（白卡片上看不見）或不對的，改用球隊代表色
 COLOR_FIX = {
