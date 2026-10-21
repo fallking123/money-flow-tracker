@@ -21,6 +21,8 @@ jobs:
         run: pip install pandas==3.0.2 numpy==2.4.4 scikit-learn==1.8.0
       - name: Train
         run: python soccer_model.py
+      - name: Train world model（五大聯賽以外的足球）
+        run: python world_model.py || echo "全球足球模型失敗（資料還沒齊）"
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
