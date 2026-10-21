@@ -36,7 +36,7 @@ jobs:
     timeout-minutes: 120
     strategy:
       fail-fast: false
-      max-parallel: 8
+      max-parallel: 20
       matrix:
         comp: [uefa.champions, uefa.europa, uefa.europa.conf, uefa.champions_qual, uefa.europa_qual, uefa.europa.conf_qual,
                eng.fa, eng.league_cup, esp.copa_del_rey, ita.coppa_italia, ger.dfb_pokal, fra.coupe_de_france,
@@ -57,4 +57,24 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/data/soccer/world/
           git commit -m "全球足球：ESPN ${{ matrix.comp }} 賽果" || exit 0
+          for i in 1 2 3 4 5 6 7 8; do git pull --rebase && git push && exit 0; sleep $((RANDOM % 20 + 5)); done
+  train:
+    needs: [intl, espn]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - run: git pull --rebase || true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install numpy==2.4.4 scikit-learn==1.8.0
+      - run: python world_model.py
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/soccer/model/world_params.json docs/data/soccer/model/world_report.json
+          git commit -m "全球足球模型：每天更新強弱分數" || exit 0
           for i in 1 2 3 4 5 6 7 8; do git pull --rebase && git push && exit 0; sleep $((RANDOM % 20 + 5)); done
