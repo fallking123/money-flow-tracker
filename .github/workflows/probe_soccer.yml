@@ -1,0 +1,31 @@
+name: Probe soccer sources
+
+# 試探五大聯賽以外的足球賽事代號（只存試探結果）
+on:
+  workflow_dispatch: {}
+  push:
+    paths:
+      - probe_soccer_sources.py
+      - .github/workflows/probe_soccer.yml
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install requests==2.32.3
+      - run: python probe_soccer_sources.py > docs/data/soccer/probe_sources.txt 2>&1 || true
+      - name: Commit result
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/soccer/probe_sources.txt
+          git commit -m "足球：資料來源試探結果" || exit 0
+          for i in 1 2 3 4 5; do git pull --rebase && git push && exit 0; sleep 10; done
