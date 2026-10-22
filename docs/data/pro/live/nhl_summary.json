@@ -1,10 +1,10 @@
 {
- "updated_utc": "2026-10-21T22:46Z",
+ "updated_utc": "2026-10-22T08:37Z",
  "season": "2026-27",
  "rule": "模型比 Pinnacle 多看好 15%–30%",
- "games": 149,
- "games_settled": 138,
- "picks": 4,
+ "games": 151,
+ "games_settled": 140,
+ "picks": 5,
  "clv": [
   -0.0385,
   0.0262,
@@ -15,7 +15,22 @@
   0.0,
   4
  ],
- "move_toward": 64,
- "move_away": 40,
- "pending": []
+ "move_toward": 65,
+ "move_away": 41,
+ "pending": [
+  {
+   "game_id": "1638481883",
+   "date": "2026-10-22",
+   "home": "OTT",
+   "away": "SJS",
+   "decided_utc": "2026-10-22T08:37Z",
+   "how": "實戰",
+   "p_model": 0.7101,
+   "odds_home": 1.7752,
+   "odds_away": 2.15,
+   "fair_home_dec": 0.5477,
+   "pick": "home",
+   "edge": 0.2606
+  }
+ ]
 }
