@@ -443,6 +443,7 @@ def live_summary():
     twin = lambda strat: {r["game_id"]: [num(r["settle_odds"]) or num(r["tw_odds"]), r["tw_src"], r["result"], num(r["profit"])]
                           for r in rows if r["strategy"] == strat}
     tw_us, tw_all = twin("model1_us_tw"), twin("model1_all_tw")
+    tw_sp, tw_ou = twin("model1_sp_tw"), twin("model1_ou_tw")
     settled = sorted([r for r in m1 if r["result"] in ("win", "loss", "push")], key=lambda r: r["game_time_utc"], reverse=True)
     pend = [r for r in m1 if not r["result"]]
     slim = lambda r: {"sport": r["sport"], "lg": r.get("league") or r["sport"], "t": r["game_time_utc"], "away": r["away_zh"] or r["away"], "home": r["home_zh"] or r["home"],
@@ -485,6 +486,11 @@ def live_summary():
             # 模型一・美國賠率：每一注（含還沒開賽的），新的在前
             "us_bets": [{**slim(r), "us": num(r["us_odds"]), "tw_est": num(tw_of.get(r["game_id"])), "twr": tw_us.get(r["game_id"])}
                         for r in sorted([r for r in rows if r["strategy"] == "model1_us"], key=lambda r: r["game_time_utc"], reverse=True)],
+            # 只下讓分／只下大小分：每一注（分開列，使用者要求獨贏、讓分、大小分分開看）
+            "sp_bets": [{**slim(r), "us": num(r["us_odds"]), "twr": tw_sp.get(r["game_id"])}
+                        for r in sorted([r for r in rows if r["strategy"] == "model1_sp_us"], key=lambda r: r["game_time_utc"], reverse=True)],
+            "ou_bets": [{**slim(r), "us": num(r["us_odds"]), "twr": tw_ou.get(r["game_id"])}
+                        for r in sorted([r for r in rows if r["strategy"] == "model1_ou_us"], key=lambda r: r["game_time_utc"], reverse=True)],
             # 不限獨贏：每一注
             "all_bets": [{**slim(r), "us": num(r["us_odds"]), "twr": tw_all.get(r["game_id"])}
                          for r in sorted([r for r in rows if r["strategy"] == "model1_all_us"], key=lambda r: r["game_time_utc"], reverse=True)]}

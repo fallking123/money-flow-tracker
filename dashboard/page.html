@@ -2260,7 +2260,7 @@ td.luck{color:var(--muted)!important}
       ${lines.length ? `<div class="legend">${legend}</div>` : ""}
       <p class="mut" style="font-size:12.5px;margin:8px 0 0">${note}</p></div>`;
   }
-  const MT = {tab: store.get("mtab", "score")};
+  const MT = {tab: store.get("mtab", "score"), bk: store.get("mbk", "ml")};
   const MT_TABS = [["score", "成績"], ["curve", "曲線"], ["stake", "下多少"], ["odds", "賠率區間"], ["bets", "每一注"], ["bt", "回測"]];
   function renderModels() {
     const L = DATA.live || {strats: {}}, S = L.strats || {};
@@ -2313,7 +2313,7 @@ td.luck{color:var(--muted)!important}
           <td class="r" style="line-height:1.35">${u ? `押 <b>${esc(u.lab)}</b><div class="n">${odd(u.us)} <span class="${u.ev >= 0 ? "good" : "bad"}">${evTxt(u.ev)}</span></div><span class="evt ${u.ev >= EV_GO ? "go" : u.ev >= 0 ? "edge" : "no"}">${u.ev >= EV_GO ? "可以下" : u.ev >= 0 ? "差一點" : "不下"}</span>` : "–"}</td></tr>`; }).join("")}</tbody></table></div>
         <p class="mut" style="font-size:12.5px;margin:8px 0 0">勝率是模型一估的真實勝率（台彩欄的冰球是 60 分鐘三選一）。美國賠率抽得少，期望值會比台彩高很多；「每一場都下」兩邊都照這張表押。</p></div>`;
     }
-    T.bets = h; h = "";
+    const soonCard = h; h = "";
     // 歷史回測
     const um = (DATA.stats || {}).us_models || {}, ks = Object.keys(um).filter((k) => ((um[k].betting || {}).every_tw));
     if (ks.length) {
@@ -2351,14 +2351,39 @@ td.luck{color:var(--muted)!important}
         <p class="mut" style="font-size:12.5px;margin:8px 0 0">${note}</p></div></details>`;
     };
     const lgF = (a) => a.filter((x) => lgOk(x.lg || x.sport) && dOk(x.t));
-    h += betList(lgF(L.us_bets || []), "模型一・美國賠率：每一注", true, "每一場都下獨贏（含延長賽），押「模型一勝率 × 美國賠率」比較高的那一邊，用開賽前最後一次的美國賠率結算。「台彩約」是同一邊在台彩的賠率（冰球是 60 分鐘、打平算輸）。");
-    h += betList(lgF(L.all_bets || []), "不限玩法・美國賠率：每一注", false, "每一場在獨贏、讓分、大小分裡挑美國賠率期望值最高的一注。獨贏的勝率是模型一，讓分、大小分用 Pinnacle（沒有就用美國各家去抽水），因為模型只會預測獨贏，所以大部分時候還是挑到獨贏。");
+    // 讓分／大小分：接下來要押哪一注（還沒開賽、36 小時內）
+    const nextCard = (list, title) => {
+      const up = list.filter((x) => !x.result && new Date(x.t) > Date.now() && new Date(x.t) - Date.now() < 36 * 36e5 && lgOk(x.lg || x.sport))
+        .sort((a, b) => a.t.localeCompare(b.t));
+      if (!up.length) return `<div class="card"><h3>${title}</h3><p class="mut" style="font-size:13px;margin:0">36 小時內沒有還沒開賽的比賽。</p></div>`;
+      return `<div class="card"><h3>${title}<small>美國賠率期望值最高的那一邊・開賽前會跟著盤口更新</small></h3><div class="scroll"><table class="tb"><thead><tr><th>開賽</th><th>比賽</th><th class="r">押</th><th class="r">美國賠率</th></tr></thead><tbody>${up.map((x) => `<tr>
+        <td class="n" style="line-height:1.3">${fmtTime.format(new Date(x.t))}<div class="mut" style="font-size:11px;font-weight:400">${fmtMD.format(new Date(x.t))}</div></td>
+        <td style="white-space:normal;line-height:1.35"><span class="pill lg">${esc(x.sport === "soccer" ? "⚽" + (((MLG_LIST.find(([k]) => k === x.lg) || [])[1]) || SOC_NAME[x.lg] || "足球") : spLabel(x.sport))}</span> ${x.sport === "soccer" ? `${esc(x.home)} vs ${esc(x.away)}` : `${esc(x.away)} @ ${esc(x.home)}`}</td>
+        <td class="r" style="white-space:normal;line-height:1.35"><b>${esc(String(x.pick).replace(/^(讓分|大小)・/, ""))}</b><div class="mut" style="font-size:11px">勝率 ${x.p == null ? "–" : Math.round(x.p * 100) + "%"}</div></td>
+        <td class="r" style="line-height:1.35"><span class="n">${odd(x.us)}</span><div class="n ${x.ev >= 0 ? "good" : "bad"}">${x.ev == null ? "" : evTxt(x.ev)}</div><span class="evt ${x.ev >= EV_GO ? "go" : x.ev >= 0 ? "edge" : "no"}">${x.ev >= EV_GO ? "可以下" : x.ev >= 0 ? "差一點" : "不下"}</span>${x.twr && x.twr[0] ? `<div class="mut" style="font-size:10.5px">台彩約 ${odd(x.twr[0])}</div>` : ""}</td></tr>`).join("")}</tbody></table></div>
+        <p class="mut" style="font-size:12.5px;margin:8px 0 0">讓分、大小分的勝率用 Pinnacle 去抽水的機率（模型一只會預測獨贏）。所以這裡的期望值大多接近 0，只是美國各家跟 Pinnacle 的價差。</p></div>`;
+    };
+    const BK = [["ml", "獨贏"], ["sp", "讓分"], ["ou", "大小分"], ["all", "不限玩法"]];
+    if (!BK.some(([k]) => k === MT.bk)) MT.bk = "ml";
+    h += `<div class="chips" style="margin-bottom:12px">${BK.map(([k, n]) => `<button type="button" class="chip" data-bk="${k}" aria-pressed="${MT.bk === k}">${n}</button>`).join("")}</div>`;
+    if (MT.bk === "ml") {
+      h += soonCard;
+      h += betList(lgF(L.us_bets || []), "模型一・美國賠率：獨贏每一注", true, "每一場都下獨贏（含延長賽），押「模型一勝率 × 美國賠率」比較高的那一邊，用開賽前最後一次的美國賠率結算。「台彩約」是同一邊在台彩的賠率（冰球是 60 分鐘、打平算輸）。");
+    } else if (MT.bk === "sp") {
+      h += nextCard(L.sp_bets || [], "接下來怎麼押：讓分");
+      h += betList(lgF(L.sp_bets || []), "只下讓分・美國賠率：每一注", true, "每一場只看讓分，押美國賠率期望值比較高的那一邊，用開賽前最後一次的美國賠率結算；「台彩下」是同一注改去台彩下（台彩讓分線不一定一樣）。");
+    } else if (MT.bk === "ou") {
+      h += nextCard(L.ou_bets || [], "接下來怎麼押：大小分");
+      h += betList(lgF(L.ou_bets || []), "只下大小分・美國賠率：每一注", true, "每一場只看大小分，押美國賠率期望值比較高的那一邊，用開賽前最後一次的美國賠率結算；「台彩下」是同一注改去台彩下（台彩大小線常常差 0.5～1 分）。");
+    } else {
+      h += betList(lgF(L.all_bets || []), "不限玩法・美國賠率：每一注", true, "每一場在獨贏、讓分、大小分裡挑美國賠率期望值最高的一注。獨贏的勝率是模型一，讓分、大小分用 Pinnacle（沒有就用美國各家去抽水），因為模型只會預測獨贏，所以大部分時候還是挑到獨贏。");
+    }
     const rec = lgF(L.recent || []);
-    if (rec.length) {
+    if (rec.length && MT.bk === "ml") {
       const RS = {win: ["贏", "w"], loss: ["輸", "l"], push: ["平", "p"]};
       h += `<details class="more-sec"><summary><span>模型一最近開獎<small class="sm-sub">台彩・每場 1,000 元</small></span></summary><div><div class="scroll"><table class="tb"><thead><tr><th>日期</th><th>比賽</th><th>押</th><th class="r">台彩</th><th>結果</th><th class="r">賺賠</th></tr></thead><tbody>${rec.map((x) => `<tr><td class="n">${fmtMD.format(new Date(x.t))}</td><td>${x.sport === "soccer" ? `${esc(x.home)} vs ${esc(x.away)}` : `${esc(x.away)} @ ${esc(x.home)}`}</td><td>${esc(x.pick)}</td><td class="r n">${odd(x.tw)}${x.src === "actual" ? "" : '<small class="mut">估</small>'}</td><td><span class="res ${(RS[x.result] || ["", "p"])[1]}">${(RS[x.result] || [x.result])[0]}</span></td><td class="r n ${gb(x.profit)}">${ntd((x.profit || 0) * UNIT)}</td></tr>`).join("")}</tbody></table></div></div></details>`;
     }
-    T.bets += h;
+    T.bets = h;
     const tabs = MT_TABS.filter(([k]) => T[k]);
     if (!tabs.some(([k]) => k === MT.tab)) MT.tab = "score";
     const sub = `<div class="subnav" role="tablist" style="margin-bottom:12px">${tabs.map(([k, n]) => `<button type="button" role="tab" data-mtab="${k}" aria-selected="${MT.tab === k}">${n}</button>`).join("")}</div>`;
@@ -2910,6 +2935,7 @@ td.luck{color:var(--muted)!important}
     if (t.dataset.sliptab) { SLIP.tab = t.dataset.sliptab; store.set("slip_tab", SLIP.tab); return slipRefresh(); }
     if (t.dataset.sliprec) return slipToForm(t.dataset.sliprec);
     if (t.dataset.lgfold) { const k = t.dataset.lgfold; SLIP.fold.has(k) ? SLIP.fold.delete(k) : SLIP.fold.add(k); store.set("sim_fold", [...SLIP.fold]); return renderSim(); }
+    if (t.dataset.bk) { MT.bk = t.dataset.bk; store.set("mbk", MT.bk); const y = window.scrollY; renderModels(); window.scrollTo(0, y); return; }
     if (t.dataset.mtab) { MT.tab = t.dataset.mtab; store.set("mtab", MT.tab); renderModels(); window.scrollTo(0, 0); return; }
     if (t.dataset.mlg) {
       const k = t.dataset.mlg;
