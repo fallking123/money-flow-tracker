@@ -1,22 +1,22 @@
 {
- "updated_utc": "2026-10-23T22:39Z",
+ "updated_utc": "2026-10-24T08:09Z",
  "season": "2026-27",
  "rule": "模型比 Pinnacle 多看好 15%–30%",
  "games": 163,
- "games_settled": 151,
+ "games_settled": 153,
  "picks": 7,
  "clv": [
-  -0.0362,
-  0.0211,
-  5
+  -0.0253,
+  0.0202,
+  6
  ],
  "profit": [
   -1.0,
   0.0,
   5
  ],
- "move_toward": 70,
- "move_away": 44,
+ "move_toward": 71,
+ "move_away": 45,
  "pending": [
   {
    "game_id": "1638595705",
@@ -31,8 +31,8 @@
    "fair_home_dec": "0.4335",
    "pick": "away",
    "edge": "0.1518",
-   "close_fair_home": "",
-   "clv": "",
+   "close_fair_home": 0.3998,
+   "clv": 0.0289,
    "result": "",
    "profit": ""
   },
@@ -43,12 +43,16 @@
    "away": "LAK",
    "decided_utc": "2026-10-23T22:39Z",
    "how": "實戰",
-   "p_model": 0.5301,
-   "odds_home": 1.6061,
-   "odds_away": 2.45,
-   "fair_home_dec": 0.604,
+   "p_model": "0.5301",
+   "odds_home": "1.6061",
+   "odds_away": "2.45",
+   "fair_home_dec": "0.604",
    "pick": "away",
-   "edge": 0.1512
+   "edge": "0.1512",
+   "close_fair_home": "",
+   "clv": "",
+   "result": "",
+   "profit": ""
   }
  ]
 }
