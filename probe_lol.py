@@ -26,3 +26,11 @@ for u in ["https://oracleselixir.com/tools/downloads", "https://lol.timsevenhuys
                 break
     except Exception as e:
         print(u, "失敗", e)
+
+print("\n=== 舊下載頁所有檔案連結 ===")
+r = requests.get("https://lol.timsevenhuysen.com/matchdata/", headers=UA, timeout=30)
+for h in sorted(set(re.findall(r'href="([^"]+)"', r.text))):
+    if any(x in h.lower() for x in (".csv", ".xlsx", "drive", "amazonaws", "download")):
+        print(h)
+i = r.text.find("Below you will find")
+print(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", r.text[max(0, i - 3000):i + 3000])))
