@@ -14,7 +14,7 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: "3.11"}
       - run: pip install requests==2.32.3
-      - run: mkdir -p docs/data/esports && python fetch_lol.py 1v6LRphp2kYciU4SXp0PCjEMuev1bDejc 2025 > docs/data/esports/fetch_lol_log.txt 2>&1 || true
+      - run: mkdir -p docs/data/esports && python fetch_lol.py 1J9G9ZOoIYG-m0rS9GFxZTbovK2NU9T2y 2025 > docs/data/esports/fetch_lol_log.txt 2>&1 || true
       - run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
