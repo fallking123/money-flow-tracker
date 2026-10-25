@@ -1,0 +1,23 @@
+name: Fetch LoL data
+on:
+  workflow_dispatch: {}
+  push:
+    paths: [fetch_lol.py, .github/workflows/fetch_lol.yml]
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: pip install requests==2.32.3
+      - run: mkdir -p docs/data/esports && python fetch_lol.py 1v6LRphp2kYciU4SXp0PCjEMuev1bDejc 2025 > docs/data/esports/fetch_lol_log.txt 2>&1 || true
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/esports/
+          git commit -m "電競：英雄聯盟歷史資料（Oracle's Elixir）" || exit 0
+          for i in 1 2 3 4 5; do git pull --rebase && git push && exit 0; sleep 10; done
