@@ -1,29 +1,10 @@
-"""試探第 2 輪：舊下載頁的實際檔案網址、Leaguepedia（lol.fandom.com）API 有沒有首殺欄位"""
-import re, json
+"""試探第 3 輪：舊資料頁（2016–2020）實際下載網址"""
+import re
 import requests
 UA = {"User-Agent": "money-flow-tracker personal research (non-commercial)"}
-r = requests.get("https://lol.timsevenhuysen.com/matchdata/", headers=UA, timeout=30)
-print("=== 舊下載頁含 2019/2020 的網址 ===")
-for h in sorted(set(re.findall(r'(?:href|data-[a-z-]+)="([^"]+)"', r.text))):
-    if re.search(r"20(1\d|2\d)", h) and "wp-content/themes" not in h:
-        print(h)
-print("\n=== Leaguepedia API ===")
-API = "https://lol.fandom.com/api.php"
-for table in ("ScoreboardGames", "ScoreboardPlayers", "ScoreboardTeams"):
-    try:
-        q = {"action": "cargofields", "table": table, "format": "json"}
-        j = requests.get(API, params=q, headers=UA, timeout=30).json()
-        print(table, list((j.get("cargofields") or {}).keys()))
-    except Exception as e:
-        print(table, "失敗", e)
-try:
-    q = {"action": "cargoquery", "tables": "ScoreboardGames", "fields": "Tournament,Team1,Team2,Winner,DateTime_UTC", "where": "Tournament LIKE '%Worlds 2025%'", "limit": "3", "format": "json"}
-    print(requests.get(API, params=q, headers=UA, timeout=30).text[:1500])
-except Exception as e:
-    print("query 失敗", e)
-print("\n=== Leaguepedia 條款相關 ===")
-r = requests.get("https://lol.fandom.com/wiki/Help:API_Documentation", headers=UA, timeout=30)
-t = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", re.sub(r"<script.*?</script>|<style.*?</style>", " ", r.text, flags=re.S)))
-for kw in ("rate", "limit", "commercial", "scrap", "bot"):
-    m = re.search(kw, t)
-    if m: print("…", t[max(0, m.start()-250):m.start()+300])
+for s in ["2019-spring", "2019-worlds", "2020-summer", "2018-spring"]:
+    r = requests.get(f"https://lol.timsevenhuysen.com/gamedata/{s}/", headers=UA, timeout=30)
+    print("==", s, r.status_code, len(r.text))
+    for h in sorted(set(re.findall(r'(?:href|src|data-[a-z-]+)="([^"]+)"', r.text))):
+        if any(x in h.lower() for x in (".csv", ".xls", "drive", "amazonaws", "download", "docs.google", "dropbox")):
+            print("  ", h)
