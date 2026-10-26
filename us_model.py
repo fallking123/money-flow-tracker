@@ -257,7 +257,7 @@ def curves(dates, p, pm, y, dec_a, dec_h, n_pts=120):
     ev_h, ev_a = p * dec_h - 1, (1 - p) * dec_a - 1
     home_us = ev_h >= ev_a
     pl_us = pl_of(home_us, dec_a, dec_h)
-    pl_tw = pl_of((p * th) >= ((1 - p) * ta), ta, th)
+    pl_tw = pl_of((p * dec_h) >= ((1 - p) * dec_a), ta, th)   # 模型一：照舊估法（美國 × 同一個折扣＝跟美國賠率挑同一邊）挑邊，用比較準的台彩估法結算
     pl_fav = pl_of(pm >= 0.5, dec_a, dec_h)
     best_ev = np.maximum(ev_h, ev_a)
     val = best_ev >= 0.02
@@ -332,7 +332,9 @@ def run(sport):
     ta, th = tw_est(test["dec_close_away"].values), tw_est(test["dec_close_home"].values)
     ev_pick = lambda p: (p * th) >= ((1 - p) * ta)
     fav_home = test["p_mkt"].values >= 0.5
-    bet["every_tw"] = {"model1": flat(ev_pick(p_model), y, ta, th), "market": flat(ev_pick(p_mkt), y, ta, th),
+    # 模型一（使用者 2026-10-26 定義）：挑邊用舊估法（美國 × 同一個折扣，兩邊打一樣的折＝跟美國賠率挑同一邊），賺賠用比較準的台彩估法
+    ev_pick_old = lambda p: (p * test["dec_close_home"].values) >= ((1 - p) * test["dec_close_away"].values)
+    bet["every_tw"] = {"model1": flat(ev_pick_old(p_model), y, ta, th), "model3": flat(ev_pick(p_model), y, ta, th), "market": flat(ev_pick(p_mkt), y, ta, th),
                        "favorite": flat(fav_home, y, ta, th), "underdog": flat(~fav_home, y, ta, th)}
     bet["every_us"] = {"model1": flat(ev_pick(p_model), y, test["dec_close_away"].values, test["dec_close_home"].values)}
     order = np.argsort(test["date"].values, kind="stable")

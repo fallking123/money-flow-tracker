@@ -420,7 +420,7 @@ def team_ctx(ctx, side, k):
 
 FLIP_ODDS = 1.4   # 參考策略 model1_flip14：模型一押的台彩賠率低於這個就改押對面
 
-LIVE_STRATS = ["model1", "model1_old", "model1_new", "model1_us", "model1_us_tw", "model1_sp_us", "model1_sp_tw", "model1_ou_us", "model1_ou_tw",
+LIVE_STRATS = ["model1", "model3", "model1_us", "model1_us_tw", "model1_sp_us", "model1_sp_tw", "model1_ou_us", "model1_ou_tw",
                "model1_all_us", "model1_all_tw", "model2", "combo", "favorite", "underdog", "draw_us", "draw"]
 
 
@@ -452,7 +452,7 @@ def live_summary():
     tw_sp, tw_ou = twin("model1_sp_tw"), twin("model1_ou_tw")
     settled = sorted([r for r in m1 if r["result"] in ("win", "loss", "push")], key=lambda r: r["game_time_utc"], reverse=True)
     pend = [r for r in m1 if not r["result"]]
-    slim = lambda r: {"sport": r["sport"], "lg": r.get("league") or r["sport"], "t": r["game_time_utc"], "away": r["away_zh"] or r["away"], "home": r["home_zh"] or r["home"],
+    slim = lambda r: {"sport": r["sport"], "gid": r["game_id"], "lg": r.get("league") or r["sport"], "t": r["game_time_utc"], "away": r["away_zh"] or r["away"], "home": r["home_zh"] or r["home"],
                       "pick": r["pick_zh"], "p": num(r["p"]), "tw": num(r["settle_odds"]) or num(r["tw_odds"]),
                       "src": r["settle_src"] or r["tw_src"], "ev": num(r["ev"]), "result": r["result"], "profit": num(r["profit"])}
     # 每一筆開獎的注（畫獲利曲線、算凱利用）：[時間, 策略, 運動, 結算賠率, 開賽前勝率, 開賽前期望值, 賺賠(每 1 單位)]
@@ -487,14 +487,14 @@ def live_summary():
         rows_s.append({**(f or r), "strategy": "model1_flip14", "flipped": bool(f)})
     series = sorted([[r["game_time_utc"], r["strategy"], r["sport"], num(r["settle_odds"]) or num(r["tw_odds"]), num(r["p"]), num(r["ev"]),
                       num(r["profit"]), r.get("league") or r["sport"], int(r["settle_src"] == "actual")] for r in rows_s if r["result"] in ("win", "loss", "push")], key=lambda x: x[0])
-    # 舊估法 vs 新估法（使用者 2026-10-26 要求）：同一場兩種估法押不同邊的那幾場，各自的賺賠
+    # 模型一 vs 模型三（使用者 2026-10-26 要求）：同一場兩個模型押不同邊的那幾場，各自的賺賠
     pair = {}
     for r in rows:
-        if r["strategy"] in ("model1_old", "model1_new") and r["result"] in ("win", "loss", "push"):
+        if r["strategy"] in ("model1", "model3") and r["result"] in ("win", "loss", "push"):
             pair.setdefault((r["sport"], r["game_id"]), {})[r["strategy"]] = r
     cmp_rows = []
     for (sp, gid), m in pair.items():
-        o, n = m.get("model1_old"), m.get("model1_new")
+        o, n = m.get("model1"), m.get("model3")
         if not o or not n or o["pick"] == n["pick"]:
             continue
         cmp_rows.append({"sport": sp, "lg": o.get("league") or sp, "t": o["game_time_utc"], "away": o["away_zh"] or o["away"], "home": o["home_zh"] or o["home"],
@@ -503,8 +503,10 @@ def live_summary():
     cmp_rows.sort(key=lambda x: x["t"], reverse=True)
     return {"since": min((r["game_time_utc"] for r in m1), default=None), "strats": strats, "pending": len(pend), "est_cmp": cmp_rows,
             "recent": [slim(r) for r in settled[:30]], "series": series,
-            # 模型一・台彩：每一注（含還沒開賽的），新的在前
-            "tw_bets": [slim(r) for r in sorted(m1, key=lambda r: r["game_time_utc"], reverse=True)],
+            # 模型一・台彩：每一注（含還沒開賽的），新的在前；eo＝挑邊時用的舊估法台彩賠率
+            "tw_bets": [{**slim(r), "eo": num(r.get("est_old"))} for r in sorted(m1, key=lambda r: r["game_time_utc"], reverse=True)],
+            # 模型三・台彩：每一注（新估法挑邊；10/26 以前是回頭補算的）
+            "m3_bets": [{**slim(r), "eo": num(r.get("est_old"))} for r in sorted([r for r in rows if r["strategy"] == "model3"], key=lambda r: r["game_time_utc"], reverse=True)],
             # 模型一・美國賠率：每一注（含還沒開賽的），新的在前
             "us_bets": [{**slim(r), "us": num(r["us_odds"]), "tw_est": num(tw_of.get(r["game_id"])), "twr": tw_us.get(r["game_id"])}
                         for r in sorted([r for r in rows if r["strategy"] == "model1_us"], key=lambda r: r["game_time_utc"], reverse=True)],

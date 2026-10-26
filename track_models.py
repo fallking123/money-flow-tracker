@@ -327,12 +327,12 @@ def picks(g, tw):
     if not opts:
         return {}, snap
     two = [o for o in opts if o["key"] != "draw"]
-    # 比較兩種估法（使用者 2026-10-26 要求）：model1_old＝用舊估法挑邊、model1_new＝用新估法挑邊；兩個都用同一個台彩賠率結算
+    # 模型一＝用「舊估法」（美國共識盤 ×（1 + 平均折扣））估的台彩賠率挑邊；
+    # 模型三＝用「新估法」（Pinnacle＋bet365、機率加固定值）估的台彩賠率挑邊。
+    # 兩個的勝率都是模型一的；賺賠都用比較準的台彩賠率（實際截圖或新估法）結算。（使用者 2026-10-26 指定）
     olds = [{**o, "est_old": old_est(o, tw, g["sport"])} for o in opts]
-    bo = max(olds, key=lambda o: o["p"] * o["est_old"] - 1)
-    cmp = {"model1_old": {**bo, "ev": bo["p"] * bo["est_old"] - 1},
-           "model1_new": {**max(opts, key=lambda o: o["ev"]), "est_old": next(o["est_old"] for o in olds if o["key"] == max(opts, key=lambda o: o["ev"])["key"])}}
-    out = {"model1": max(opts, key=lambda o: o["ev"]),
+    out = {"model1": max(olds, key=lambda o: o["p"] * o["est_old"] - 1),
+           "model3": max(olds, key=lambda o: o["ev"]),
            "favorite": max(two, key=lambda o: o["m"]),
            "underdog": min(two, key=lambda o: o["m"])}
     us = us_options(g)
@@ -350,16 +350,28 @@ def picks(g, tw):
         if dr[0][0]:
             out["draw_us"] = dr[0][0]
         out["draw"] = dr[0][1]
-    out.update(cmp)
     return out, snap
 
 
-TW_EV_STRATS = {"model1", "model1_new", "favorite", "underdog", "draw"}   # 這幾個策略的 ev＝台彩期望值（其他記的是美國期望值）
+TW_EV_STRATS = {"model1", "model3", "favorite", "underdog", "draw"}   # 這幾個策略的 ev＝台彩期望值（其他記的是美國期望值）
 
 
-def backfill_compare(rows, sport, tw):
-    """補記：過去（已開賽）的比賽，用記下來的熱門／冷門／和局三個選項，分別照舊估法、新估法重新挑邊。
-    勝率＝模型一（和局＝1 − 主 − 客）；結算照那個選項記錄的台彩賠率（實際截圖或目前最準的估法）"""
+def old_est_row(r, tw, sport):
+    """記錄裡這一注用舊估法估的台彩賠率（實際截圖、冰球照用記錄的）"""
+    try:
+        us = float(r["us_odds"])
+    except (TypeError, ValueError):
+        us = None
+    if r.get("tw_src") == "actual" or sport == "nhl" or not us or us <= 1:
+        return r.get("tw_odds", "")
+    return round(us * (1 + old_discount(tw, sport) / 100), 3)
+
+
+def backfill_model3(rows, sport, tw):
+    """模型三（使用者 2026-10-26 指定）：用新估法（Pinnacle＋bet365、機率加固定值）的台彩賠率挑邊。
+    過去（已開賽、還沒有模型三記錄）的比賽：用記下來的熱門／冷門／和局三個選項重新挑一次
+    （勝率＝模型一，和局＝1 − 主 − 客；賠率＝那個選項記錄的台彩賠率＝實際截圖或新估法）。冰球台彩估法沒變：模型三＝模型一。
+    順便：10/26 傍晚短暫用過的比較策略 model1_new 改名成 model3、model1_old 拿掉（模型一本身就是舊估法挑邊）；模型一補 est_old。"""
     def num(v):
         try:
             return float(v)
@@ -367,35 +379,36 @@ def backfill_compare(rows, sport, tw):
             return None
     n = 0
     for (gid, strat), r in list(rows.items()):
-        if strat != "model1" or ((gid, "model1_old") in rows and (gid, "model1_new") in rows):
+        if strat == "model1_new":
+            rows.pop((gid, strat))
+            if (gid, "model3") not in rows:
+                rows[(gid, "model3")] = {**r, "strategy": "model3"}
+        elif strat == "model1_old":
+            rows.pop((gid, strat))
+    for (gid, strat), r in list(rows.items()):
+        if strat != "model1":
+            continue
+        if r.get("est_old") in (None, ""):
+            r["est_old"] = old_est_row(r, tw, sport)
+        if (gid, "model3") in rows:
             continue
         fav, dog = rows.get((gid, "favorite")), rows.get((gid, "underdog"))
         if sport == "nhl" or not fav or not dog or num(fav.get("p")) is None or num(dog.get("p")) is None:
-            for s in ("model1_old", "model1_new"):     # 冰球估法沒變：兩條都跟模型一一樣
-                if (gid, s) not in rows:
-                    rows[(gid, s)] = {**r, "strategy": s, "est_old": r.get("tw_odds", "")}
-                    n += 1
+            rows[(gid, "model3")] = {**r, "strategy": "model3"}
+            n += 1
             continue
         opts = [(num(fav["p"]), fav), (num(dog["p"]), dog)]
         dr = rows.get((gid, "draw"))
         if sport == "soccer" and dr:
             opts.append((max(0.0, 1 - opts[0][0] - opts[1][0]), dr))
-        cand = []
-        for p, o in opts:
-            now = num(o.get("settle_odds")) or num(o.get("tw_odds"))
-            if not now:
-                continue
-            old = now if o.get("tw_src") == "actual" or not num(o.get("us_odds")) else round(num(o["us_odds"]) * (1 + old_discount(tw, sport) / 100), 3)
-            cand.append((p, now, old, o))
+        cand = [(p, num(o.get("settle_odds")) or num(o.get("tw_odds")), o) for p, o in opts]
+        cand = [c for c in cand if c[1]]
         if not cand:
             continue
-        for s, key in (("model1_old", lambda c: c[0] * c[2]), ("model1_new", lambda c: c[0] * c[1])):
-            if (gid, s) in rows:
-                continue
-            p, now, old, o = max(cand, key=key)
-            rows[(gid, s)] = {**o, "strategy": s, "p": round(p, 4), "est_old": old,
-                              "ev": round(p * (old if s == "model1_old" else now) - 1, 4)}
-            n += 1
+        p, now, o = max(cand, key=lambda c: c[0] * c[1])
+        rows[(gid, "model3")] = {**o, "strategy": "model3", "p": round(p, 4), "ev": round(p * now - 1, 4),
+                                 "est_old": old_est_row(o, tw, sport)}
+        n += 1
     return n
 
 
@@ -618,7 +631,7 @@ def run(sports, now=None):
             if g:
                 rows[(gid, TW_TWINS[strat])] = twin_row(r, g, tw)
                 n_new += 1
-        n_new += backfill_compare(rows, sport, tw)
+        n_new += backfill_model3(rows, sport, tw)
         gidx = {g["id"]: g for g in games if g["sport"] == sport}
         n_rep = reprice_est(rows, sport, tw, lambda gid: finals.get((sport, gid)) or gidx.get(gid))
         for k, r in rows.items():
