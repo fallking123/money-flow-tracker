@@ -240,6 +240,67 @@ def band_table():
     return out
 
 
+# ── 獨贏：台彩在每個選項的機率上「加一個固定值」（2026-10-26 第二版）──────────
+# 使用者三場義甲截圖對 Pinnacle：熱門、冷門、和局的機率都多了約 4–7 個百分點（不管賠率高低），
+# 所以賠率越高看起來打越兇（10.28 → 6.25）。估法：台彩賠率 ≈ 1 ÷（1 ÷ 美國賠率 + k）。
+# k 分主客隊（side）和和局（draw）；主客隊再分運動（筆數少往全部平均靠，權重 ADD_PRIOR 筆）。
+ADD_PRIOR = 10
+ADD_DEFAULT = {"side": 0.06, "draw": 0.046}
+
+
+def add_points():
+    """(運動, side/draw, 美國或 Pinnacle 賠率, 台彩賠率)；只算獨贏，冰球不算（60 分鐘三選一另外算）"""
+    out = []
+    for r in read_rows(TW_ODDS_FILE):
+        us, tw = _num(r["us_odds"]), _num(r["tw_odds"])
+        if r["market"] != "ml" or (r["sport"], "ml") in NO_DISCOUNT or not us or not tw or us <= 1:
+            continue
+        out.append((r["sport"], "draw" if r["side"] == "draw" else "side", us, tw))
+    if os.path.exists(TW_REF_FILE):
+        for r in read_rows(TW_REF_FILE):
+            ref, tw = _num(r["ref_odds"]), _num(r["tw_odds"])
+            if r["market"] == "ml" and ref and tw and ref > 1:
+                out.append((r.get("sport") or "soccer", "draw" if r.get("side") == "draw" else "side", ref, tw))
+    return out
+
+
+def add_table():
+    """{'side': {'k', 'n', 'by_sport': {運動: {'k', 'n'}}}, 'draw': {'k', 'n'}}"""
+    pts = add_points()
+    out = {}
+    for kind in ("side", "draw"):
+        v = [(sp, 1 / tw - 1 / us) for sp, kd, us, tw in pts if kd == kind]
+        if kind == "draw":   # 和局資料少：往主客隊的 k 靠
+            base = out["side"]["k"]
+            k = (sum(d for _, d in v) + 5 * ADD_DEFAULT["draw"] / ADD_DEFAULT["side"] * base) / (len(v) + 5)
+            out[kind] = {"k": round(k, 4), "n": len(v), "avg": round(sum(d for _, d in v) / len(v), 4) if v else None}
+            continue
+        k = sum(d for _, d in v) / len(v) if v else ADD_DEFAULT[kind]
+        by = {}
+        for sp in sorted({sp for sp, _ in v}):
+            ds = [d for s, d in v if s == sp]
+            by[sp] = {"k": round((sum(ds) + ADD_PRIOR * k) / (len(ds) + ADD_PRIOR), 4), "n": len(ds), "avg": round(sum(ds) / len(ds), 4)}
+        out[kind] = {"k": round(k, 4), "n": len(v), "by_sport": by}
+    return out
+
+
+def add_k(add, sport, side="side"):
+    if not add:
+        return None
+    if side == "draw":
+        return (add.get("draw") or {}).get("k")
+    s = add.get("side") or {}
+    return ((s.get("by_sport") or {}).get(sport) or {}).get("k") or s.get("k")
+
+
+def est_ml(add, sport, odds, side="side"):
+    """獨贏：美國（或 Pinnacle）賠率 → 估的台彩賠率；沒有表回傳 None"""
+    k = add_k(add, sport, side)
+    if k is None or not odds or odds <= 1:
+        return None
+    return max(1.01, 1 / (1 / odds + k))
+
+
 def band_discount(bands, odds, market="ml"):
     """這個賠率在台彩大約打幾折（%，負數）；沒有級距表回傳 None"""
     if not bands or not odds:
@@ -293,7 +354,7 @@ def summary():
              "market": r["market"], "side": r["side"], "line": _num(r["tw_line"]),
              "tw": _num(r["tw_odds"]), "us": _num(r["us_odds"]), "d": _num(r["discount_pct"])}
             for r in same[:8]]
-    return {"n_total": len(rows), "by_group": out, "best": best, "bands": band_table()}
+    return {"n_total": len(rows), "by_group": out, "best": best, "bands": band_table(), "add": add_table()}
 
 
 if __name__ == "__main__":

@@ -49,10 +49,16 @@ def path_for(sport):
     return os.path.join(sport_dir(sport), "model_picks.csv")
 
 
-def discount(tw, sport, market="ml", odds=None):
-    """台彩賠率比美國低多少（%）：有賠率就照賠率級距（賠率越高抽越多，2026-10-26 起）；
-    沒有級距表時才用這個運動＋玩法的平均，再沒有就用全部平均"""
+def discount(tw, sport, market="ml", odds=None, side="side"):
+    """台彩賠率比美國低多少（%）。2026-10-26 起：
+    - 獨贏（含和局）：台彩在機率上加固定值 k → 台彩 ≈ 1 ÷（1 ÷ 美國 + k），賠率越高打越兇（side＝"draw" 用和局的 k）
+    - 讓分／大小分：照賠率級距
+    沒有表時才用這個運動＋玩法的平均，再沒有就用全部平均"""
     import record_tw_odds
+    if market == "ml" and odds:
+        e = record_tw_odds.est_ml(tw.get("add"), sport, odds, side)
+        if e:
+            return (e / odds - 1) * 100
     bd = record_tw_odds.band_discount(tw.get("bands"), odds, market)
     if bd is not None:
         return bd
@@ -126,7 +132,7 @@ def tw_opts(g, tw):
         if act and act[0]:
             o["tw"], o["src"] = act[0], "actual"
         else:
-            o["tw"], o["src"] = (o["est"] if "est" in o else round(o["us"] * (1 + discount(tw, g["sport"], "ml", o["us"]) / 100), 3)), "est"
+            o["tw"], o["src"] = (o["est"] if "est" in o else round(o["us"] * (1 + discount(tw, g["sport"], "ml", o["us"], "draw" if o["key"] == "draw" else "side") / 100), 3)), "est"
         o["ev"] = o["p"] * o["tw"] - 1
     return opts, snap
 
@@ -148,7 +154,7 @@ def retro_tw(g, tw, r):
         p3, q3 = B.nhl_reg3(ph(p), total)[i], B.nhl_reg3(ph(m), total)[i]
         odds, src = (act, "actual") if act else (round(1 / (q3 * (1 + B.NHL3_MARGIN)), 3), "est")
         return {"p": p3, "m": q3, "tw": odds, "src": src, "ev": p3 * odds - 1}
-    odds, src = (act, "actual") if act else (round(us * (1 + discount(tw, sport, "ml", us) / 100), 3), "est")
+    odds, src = (act, "actual") if act else (round(us * (1 + discount(tw, sport, "ml", us, "draw" if key == "draw" else "side") / 100), 3), "est")
     return {"p": p, "m": m, "tw": odds, "src": src, "ev": p * odds - 1}
 
 
@@ -217,7 +223,7 @@ def draw_opts(g, tw):
     if any(o <= 1 for o in us):
         return None
     m = (1 / us[1]) / sum(1 / o for o in us)
-    two, src = (act, "actual") if act else (round(us[1] * (1 + discount(tw, "soccer", "ml", us[1]) / 100), 3), "est")
+    two, src = (act, "actual") if act else (round(us[1] * (1 + discount(tw, "soccer", "ml", us[1], "draw") / 100), 3), "est")
     base = {"key": "draw", "name": "和局", "us": us[1], "p": m, "m": m}
     return ({**base, "tw": us[1], "src": "us", "ev": m * us[1] - 1},
             {**base, "tw": two, "src": src, "ev": m * two - 1}), snap
@@ -254,7 +260,7 @@ def tw_price(g, tw, pick):
             return round(1 / (q3 * (1 + B.NHL3_MARGIN)), 3), "est"
         pp = nhl_reg_over(fair["over"], line) if key == "over" else 1 - nhl_reg_over(1 - fair["under"], line)
         return round(1 / (pp * (1 + NHL_OU_MARGIN)), 3), "est"
-    return round(us * (1 + discount(tw, g["sport"], mkt, us) / 100), 3), "est"
+    return round(us * (1 + discount(tw, g["sport"], mkt, us, "draw" if key == "draw" else "side") / 100), 3), "est"
 
 
 def tw_prob(g, pick, p):
@@ -320,7 +326,7 @@ TW_EV_STRATS = {"model1", "favorite", "underdog", "draw"}   # 這幾個策略的
 
 
 def reprice_est(rows, sport, tw):
-    """估的台彩賠率照最新的級距折扣重算（2026-10-26 起：賠率越高抽越多）。
+    """估的台彩賠率照最新的估法重算（2026-10-26 起：獨贏加機率、讓分大小分照級距；賠率越高抽越多）。
     押哪一邊不變，只改估的台彩賠率、台彩期望值、已開獎那幾注的賺賠；實際截圖的賠率不動；冰球用自己的 60 分鐘算法，不動。"""
     if sport == "nhl":
         return 0
@@ -334,8 +340,8 @@ def reprice_est(rows, sport, tw):
             continue
         if us <= 1:
             continue
-        mkt = r["pick"].split("|")[0] if "|" in r["pick"] else "ml"
-        new = round(us * (1 + discount(tw, sport, mkt, us) / 100), 3)
+        mkt, key = (r["pick"].split("|") + [""])[:2] if "|" in r["pick"] else ("ml", r["pick"])
+        new = round(us * (1 + discount(tw, sport, mkt, us, "draw" if key == "draw" else "side") / 100), 3)
         try:
             if abs(float(r["tw_odds"]) - new) < 0.0005:
                 continue

@@ -40,14 +40,14 @@ _BANDS = None
 
 
 def tw_est(dec):
-    """美國賠率 → 估的台彩賠率：依賠率級距打折（賠率越高抽越多，跟看板、實戰記錄同一張表；2026-10-26 起）"""
+    """美國賠率 → 估的台彩賠率：台彩在機率上加固定值 k（賠率越高打越兇，跟看板、實戰記錄同一個估法；2026-10-26 起）"""
     global _BANDS
     import record_tw_odds
     if _BANDS is None:
-        _BANDS = record_tw_odds.band_table()
+        _BANDS = record_tw_odds.add_table()
+    k = record_tw_odds.add_k(_BANDS, None) or 0.06
     dec = np.asarray(dec, dtype=float)
-    d = np.array([record_tw_odds.band_discount(_BANDS, float(o), "ml") if np.isfinite(o) and o > 1 else 0.0 for o in dec])
-    return dec * (1 + d / 100)
+    return np.where(np.isfinite(dec) & (dec > 1), np.maximum(1.01, 1 / (1 / np.where(dec > 1, dec, 2.0) + k)), dec)
 
 # SBRO 的隊名（沒有空格）→ ESPN 的隊名；搬家、改名的隊接到同一支（Elo 延續）
 SBRO_ALIAS = {
@@ -357,7 +357,7 @@ def run(sport):
         "weights": {c: round(float(w), 3) for c, w in zip(cols, m_best.coef_[0])},
         "accuracy": acc,
         "hit_rate": {"market": round(float(np.mean((p_mkt > .5) == y)) * 100, 1), "model": round(float(np.mean((p_model > .5) == y)) * 100, 1)},
-        "calibration": calibration(p_model, y), "betting": bet, "tw_method": "bands", "open_vs_close": res_extra,
+        "calibration": calibration(p_model, y), "betting": bet, "tw_method": "add", "open_vs_close": res_extra,
         "home_win_rate": round(float(df["y"].mean()) * 100, 1),
         "unmapped_teams": unmapped[:30],
         "by_season": {s: {"n": int((test["season"] == s).sum()),
