@@ -420,7 +420,7 @@ def team_ctx(ctx, side, k):
 
 FLIP_ODDS = 1.4   # 參考策略 model1_flip14：模型一押的台彩賠率低於這個就改押對面
 
-LIVE_STRATS = ["model1", "model1_us", "model1_us_tw", "model1_sp_us", "model1_sp_tw", "model1_ou_us", "model1_ou_tw",
+LIVE_STRATS = ["model1", "model1_old", "model1_new", "model1_us", "model1_us_tw", "model1_sp_us", "model1_sp_tw", "model1_ou_us", "model1_ou_tw",
                "model1_all_us", "model1_all_tw", "model2", "combo", "favorite", "underdog", "draw_us", "draw"]
 
 
@@ -487,7 +487,21 @@ def live_summary():
         rows_s.append({**(f or r), "strategy": "model1_flip14", "flipped": bool(f)})
     series = sorted([[r["game_time_utc"], r["strategy"], r["sport"], num(r["settle_odds"]) or num(r["tw_odds"]), num(r["p"]), num(r["ev"]),
                       num(r["profit"]), r.get("league") or r["sport"], int(r["settle_src"] == "actual")] for r in rows_s if r["result"] in ("win", "loss", "push")], key=lambda x: x[0])
-    return {"since": min((r["game_time_utc"] for r in m1), default=None), "strats": strats, "pending": len(pend),
+    # 舊估法 vs 新估法（使用者 2026-10-26 要求）：同一場兩種估法押不同邊的那幾場，各自的賺賠
+    pair = {}
+    for r in rows:
+        if r["strategy"] in ("model1_old", "model1_new") and r["result"] in ("win", "loss", "push"):
+            pair.setdefault((r["sport"], r["game_id"]), {})[r["strategy"]] = r
+    cmp_rows = []
+    for (sp, gid), m in pair.items():
+        o, n = m.get("model1_old"), m.get("model1_new")
+        if not o or not n or o["pick"] == n["pick"]:
+            continue
+        cmp_rows.append({"sport": sp, "lg": o.get("league") or sp, "t": o["game_time_utc"], "away": o["away_zh"] or o["away"], "home": o["home_zh"] or o["home"],
+                         "old": [o["pick_zh"], num(o["settle_odds"]) or num(o["tw_odds"]), num(o["est_old"]), o["result"], num(o["profit"])],
+                         "new": [n["pick_zh"], num(n["settle_odds"]) or num(n["tw_odds"]), n["result"], num(n["profit"])]})
+    cmp_rows.sort(key=lambda x: x["t"], reverse=True)
+    return {"since": min((r["game_time_utc"] for r in m1), default=None), "strats": strats, "pending": len(pend), "est_cmp": cmp_rows,
             "recent": [slim(r) for r in settled[:30]], "series": series,
             # 模型一・台彩：每一注（含還沒開賽的），新的在前
             "tw_bets": [slim(r) for r in sorted(m1, key=lambda r: r["game_time_utc"], reverse=True)],

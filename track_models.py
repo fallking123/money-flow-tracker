@@ -40,13 +40,29 @@ from sports_common import nhl_reg_over, parse_time, read_rows, sport_dir
 
 FIELDS = ["sport", "league", "game_id", "game_time_utc", "away", "home", "away_zh", "home_zh", "strategy", "pick", "pick_zh",
           "p", "mkt_p", "us_odds", "tw_odds", "tw_src", "ev", "hours_before", "updated_utc",
-          "result", "settle_odds", "settle_src", "profit"]
+          "result", "settle_odds", "settle_src", "profit", "est_old"]
 HORIZON_H = 48          # 開賽前多久開始記
 DEFAULT_DISC = -9.0     # 完全沒有台彩記錄時，台彩賠率 ≈ 美國賠率 × (1 − 9%)
 
 
 def path_for(sport):
     return os.path.join(sport_dir(sport), "model_picks.csv")
+
+
+def old_discount(tw, sport, market="ml"):
+    """改之前（2026-10-26 以前）的估法：這個運動＋玩法跟美國收盤比的平均折扣，沒有就用全部平均（不分賠率高低）"""
+    gs = [x for x in tw.get("by_group", []) if x.get("avg_discount_pct") is not None]
+    hit = next((x for x in gs if x["sport"] == sport and x["market"] == market), None)
+    if hit:
+        return hit["avg_discount_pct"]
+    return sum(x["avg_discount_pct"] for x in gs) / len(gs) if gs else DEFAULT_DISC
+
+
+def old_est(o, tw, sport):
+    """舊估法估的台彩賠率：實際截圖照用、冰球照舊（60 分鐘另算，沒改過），其他＝美國共識盤 ×（1 + 平均折扣）"""
+    if o.get("src") == "actual" or sport == "nhl" or not o.get("us"):
+        return o["tw"]
+    return round(o["us"] * (1 + old_discount(tw, sport) / 100), 3)
 
 
 def discount(tw, sport, market="ml", odds=None, side="side"):
@@ -311,6 +327,11 @@ def picks(g, tw):
     if not opts:
         return {}, snap
     two = [o for o in opts if o["key"] != "draw"]
+    # 比較兩種估法（使用者 2026-10-26 要求）：model1_old＝用舊估法挑邊、model1_new＝用新估法挑邊；兩個都用同一個台彩賠率結算
+    olds = [{**o, "est_old": old_est(o, tw, g["sport"])} for o in opts]
+    bo = max(olds, key=lambda o: o["p"] * o["est_old"] - 1)
+    cmp = {"model1_old": {**bo, "ev": bo["p"] * bo["est_old"] - 1},
+           "model1_new": {**max(opts, key=lambda o: o["ev"]), "est_old": next(o["est_old"] for o in olds if o["key"] == max(opts, key=lambda o: o["ev"])["key"])}}
     out = {"model1": max(opts, key=lambda o: o["ev"]),
            "favorite": max(two, key=lambda o: o["m"]),
            "underdog": min(two, key=lambda o: o["m"])}
@@ -329,10 +350,53 @@ def picks(g, tw):
         if dr[0][0]:
             out["draw_us"] = dr[0][0]
         out["draw"] = dr[0][1]
+    out.update(cmp)
     return out, snap
 
 
-TW_EV_STRATS = {"model1", "favorite", "underdog", "draw"}   # 這幾個策略的 ev＝台彩期望值（其他記的是美國期望值）
+TW_EV_STRATS = {"model1", "model1_new", "favorite", "underdog", "draw"}   # 這幾個策略的 ev＝台彩期望值（其他記的是美國期望值）
+
+
+def backfill_compare(rows, sport, tw):
+    """補記：過去（已開賽）的比賽，用記下來的熱門／冷門／和局三個選項，分別照舊估法、新估法重新挑邊。
+    勝率＝模型一（和局＝1 − 主 − 客）；結算照那個選項記錄的台彩賠率（實際截圖或目前最準的估法）"""
+    def num(v):
+        try:
+            return float(v)
+        except (TypeError, ValueError):
+            return None
+    n = 0
+    for (gid, strat), r in list(rows.items()):
+        if strat != "model1" or ((gid, "model1_old") in rows and (gid, "model1_new") in rows):
+            continue
+        fav, dog = rows.get((gid, "favorite")), rows.get((gid, "underdog"))
+        if sport == "nhl" or not fav or not dog or num(fav.get("p")) is None or num(dog.get("p")) is None:
+            for s in ("model1_old", "model1_new"):     # 冰球估法沒變：兩條都跟模型一一樣
+                if (gid, s) not in rows:
+                    rows[(gid, s)] = {**r, "strategy": s, "est_old": r.get("tw_odds", "")}
+                    n += 1
+            continue
+        opts = [(num(fav["p"]), fav), (num(dog["p"]), dog)]
+        dr = rows.get((gid, "draw"))
+        if sport == "soccer" and dr:
+            opts.append((max(0.0, 1 - opts[0][0] - opts[1][0]), dr))
+        cand = []
+        for p, o in opts:
+            now = num(o.get("settle_odds")) or num(o.get("tw_odds"))
+            if not now:
+                continue
+            old = now if o.get("tw_src") == "actual" or not num(o.get("us_odds")) else round(num(o["us_odds"]) * (1 + old_discount(tw, sport) / 100), 3)
+            cand.append((p, now, old, o))
+        if not cand:
+            continue
+        for s, key in (("model1_old", lambda c: c[0] * c[2]), ("model1_new", lambda c: c[0] * c[1])):
+            if (gid, s) in rows:
+                continue
+            p, now, old, o = max(cand, key=key)
+            rows[(gid, s)] = {**o, "strategy": s, "p": round(p, 4), "est_old": old,
+                              "ev": round(p * (old if s == "model1_old" else now) - 1, 4)}
+            n += 1
+    return n
 
 
 def reprice_est(rows, sport, tw, game_of=lambda gid: None):
@@ -477,7 +541,7 @@ def run(sports, now=None):
                            "p": round(o["p"], 4), "mkt_p": round(o["m"], 4), "us_odds": o["us"], "tw_odds": o["tw"], "tw_src": o["src"],
                            "ev": round(o["ev"], 4), "hours_before": snap.get("hrs") if snap else "",
                            "updated_utc": now.strftime("%Y-%m-%dT%H:%MZ"),
-                           "result": "", "settle_odds": "", "settle_src": "", "profit": ""}
+                           "result": "", "settle_odds": "", "settle_src": "", "profit": "", "est_old": o.get("est_old", "")}
                 n_upd += bool(old)
                 n_new += not old
                 if strat in TW_TWINS:   # 同一注改去台彩下
@@ -554,6 +618,7 @@ def run(sports, now=None):
             if g:
                 rows[(gid, TW_TWINS[strat])] = twin_row(r, g, tw)
                 n_new += 1
+        n_new += backfill_compare(rows, sport, tw)
         gidx = {g["id"]: g for g in games if g["sport"] == sport}
         n_rep = reprice_est(rows, sport, tw, lambda gid: finals.get((sport, gid)) or gidx.get(gid))
         for k, r in rows.items():
