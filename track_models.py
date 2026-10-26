@@ -145,6 +145,23 @@ def us_options(g):
             for k, o, p, m in zip(keys, us, mdl["p"], mdl["mkt"])]
 
 
+def pin_options(g):
+    """模型三・Pinnacle 賠率（使用者 2026-10-26）：只用 Pinnacle 開賽前最新的獨贏賠率（含延長賽；足球三選一），勝率一樣用模型一"""
+    import base_odds
+    pl = (g.get("pin") or {}).get("l")
+    if g["sport"] == "soccer":
+        mdl, keys = g.get("model"), ["home", "draw", "away"]
+    else:
+        mdl, keys = g.get("m1"), ["away", "home"]
+    if not mdl or not pl:
+        return []
+    odds = [base_odds._side(pl, "ml", k, None) for k in keys]
+    if not all(odds):
+        return []
+    return [{"key": k, "us": o, "p": p, "m": m, "tw": o, "src": "pin", "ev": p * o - 1}
+            for k, o, p, m in zip(keys, odds, mdl["p"], mdl["mkt"])]
+
+
 def pick_name(g, key):
     return "和局" if key == "draw" else (g.get(key + "_zh") or g[key])
 
@@ -341,6 +358,12 @@ def picks(g, tw):
         same = next((o for o in opts if o["key"] == out["model1_us"]["key"]), None)
         if same:   # 押同一邊、改去台彩下；ev 記美國賠率的期望值（「美國划算才下」用的是同一個判斷）
             out["model1_us_tw"] = {**same, "ev": out["model1_us"]["ev"]}
+    po = pin_options(g)
+    if po:   # 模型三・Pinnacle 賠率＋同一邊改去台彩下
+        out["model3_pin"] = max(po, key=lambda o: o["ev"])
+        same = next((o for o in olds if o["key"] == out["model3_pin"]["key"]), None)
+        if same:
+            out["model3_pin_tw"] = {**same, "ev": out["model3_pin"]["ev"]}
     for strat, only in (("model1_all_us", None), ("model1_sp_us", "sp"), ("model1_ou_us", "ou")):
         ba = best_all(g, only=only)
         if ba:   # 不限獨贏（三種玩法挑最好）／只下讓分／只下大小分
@@ -409,6 +432,53 @@ def backfill_model3(rows, sport, tw):
         rows[(gid, "model3")] = {**o, "strategy": "model3", "p": round(p, 4), "ev": round(p * now - 1, 4),
                                  "est_old": old_est_row(o, tw, sport)}
         n += 1
+    return n
+
+
+def backfill_pin(rows, sport, game_of):
+    """模型三・Pinnacle 賠率／Pinnacle 選邊・台彩下：過去（已開賽）的比賽回頭補。
+    勝率＝模型一（美國四大：模型一・美國賠率那筆的勝率，另一邊＝1 − 它；足球：熱門／冷門＋和局＝1 − 主 − 客）；
+    Pinnacle 賠率＝開賽前最後一筆；台彩下那筆照那一邊記錄的台彩選項（熱門／冷門／和局）"""
+    import base_odds
+
+    def num(v):
+        try:
+            return float(v)
+        except (TypeError, ValueError):
+            return None
+    n = 0
+    for (gid, strat), r in list(rows.items()):
+        if strat != "model1_us" or (gid, "model3_pin") in rows:
+            continue
+        g = game_of(gid)
+        pl = ((g or {}).get("pin") or {}).get("l")
+        if not pl or not r.get("result"):
+            continue
+        tw_side = {o["pick"]: o for o in (rows.get((gid, s)) for s in ("favorite", "underdog", "draw")) if o}
+        if sport == "soccer":
+            fav, dog = rows.get((gid, "favorite")), rows.get((gid, "underdog"))
+            if not fav or not dog or num(fav.get("p")) is None or num(dog.get("p")) is None:
+                continue
+            ps = {fav["pick"]: num(fav["p"]), dog["pick"]: num(dog["p"])}
+            ps["draw"] = max(0.0, 1 - sum(ps.values()))
+        else:
+            p0 = num(r.get("p"))
+            if p0 is None:
+                continue
+            ps = {r["pick"]: p0, ("home" if r["pick"] == "away" else "away"): 1 - p0}
+        cand = [(k, p, base_odds._side(pl, "ml", k, None)) for k, p in ps.items()]
+        cand = [c for c in cand if c[2]]
+        if len(cand) < len(ps):
+            continue
+        k, p, o = max(cand, key=lambda c: c[1] * c[2])
+        rows[(gid, "model3_pin")] = {**r, "strategy": "model3_pin", "pick": k, "pick_zh": pick_name(g, k), "p": round(p, 4),
+                                     "us_odds": o, "tw_odds": o, "tw_src": "pin", "ev": round(p * o - 1, 4), "est_old": "",
+                                     "result": "", "settle_odds": "", "settle_src": "", "profit": ""}
+        n += 1
+        t = tw_side.get(k)
+        if t and (gid, "model3_pin_tw") not in rows:
+            rows[(gid, "model3_pin_tw")] = {**t, "strategy": "model3_pin_tw", "ev": round(p * o - 1, 4)}
+            n += 1
     return n
 
 
@@ -500,7 +570,7 @@ def settle(row, g):
         if v == 0:
             return "push", odds, "us", 0.0
         return ("win" if v > 0 else "loss"), odds, "us", round(odds - 1, 4) if v > 0 else -1.0
-    if row["strategy"].endswith("_us"):   # 美國賠率：含延長賽，用開賽前最後記到的美國賠率結算
+    if row["strategy"].endswith("_us") or row["strategy"] == "model3_pin":   # 美國／Pinnacle 賠率：含延長賽，用開賽前最後記到的賠率結算
         if g["sport"] == "soccer":
             won = (w == "tie") if pick == "draw" else (w == pick)
         else:
@@ -508,7 +578,8 @@ def settle(row, g):
                 return "push", "", "", 0.0
             won = w == pick
         odds = float(row["tw_odds"])
-        return ("win" if won else "loss"), odds, "us", round(odds - 1, 4) if won else -1.0
+        src = "pin" if row["strategy"] == "model3_pin" else "us"
+        return ("win" if won else "loss"), odds, src, round(odds - 1, 4) if won else -1.0
     if g["sport"] == "nhl":
         w = res.get("reg")        # 台彩冰球只算 60 分鐘
         if w is None:
@@ -633,6 +704,7 @@ def run(sports, now=None):
                 n_new += 1
         n_new += backfill_model3(rows, sport, tw)
         gidx = {g["id"]: g for g in games if g["sport"] == sport}
+        n_new += backfill_pin(rows, sport, lambda gid: finals.get((sport, gid)) or gidx.get(gid))
         n_rep = reprice_est(rows, sport, tw, lambda gid: finals.get((sport, gid)) or gidx.get(gid))
         for k, r in rows.items():
             if r.get("result"):

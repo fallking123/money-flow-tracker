@@ -420,7 +420,7 @@ def team_ctx(ctx, side, k):
 
 FLIP_ODDS = 1.4   # 參考策略 model1_flip14：模型一押的台彩賠率低於這個就改押對面
 
-LIVE_STRATS = ["model1", "model3", "model1_us", "model1_us_tw", "model1_sp_us", "model1_sp_tw", "model1_ou_us", "model1_ou_tw",
+LIVE_STRATS = ["model1", "model3", "model3_pin", "model3_pin_tw", "model1_us", "model1_us_tw", "model1_sp_us", "model1_sp_tw", "model1_ou_us", "model1_ou_tw",
                "model1_all_us", "model1_all_tw", "model2", "combo", "favorite", "underdog", "draw_us", "draw"]
 
 
@@ -449,6 +449,7 @@ def live_summary():
     twin = lambda strat: {r["game_id"]: [num(r["settle_odds"]) or num(r["tw_odds"]), r["tw_src"], r["result"], num(r["profit"])]
                           for r in rows if r["strategy"] == strat}
     tw_us, tw_all = twin("model1_us_tw"), twin("model1_all_tw")
+    tw_pin = twin("model3_pin_tw")
     tw_sp, tw_ou = twin("model1_sp_tw"), twin("model1_ou_tw")
     settled = sorted([r for r in m1 if r["result"] in ("win", "loss", "push")], key=lambda r: r["game_time_utc"], reverse=True)
     pend = [r for r in m1 if not r["result"]]
@@ -505,6 +506,9 @@ def live_summary():
             "recent": [slim(r) for r in settled[:30]], "series": series,
             # 模型一・台彩：每一注（含還沒開賽的），新的在前；eo＝挑邊時用的舊估法台彩賠率
             "tw_bets": [{**slim(r), "eo": num(r.get("est_old"))} for r in sorted(m1, key=lambda r: r["game_time_utc"], reverse=True)],
+            # 模型三・Pinnacle 賠率：每一注（只用 Pinnacle 判斷、結算）；twr＝同一注改去台彩下
+            "pin_bets": [{**slim(r), "us": num(r["us_odds"]), "twr": tw_pin.get(r["game_id"])}
+                         for r in sorted([r for r in rows if r["strategy"] == "model3_pin"], key=lambda r: r["game_time_utc"], reverse=True)],
             # 模型三・台彩：每一注（新估法挑邊；10/26 以前是回頭補算的）
             "m3_bets": [{**slim(r), "eo": num(r.get("est_old"))} for r in sorted([r for r in rows if r["strategy"] == "model3"], key=lambda r: r["game_time_utc"], reverse=True)],
             # 模型一・美國賠率：每一注（含還沒開賽的），新的在前
