@@ -2352,7 +2352,10 @@ td.luck{color:var(--muted)!important}
           <div class="mut" style="font-size:11px">勝率 ${x.p == null ? "–" : Math.round(x.p * 100) + "%"}${x.ev == null ? "" : "・期望值 " + evTxt(x.ev)}</div></td>
         <td class="r" style="line-height:1.4"><div class="mut" style="font-size:10.5px">美國</div>${RS[x.result] ? `<span class="res ${RS[x.result][1]}">${RS[x.result][0]}</span><div class="n ${gb(x.profit)}">${x.profit != null ? sgn(x.profit * UNIT, 0) : ""}</div>` : '<span class="mut">未開賽</span>'}</td>
         <td class="r" style="line-height:1.4">${twCell(x.twr)}</td></tr>`;
-      return `<details class="more-sec"${open ? " open" : ""}><summary><span>${title}<small class="sm-sub">${ub.length} 注・已開獎 ${done.length} 注・每注 ${UNIT.toLocaleString("en-US")} 元・美國合計 <b class="${gb(pl)}">${sgn(pl * UNIT, 0)}</b> 元${tdone.length ? `・同一注台彩下合計 <b class="${gb(tpl)}">${sgn(tpl * UNIT, 0)}</b> 元` : ""}</small></span></summary><div>
+      const voidN = done.filter((x) => x.result === "void").length, estN = tdone.filter((x) => x.twr[1] !== "actual").length;
+      const twNote = !tdone.length ? "" : estN === tdone.length ? `${tdone.length} 注，台彩賠率都是估的` : estN ? `${tdone.length} 注，其中 ${estN} 注台彩賠率是估的` : `${tdone.length} 注`;
+      const oNote = MOD.lo || MOD.hi ? `<span style="display:block;margin-top:3px">註：這裡的「${oTag().replace(/・$/, "")}」看的是<b>美國賠率</b>，所以台彩合計會包含台彩賠率不在這個範圍的注；成績頁「美國選邊・台彩下」看的是台彩賠率，注數和金額會不一樣。${voidN ? "成績頁也不算取消的比賽。" : ""}</span>` : voidN ? `<span style="display:block;margin-top:3px">註：成績頁不算取消的比賽，所以注數會少 ${voidN} 注（金額一樣）。</span>` : "";
+      return `<details class="more-sec"${open ? " open" : ""}><summary><span>${title}<small class="sm-sub">${ub.length} 注・已開獎 ${done.length} 注${voidN ? `（含取消 ${voidN} 注，退回本金）` : ""}・每注 ${UNIT.toLocaleString("en-US")} 元・美國合計 <b class="${gb(pl)}">${sgn(pl * UNIT, 0)}</b> 元${tdone.length ? `・同一注台彩下合計（${twNote}）<b class="${gb(tpl)}">${sgn(tpl * UNIT, 0)}</b> 元` : ""}${oNote}</small></span></summary><div>
         <div class="scroll"><table class="tb"><thead><tr><th>開賽</th><th>押哪邊・美國賠率</th><th class="r">美國</th><th class="r">台彩下</th></tr></thead><tbody>${ub.map(tr).join("")}</tbody></table></div>
         <p class="mut" style="font-size:12.5px;margin:8px 0 0">${note}</p></div></details>`;
     };
