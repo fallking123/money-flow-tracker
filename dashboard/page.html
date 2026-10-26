@@ -2360,6 +2360,21 @@ td.luck{color:var(--muted)!important}
         <p class="mut" style="font-size:12.5px;margin:8px 0 0">${note}</p></div></details>`;
     };
     const lgF = (a) => a.filter((x) => lgOk(x.lg || x.sport) && dOk(x.t) && oOk(x.us != null ? x.us : x.tw));
+    // 模型一・台彩：每一注（賠率篩選看台彩賠率，跟成績頁「模型一・台彩」同一批注）
+    const twList = (ub) => {
+      if (!ub.length) return "";
+      const RS = {win: ["贏", "w"], loss: ["輸", "l"], push: ["平", "p"], void: ["取消", "p"]};
+      const done = ub.filter((x) => RS[x.result]), pl = done.reduce((a, x) => a + (x.profit || 0), 0);
+      const voidN = done.filter((x) => x.result === "void").length, estN = done.filter((x) => x.src !== "actual").length;
+      const tr = (x) => `<tr><td class="n" style="line-height:1.3">${fmtMD.format(new Date(x.t))}<div class="mut" style="font-size:11px;font-weight:400">${esc(x.sport === "soccer" ? ((MLG_LIST.find(([k]) => k === x.lg) || [])[1] || SOC_NAME[x.lg] || "足球") : spLabel(x.sport))}</div></td>
+        <td style="white-space:normal;line-height:1.35"><b>${esc(x.pick)}</b>${x.sport === "nhl" ? '<small class="mut">（60分）</small>' : ""}<div class="mut" style="font-size:11.5px">${x.sport === "soccer" ? `${esc(x.home)} vs ${esc(x.away)}` : `${esc(x.away)} @ ${esc(x.home)}`}</div>
+          <div class="mut" style="font-size:11px">勝率 ${x.p == null ? "–" : Math.round(x.p * 100) + "%"}${x.ev == null ? "" : "・期望值 " + evTxt(x.ev)}</div></td>
+        <td class="r n">${odd(x.tw)}${x.src === "actual" ? "" : '<small class="mut">估</small>'}</td>
+        <td class="r" style="line-height:1.4">${RS[x.result] ? `<span class="res ${RS[x.result][1]}">${RS[x.result][0]}</span><div class="n ${gb(x.profit)}">${x.profit != null ? sgn(x.profit * UNIT, 0) : ""}</div>` : '<span class="mut">未開賽</span>'}</td></tr>`;
+      return `<details class="more-sec"><summary><span>模型一・台彩：獨贏每一注<small class="sm-sub">${ub.length} 注・已開獎 ${done.length} 注${voidN ? `（含取消 ${voidN} 注，退回本金）` : ""}・每注 ${UNIT.toLocaleString("en-US")} 元・台彩合計 <b class="${gb(pl)}">${sgn(pl * UNIT, 0)}</b> 元${done.length ? `（${estN === done.length ? "台彩賠率都是估的" : estN ? `其中 ${estN} 注台彩賠率是估的` : "都是實際台彩賠率"}）` : ""}${MOD.lo || MOD.hi ? `<span style="display:block;margin-top:3px">註：這裡的「${oTag().replace(/・$/, "")}」看的是<b>台彩賠率</b>，跟成績頁「模型一・台彩」是同一批注。</span>` : ""}</small></span></summary><div>
+        <div class="scroll"><table class="tb"><thead><tr><th>開賽</th><th>押哪邊</th><th class="r">台彩賠率</th><th class="r">結果</th></tr></thead><tbody>${ub.map(tr).join("")}</tbody></table></div>
+        <p class="mut" style="font-size:12.5px;margin:8px 0 0">每一場都下獨贏，押「模型一勝率 × 台彩賠率」期望值最高的那一邊（足球、冰球可能押和局；冰球是 60 分鐘三選一）。「估」＝沒有你截圖的台彩賠率，用美國賠率打折估的。</p></div></details>`;
+    };
     // 讓分／大小分：接下來要押哪一注（還沒開賽、36 小時內）
     const nextCard = (list, title) => {
       const up = list.filter((x) => !x.result && new Date(x.t) > Date.now() && new Date(x.t) - Date.now() < 36 * 36e5 && lgOk(x.lg || x.sport))
@@ -2378,6 +2393,7 @@ td.luck{color:var(--muted)!important}
     if (MT.bk === "ml") {
       h += soonCard;
       h += betList(lgF(L.us_bets || []), "模型一・美國賠率：獨贏每一注", true, "每一場都下獨贏（含延長賽），押「模型一勝率 × 美國賠率」比較高的那一邊，用開賽前最後一次的美國賠率結算。「台彩約」是同一邊在台彩的賠率（冰球是 60 分鐘、打平算輸）。");
+      h += twList(lgF(L.tw_bets || []));
     } else if (MT.bk === "sp") {
       h += nextCard(L.sp_bets || [], "接下來怎麼押：讓分");
       h += betList(lgF(L.sp_bets || []), "只下讓分・美國賠率：每一注", true, "每一場只看讓分，押美國賠率期望值比較高的那一邊，用開賽前最後一次的美國賠率結算；「台彩下」是同一注改去台彩下（台彩讓分線不一定一樣）。");

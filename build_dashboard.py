@@ -483,6 +483,8 @@ def live_summary():
                       num(r["profit"]), r.get("league") or r["sport"], int(r["settle_src"] == "actual")] for r in rows_s if r["result"] in ("win", "loss", "push")], key=lambda x: x[0])
     return {"since": min((r["game_time_utc"] for r in m1), default=None), "strats": strats, "pending": len(pend),
             "recent": [slim(r) for r in settled[:30]], "series": series,
+            # 模型一・台彩：每一注（含還沒開賽的），新的在前
+            "tw_bets": [slim(r) for r in sorted(m1, key=lambda r: r["game_time_utc"], reverse=True)],
             # 模型一・美國賠率：每一注（含還沒開賽的），新的在前
             "us_bets": [{**slim(r), "us": num(r["us_odds"]), "tw_est": num(tw_of.get(r["game_id"])), "twr": tw_us.get(r["game_id"])}
                         for r in sorted([r for r in rows if r["strategy"] == "model1_us"], key=lambda r: r["game_time_utc"], reverse=True)],
