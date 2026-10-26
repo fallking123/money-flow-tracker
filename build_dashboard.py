@@ -479,13 +479,14 @@ def live_summary():
             continue
         rows_s.append({**r, "strategy": "both_us", "settle_odds": us, "tw_odds": us, "settle_src": "us", "result": res,
                        "profit": round(us - 1, 4) if res == "win" else (0.0 if res == "push" else -1.0)})
-    # 參考：模型一・台彩，但台彩賠率低於 1.4 的改押對面那一隊（不押和局）
+    # 參考：只看模型一・台彩押的那邊台彩賠率低於 1.4 的場次，改押對面那一隊（不押和局）；其他場次不下（使用者 2026-10-26 指定）
     side = {(r["game_id"], r["pick"]): r for r in rows if r["strategy"] in ("favorite", "underdog")}
     for r in [x for x in rows if x["strategy"] == "model1"]:
         o = num(r["settle_odds"]) or num(r["tw_odds"])
         opp = {"home": "away", "away": "home"}.get(r["pick"])
         f = side.get((r["game_id"], opp)) if o and o < FLIP_ODDS and opp else None
-        rows_s.append({**(f or r), "strategy": "model1_flip14", "flipped": bool(f)})
+        if f:
+            rows_s.append({**f, "strategy": "model1_flip14", "flipped": True})
     # 成績頁每一行都能點開看每一注（使用者 2026-10-26）：[9]＝比賽編號（指到 sg）、[10]＝押什麼（pick 原始代碼，網頁換成中文）
     sg_idx, sg = {}, []
     def gi(r):
