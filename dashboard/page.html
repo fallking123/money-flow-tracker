@@ -2111,7 +2111,7 @@ td.luck{color:var(--muted)!important}
                  model1_all_tw: ["不限玩法・台彩下", "同一注改去台彩下（冰球只算 60 分鐘，讓分不算）"],
                  model2: ["模型二・資金", "下注比例＋盤口移動"], combo: ["綜合", "模型一＋模型二"],
                  favorite: ["都押熱門", "不用模型"], underdog: ["都押冷門", "不用模型"],
-                 model1_flip14: ["模型一・低於 1.4 改押對面", "模型一・台彩，但押的那邊台彩賠率低於 1.4 就改押對面那一隊（不押和局）"],
+                 model1_flip14: ["模型一・低於 1.4 改押對面", "模型一・台彩，但押的那邊台彩賠率低於 1.4 就改押對面那一隊（不押和局）；沒低於 1.4 的就跟模型一押一樣"],
                  draw_us: ["每場都押和局・美國", "足球每一場都押和局，用美國賠率結算（不用模型）"], draw: ["每場都押和局・台彩", "足球＋冰球每一場都押和局，用台彩賠率（有記錄用實際的，沒有用估的）；冰球＝60 分鐘打平"],
                  model1_us_draw: ["只押模型一挑的和局・美國", "「模型一・美國賠率」裡押和局的那幾注"], model1_tw_draw: ["只押模型一挑的和局・台彩", "足球：同一批和局改去台彩下；冰球：模型一・台彩挑的 60 分鐘和局"]};
   const READY = {model3: true, model3_pin: true, model3_pin_tw: true, model1: true, model1_us: true, model1_us_tw: true, model1_sp_us: true, model1_ou_us: true, model1_all_us: true, model1_sp_tw: true, model1_ou_tw: true, model1_all_tw: true, favorite: true, underdog: true, model1_flip14: true, draw_us: true, draw: true, model1_us_draw: true, model1_tw_draw: true};
@@ -2355,7 +2355,7 @@ td.luck{color:var(--muted)!important}
       const tr = (x) => {
         const gm = SG[x[9]] || [x[0], x[2], x[7], "", ""], pf = x[6], res = pf > 0 ? ["贏", "w"] : pf < 0 ? ["輸", "l"] : ["平", "p"];
         return `<tr><td class="n" style="line-height:1.3">${fmtMD.format(new Date(x[0]))}<div class="mut" style="font-size:10.5px;font-weight:400">${esc(lgN(gm))}</div></td>
-          <td style="white-space:normal;line-height:1.35"><b>${esc(pkName(gm, x[10], tw))}</b><div class="mut" style="font-size:11px">${gm[1] === "soccer" ? `${esc(gm[4])} vs ${esc(gm[3])}` : `${esc(gm[3])} @ ${esc(gm[4])}`}</div>${x[4] != null ? `<div class="mut" style="font-size:10.5px">勝率 ${Math.round(x[4] * 100)}%${x[5] != null ? "・期望值 " + evTxt(x[5]) : ""}</div>` : ""}</td>
+          <td style="white-space:normal;line-height:1.35"><b>${esc(pkName(gm, x[10], tw))}</b>${k === "model1_flip14" ? (x[11] ? `<div style="font-size:11px"><span class="pill sig">改押對面</span> 模型一押 ${esc(tm(gm, x[10] === "home" ? "away" : "home"))}（台彩低於 1.4）</div>` : '<div class="mut" style="font-size:11px">跟模型一一樣（沒有低於 1.4）</div>') : ""}<div class="mut" style="font-size:11px">${gm[1] === "soccer" ? `${esc(gm[4])} vs ${esc(gm[3])}` : `${esc(gm[3])} @ ${esc(gm[4])}`}</div>${x[4] != null ? `<div class="mut" style="font-size:10.5px">勝率 ${Math.round(x[4] * 100)}%${x[5] != null ? "・期望值 " + evTxt(x[5]) : ""}</div>` : ""}</td>
           <td class="r n">${odd(x[3])}${tw && !x[8] ? '<small class="mut">估</small>' : ""}</td>
           <td class="r" style="line-height:1.35"><span class="res ${res[1]}">${res[0]}</span><div class="n ${gb(pf)}">${sgn(pf * UNIT, 0)}</div></td></tr>`;
       };

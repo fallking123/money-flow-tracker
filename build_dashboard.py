@@ -495,7 +495,7 @@ def live_summary():
             sg.append([r["game_time_utc"], r["sport"], r.get("league") or r["sport"], r["away_zh"] or r["away"], r["home_zh"] or r["home"]])
         return sg_idx[k]
     series = sorted([[r["game_time_utc"], r["strategy"], r["sport"], num(r["settle_odds"]) or num(r["tw_odds"]), num(r["p"]), num(r["ev"]),
-                      num(r["profit"]), r.get("league") or r["sport"], int(r["settle_src"] == "actual"), gi(r), r["pick"]]
+                      num(r["profit"]), r.get("league") or r["sport"], int(r["settle_src"] == "actual"), gi(r), r["pick"], int(bool(r.get("flipped")))]
                      for r in rows_s if r["result"] in ("win", "loss", "push")], key=lambda x: x[0])
     # 模型一 vs 模型三（使用者 2026-10-26 要求）：同一場兩個模型押不同邊的那幾場，各自的賺賠
     pair = {}
