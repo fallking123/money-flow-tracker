@@ -675,13 +675,24 @@ td.luck{color:var(--muted)!important}
     return {o, pl: o > 0 ? o * (sd.odds - 1) : o < 0 ? o : 0};
   }
   const inSport = (g) => state.sport === "all" || g.sport === state.sport;
-  function twDisc(sport, mkt) {
+  // 台彩打幾折：有賠率就照「賠率級距」（賠率越高抽越多，2026-10-26 起；表在 DATA.tw.bands）
+  function bandDisc(odds, mkt) {
+    const b = DATA.tw && DATA.tw.bands; if (!b || !odds) return null;
+    const rows = b[mkt === "ml" ? "ml" : "line"] || []; let i = 0;
+    b.edges.forEach((lo, k) => { if (odds >= lo) i = k; });
+    return rows[i] ? rows[i].use : null;
+  }
+  function twDisc(sport, mkt, odds) {
+    const bd = bandDisc(odds, mkt); if (bd != null) return {d: bd, est: true};
     const gs = (DATA.tw && DATA.tw.by_group) || [];
     const hit = gs.find((x) => x.sport === sport && x.market === mkt && x.avg_discount_pct != null);
     if (hit) return {d: hit.avg_discount_pct, est: false};
     const all = gs.filter((x) => x.avg_discount_pct != null);
     return all.length ? {d: all.reduce((s, x) => s + x.avg_discount_pct, 0) / all.length, est: true} : null;
   }
+  // 歷史回測的台彩賠率怎麼估的（週日重練後改成依賠率級距）
+  const btTw = (sps) => { const um = (DATA.stats || {}).us_models || {}, all = sps.filter((k) => um[k]);
+    return all.length && all.every((k) => um[k].tw_method === "bands") ? "依賠率級距打折估（賠率越高抽越多）" : "先用美國賠率 × 0.91 估（每週日重練後改成依賠率級距打折）"; };
   const twMargin = () => {
     const gs = ((DATA.tw && DATA.tw.by_group) || []).filter((x) => x.tw_margin_pct != null);
     return gs.length ? gs.reduce((s, x) => s + x.tw_margin_pct, 0) / gs.length / 100 : 0.15;
@@ -767,7 +778,7 @@ td.luck{color:var(--muted)!important}
 
   // ═════════ 期望值：估計勝率 × 台彩賠率 − 1 ═════════
   // 勝率：獨贏用模型一（足球用足球模型），其他玩法用 Pinnacle 去掉抽水，沒有 Pinnacle 才用美國莊家
-  // 台彩賠率：你記錄過的實際賠率優先，沒有就用「美國賠率 × 台彩平均折扣」估
+  // 台彩賠率：你記錄過的實際賠率優先，沒有就用「美國賠率 × 這個賠率級距的台彩折扣」估
   const EV_GO = 0.02;   // 期望值至少 +2% 才說「可以下」（估計本身有誤差，留一點空間）
   const EV_LOOK = -0.05; // 台彩賠率是估的、差不到 5%：台彩實際賠率高一點就可能划算
   function probOf(g, mkt, ss, i) {
@@ -780,7 +791,7 @@ td.luck{color:var(--muted)!important}
   function twOdds(g, mkt, sd) {
     const rec = g.tw && g.tw[mkt] && g.tw[mkt][sd.key];
     if (rec && rec[0] && (mkt === "ml" || rec[1] == null || rec[1] === sd.ln)) return {odds: rec[0], est: false};
-    const td = twDisc(g.sport, mkt); if (!td || !sd.odds) return null;
+    const td = twDisc(g.sport, mkt, sd.odds); if (!td || !sd.odds) return null;
     return {odds: Math.round(sd.odds * (1 + td.d / 100) * 100) / 100, est: true};
   }
   const optLabel = (g, mkt, sd) => (mkt === "ml" ? sd.nm : mkt === "sp" ? `${sd.nm} ${line(sd.ln)}` : `${sd.key === "over" ? "大" : "小"} ${sd.ln ?? ""}`);
@@ -832,7 +843,7 @@ td.luck{color:var(--muted)!important}
       for (const set of sets) {
         if (set.length < 2 || set.some((o) => !o.us)) continue;
         const inv = set.reduce((a, o) => a + 1 / o.us, 0);
-        for (const o of set) { const p = (1 / o.us) / inv, tw = Math.round(o.us * (1 + td.d / 100) * 100) / 100; opts.push({lab: o.v, pick: o.v, p, src: "美國莊家", us: o.us, tw, est: true, ev: p * tw - 1}); }
+        for (const o of set) { const p = (1 / o.us) / inv, tw = Math.round(o.us * (1 + (twDisc(g.sport, mk, o.us) || td).d / 100) * 100) / 100; opts.push({lab: o.v, pick: o.v, p, src: "美國莊家", us: o.us, tw, est: true, ev: p * tw - 1}); }
       }
       if (opts.length) out.push({label: grp.label, opts});
     }
@@ -2030,6 +2041,16 @@ td.luck{color:var(--muted)!important}
     if (!groups.length) h += `<tr><td colspan="6" class="mut">這個運動還沒有台彩記錄</td></tr>`;
     for (const g of groups) h += `<tr><td>${esc(spLabel(g.sport))}</td><td>${esc(MK[g.market] || g.market)}</td><td class="r n bad">${g.tw_margin_pct == null ? "–" : g.tw_margin_pct.toFixed(1) + "%"}</td><td class="r n">${g.us_margin_pct == null ? "–" : g.us_margin_pct.toFixed(1) + "%"}</td><td class="r n ${gb(g.avg_discount_pct)}">${g.avg_discount_pct == null ? "–" : sgn(g.avg_discount_pct, 1) + "%"}</td><td class="r n hide-s">${g.games ?? "–"}</td></tr>`;
     h += `</tbody></table></div></div>`;
+    // 依賠率級距的折扣表（估台彩賠率就是用這張；賠率越高抽越多）
+    const bd = tw.bands;
+    if (bd && bd.ml) {
+      const rng = (r) => (r.hi == null ? `${r.lo} 以上` : `${r.lo}–${r.hi}`);
+      const cell = (r) => `<td class="r n bad">${sgn(r.use, 1)}%</td><td class="r n mut hide-s">${r.n ? r.n + " 筆" : "沒記錄"}</td>`;
+      const ex = (o) => { const d = bandDisc(o, "ml"); return d == null ? "" : `${odd(o)} → 約 ${odd(Math.round(o * (1 + d / 100) * 100) / 100)}`; };
+      h += `<div class="card"><h3>估台彩賠率：照賠率級距打折<small>沒有你截圖的實際賠率時，用美國賠率 ×（1 + 折扣）估</small></h3><div class="scroll"><table class="tb"><thead><tr><th>美國賠率</th><th class="r">獨贏打折</th><th class="r hide-s">獨贏記錄</th><th class="r">讓分／大小</th><th class="r hide-s">記錄</th></tr></thead><tbody>
+        ${bd.ml.map((r, i) => `<tr><td class="n">${rng(r)}</td>${cell(r)}${bd.line && bd.line[i] ? cell(bd.line[i]) : '<td class="r">–</td><td class="hide-s"></td>'}</tr>`).join("")}</tbody></table></div>
+        <p class="mut" style="font-size:12.5px;margin:8px 0 0">例：${[1.6, 2.0, 3.5, 6.0].map(ex).join("、")}。賠率越高、台彩抽越多，所以高賠的估計會比以前（全部打同一個折）低很多。每個級距用你記過的平均，筆數少的級距會往整體趨勢靠一點，避免一兩筆就帶偏；讓分／大小分沒記錄的級距借用獨贏的。記越多越準，新截圖會自動算進來。</p></div>`;
+    }
     if (best.length) {
       h += `<div class="card"><h3>台彩抽最少的幾注<small>差距接近 0 或是正的＝台彩這注幾乎沒抽</small></h3><div class="scroll"><table class="tb"><thead><tr><th class="hide-s">日期</th><th>比賽</th><th>押什麼</th><th class="r">台彩</th><th class="r hide-s">美國</th><th class="r">差</th></tr></thead><tbody>`;
       for (const b of best) {
@@ -2257,7 +2278,7 @@ td.luck{color:var(--muted)!important}
     const legend = lines.map((l) => { const e = l.pts[l.pts.length - 1][1]; return `<span><i style="background:${LINE[l.k][1]}"></i>${LINE[l.k][0]} <b class="n ${gb(e)}">${ntd(e)}</b></span>`; }).join("");
     const note = MC.view === "live"
       ? (MC.stake === "kelly" ? `從本金 ${ntdAmt(startBank())} 開始，只下期望值 ≥ +2% 的注，金額照你在「我的投注」設的凱利比例${bankNow() ? "" : "（還沒設本金，先用 10 萬示範）"}。` : `每場都下 ${UNIT.toLocaleString("en-US")} 元。模型一・台彩用台彩賠率結算，模型一・美國用美國收盤賠率。`)
-      : (MC.stake === "kelly" ? `最近兩季 ${spLabel(MC.sport)} 測試資料，從 ${ntdAmt(startBank())} 開始，只下美國賠率期望值 ≥ +2% 的，1/4 凱利、每注最多 3%。` : `最近兩季 ${spLabel(MC.sport)}，模型沒看過的比賽，每注 ${UNIT.toLocaleString("en-US")} 元。台彩賠率用美國 × 0.91 估。`);
+      : (MC.stake === "kelly" ? `最近兩季 ${spLabel(MC.sport)} 測試資料，從 ${ntdAmt(startBank())} 開始，只下美國賠率期望值 ≥ +2% 的，1/4 凱利、每注最多 3%。` : `最近兩季 ${spLabel(MC.sport)}，模型沒看過的比賽，每注 ${UNIT.toLocaleString("en-US")} 元。台彩賠率${btTw([MC.sport])}。`);
     const empty = MC.view === "live" ? `還沒有開獎的比賽。第一批開獎後就會畫出來（${(DATA.live && DATA.live.pending) || 0} 場等開獎）。` : "沒有回測資料。";
     return `<div class="card"><h3>獲利曲線<small>模型二、綜合還在累積資料，上線後會加一條線</small></h3>
       <div class="ctl" style="margin-bottom:10px">${seg("view", [["live", "上線後實戰"], ["bt", "歷史回測"]])}${seg("stake", [["flat", "每注 1,000"], ["kelly", "凱利（你的本金）"]])}</div>
@@ -2469,7 +2490,7 @@ td.luck{color:var(--muted)!important}
       }).join("");
       h += `<div class="card"><h3>美國四大・模型一（實力）<small>用 2006–2010 年起的歷史比賽訓練，最後兩季當測試</small></h3>
         <div class="scroll"><table class="tb"><thead><tr><th>運動</th><th class="r">訓練場數</th><th class="r">測試場數</th><th class="r">只看球隊數據</th><th class="r">收盤賠率</th><th class="r">模型一</th><th class="r">每場都下<br>（台彩）</th><th class="r">台彩划算的</th></tr></thead><tbody>${rowsU}</tbody></table></div>
-        <p class="mut" style="font-size:13px;margin:8px 0 0">前三欄是「比亂猜準多少」，越大越準。「每場都下」＝測試季每場都照模型一押期望值比較高的那邊，在台彩賠率下每 100 元平均賺賠。「台彩划算的」＝模型一勝率 × 台彩賠率 > 1 的注有幾注。台彩賠率先用美國賠率 × 0.91 估。</p>
+        <p class="mut" style="font-size:13px;margin:8px 0 0">前三欄是「比亂猜準多少」，越大越準。「每場都下」＝測試季每場都照模型一押期望值比較高的那邊，在台彩賠率下每 100 元平均賺賠。「台彩划算的」＝模型一勝率 × 台彩賠率 > 1 的注有幾注。台彩賠率${btTw(Object.keys(um))}。</p>
         <div class="gl" style="margin-top:10px">
           <div><b>結論：收盤賠率已經把公開資料都算進去了</b>四個運動都一樣：加上 Elo 強弱、休息天數、背靠背、先發投手，最多只比收盤賠率準一點點，有時還差一點。只看球隊數據明顯比較差。</div>
           <div><b>所以模型一 ≈ 市場的公平價</b>每場都下，在台彩大約每 100 元虧 11–16 元，就是台彩的抽成。它的用處是告訴你「這隊真正的勝率大約多少」，拿來找台彩開得特別好、期望值是正的那幾注；大部分比賽兩邊都不划算，就不下。</div>

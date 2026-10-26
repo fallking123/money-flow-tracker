@@ -88,7 +88,7 @@ def tw_odds(g, mkt, key, line, us, tw):
     rec = ((g.get("tw") or {}).get(mkt) or {}).get(key)
     if rec and rec[0] and (mkt == "ml" or rec[1] is None or rec[1] == line):
         return rec[0], "actual"
-    return round(us * (1 + discount(tw, g["sport"], mkt) / 100), 2), "est"
+    return round(us * (1 + discount(tw, g["sport"], mkt, us) / 100), 2), "est"
 
 
 def kelly(p, o):

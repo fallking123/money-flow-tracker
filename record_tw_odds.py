@@ -172,6 +172,83 @@ def per_game():
     return out
 
 
+# ── 依賠率級距打折（2026-10-26，使用者發現台彩賠率越高抽越多）────────────────
+# 估台彩賠率＝美國賠率 ×（1 + 這個級距的折扣）。獨贏、讓分／大小分分開算。
+# 每個級距的折扣＝記錄的平均；筆數少的往「整體趨勢線」（折扣對 ln 賠率的直線）靠：
+#   用的折扣 =（n × 平均 + 5 × 趨勢）/（n + 5）
+# 讓分／大小分沒有記錄的級距，借用獨贏同一級距。
+TW_REF_FILE = os.path.join(DATA_DIR, "tw_ref_examples.csv")   # 使用者口頭給的例子（沒有比賽資料，只有兩個賠率）
+BAND_EDGES = [1.0, 1.4, 1.7, 2.0, 2.5, 3.0, 4.0, 5.0]
+BAND_PRIOR = 5          # 趨勢線的權重（相當於幾筆記錄）
+BAND_CLAMP = (-35.0, -3.0)
+
+
+def _band_index(odds):
+    i = 0
+    for k, lo in enumerate(BAND_EDGES):
+        if odds >= lo:
+            i = k
+    return i
+
+
+def band_points():
+    """所有可比的（美國或 Pinnacle 賠率, 折扣%）點：{'ml': [...], 'line': [...]}"""
+    pts = {"ml": [], "line": []}
+    for r in read_rows(TW_ODDS_FILE):
+        d, us = _num(r["discount_pct"]), _num(r["us_odds"])
+        if d is None or not us or (r["sport"], r["market"]) in NO_DISCOUNT:
+            continue
+        if r["market"] != "ml" and _num(r["tw_line"]) != _num(r["us_line"]):
+            continue
+        pts["ml" if r["market"] == "ml" else "line"].append((us, d))
+    if os.path.exists(TW_REF_FILE):
+        for r in read_rows(TW_REF_FILE):
+            ref, tw = _num(r["ref_odds"]), _num(r["tw_odds"])
+            if ref and tw:
+                pts["ml" if r["market"] == "ml" else "line"].append((ref, (tw - ref) / ref * 100))
+    return pts
+
+
+def band_table():
+    """{'edges': [...], 'ml': [{lo, hi, n, avg, use}], 'line': [...]}（use＝估台彩用的折扣%）"""
+    import math
+    pts = band_points()
+    out = {"edges": BAND_EDGES}
+    for kind in ("ml", "line"):
+        ps = pts[kind]
+        fit = None
+        if len(ps) >= 10:
+            xs, ys = [math.log(o) for o, _ in ps], [d for _, d in ps]
+            mx, my = sum(xs) / len(xs), sum(ys) / len(ys)
+            sxx = sum((x - mx) ** 2 for x in xs)
+            if sxx > 0:
+                b = sum((x - mx) * (y - my) for x, y in zip(xs, ys)) / sxx
+                fit = (my - b * mx, b)
+        rows = []
+        for i, lo in enumerate(BAND_EDGES):
+            hi = BAND_EDGES[i + 1] if i + 1 < len(BAND_EDGES) else None
+            v = [d for o, d in ps if _band_index(o) == i]
+            avg = sum(v) / len(v) if v else None
+            if kind == "line" and not v:   # 借獨贏的；但不比前一個級距抽得少
+                use = min(out["ml"][i]["use"], rows[-1]["use"]) if rows else out["ml"][i]["use"]
+            else:
+                trend = fit[0] + fit[1] * math.log(math.sqrt(lo * min(hi or 7.0, 7.0))) if fit else (avg if avg is not None else -9.0)
+                use = (len(v) * avg + BAND_PRIOR * trend) / (len(v) + BAND_PRIOR) if v else trend
+            use = min(max(use, BAND_CLAMP[0]), BAND_CLAMP[1])
+            rows.append({"lo": lo, "hi": hi, "n": len(v), "avg": None if avg is None else round(avg, 2), "use": round(use, 2)})
+        out[kind] = rows
+    return out
+
+
+def band_discount(bands, odds, market="ml"):
+    """這個賠率在台彩大約打幾折（%，負數）；沒有級距表回傳 None"""
+    if not bands or not odds:
+        return None
+    rows = bands.get("ml" if market == "ml" else "line") or []
+    i = _band_index(odds)
+    return rows[i]["use"] if i < len(rows) else None
+
+
 def summary():
     """
     依運動+盤別統計（給儀表板用）：
@@ -216,7 +293,7 @@ def summary():
              "market": r["market"], "side": r["side"], "line": _num(r["tw_line"]),
              "tw": _num(r["tw_odds"]), "us": _num(r["us_odds"]), "d": _num(r["discount_pct"])}
             for r in same[:8]]
-    return {"n_total": len(rows), "by_group": out, "best": best}
+    return {"n_total": len(rows), "by_group": out, "best": best, "bands": band_table()}
 
 
 if __name__ == "__main__":

@@ -36,6 +36,18 @@ SP_N, SP_PRIOR = 10, 5   # 先發投手：看最近 10 場先發的前五局失�
 REST_CAP = 4
 EDGES = [0.0, 0.02, 0.04]
 TW_DISCOUNT = 0.91   # 台彩賠率大約是美國的 9 成（用你記的台彩賠率估的；之後自動更新）
+_BANDS = None
+
+
+def tw_est(dec):
+    """美國賠率 → 估的台彩賠率：依賠率級距打折（賠率越高抽越多，跟看板、實戰記錄同一張表；2026-10-26 起）"""
+    global _BANDS
+    import record_tw_odds
+    if _BANDS is None:
+        _BANDS = record_tw_odds.band_table()
+    dec = np.asarray(dec, dtype=float)
+    d = np.array([record_tw_odds.band_discount(_BANDS, float(o), "ml") if np.isfinite(o) and o > 1 else 0.0 for o in dec])
+    return dec * (1 + d / 100)
 
 # SBRO 的隊名（沒有空格）→ ESPN 的隊名；搬家、改名的隊接到同一支（Elo 延續）
 SBRO_ALIAS = {
@@ -239,7 +251,7 @@ def curves(dates, p, pm, y, dec_a, dec_h, n_pts=120):
     - m1_us_value：只下美國賠率期望值 ≥ +2% 的
     - m1_us_kelly：同上，用 1/4 凱利（每注最多 3%）下注，數字是本金倍數（從 1 開始）
     - fav_us：都押熱門（參考）"""
-    ta, th = dec_a * TW_DISCOUNT, dec_h * TW_DISCOUNT
+    ta, th = tw_est(dec_a), tw_est(dec_h)
     def pl_of(home, da, dh):
         return np.where(home, np.where(y == 1, dh - 1, -1.0), np.where(y == 0, da - 1, -1.0))
     ev_h, ev_a = p * dec_h - 1, (1 - p) * dec_a - 1
@@ -315,9 +327,9 @@ def run(sport):
     # 開盤賠率時代能不能賺（模擬在開盤下注，看收盤前有沒有搶到價）
     has_open = test["dec_open_home"].notna().values
     bet = {"close": {str(e): simulate(p_model, y, test["dec_close_away"].values, test["dec_close_home"].values, e) for e in EDGES},
-           "tw": {str(e): simulate(p_model, y, test["dec_close_away"].values * TW_DISCOUNT, test["dec_close_home"].values * TW_DISCOUNT, e) for e in EDGES}}
+           "tw": {str(e): simulate(p_model, y, tw_est(test["dec_close_away"].values), tw_est(test["dec_close_home"].values), e) for e in EDGES}}
     # 每一場都下（台彩估計賠率）：各自押「期望值比較高的那一邊」；另外列「都押熱門」「都押冷門」當參考
-    ta, th = test["dec_close_away"].values * TW_DISCOUNT, test["dec_close_home"].values * TW_DISCOUNT
+    ta, th = tw_est(test["dec_close_away"].values), tw_est(test["dec_close_home"].values)
     ev_pick = lambda p: (p * th) >= ((1 - p) * ta)
     fav_home = test["p_mkt"].values >= 0.5
     bet["every_tw"] = {"model1": flat(ev_pick(p_model), y, ta, th), "market": flat(ev_pick(p_mkt), y, ta, th),
@@ -345,7 +357,7 @@ def run(sport):
         "weights": {c: round(float(w), 3) for c, w in zip(cols, m_best.coef_[0])},
         "accuracy": acc,
         "hit_rate": {"market": round(float(np.mean((p_mkt > .5) == y)) * 100, 1), "model": round(float(np.mean((p_model > .5) == y)) * 100, 1)},
-        "calibration": calibration(p_model, y), "betting": bet, "open_vs_close": res_extra,
+        "calibration": calibration(p_model, y), "betting": bet, "tw_method": "bands", "open_vs_close": res_extra,
         "home_win_rate": round(float(df["y"].mean()) * 100, 1),
         "unmapped_teams": unmapped[:30],
         "by_season": {s: {"n": int((test["season"] == s).sum()),

@@ -337,7 +337,7 @@ def us_model_reports():
         if os.path.exists(p):
             r = json.load(open(p, encoding="utf-8"))
             out[sp] = {k: r.get(k) for k in ("seasons", "test_seasons", "train_games", "test_games", "chosen", "accuracy", "features",
-                                             "hit_rate", "calibration", "betting", "open_vs_close", "generated_utc")}
+                                             "hit_rate", "calibration", "betting", "open_vs_close", "generated_utc", "tw_method")}
     return out
 
 
