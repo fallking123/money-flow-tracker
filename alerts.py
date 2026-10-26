@@ -88,7 +88,9 @@ def tw_odds(g, mkt, key, line, us, tw):
     rec = ((g.get("tw") or {}).get(mkt) or {}).get(key)
     if rec and rec[0] and (mkt == "ml" or rec[1] is None or rec[1] == line):
         return rec[0], "actual"
-    return round(us * (1 + discount(tw, g["sport"], mkt, us, "draw" if key == "draw" else "side") / 100), 2), "est"
+    from track_models import tw_from   # 從 Pinnacle＋bet365 基準估（2026-10-26 起）
+    e = tw_from(g, tw, g["sport"], mkt, key, us, line, nd=2)
+    return (e, "est") if e else (None, "none")
 
 
 def kelly(p, o):

@@ -69,6 +69,16 @@ def discount(tw, sport, market="ml", odds=None, side="side"):
     return sum(x["avg_discount_pct"] for x in gs) / len(gs) if gs else DEFAULT_DISC
 
 
+def tw_from(g, tw, sport, mkt, key, us, line=None, nd=3):
+    """估台彩賠率（2026-10-26 起）：從基準賠率（Pinnacle＋bet365，base_odds.py）估，那場沒有基準才用美國賠率"""
+    import base_odds
+    b, _ = base_odds.pick(g, mkt, key, line)
+    ref = b or us
+    if not ref or ref <= 1:
+        return None
+    return round(ref * (1 + discount(tw, sport, mkt, ref, "draw" if key == "draw" else "side") / 100), nd)
+
+
 def ml_options(g):
     """獨贏各個選項：key、美國賠率、模型勝率 p、市場公平機率 m；沒有模型或賠率就回傳 []"""
     snap = next((s for s in reversed(g.get("snaps") or []) if s.get("ml")), None)
@@ -132,7 +142,7 @@ def tw_opts(g, tw):
         if act and act[0]:
             o["tw"], o["src"] = act[0], "actual"
         else:
-            o["tw"], o["src"] = (o["est"] if "est" in o else round(o["us"] * (1 + discount(tw, g["sport"], "ml", o["us"], "draw" if o["key"] == "draw" else "side") / 100), 3)), "est"
+            o["tw"], o["src"] = (o["est"] if "est" in o else tw_from(g, tw, g["sport"], "ml", o["key"], o["us"])), "est"
         o["ev"] = o["p"] * o["tw"] - 1
     return opts, snap
 
@@ -154,7 +164,7 @@ def retro_tw(g, tw, r):
         p3, q3 = B.nhl_reg3(ph(p), total)[i], B.nhl_reg3(ph(m), total)[i]
         odds, src = (act, "actual") if act else (round(1 / (q3 * (1 + B.NHL3_MARGIN)), 3), "est")
         return {"p": p3, "m": q3, "tw": odds, "src": src, "ev": p3 * odds - 1}
-    odds, src = (act, "actual") if act else (round(us * (1 + discount(tw, sport, "ml", us, "draw" if key == "draw" else "side") / 100), 3), "est")
+    odds, src = (act, "actual") if act else (tw_from(g, tw, sport, "ml", key, us), "est")
     return {"p": p, "m": m, "tw": odds, "src": src, "ev": p * odds - 1}
 
 
@@ -223,7 +233,7 @@ def draw_opts(g, tw):
     if any(o <= 1 for o in us):
         return None
     m = (1 / us[1]) / sum(1 / o for o in us)
-    two, src = (act, "actual") if act else (round(us[1] * (1 + discount(tw, "soccer", "ml", us[1], "draw") / 100), 3), "est")
+    two, src = (act, "actual") if act else (tw_from(g, tw, "soccer", "ml", "draw", us[1]), "est")
     base = {"key": "draw", "name": "和局", "us": us[1], "p": m, "m": m}
     return ({**base, "tw": us[1], "src": "us", "ev": m * us[1] - 1},
             {**base, "tw": two, "src": src, "ev": m * two - 1}), snap
@@ -260,7 +270,7 @@ def tw_price(g, tw, pick):
             return round(1 / (q3 * (1 + B.NHL3_MARGIN)), 3), "est"
         pp = nhl_reg_over(fair["over"], line) if key == "over" else 1 - nhl_reg_over(1 - fair["under"], line)
         return round(1 / (pp * (1 + NHL_OU_MARGIN)), 3), "est"
-    return round(us * (1 + discount(tw, g["sport"], mkt, us, "draw" if key == "draw" else "side") / 100), 3), "est"
+    return tw_from(g, tw, g["sport"], mkt, key, us, line), "est"
 
 
 def tw_prob(g, pick, p):
@@ -325,8 +335,8 @@ def picks(g, tw):
 TW_EV_STRATS = {"model1", "favorite", "underdog", "draw"}   # 這幾個策略的 ev＝台彩期望值（其他記的是美國期望值）
 
 
-def reprice_est(rows, sport, tw):
-    """估的台彩賠率照最新的估法重算（2026-10-26 起：獨贏加機率、讓分大小分照級距；賠率越高抽越多）。
+def reprice_est(rows, sport, tw, game_of=lambda gid: None):
+    """估的台彩賠率照最新的估法重算（2026-10-26 起：從 Pinnacle＋bet365 基準估；獨贏加機率、讓分大小分照級距）。
     押哪一邊不變，只改估的台彩賠率、台彩期望值、已開獎那幾注的賺賠；實際截圖的賠率不動；冰球用自己的 60 分鐘算法，不動。"""
     if sport == "nhl":
         return 0
@@ -340,8 +350,14 @@ def reprice_est(rows, sport, tw):
             continue
         if us <= 1:
             continue
-        mkt, key = (r["pick"].split("|") + [""])[:2] if "|" in r["pick"] else ("ml", r["pick"])
-        new = round(us * (1 + discount(tw, sport, mkt, us, "draw" if key == "draw" else "side") / 100), 3)
+        mkt, key, ln = (r["pick"].split("|") + ["", ""])[:3] if "|" in r["pick"] else ("ml", r["pick"], "")
+        try:
+            line = float(ln) if ln not in ("", None) else None
+        except ValueError:
+            line = None
+        new = tw_from(game_of(r["game_id"]), tw, sport, mkt, key, us, line)
+        if not new:
+            continue
         try:
             if abs(float(r["tw_odds"]) - new) < 0.0005:
                 continue
@@ -538,7 +554,8 @@ def run(sports, now=None):
             if g:
                 rows[(gid, TW_TWINS[strat])] = twin_row(r, g, tw)
                 n_new += 1
-        n_rep = reprice_est(rows, sport, tw)
+        gidx = {g["id"]: g for g in games if g["sport"] == sport}
+        n_rep = reprice_est(rows, sport, tw, lambda gid: finals.get((sport, gid)) or gidx.get(gid))
         for k, r in rows.items():
             if r.get("result"):
                 continue

@@ -745,6 +745,19 @@ td.luck{color:var(--muted)!important}
     if (mkt === "sp") return ["away", "home"].filter((k) => x[k]).map((k) => ({key: k, ln: x[k][0], odds: x[k][1]}));
     return [{key: "over", ln: x.line, odds: x.over}, {key: "under", ln: x.line, odds: x.under}];
   }
+  // 基準賠率（使用者 2026-10-26 指定）：Pinnacle＋bet365，兩家都有就把機率平均；估台彩賠率都從這裡出發
+  function baseSide(snap, mkt, key, ln) {
+    const x = pinSides(snap, mkt).find((y) => y.key === key); if (!x || !x.odds || x.odds <= 1) return null;
+    if (mkt !== "ml" && ln != null && (x.ln == null || Math.abs(x.ln - ln) > 1e-6)) return null;
+    return x.odds;
+  }
+  function baseOdds(g, mkt, sd) {
+    const p = baseSide(g.pin && g.pin.l, mkt, sd.key, sd.ln), b = baseSide(g.b365, mkt, sd.key, sd.ln);
+    if (p && b) return {odds: 2 / (1 / p + 1 / b), src: "Pinnacle＋bet365"};
+    if (p) return {odds: p, src: "Pinnacle"};
+    if (b) return {odds: b, src: "bet365"};
+    return null;
+  }
   const pinFair = (arr, key) => { if (!arr.length || arr.some((x) => !x.odds)) return null; const t = arr.reduce((a, x) => a + 1 / x.odds, 0), s = arr.find((x) => x.key === key); return s ? (1 / s.odds) / t : null; };
   function pinMove(g, mkt) {
     const p = g.pin; if (!p || !p.l || !p.l[mkt]) return null;
@@ -765,7 +778,7 @@ td.luck{color:var(--muted)!important}
   function pinBlock(g, mkt, sig) {
     const pm = pinMove(g, mkt); if (!pm) return "";
     const p = g.pin, l = pinSides(p.l, mkt);
-    const now = mkt === "ml" ? l.map((x) => `${esc(keyName(g, x.key))} ${Math.round(pinFair(l, x.key) * 100)}%`).join("・")
+    const now = mkt === "ml" ? l.map((x) => `${esc(keyName(g, x.key))} ${odd(x.odds)}（${Math.round(pinFair(l, x.key) * 100)}%）`).join("・")
       : mkt === "sp" ? l.map((x) => `${esc(keyName(g, x.key))} ${line(x.ln)} ${odd(x.odds)}`).join("・")
       : `${l[0].ln}：大 ${odd(l[0].odds)}・小 ${odd(l[1].odds)}`;
     let txt;
@@ -774,7 +787,10 @@ td.luck{color:var(--muted)!important}
     else txt = `從 ${when(p.first_ts)} 開始記錄到現在，盤口沒什麼動`;
     let agree = "";
     if (sig && pm.key) agree = pm.key === sig.key ? `<span class="x good">＋ 跟上面的大戶訊號同方向，更可信。</span>` : `<span class="x bad">！ 跟上面的大戶訊號反方向，要小心。</span>`;
-    return `<div class="pin"><b>Pinnacle（職業／亞洲大錢）</b>${txt}<span class="x mut">現在：${now}</span>${agree}</div>`;
+    const b = pinSides(g.b365, mkt);
+    const bnow = !b.length ? "" : mkt === "ml" ? b.map((x) => `${esc(keyName(g, x.key))} ${odd(x.odds)}`).join("・")
+      : mkt === "sp" ? b.map((x) => `${esc(keyName(g, x.key))} ${line(x.ln)} ${odd(x.odds)}`).join("・") : `${b[0].ln}：大 ${odd(b[0].odds)}・小 ${odd(b[1].odds)}`;
+    return `<div class="pin"><b>Pinnacle（職業／亞洲大錢）</b>${txt}<span class="x mut">Pinnacle 現在：${now}</span>${bnow ? `<span class="x mut">bet365 現在：${bnow}</span>` : ""}${agree}</div>`;
   }
   function pinFairFor(g, mkt, sd) {
     const l = g.pin && g.pin.l ? pinSides(g.pin.l, mkt) : []; if (!l.length) return null;
@@ -786,7 +802,7 @@ td.luck{color:var(--muted)!important}
 
   // ═════════ 期望值：估計勝率 × 台彩賠率 − 1 ═════════
   // 勝率：獨贏用模型一（足球用足球模型），其他玩法用 Pinnacle 去掉抽水，沒有 Pinnacle 才用美國莊家
-  // 台彩賠率：你記錄過的實際賠率優先，沒有就估（獨贏：機率加固定值；讓分大小：賠率級距）
+  // 台彩賠率：你記錄過的實際賠率優先，沒有就從 Pinnacle＋bet365 基準估（獨贏：機率加固定值；讓分大小：賠率級距）
   const EV_GO = 0.02;   // 期望值至少 +2% 才說「可以下」（估計本身有誤差，留一點空間）
   const EV_LOOK = -0.05; // 台彩賠率是估的、差不到 5%：台彩實際賠率高一點就可能划算
   function probOf(g, mkt, ss, i) {
@@ -799,8 +815,9 @@ td.luck{color:var(--muted)!important}
   function twOdds(g, mkt, sd) {
     const rec = g.tw && g.tw[mkt] && g.tw[mkt][sd.key];
     if (rec && rec[0] && (mkt === "ml" || rec[1] == null || rec[1] === sd.ln)) return {odds: rec[0], est: false};
-    const td = twDisc(g.sport, mkt, sd.odds, sd.key === "draw" ? "draw" : "side"); if (!td || !sd.odds) return null;
-    return {odds: Math.round(sd.odds * (1 + td.d / 100) * 100) / 100, est: true};
+    const bo = baseOdds(g, mkt, sd), ref = bo ? bo.odds : sd.odds;   // 從 Pinnacle＋bet365 估，沒有才用美國賠率
+    const td = twDisc(g.sport, mkt, ref, sd.key === "draw" ? "draw" : "side"); if (!td || !ref) return null;
+    return {odds: Math.round(ref * (1 + td.d / 100) * 100) / 100, est: true, base: bo ? bo.src : "美國"};
   }
   const optLabel = (g, mkt, sd) => (mkt === "ml" ? sd.nm : mkt === "sp" ? `${sd.nm} ${line(sd.ln)}` : `${sd.key === "over" ? "大" : "小"} ${sd.ln ?? ""}`);
   // 冰球：台彩只算 60 分鐘（正規時間）。獨贏是三選一（客／和／主）；讓分是三選一的歐式讓分（2:0、1:0…），跟美國 ±1.5 不同，不估；
@@ -1208,11 +1225,12 @@ td.luck{color:var(--muted)!important}
   }
   // 足球：歐洲各家賠率（football-data.co.uk），跟美國共識盤比
   function euBlock(g, s) {
-    const e = g.eu, us = sides(g, s, "ml").map((x) => x.odds);
+    const e = g.eu, us = sides(g, s, "ml").map((x) => x.odds), pm = g.pin && g.pin.l && g.pin.l.ml;
     const cell = (arr, i) => (arr && arr[i] ? odd(arr[i]) : "–");
     const row = (nm, arr) => `<tr><td>${nm}</td><td class="r n">${cell(arr, 0)}</td><td class="r n">${cell(arr, 1)}</td><td class="r n">${cell(arr, 2)}</td></tr>`;
     return `<div><h4>歐洲賠率（主／和／客）</h4><table class="tb mini"><thead><tr><th></th><th class="r">主</th><th class="r">和</th><th class="r">客</th></tr></thead><tbody>
-      ${row("歐洲平均", e.avg)}${row("歐洲最高", e.max)}${row("Bet365", e.b365)}${row("Betfair 交易所", e.bfe)}${row("美國共識", us)}</tbody></table>
+      ${pm ? row("<b>Pinnacle（現在）</b>", [pm.home, pm.draw, pm.away]) : ""}${row("歐洲平均", e.avg)}${row("歐洲最高", e.max)}${row("Bet365", e.b365)}${row("Betfair 交易所", e.bfe)}${row("美國共識", us)}</tbody></table>
+      <div class="mut" style="font-size:11.5px;margin-top:4px">Pinnacle 每小時更新；歐洲平均、Bet365、Betfair 來自 football-data，一週只更新兩次，可能是幾天前的價。估台彩用 Pinnacle。</div>
       <div class="mrow"><span>大小 2.5（平均）</span><span class="n">大 ${cell(e.ou, 0)}　小 ${cell(e.ou, 1)}</span></div>
       ${e.ah != null ? `<div class="mrow"><span>亞洲讓球 主 ${line(e.ah)}</span><span class="n">主 ${cell(e.ah_avg, 0)}　客 ${cell(e.ah_avg, 1)}</span></div>` : ""}</div>`;
   }
@@ -2058,11 +2076,11 @@ td.luck{color:var(--muted)!important}
       const c = (o, side) => { const e = estMl(sp, o, side); return e ? `<td class="r n">${odd(Math.round(e * 100) / 100)}<div class="bad" style="font-size:11px">${sgn((e / o - 1) * 100, 0)}%</div></td>` : '<td class="r mut">–</td>'; };
       const ln = (o) => { const d = bandDisc(o, "sp"); return d == null ? '<td class="r mut">–</td>' : `<td class="r n">${odd(Math.round(o * (1 + d / 100) * 100) / 100)}<div class="bad" style="font-size:11px">${sgn(d, 0)}%</div></td>`; };
       const bySp = Object.entries(ad.side.by_sport || {}).map(([k, v]) => `${spLabel(k)} ${pc(v.k)}（${v.n} 筆）`).join("、");
-      h += `<div class="card"><h3>估台彩賠率：賠率越高抽越多<small>沒有你截圖的實際賠率時這樣估${sp ? `・${esc(spLabel(sp))}` : ""}</small></h3>
+      h += `<div class="card"><h3>估台彩賠率：賠率越高抽越多<small>沒有你截圖的實際賠率時這樣估・基準＝Pinnacle＋bet365${sp ? `・${esc(spLabel(sp))}` : ""}</small></h3>
         <p style="font-size:13.5px;margin:0 0 8px">台彩的做法像是：<b>每個選項的機率都多加約 ${pc(ad.side.k)} 個百分點</b>（和局約 ${pc(ad.draw.k)}）。加的量差不多固定，所以賠率越高，賠率就被砍得越兇。例：10.28 的冷門，台彩只給 6.25。</p>
-        <div class="scroll"><table class="tb"><thead><tr><th>美國賠率</th><th class="r">獨贏（主客隊）</th><th class="r">和局</th><th class="r">讓分／大小</th></tr></thead><tbody>
+        <div class="scroll"><table class="tb"><thead><tr><th>基準賠率</th><th class="r">獨贏（主客隊）</th><th class="r">和局</th><th class="r">讓分／大小</th></tr></thead><tbody>
         ${OD.map((o) => `<tr><td class="n">${odd(o)}</td>${c(o, "side")}${o >= 2.5 && o <= 7 ? c(o, "draw") : '<td class="r mut">–</td>'}${o <= 3 ? ln(o) : '<td class="r mut">–</td>'}</tr>`).join("")}</tbody></table></div>
-        <p class="mut" style="font-size:12.5px;margin:8px 0 0">格子裡是估的台彩賠率，下面是比美國低多少。主客隊每個運動分開算：${bySp}；和局 ${ad.draw.n} 筆（太少，先往主客隊靠）。讓分／大小分台彩會自己調盤口，照賠率級距打折（${bd && bd.line ? bd.line.filter((r) => r.n).reduce((a, r) => a + r.n, 0) : 0} 筆記錄）。記越多越準，新截圖會自動算進來，過去估的注也會跟著重算。</p></div>`;
+        <p class="mut" style="font-size:12.5px;margin:8px 0 0">格子裡是估的台彩賠率，下面是比基準低多少。基準賠率＝Pinnacle 和 bet365 的平均（只有一家就用那一家；足球目前只有 Pinnacle；兩家都沒有才用美國共識盤）。${ad.ref ? `校正用的記錄：${ad.ref.base} 筆對得到基準、${ad.ref.us} 筆只能對美國收盤、另有 ${ad.ref.examples} 個你給的 Pinnacle 例子。` : ""}主客隊每個運動分開算：${bySp}；和局 ${ad.draw.n} 筆（太少，先往主客隊靠）。讓分／大小分台彩會自己調盤口，照賠率級距打折（${bd && bd.line ? bd.line.filter((r) => r.n).reduce((a, r) => a + r.n, 0) : 0} 筆記錄）。記越多越準，新截圖會自動算進來，過去估的注也會跟著重算。</p></div>`;
     }
     if (best.length) {
       h += `<div class="card"><h3>台彩抽最少的幾注<small>差距接近 0 或是正的＝台彩這注幾乎沒抽</small></h3><div class="scroll"><table class="tb"><thead><tr><th class="hide-s">日期</th><th>比賽</th><th>押什麼</th><th class="r">台彩</th><th class="r hide-s">美國</th><th class="r">差</th></tr></thead><tbody>`;

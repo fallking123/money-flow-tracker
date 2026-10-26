@@ -20,6 +20,7 @@ from sports_common import (NHL3_MARGIN, nhl_reg3, reg_winner, reg_total, _norm, 
 import record_tw_odds
 import soccer_dashboard
 import pinnacle_dashboard
+import base_odds
 
 RECENT_DAYS = 14
 MAX_SNAPS = 40
@@ -215,6 +216,9 @@ def build_closed():
                    if r.get("status") == "final"}
         if not results:
             continue
+        # 基準賠率（Pinnacle＋bet365 收盤）：只接最近兩個月（重算估的台彩賠率用；網頁不顯示）
+        pins = pinnacle_dashboard.load(sport, datetime.now(timezone.utc), 62)
+        b365 = base_odds.load_b365(sport)
         by_id = {}
         for path in all_monthly_files(sport, "odds_history"):
             for r in read_rows(path):
@@ -239,6 +243,8 @@ def build_closed():
                 "status": "final",
                 "open": open_of(rows[0]),
                 "snaps": [snap_of(r) for r in thin(pre)],
+                **({"pin": pp} if (pp := pinnacle_dashboard.find(pins, home, away, t)) else {}),
+                **({"b365": bb} if (bb := base_odds.b365_snap(b365.get(sid), t)) else {}),
                 "result": {"away": num(res["away_score"]), "home": num(res["home_score"]),
                            "winner": res["winner"], "margin": num(res["margin"]), "total": num(res["total_points"]),
                            "reg": reg_winner(res.get("away_periods"), res.get("home_periods")) if sport == "nhl" else None,
@@ -518,6 +524,7 @@ def build(now):
 
         extra = extra_index(sport, now)
         pins = pinnacle_dashboard.load(sport, now, RECENT_DAYS)
+        b365 = base_odds.load_b365(sport)
         for sid, g in by_id.items():
             rows = sorted(g["rows"], key=lambda r: r["timestamp_utc"])
             last = rows[-1]
@@ -545,6 +552,7 @@ def build(now):
                 "open": open_of(first),
                 "extra": match_extra(extra, away, home, t),
                 "pin": pinnacle_dashboard.find(pins, home, away, t),
+                "b365": base_odds.b365_snap(b365.get(sid), t),
                 "snaps": [snap_of(r) for r in rows[-MAX_SNAPS:]],
                 "result": None if not res or res["status"] != "final" else {
                     "away": num(res["away_score"]), "home": num(res["home_score"]),
@@ -575,7 +583,9 @@ def build(now):
         rec = twg.get((g["sport"], g["id"]))
         if rec:
             g["tw"] = rec
-    tw = record_tw_odds.summary()
+    # 台彩校正改成對「基準賠率」（Pinnacle＋bet365）比；那場找不到基準才用美國收盤
+    gmap = {(g["sport"], g["id"]): g for g in closed + games}
+    tw = record_tw_odds.summary(base_of=lambda sport, gid, mkt, side, line: base_odds.pick(gmap.get((sport, gid)), mkt, side, line))
     for b in tw.get("best", []):
         if b["sport"] == "soccer":
             b["away"] = soccer_dashboard.ZH.get(b["away"]) or b["away"]
@@ -635,9 +645,16 @@ def slim(data):
     return out
 
 
+def strip_closed_base(data):
+    """已完賽比賽的 Pinnacle／bet365 收盤只給程式重算用，不寫進看板檔案（檔案才不會變大）"""
+    out = dict(data)
+    out["closed"] = [{k: v for k, v in g.items() if k not in ("pin", "b365")} for g in data.get("closed", [])]
+    return out
+
+
 if __name__ == "__main__":
     now = datetime.now(timezone.utc)
-    data = build(now)
+    data = strip_closed_base(build(now))
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, separators=(",", ":"))

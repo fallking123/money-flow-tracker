@@ -366,8 +366,13 @@ def build_soccer(now, recent_days=14, closed_snaps=8):
         for r in read_rows(path):
             if r["an_id"] in results and results[r["an_id"]].get("status") == "final":
                 allrows.setdefault(r["an_id"], []).append(r)
+    pins62 = pinnacle_dashboard.load("soccer", now, 62)   # 基準賠率（Pinnacle 收盤）：重算估的台彩賠率用
     for aid, rows in allrows.items():
-        closed.append(game_of(aid, rows, results[aid], now, snaps_k=closed_snaps))
+        cg = game_of(aid, rows, results[aid], now, snaps_k=closed_snaps)
+        pp = pinnacle_dashboard.find(pins62, cg["home"], cg["away"], parse_time(rows[-1]["game_time_utc"]), score=match_score, league=cg["league"])
+        if pp:
+            cg["pin"] = pp
+        closed.append(cg)
     # 只有 Pinnacle 的賽事（沒有 Action Network 下注比例）
     an_lg = {k for k, v in COMPS.items() if v.get("an")}
     for e in pinnacle_dashboard.load("soccer", now, 60):

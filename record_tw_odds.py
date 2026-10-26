@@ -191,16 +191,29 @@ def _band_index(odds):
     return i
 
 
-def band_points():
-    """所有可比的（美國或 Pinnacle 賠率, 折扣%）點：{'ml': [...], 'line': [...]}"""
+def _ref(r, base_of):
+    """這筆記錄拿來比的賠率：有基準（Pinnacle＋bet365）就用基準，沒有才用美國收盤 → (賠率, 是不是基準)"""
+    if base_of:
+        line = None if r["market"] == "ml" else _num(r["tw_line"])
+        b = base_of(r["sport"], r["sbd_id"], r["market"], r["side"], line)
+        if b and b[0]:
+            return b[0], True
+    return _num(r["us_odds"]), False
+
+
+def band_points(base_of=None):
+    """所有可比的（基準或美國賠率, 折扣%）點：{'ml': [...], 'line': [...]}"""
     pts = {"ml": [], "line": []}
     for r in read_rows(TW_ODDS_FILE):
-        d, us = _num(r["discount_pct"]), _num(r["us_odds"])
-        if d is None or not us or (r["sport"], r["market"]) in NO_DISCOUNT:
+        tw = _num(r["tw_odds"])
+        if _num(r["discount_pct"]) is None or not tw or (r["sport"], r["market"]) in NO_DISCOUNT:
             continue
         if r["market"] != "ml" and _num(r["tw_line"]) != _num(r["us_line"]):
             continue
-        pts["ml" if r["market"] == "ml" else "line"].append((us, d))
+        ref, _ = _ref(r, base_of)
+        if not ref:
+            continue
+        pts["ml" if r["market"] == "ml" else "line"].append((ref, (tw - ref) / ref * 100))
     if os.path.exists(TW_REF_FILE):
         for r in read_rows(TW_REF_FILE):
             ref, tw = _num(r["ref_odds"]), _num(r["tw_odds"])
@@ -209,10 +222,10 @@ def band_points():
     return pts
 
 
-def band_table():
+def band_table(base_of=None):
     """{'edges': [...], 'ml': [{lo, hi, n, avg, use}], 'line': [...]}（use＝估台彩用的折扣%）"""
     import math
-    pts = band_points()
+    pts = band_points(base_of)
     out = {"edges": BAND_EDGES}
     for kind in ("ml", "line"):
         ps = pts[kind]
@@ -248,14 +261,19 @@ ADD_PRIOR = 10
 ADD_DEFAULT = {"side": 0.06, "draw": 0.046}
 
 
-def add_points():
-    """(運動, side/draw, 美國或 Pinnacle 賠率, 台彩賠率)；只算獨贏，冰球不算（60 分鐘三選一另外算）"""
+def add_points(base_of=None, counts=None):
+    """(運動, side/draw, 基準或美國賠率, 台彩賠率)；只算獨贏，冰球不算（60 分鐘三選一另外算）"""
     out = []
     for r in read_rows(TW_ODDS_FILE):
-        us, tw = _num(r["us_odds"]), _num(r["tw_odds"])
-        if r["market"] != "ml" or (r["sport"], "ml") in NO_DISCOUNT or not us or not tw or us <= 1:
+        tw = _num(r["tw_odds"])
+        if r["market"] != "ml" or (r["sport"], "ml") in NO_DISCOUNT or not tw:
             continue
-        out.append((r["sport"], "draw" if r["side"] == "draw" else "side", us, tw))
+        ref, is_base = _ref(r, base_of)
+        if not ref or ref <= 1:
+            continue
+        if counts is not None:
+            counts["base" if is_base else "us"] += 1
+        out.append((r["sport"], "draw" if r["side"] == "draw" else "side", ref, tw))
     if os.path.exists(TW_REF_FILE):
         for r in read_rows(TW_REF_FILE):
             ref, tw = _num(r["ref_odds"]), _num(r["tw_odds"])
@@ -264,9 +282,10 @@ def add_points():
     return out
 
 
-def add_table():
-    """{'side': {'k', 'n', 'by_sport': {運動: {'k', 'n'}}}, 'draw': {'k', 'n'}}"""
-    pts = add_points()
+def add_table(base_of=None):
+    """{'side': {'k', 'n', 'by_sport': {運動: {'k', 'n'}}}, 'draw': {'k', 'n'}, 'ref': {'base', 'us', 'pinnacle_examples'}}"""
+    cnt = {"base": 0, "us": 0}
+    pts = add_points(base_of, cnt)
     out = {}
     for kind in ("side", "draw"):
         v = [(sp, 1 / tw - 1 / us) for sp, kd, us, tw in pts if kd == kind]
@@ -281,6 +300,7 @@ def add_table():
             ds = [d for s, d in v if s == sp]
             by[sp] = {"k": round((sum(ds) + ADD_PRIOR * k) / (len(ds) + ADD_PRIOR), 4), "n": len(ds), "avg": round(sum(ds) / len(ds), 4)}
         out[kind] = {"k": round(k, 4), "n": len(v), "by_sport": by}
+    out["ref"] = {**cnt, "examples": len(pts) - cnt["base"] - cnt["us"]}
     return out
 
 
@@ -310,7 +330,7 @@ def band_discount(bands, odds, market="ml"):
     return rows[i]["use"] if i < len(rows) else None
 
 
-def summary():
+def summary(base_of=None):
     """
     依運動+盤別統計（給儀表板用）：
     - avg_discount_pct：台彩賠率比美國收盤低多少（平均）
@@ -354,7 +374,7 @@ def summary():
              "market": r["market"], "side": r["side"], "line": _num(r["tw_line"]),
              "tw": _num(r["tw_odds"]), "us": _num(r["us_odds"]), "d": _num(r["discount_pct"])}
             for r in same[:8]]
-    return {"n_total": len(rows), "by_group": out, "best": best, "bands": band_table(), "add": add_table()}
+    return {"n_total": len(rows), "by_group": out, "best": best, "bands": band_table(base_of), "add": add_table(base_of)}
 
 
 if __name__ == "__main__":
