@@ -486,8 +486,17 @@ def live_summary():
         opp = {"home": "away", "away": "home"}.get(r["pick"])
         f = side.get((r["game_id"], opp)) if o and o < FLIP_ODDS and opp else None
         rows_s.append({**(f or r), "strategy": "model1_flip14", "flipped": bool(f)})
+    # 成績頁每一行都能點開看每一注（使用者 2026-10-26）：[9]＝比賽編號（指到 sg）、[10]＝押什麼（pick 原始代碼，網頁換成中文）
+    sg_idx, sg = {}, []
+    def gi(r):
+        k = (r["sport"], r["game_id"])
+        if k not in sg_idx:
+            sg_idx[k] = len(sg)
+            sg.append([r["game_time_utc"], r["sport"], r.get("league") or r["sport"], r["away_zh"] or r["away"], r["home_zh"] or r["home"]])
+        return sg_idx[k]
     series = sorted([[r["game_time_utc"], r["strategy"], r["sport"], num(r["settle_odds"]) or num(r["tw_odds"]), num(r["p"]), num(r["ev"]),
-                      num(r["profit"]), r.get("league") or r["sport"], int(r["settle_src"] == "actual")] for r in rows_s if r["result"] in ("win", "loss", "push")], key=lambda x: x[0])
+                      num(r["profit"]), r.get("league") or r["sport"], int(r["settle_src"] == "actual"), gi(r), r["pick"]]
+                     for r in rows_s if r["result"] in ("win", "loss", "push")], key=lambda x: x[0])
     # 模型一 vs 模型三（使用者 2026-10-26 要求）：同一場兩個模型押不同邊的那幾場，各自的賺賠
     pair = {}
     for r in rows:
@@ -502,7 +511,7 @@ def live_summary():
                          "old": [o["pick_zh"], num(o["settle_odds"]) or num(o["tw_odds"]), num(o["est_old"]), o["result"], num(o["profit"])],
                          "new": [n["pick_zh"], num(n["settle_odds"]) or num(n["tw_odds"]), n["result"], num(n["profit"])]})
     cmp_rows.sort(key=lambda x: x["t"], reverse=True)
-    return {"since": min((r["game_time_utc"] for r in m1), default=None), "strats": strats, "pending": len(pend), "est_cmp": cmp_rows,
+    return {"since": min((r["game_time_utc"] for r in m1), default=None), "strats": strats, "pending": len(pend), "est_cmp": cmp_rows, "sg": sg,
             "recent": [slim(r) for r in settled[:30]], "series": series,
             # 模型一・台彩：每一注（含還沒開賽的），新的在前；eo＝挑邊時用的舊估法台彩賠率
             "tw_bets": [{**slim(r), "eo": num(r.get("est_old"))} for r in sorted(m1, key=lambda r: r["game_time_utc"], reverse=True)],
