@@ -44,6 +44,8 @@ def main():
         data["live_nhl"] = json.load(open(os.path.join(lv, "nhl_summary.json"), encoding="utf-8"))
         allr = list(_csv.DictReader(open(os.path.join(lv, "nhl.csv"), encoding="utf-8")))
         data["live_nhl"]["picks_list"] = [r for r in allr if r.get("pick")]
+        from pro import live_report
+        data["live_nhl"]["weekly"] = live_report.weekly(allr)   # 每一場都看收盤有沒有往模型移（週報）
         # 每日對照表：還沒打的＋最近 2 天打完的，每一場都列（不只有下注的）
         from datetime import timedelta as _td
         cut = (datetime.now(timezone.utc) - _td(days=2, hours=6)).date().isoformat()

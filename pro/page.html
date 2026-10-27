@@ -491,6 +491,22 @@ const DATA = /*__DATA__*/null;
       <p class="note">全部 ${L.games_settled} 場打完的比賽裡，收盤往模型那邊移 ${L.move_toward} 場、反方向 ${L.move_away} 場。「回補」＝系統上線前、這一季已經打完的比賽，用我們第一次記到的賠率補記（模型只用比賽前的資料）。注數要到幾百注才看得出真假，前面大多是運氣。</p>
       ${rows ? `<div class="scroll"><table><thead><tr><th>日期</th><th>比賽</th><th class="r">賠率</th><th class="r">CLV</th><th class="r">結果</th></tr></thead><tbody>${rows}</tbody></table></div>` : ""}</section>`;
   }
+  function liveWeekly() {
+    const W = DATA.live_nhl && DATA.live_nhl.weekly; if (!W || !W.all || !W.all.n) return "";
+    const pts = (x) => (x == null ? "–" : (x >= 0 ? "+" : "−") + Math.abs(x * 100).toFixed(2) + " 點");
+    const ed = (a) => (a.edge ? `<b class="${gb(a.edge.mean)}">${pp(a.edge.mean, 2)}</b>` : "–");
+    const row = (lab, a, sub) => `<tr><td>${lab}${sub ? `<div class="s">${sub}</div>` : ""}</td><td class="r n">${a.n}</td><td class="r n">${ed(a)}${a.edge && a.edge.se != null ? `<div class="s">±${(2 * a.edge.se * 100).toFixed(1)}%</div>` : ""}</td><td class="r n">${a.move ? pts(a.move.mean) : "–"}</td><td class="r n">${a.toward}／${a.away}</td><td class="r n">${a.rule_n}</td></tr>`;
+    const L = W.live, A = W.all;
+    const verdict = (a) => !a.edge || a.n < 30 ? "場數還太少" : a.edge.se != null && Math.abs(a.edge.mean) >= 2 * a.edge.se ? (a.edge.mean > 0 ? "看得出模型挑的邊比較好" : "看得出模型挑的邊比較差") : "跟丟銅板差不多，看不出模型有用";
+    return `<section class="card"><span class="tag">週報 · NHL</span><h2>每一場都看：收盤有沒有往模型移</h2>
+      <p class="sub">規則一季只觸發約 50 注，看輸贏要好幾季。這裡改看<b>每一場</b>：用決定那一刻的 Pinnacle 賠率押模型比較看好的那邊（不管差多少），打完跟收盤比。只是亂押的話，平均會剛好輸掉 Pinnacle 的抽水（約 3%）；「比抽水好」＞ 0 才代表模型挑的邊比較準。</p>
+      <div class="kpis"><div class="kpi"><span>實戰場數</span><b>${L.n}</b></div><div class="kpi"><span>實戰・比抽水好</span><b class="${L.edge ? gb(L.edge.mean) : ""}">${L.edge ? pp(L.edge.mean, 2) : "–"}</b>${luck(L.edge)}</div><div class="kpi"><span>收盤往模型移／反方向</span><b>${L.toward}／${L.away}</b></div></div>
+      <p class="note" style="margin-top:0"><b>目前判斷（實戰）：${verdict(L)}。</b>含季初回補的全部 ${A.n} 場：比抽水好 ${pp(A.edge && A.edge.mean, 2)}（±${A.edge && A.edge.se != null ? (2 * A.edge.se * 100).toFixed(1) : "–"}%），${verdict(A)}。</p>
+      <div class="scroll"><table><thead><tr><th>週（週一）</th><th class="r">場數</th><th class="r">比抽水好</th><th class="r">收盤平均移動</th><th class="r">往／反</th><th class="r">規則注數</th></tr></thead><tbody>
+      ${W.weeks.slice().reverse().map((w) => row(esc(w.week.slice(5).replace("-", "/")), w, w.how)).join("")}
+      ${row("<b>實戰合計</b>", L, "10/13 起")}${row("<b>全部合計</b>", A, "含季初回補")}</tbody></table></div>
+      <p class="note">「收盤平均移動」＝收盤勝率減掉決定時的勝率（都去掉抽水），站在模型那一邊看；正的＝收盤往模型移。「往／反」＝移動超過 0.5 點的場數。± 是運氣範圍：差距比它小就是運氣。練習區的規則（看好 ≥15%）CLV 約 +0.6%，所以就算模型真的有用，每一場平均也只會好一點點，要累積幾百場才看得出來。</p></section>`;
+  }
   function board() {
     const L = DATA.live_nhl; if (!L || !L.board || !L.board.length) return "";
     const rows = L.board.slice().sort((a, b) => (b.date + b.home).localeCompare(a.date + a.home)).map((r) => {
@@ -517,7 +533,7 @@ const DATA = /*__DATA__*/null;
   }
   function render() {
     if (!DATA) { $("app").innerHTML = `<div class="card">沒有資料。</div>`; return; }
-    $("app").innerHTML = head() + stages() + liveNhl() + board() + audit() + rule15() + search() + combo() + usStage() + soccer() + dataCheck() + clvIntro() + market() + signals() + model1() +
+    $("app").innerHTML = head() + stages() + liveNhl() + liveWeekly() + board() + audit() + rule15() + search() + combo() + usStage() + soccer() + dataCheck() + clvIntro() + market() + signals() + model1() +
       `<footer>職業版只做研究和驗證，跟原本的看板、模型一完全分開。</footer>`;
   }
   document.addEventListener("click", (e) => {
