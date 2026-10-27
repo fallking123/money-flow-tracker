@@ -184,6 +184,11 @@ h1{font-size:24px;font-weight:900;margin:0;text-wrap:balance}
 .vb .it .e{font-family:var(--num);font-weight:800;font-size:16px;text-align:right;color:var(--good)}
 .vb .it.us .e{color:var(--accent)}
 .vb .it .s{font-size:12.5px;text-align:right;color:var(--ink2)}
+.vb .it.look{background:var(--warn-soft)}
+.vb .it.look .e{color:var(--warn)}
+.vb-h{font-size:13px;font-weight:700;margin:12px 0 6px}
+.vb-h:first-of-type{margin-top:4px}
+.vb-h small{font-weight:500;color:var(--muted);margin-left:6px}
 .evt{font-size:11.5px;font-weight:700;border-radius:999px;padding:1px 8px;white-space:nowrap}
 .evt.go{background:var(--good-soft);color:var(--good)} .evt.edge,.evt.look{background:var(--warn-soft);color:var(--warn)} .evt.no{background:var(--soft2);color:var(--muted)}
 .evtb small{font-weight:400}
@@ -1068,6 +1073,36 @@ td.luck{color:var(--muted)!important}
     };
     return `<div class="card" style="margin-bottom:14px"><h3>現在划算的注<small>綠色＝台彩划算，藍色＝只有美國賠率划算；點一下記錄</small></h3><div class="vb">${items.slice(0, 12).map(row).join("")}</div></div>`;
   }
+  // 比賽頁最上面「今天要看的注」（使用者 2026-10-27 要求整合）：36 小時內，照台彩期望值分三種
+  //   可以下＝台彩期望值 ≥ +2%；去台彩看一眼＝台彩賠率是估的、差不到 5%（台彩實際開高一點就划算）；只有美國賠率划算＝台彩下不到（收起來）
+  function todayCard(list) {
+    const go = [], look = [], us = [];
+    for (const g of list) {
+      if (g.status !== "upcoming") continue;
+      const near = new Date(g.t) - Date.now() <= 36 * 36e5;
+      for (const grp of evOptions(g)) for (const o of grp.opts) {
+        if (o.ev >= EV_GO) go.push({g, o});
+        else if (o.est && o.ev >= EV_LOOK) { if (near) look.push({g, o}); }
+        else if (o.evUs != null && o.evUs >= EV_GO) us.push({g, o});
+      }
+    }
+    go.sort((a, b) => b.o.ev - a.o.ev); look.sort((a, b) => b.o.ev - a.o.ev); us.sort((a, b) => b.o.evUs - a.o.evUs);
+    const when = (g) => `${fmtMD.format(new Date(g.t))} ${fmtTime.format(new Date(g.t))}・${esc(lgLabel(g))}・${esc(matchName(g))}`;
+    const pr = (o) => (o.p == null ? "" : `勝率 ${Math.round(o.p * 100)}%（${esc(o.src || "")}）・`);
+    const item = (cls, g, o, ev, right) => `<button type="button" class="it${cls}" data-bet="${esc(g.sport + "|" + g.id)}" data-mk="${o.mkt}" data-pick="${esc(o.pick)}">
+        <span class="m">${when(g)}</span><span class="e">${evTxt(ev)}</span><span class="p">${esc(MK[o.mkt])} ${esc(o.lab)}</span><span class="s">${right}</span></button>`;
+    const goRow = ({g, o}) => { const st = stakeFor(o.p, o.tw, g.sport + "|" + g.id);
+      return item("", g, o, o.ev, `${pr(o)}台彩 ${odd(o.tw)}${o.est ? "（估）" : ""}・${st && st.amt ? `建議下 ${stkTxt(st)}` : st && st.pause ? "回撤太大，先暫停" : st ? "今天額度用完" : "設定本金看建議金額"}`); };
+    const lookRow = ({g, o}) => item(" look", g, o, o.ev, `${pr(o)}估 ${odd(o.tw)}・<b>台彩要 ≥ ${odd(needOdds(o))} 才下</b>`);
+    const usRow = ({g, o}) => item(" us", g, o, o.evUs, `${g.pin_only ? "國際" : "美國"} ${odd(o.us)}・台彩要 ≥ ${odd(needOdds(o))} 才下`);
+    const LK = 10;
+    let h = `<div class="card" style="margin-bottom:14px"><h3>今天要看的注<small>照台彩期望值（勝率 × 台彩賠率 − 1）・點一下記錄</small></h3>`;
+    if (!go.length && !look.length) h += `<p class="mut" style="font-size:13px;margin:0">現在沒有台彩划算的注，36 小時內也沒有接近划算的。台彩抽很多，大部分時間都是這樣，不下也沒關係。</p>`;
+    if (go.length) h += `<div class="vb-h">可以下<small>台彩期望值 ≥ +2%</small></div><div class="vb">${go.map(goRow).join("")}</div>`;
+    if (look.length) h += `<div class="vb-h">去台彩看一眼<small>36 小時內・估的賠率差一點；台彩實際賠率到右邊的數字就划算</small></div><div class="vb">${look.slice(0, LK).map(lookRow).join("")}</div>${look.length > LK ? `<p class="mut" style="font-size:12px;margin:6px 0 0">另外還有 ${look.length - LK} 注更差一點的，沒列出來。</p>` : ""}`;
+    if (us.length) h += `<details class="more-sec" style="margin-top:10px"><summary>只有美國賠率划算（台彩下不到）<small class="sm-sub">${us.length} 注・參考用</small></summary><div class="vb">${us.slice(0, 12).map(usRow).join("")}</div></details>`;
+    return h + `<p class="mut" style="font-size:12px;margin:8px 0 0">台彩賠率有你截圖就用實際的，沒有就用 Pinnacle＋bet365 估（標「估」）。真的下注前，以台彩 App 上的賠率為準。</p></div>`;
+  }
   function evGrid(g) {
     if (g.status !== "upcoming") return "";
     const groups = evOptions(g); if (!groups.length) return "";
@@ -1328,9 +1363,9 @@ td.luck{color:var(--muted)!important}
         <div class="bt"><span>今天可下</span>${sp && (sp.day || sp.week) ? `<b class="sm bad">已停損</b>` : left == null ? `<button type="button" class="bt-link" data-v="bets">設定本金</button>` : `<b class="n sm">${ntdAmt(left)}</b>`}</div>
       </div>${need ? `<button type="button" class="ask" data-v="tw">${CAM}<span>有 <b>${need} 場</b>剛打完的比賽需要台彩賠率截圖</span><span class="go">看是哪幾場 →</span></button>` : ""}`;
     if (!list.length) { $("board").innerHTML = `<div class="empty">這個運動目前沒有即將開打的比賽（休賽期或還沒開始記錄）。</div>`; return; }
-    let h = `<div class="bsec">有訊號<span>依強度排</span></div>`;
+    let h = todayCard(DATA.games.filter(inSport)) + `<div class="bsec">有訊號<span>依強度排</span></div>`;
     h += sigs.length ? `<div class="grid">${sigs.map(sigCard).join("")}</div>` : `<div class="empty" style="padding:18px">目前沒有比賽達到訊號（錢比人多 ${state.thr}%）。可以把上面的門檻調低看看。</div>`;
-    h += `<div style="height:14px"></div>` + valueBlock(DATA.games.filter(inSport));
+    h += `<div style="height:14px"></div>`;
     if (rest.length) {
       h += `<button type="button" class="others" id="others" aria-expanded="${state.others}"><span>其他 ${rest.length} 場沒有明顯訊號</span><span class="go">${state.others ? "收起" : "展開"}</span></button>`;
       if (state.others) {
@@ -2340,7 +2375,9 @@ td.luck{color:var(--muted)!important}
       ${lines.length ? `<div class="legend">${legend}</div>` : ""}
       <p class="mut" style="font-size:12.5px;margin:8px 0 0">${note}</p></div>`;
   }
-  const SD = {open: "", lim: 100};   // 成績頁：哪一行點開看每一注、顯示幾注
+  const SD = {open: "", lim: 100};
+  let REFO = store.get("ref_open", false);   // 成績頁「更多參考策略」有沒有打開
+  document.addEventListener("toggle", (e) => { const d = e.target; if (d && d.dataset && d.dataset.refsec) { REFO = d.open; store.set("ref_open", REFO); } }, true);   // 成績頁：哪一行點開看每一注、顯示幾注
   const MT = {tab: store.get("mtab", "score"), bk: store.get("mbk", "ml"), m: store.get("mmod", "m1") === "m3" ? "m3" : "m1"};
   const MT_TABS = [["score", "成績"], ["curve", "曲線"], ["stake", "下多少"], ["odds", "賠率區間"], ["bets", "每一注"], ["bt", "回測"]];
   function renderModels() {
@@ -2391,12 +2428,15 @@ td.luck{color:var(--muted)!important}
     const lgTag = (MLG.sel.size ? `只算 ${lgNames().join("、")}・` : "") + dTag() + oTag();
     const T = {};
     let h = `<div class="card"><h3>每一場都下注，誰的獲利率最高<small>${lgTag}上線後實戰・${L.since ? `從 ${fmtMD.format(new Date(L.since))} 開始` : "今天開始"}・每場 ${UNIT.toLocaleString("en-US")} 元</small></h3>
-      <div class="scroll"><table class="tb">${head}<tbody><tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">模型一（挑邊：美國賠率／舊估法）</td></tr>${row("model1")}${row("model1_us")}${row("model1_us_tw")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">模型三（挑邊：Pinnacle／新估法）</td></tr>${row("model3")}${row("model3_pin")}${row("model3_pin_tw")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">不限獨贏・美國賠率</td></tr>${row("model1_us", "只下獨贏・美國", "每場押獨贏比較划算的一邊（跟上面「模型一・美國賠率」同一批）")}${row("model1_sp_us")}${row("model1_ou_us")}${row("model1_all_us")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">不限獨贏・同一注改去台彩下</td></tr>${row("model1_us_tw", "只下獨贏・台彩下", "同一注改去台彩下（冰球算 60 分鐘、打平算輸）")}${row("model1_sp_tw")}${row("model1_ou_tw")}${row("model1_all_tw")}${["draw_us", "draw", "model1_us_draw", "model1_tw_draw"].some((k) => agg(k).n) ? `<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">和局（足球、冰球）</td></tr>${row("draw_us")}${row("draw")}${row("model1_us_draw")}${row("model1_tw_draw")}` : ""}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">還在累積</td></tr>${row("model2")}${row("combo")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">參考（台彩賠率）</td></tr>${row("model1_flip14")}${row("model1_drawx", `模型一・低於 ${esc(DRW.x)} 改押和局`, `只看足球、冰球：模型一押的那邊台彩賠率低於 <input type="number" inputmode="decimal" step="0.05" min="1.01" max="20" value="${esc(DRW.x)}" data-drwin="1" style="width:62px;font-size:13px;padding:2px 4px"> 就改押和局（冰球＝60 分鐘和局）；其他場次不下。數字改完按完成就會重算。`)}${row("favorite")}${row("underdog")}</tbody></table></div>
+      <div class="scroll"><table class="tb">${head}<tbody><tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">模型一（挑邊：美國賠率／舊估法）</td></tr>${row("model1")}${row("model1_us")}${row("model1_us_tw")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">模型三（挑邊：Pinnacle／新估法）</td></tr>${row("model3")}${row("model3_pin")}${row("model3_pin_tw")}</tbody></table></div>
+      <details class="more-sec" data-refsec="1"${REFO ? " open" : ""} style="margin-top:10px"><summary>更多參考策略<small class="sm-sub">讓分、大小分、和局、改押對面、都押熱門／冷門…</small></summary><div>
+      <div class="scroll"><table class="tb">${head}<tbody><tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">不限獨贏・美國賠率</td></tr>${row("model1_us", "只下獨贏・美國", "每場押獨贏比較划算的一邊（跟上面「模型一・美國賠率」同一批）")}${row("model1_sp_us")}${row("model1_ou_us")}${row("model1_all_us")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">不限獨贏・同一注改去台彩下</td></tr>${row("model1_us_tw", "只下獨贏・台彩下", "同一注改去台彩下（冰球算 60 分鐘、打平算輸）")}${row("model1_sp_tw")}${row("model1_ou_tw")}${row("model1_all_tw")}${["draw_us", "draw", "model1_us_draw", "model1_tw_draw"].some((k) => agg(k).n) ? `<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">和局（足球、冰球）</td></tr>${row("draw_us")}${row("draw")}${row("model1_us_draw")}${row("model1_tw_draw")}` : ""}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">還在累積</td></tr>${row("model2")}${row("combo")}<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">參考（台彩賠率）</td></tr>${row("model1_flip14")}${row("model1_drawx", `模型一・低於 ${esc(DRW.x)} 改押和局`, `只看足球、冰球：模型一押的那邊台彩賠率低於 <input type="number" inputmode="decimal" step="0.05" min="1.01" max="20" value="${esc(DRW.x)}" data-drwin="1" style="width:62px;font-size:13px;padding:2px 4px"> 就改押和局（冰球＝60 分鐘和局）；其他場次不下。數字改完按完成就會重算。`)}${row("favorite")}${row("underdog")}</tbody></table></div></div></details>
       <p class="mut" style="font-size:12.5px;margin:8px 0 0">${done ? `台彩結算：${actual} 場用你記錄的實際賠率，其他用估的。` : `第一批比賽還沒開獎（${L.pending || 0} 場等開獎），開獎後自動結算。`}「模型一・美國賠率」是同一個模型用美國賠率下，沒有台彩抽成，比較看得出模型本身準不準（美國賠率是 10/1 起才開始記）。每個策略都押開賽前最後一次判斷的那一邊。</p>${LUCK_NOTE}</div>`;
     // 只下划算的
+    const GHR = (t) => `<tr><td colspan="5" class="mut" style="font-size:11.5px;background:var(--soft);padding:4px 8px">${t}</td></tr>`;
     const vrow = (k, nm) => { const v = aggV(k), id = "v" + (rid++); return `<tr><td><b>${nm}</b>${v.n ? "<br>" + sdBtn(id) : ""}</td><td class="r n">${v.n || 0}</td><td class="r n">${wr(v)}</td>${roiCell(v)}<td class="r n ${gb(v.pl)}">${money(v)}</td></tr>${SD.open === id ? sdDetail(k, true) : ""}`; };
     h += `<div class="card"><h3>只下划算的<small>${lgTag}開賽前期望值 > 0 才下・每注 ${UNIT.toLocaleString("en-US")} 元</small></h3>
-      <div class="scroll"><table class="tb">${head}<tbody>${vrow("model1", "模型一・台彩")}${vrow("model3", "模型三・台彩")}${vrow("model3_pin", "模型三・Pinnacle 賠率")}${vrow("model3_pin_tw", "Pinnacle 划算的・改去台彩下")}${vrow("model1_us", "模型一・美國賠率")}${vrow("model1_us_tw", "美國划算的・改去台彩下")}${vrow("model1_all_us", "不限玩法・美國賠率")}${vrow("model1_all_tw", "不限玩法・美國划算的改去台彩下")}
+      <div class="scroll"><table class="tb">${head}<tbody>${GHR("模型一")}${vrow("model1", "模型一・台彩")}${vrow("model1_us", "模型一・美國賠率")}${vrow("model1_us_tw", "美國划算的・改去台彩下")}${GHR("模型三")}${vrow("model3", "模型三・台彩")}${vrow("model3_pin", "模型三・Pinnacle 賠率")}${vrow("model3_pin_tw", "Pinnacle 划算的・改去台彩下")}${GHR("其他")}${vrow("model1_all_us", "不限玩法・美國賠率")}${vrow("model1_all_tw", "不限玩法・美國划算的改去台彩下")}
       <tr><td><b>模型二・資金</b></td><td colspan="4" class="mut">累積中</td></tr><tr><td><b>綜合</b></td><td colspan="4" class="mut">累積中</td></tr></tbody></table></div>
       <p class="mut" style="font-size:12.5px;margin:8px 0 0">每場都下一定會被抽成吃掉（台彩約 13%、美國約 4%）；真正看得出模型有沒有用的是這張表。</p>${LUCK_NOTE}</div>`;
     // 模型一 vs 模型三：兩個模型押不同邊的那幾場（使用者 2026-10-26 要求觀察哪個準）
