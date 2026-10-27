@@ -1,10 +1,10 @@
 {
- "updated_utc": "2026-10-26T23:22Z",
+ "updated_utc": "2026-10-27T09:02Z",
  "season": "2026-27",
  "rule": "模型比 Pinnacle 多看好 15%–30%",
- "games": 180,
- "games_settled": 169,
- "picks": 7,
+ "games": 181,
+ "games_settled": 171,
+ "picks": 8,
  "clv": [
   -0.0318,
   0.0183,
@@ -16,6 +16,21 @@
   7
  ],
  "move_toward": 75,
- "move_away": 53,
- "pending": []
+ "move_away": 55,
+ "pending": [
+  {
+   "game_id": "1638860513",
+   "date": "2026-10-27",
+   "home": "CHI",
+   "away": "LAK",
+   "decided_utc": "2026-10-27T09:02Z",
+   "how": "實戰",
+   "p_model": 0.3414,
+   "odds_home": 2.04,
+   "odds_away": 1.8547,
+   "fair_home_dec": 0.4762,
+   "pick": "away",
+   "edge": 0.2216
+  }
+ ]
 }
