@@ -34,7 +34,7 @@ ALIVE_MIN = 25
 US_STEPS = ["python scrape_extra.py", "python scrape_pinnacle.py mlb,nba,nfl,nhl", "python -m pro.injury_watch nba",
             "python track_models.py mlb,nba,nfl,nhl", "python alerts.py mlb,nba,nfl,nhl"]
 SOCCER_STEPS = ["python scrape_soccer.py", "python scrape_pinnacle.py soccer",
-                "python track_models.py soccer", "python alerts.py soccer"]
+                "python track_models.py soccer", "python alerts.py soccer", "python niche_ledger.py"]   # 冷門玩法帳本（10/27）
 
 
 def now():

@@ -21,6 +21,8 @@ import csv
 import io
 import json
 import os
+import re
+import time
 from datetime import datetime, timezone, timedelta
 
 import requests
@@ -425,11 +427,104 @@ def download_seasons(now, state):
     print(f"歐洲賠率：更新 {n} 個季度檔")
 
 
+# ---------------- 2b. 每場細節（ESPN summary）：半場比分、角球、黃紅牌（冷門玩法帳本用，2026-10-27）----------------
+EXTRA_FIELDS = ["event_id", "league", "game_time_utc", "ht_home", "ht_away", "ht_src", "corners_home", "corners_away",
+                "yc_home", "yc_away", "rc_home", "rc_away", "fetched_utc"]
+EXTRA_MAX = 150   # 每次最多補幾場（慢慢補，不要一次打太多 ESPN）
+
+
+def _espn_slugs(league):
+    from soccer_comps import COMPS
+    if league in LEAGUES:
+        return [LEAGUES[league]["espn"].replace("soccer/", "")]
+    return list((COMPS.get(league) or {}).get("espn") or [])
+
+
+def parse_summary(js):
+    """ESPN 足球 summary → {ht_home, ht_away, ht_src, corners_*, yc_*, rc_*}；拿不到的欄位留空"""
+    comps = (((js.get("header") or {}).get("competitions") or [{}])[0].get("competitors") or [])
+    side_of = {}
+    out = {}
+    for c in comps:
+        ha = c.get("homeAway")
+        tid = str((c.get("team") or {}).get("id", ""))
+        if ha in ("home", "away"):
+            side_of[tid] = ha
+            ls = c.get("linescores") or []
+            if ls:
+                try:
+                    out[f"ht_{ha}"] = int(float(ls[0].get("displayValue", ls[0].get("value"))))
+                except (TypeError, ValueError):
+                    pass
+    if "ht_home" in out and "ht_away" in out:
+        out["ht_src"] = "linescores"
+    else:
+        # 沒有分半場比分：用進球時間（45 分以內＝上半場，含 45+ 補時）
+        hg = {"home": 0, "away": 0}
+        ok = False
+        for ev in js.get("keyEvents") or []:
+            if not ev.get("scoringPlay"):
+                continue
+            ok = True
+            side = side_of.get(str((ev.get("team") or {}).get("id", "")))
+            m = re.match(r"(\d+)", str((ev.get("clock") or {}).get("displayValue", "")))
+            if side and m and int(m.group(1)) <= 45:
+                hg[side] += 1
+        if ok or js.get("keyEvents") is not None:
+            out.update({"ht_home": hg["home"], "ht_away": hg["away"], "ht_src": "keyEvents"})
+    for t in ((js.get("boxscore") or {}).get("teams") or []):
+        ha = t.get("homeAway") or side_of.get(str((t.get("team") or {}).get("id", "")))
+        if ha not in ("home", "away"):
+            continue
+        st = {x.get("name"): x.get("displayValue") for x in (t.get("statistics") or [])}
+        for key, col in (("wonCorners", "corners"), ("yellowCards", "yc"), ("redCards", "rc")):
+            try:
+                out[f"{col}_{ha}"] = int(float(st[key]))
+            except (KeyError, TypeError, ValueError):
+                pass
+    return out
+
+
+def backfill_match_extra(now):
+    path = os.path.join(sport_dir(SPORT), "match_extra.csv")
+    done = {r["event_id"] for r in read_rows(path)}
+    todo = [r for r in read_rows(os.path.join(sport_dir(SPORT), "results.csv"))
+            if r.get("status") == "final" and r.get("event_id") and r["event_id"] not in done and r["game_time_utc"] >= "2026-09-28"]
+    todo.sort(key=lambda r: r["game_time_utc"], reverse=True)
+    out = []
+    for r in todo[:EXTRA_MAX]:
+        js = None
+        for slug in _espn_slugs(r["league"]):
+            try:
+                js = http_get(f"https://site.api.espn.com/apis/site/v2/sports/soccer/{slug}/summary", params={"event": r["event_id"]}).json()
+                if js.get("header"):
+                    break
+            except Exception:
+                js = None
+        if not js:
+            continue
+        x = parse_summary(js)
+        try:   # 半場比分不能比全場多；對不上就不要
+            if x.get("ht_home") is not None and (x["ht_home"] > int(r["home_score"]) or x["ht_away"] > int(r["away_score"])):
+                x.pop("ht_home"), x.pop("ht_away"), x.pop("ht_src", None)
+        except (TypeError, ValueError, KeyError):
+            pass
+        out.append({"event_id": r["event_id"], "league": r["league"], "game_time_utc": r["game_time_utc"],
+                    "fetched_utc": now.strftime("%Y-%m-%dT%H:%MZ"), **x})
+        time.sleep(0.3)
+    append_rows(path, EXTRA_FIELDS, out)
+    print(f"足球每場細節（半場、角球、黃牌）：補 {len(out)} 場，還有 {max(0, len(todo) - len(out))} 場")
+
+
 def run():
     now = datetime.now(timezone.utc)
     state = load_state()
     collect_money_flow(now, state)
     backfill_results(now)
+    try:
+        backfill_match_extra(now)
+    except Exception as e:
+        print(f"足球每場細節失敗（不影響主資料）：{e}")
     collect_eu_odds(now, state)
     download_seasons(now, state)
     save_state(state, now)

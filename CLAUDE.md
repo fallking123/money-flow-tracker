@@ -126,6 +126,12 @@
 - `niche_stats.py` → `docs/data/niche_probs.json`：足球五大 21,980 場（半場／半全場／波膽／單雙／兩隊進球，依主隊勝率分組）、NBA 23,940 場（各節勝負含平手、單雙、第一節 vs 全場）、NHL 12,423 場（各節勝負平、進球數、60 分鐘單雙）、MLB 29,349 場（第一局得分、單雙）、LoL 10,044 場（首殺／小龍／先鋒／塔／大龍：藍紅方、Elo 強弱）。
 - 天生不對稱、值得拿台彩賠率比的：**MLB 全場單 57–60%（每季都一樣；勝分差 1 分最常見）**、LoL 首條小龍紅方 62%／首先鋒藍方 61%、LoL 首殺強隊大熱門也只 56.5%、足球半場和 41%／半場 0:0 29%／半場總進球雙 54.6%、NHL 每節平 28–35%／60 分鐘總進球雙 54%。保本賠率＝100 ÷ 機率。要確認台彩規則（MLB 單雙含不含延長、NBA 單節平手怎麼算、NHL 單節是不是三選一、LoL 是否知道藍紅方）。
 
+## 冷門玩法帳本＋想法清單（2026-10-27，使用者：「先把資料記下來，有新想法就不用等好久驗證」）
+- **想法清單 `docs/ideas.md`**（每個想法：為什麼、要什麼資料、狀態）——有新想法就加進去。
+- `niche_ledger.py`（resident 足球每小時一次＋backfill_results／scrape_soccer workflow）→ `docs/data/niche_ledger_YYYY-MM.csv`：每場打完、Pinnacle **每個選項**（全場／半場／各節／前五局、獨贏／讓分／大小／球隊得分、足球角球／黃牌）的收盤公平機率＋實際結果（1／0.5／0／−0.5／−1，四分之一盤有拆）。period 代碼見檔頭；MLB period 3 只記盤不算結果。10/27 當時 695 場、28,945 個選項。
+- 足球半場／角球／黃紅牌：`scrape_soccer.backfill_match_extra()` 抓 ESPN summary（header linescores，沒有就用 keyEvents 進球時間 ≤45）→ `docs/data/soccer/match_extra.csv`，每次最多 150 場、回補到 9/28。**10/27 寫好時本機連不到 ESPN，結構是照 ESPN 一般格式寫的，要看 Actions 跑完檔案有沒有東西**。
+- 查詢：`python3 niche_check.py <運動> <玩法> <period> <邊> [盤口] [台彩賠率] [--units Corners] [--team home]`。
+
 ## 電競（英雄聯盟首殺，2026-10-25）
 - 使用者觀察：台彩 LoL 首殺「高賠方抽水少、低賠方抽得多」。資料用 Oracle's Elixir 2025（使用者把 Google Drive 檔案複製到自己雲端分享；官網 403 不繞過）：`fetch_lol.py`＋`.github/workflows/fetch_lol.yml` → `docs/data/esports/lol_teams_2025.csv.gz`（10,044 場）。
 - 結果（Elo K=24）：弱隊拿首殺約 47–48%，大冷門約 39%。台彩首殺兩邊合計抽約 17.7%，大多放在強隊那邊（例：HLE −21%、iG −8%）。弱隊首殺要 ≥ 2.15（大冷門 ≥ 2.6）才划算。只看過很少場，要使用者再截 30–50 場（獨贏＋首殺）確認。首條大龍數字不準（沒殺龍的場兩邊都算 0）。

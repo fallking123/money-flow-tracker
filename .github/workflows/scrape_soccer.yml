@@ -44,6 +44,9 @@ jobs:
       - name: Value bet alerts (台彩 or US odds EV >= +2%)
         if: steps.alive.outputs.skip != 'true'
         run: python alerts.py soccer || echo "划算注提醒失敗，不影響主資料"
+      - name: Niche-market ledger (Pinnacle close + result for every market)
+        if: steps.alive.outputs.skip != 'true'
+        run: python niche_ledger.py || echo "冷門玩法帳本失敗，不影響主資料"
       - name: Commit and push
         if: steps.alive.outputs.skip != 'true'
         run: |
