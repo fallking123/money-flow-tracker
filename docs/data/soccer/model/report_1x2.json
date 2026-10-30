@@ -1,7 +1,7 @@
 {
- "generated_utc": "2026-10-27T01:36Z",
+ "generated_utc": "2026-10-30T02:07Z",
  "train_games": 10707,
- "test_games": 2146,
+ "test_games": 2156,
  "train_seasons": [
   "1920",
   "2021",
@@ -48,130 +48,130 @@
  },
  "accuracy": {
   "market": {
-   "logloss": 0.9753,
-   "brier": 0.5803
-  },
-  "team_only": {
-   "logloss": 0.9913,
-   "brier": 0.5905
-  },
-  "model": {
-   "logloss": 0.9733,
-   "brier": 0.5792
-  },
-  "model_v1": {
-   "logloss": 0.9734,
-   "brier": 0.5793
-  },
-  "market_recal": {
-   "logloss": 0.9746,
+   "logloss": 0.9751,
    "brier": 0.5801
   },
+  "team_only": {
+   "logloss": 0.991,
+   "brier": 0.5902
+  },
+  "model": {
+   "logloss": 0.9731,
+   "brier": 0.579
+  },
+  "model_v1": {
+   "logloss": 0.9732,
+   "brier": 0.5791
+  },
+  "market_recal": {
+   "logloss": 0.9744,
+   "brier": 0.5798
+  },
   "all_features": {
-   "logloss": 0.9741,
-   "brier": 0.5795
+   "logloss": 0.9739,
+   "brier": 0.5793
   },
   "closing": {
-   "logloss": 0.9739,
-   "brier": 0.5795,
-   "n": 2146
+   "logloss": 0.9737,
+   "brier": 0.5793,
+   "n": 2156
   },
   "model_close": {
-   "logloss": 0.9724,
-   "brier": 0.5788,
-   "n": 2146
+   "logloss": 0.9721,
+   "brier": 0.5785,
+   "n": 2156
   },
   "uniform": {
    "logloss": 1.0986
   }
  },
  "hit_rate": {
-  "market": 53.6,
+  "market": 53.7,
   "team_only": 52.2,
   "model": 53.8
  },
  "calibration": [
   {
    "pred": 12.1,
-   "real": 12.3,
-   "n": 805
+   "real": 12.5,
+   "n": 809
   },
   {
    "pred": 20.2,
-   "real": 18.5,
-   "n": 805
+   "real": 18.4,
+   "n": 808
   },
   {
    "pred": 24.7,
    "real": 25.0,
-   "n": 804
+   "n": 809
   },
   {
    "pred": 27.7,
-   "real": 28.8,
-   "n": 805
+   "real": 28.6,
+   "n": 808
   },
   {
-   "pred": 30.9,
-   "real": 28.4,
-   "n": 805
+   "pred": 30.8,
+   "real": 28.6,
+   "n": 808
   },
   {
    "pred": 37.0,
-   "real": 36.9,
-   "n": 804
+   "real": 36.8,
+   "n": 809
   },
   {
-   "pred": 47.7,
-   "real": 48.8,
-   "n": 805
+   "pred": 47.8,
+   "real": 48.9,
+   "n": 808
   },
   {
    "pred": 66.5,
-   "real": 67.8,
-   "n": 805
+   "real": 67.9,
+   "n": 809
   }
  ],
  "calibration_close": [
   {
    "pred": 12.1,
    "real": 11.7,
-   "n": 805
+   "n": 809
   },
   {
    "pred": 20.2,
-   "real": 20.1,
-   "n": 805
+   "real": 20.0,
+   "n": 808
   },
   {
    "pred": 24.6,
-   "real": 23.5,
-   "n": 804
+   "real": 23.4,
+   "n": 809
   },
   {
    "pred": 27.7,
-   "real": 27.3,
-   "n": 805
+   "real": 27.4,
+   "n": 808
   },
   {
    "pred": 30.9,
-   "real": 29.9,
-   "n": 805
+   "real": 30.1,
+   "n": 808
   },
   {
    "pred": 36.9,
-   "real": 38.1,
-   "n": 804
+   "real": 37.9,
+   "n": 809
   },
   {
-   "pred": 47.8,
-   "real": 48.2,
-   "n": 805
+   "pred": 47.9,
+   "real": 48.3,
+   "n": 808
   },
   {
    "pred": 66.5,
-   "real": 67.8,
-   "n": 805
+   "real": 67.9,
+   "n": 809
   }
  ],
  "features": [
@@ -301,29 +301,29 @@
   },
   "max": {
    "0.0": {
-    "n": 1522,
-    "win": 577,
-    "pl": 49.59,
+    "n": 1529,
+    "win": 581,
+    "pl": 50.72,
     "roi": 3.3,
     "se": 3.9,
     "avg_odds": 3.35,
     "pick_share": {
      "home": 160,
-     "draw": 928,
-     "away": 434
+     "draw": 930,
+     "away": 439
     }
    },
    "0.02": {
-    "n": 829,
-    "win": 286,
-    "pl": 13.36,
-    "roi": 1.6,
+    "n": 830,
+    "win": 287,
+    "pl": 14.16,
+    "roi": 1.7,
     "se": 5.4,
     "avg_odds": 3.72,
     "pick_share": {
      "home": 45,
      "draw": 585,
-     "away": 199
+     "away": 200
     }
    },
    "0.05": {
@@ -368,16 +368,16 @@
   },
   "close_avg": {
    "0.0": {
-    "n": 259,
-    "win": 96,
-    "pl": -9.79,
-    "roi": -3.8,
+    "n": 260,
+    "win": 97,
+    "pl": -9.23,
+    "roi": -3.6,
     "se": 9.0,
-    "avg_odds": 3.23,
+    "avg_odds": 3.22,
     "pick_share": {
      "home": 13,
      "draw": 162,
-     "away": 84
+     "away": 85
     }
    },
    "0.02": {
@@ -482,9 +482,9 @@
    "model": 0.9735
   },
   "seriea": {
-   "n": 460,
-   "market": 0.9661,
-   "model": 0.9631
+   "n": 470,
+   "market": 0.9652,
+   "model": 0.9622
   },
   "laliga": {
    "n": 479,
