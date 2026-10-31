@@ -1,22 +1,22 @@
 {
- "updated_utc": "2026-10-31T17:47Z",
+ "updated_utc": "2026-10-31T22:50Z",
  "season": "2026-27",
  "rule": "模型比 Pinnacle 多看好 15%–30%",
- "games": 207,
- "games_settled": 200,
- "picks": 9,
+ "games": 211,
+ "games_settled": 203,
+ "picks": 10,
  "clv": [
-  -0.0385,
-  0.0172,
-  8
+  -0.0333,
+  0.016,
+  9
  ],
  "profit": [
   -0.7857,
   0.2004,
   8
  ],
- "move_toward": 85,
- "move_away": 70,
+ "move_toward": 86,
+ "move_away": 72,
  "pending": [
   {
    "game_id": "1639222414",
@@ -31,10 +31,24 @@
    "fair_home_dec": "0.4523",
    "pick": "away",
    "edge": "0.1623",
-   "close_fair_home": "",
-   "clv": "",
+   "close_fair_home": 0.4321,
+   "clv": 0.0081,
    "result": "",
    "profit": ""
+  },
+  {
+   "game_id": "1639280085",
+   "date": "2026-11-01",
+   "home": "NYR",
+   "away": "EDM",
+   "decided_utc": "2026-10-31T22:50Z",
+   "how": "實戰",
+   "p_model": 0.4336,
+   "odds_home": 1.7937,
+   "odds_away": 2.12,
+   "fair_home_dec": 0.5417,
+   "pick": "away",
+   "edge": 0.2008
   }
  ]
 }
