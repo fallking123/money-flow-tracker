@@ -1726,3 +1726,170 @@ timestamp_utc,sport,league,pin_id,units,game_time_utc,hours_until_game,home_team
 2026-11-01T16:50:08.796177+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.16,Detroit Lions,Minnesota Vikings,1,spread,,away,3.0,1.8547,10000
 2026-11-01T16:50:08.796177+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.16,Detroit Lions,Minnesota Vikings,1,total,,over,22.5,1.8772,5000
 2026-11-01T16:50:08.796177+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.16,Detroit Lions,Minnesota Vikings,1,total,,under,22.5,2.0,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,0,moneyline,,home,,1.2882,75000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,0,moneyline,,away,,3.94,75000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,0,team_total,home,over,30.5,1.7299,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,0,team_total,home,under,30.5,2.17,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,0,team_total,away,over,23.5,1.9901,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,0,team_total,away,under,23.5,1.8696,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,0,spread,,home,-7.5,1.9434,100000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,0,spread,,away,7.5,1.9615,100000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,3,moneyline,,home,,1.463,2000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,3,moneyline,,away,,2.83,2000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,3,team_total,home,over,6.5,1.5917,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,3,team_total,home,under,6.5,2.43,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,3,team_total,away,over,3.5,2.25,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,3,team_total,away,under,3.5,1.6803,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,3,spread,,home,-3.0,1.9524,3000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,3,spread,,away,3.0,1.9174,3000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,1,moneyline,,home,,1.365,10000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,1,moneyline,,away,,3.31,10000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,1,team_total,home,over,14.5,1.7812,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,1,team_total,home,under,14.5,2.12,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,1,team_total,away,over,10.5,2.14,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,1,team_total,away,under,10.5,1.7634,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,1,spread,,home,-4.5,1.9174,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,1,spread,,away,4.5,1.9709,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582075,Regular,2026-11-01T18:00:00+00:00,1.0,Dallas Cowboys,Arizona Cardinals,1,total,,under,26.5,2.13,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,3,moneyline,,home,,1.7812,2000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,3,moneyline,,away,,2.11,2000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,3,team_total,home,under,6.5,1.7692,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,3,team_total,away,over,0.5,1.5714,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,3,team_total,away,under,0.5,2.48,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,3,spread,,home,-0.5,2.25,3000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,3,spread,,away,0.5,1.6993,3000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,3,total,,over,7.5,1.9434,2000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,3,total,,under,7.5,1.9091,2000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,1,moneyline,,home,,1.6369,10000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,1,moneyline,,away,,2.39,10000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,1,team_total,home,over,12.5,1.8333,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,1,team_total,home,under,12.5,2.05,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,1,team_total,away,over,9.5,1.7194,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,1,team_total,away,under,9.5,2.21,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,1,spread,,home,-3.0,2.06,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,1,spread,,away,3.0,1.8403,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,1,total,,over,22.5,1.8197,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,1,total,,under,22.5,2.06,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,0,moneyline,,home,,1.5682,75000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,0,moneyline,,away,,2.57,75000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,0,team_total,away,over,20.5,1.8403,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,0,team_total,away,under,20.5,2.02,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,0,spread,,home,-3.5,2.06,100000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,0,spread,,away,3.5,1.8547,100000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,0,total,,over,46.0,1.9091,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576334,Regular,2026-11-01T18:00:00+00:00,1.0,Detroit Lions,Minnesota Vikings,0,total,,under,46.0,1.9804,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,0,moneyline,,home,,1.1121,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,0,moneyline,,away,,7.55,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,0,team_total,home,over,28.5,1.7299,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,0,team_total,home,under,28.5,2.17,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,0,team_total,away,over,17.5,2.24,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,0,team_total,away,under,17.5,1.6849,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,0,spread,,home,-14.0,1.9901,75000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,0,spread,,away,14.0,1.9174,75000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,0,total,,over,46.0,1.8621,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,0,total,,under,46.0,2.03,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,1,moneyline,,home,,1.2169,10000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,1,moneyline,,away,,4.63,10000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,1,team_total,home,over,14.5,1.8197,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,1,team_total,home,under,14.5,2.06,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,1,spread,,home,-7.5,1.9259,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,1,spread,,away,7.5,1.9615,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,1,total,,over,23.5,1.885,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,1,total,,under,23.5,1.9901,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,3,moneyline,,home,,1.3195,2000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,3,moneyline,,away,,3.53,2000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,3,team_total,home,over,6.5,1.6757,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,3,team_total,home,under,6.5,2.26,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,3,spread,,home,-3.5,1.9804,3000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,3,spread,,away,3.5,1.8929,3000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,3,total,,over,9.5,1.9346,2000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582076,Regular,2026-11-01T18:00:00+00:00,1.0,Cincinnati Bengals,Tennessee Titans,3,total,,under,9.5,1.9174,2000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,3,moneyline,,home,,1.641,2000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,3,team_total,home,over,6.5,1.6623,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,3,team_total,away,over,3.5,2.0,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,3,team_total,away,under,3.5,1.8547,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,3,total,,over,10.0,1.8403,2000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,3,total,,under,10.0,2.02,2000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,1,moneyline,,home,,1.6667,10000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,1,moneyline,,away,,2.32,10000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,1,team_total,home,over,13.5,1.7143,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,1,team_total,home,under,13.5,2.21,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,1,spread,,home,-2.5,1.9174,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,1,spread,,away,2.5,1.9709,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,1,total,,over,27.0,1.9174,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,1,total,,under,27.0,1.9524,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,0,moneyline,,home,,1.6024,75000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,0,moneyline,,away,,2.49,75000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,0,team_total,home,over,28.5,1.9174,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,0,team_total,home,under,28.5,1.9346,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,0,team_total,away,over,24.5,1.7353,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,0,team_total,away,under,24.5,2.16,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,0,spread,,home,-3.0,1.9091,100000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,0,spread,,away,3.0,2.0,100000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,0,total,,over,55.5,2.0,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638581179,Regular,2026-11-01T18:00:00+00:00,1.0,Buffalo Bills,Baltimore Ravens,0,total,,under,55.5,1.885,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638595671,Regular,2026-11-01T21:25:00+00:00,4.41,Denver Broncos,Kansas City Chiefs,3,team_total,away,over,3.5,2.24,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638595671,Regular,2026-11-01T21:25:00+00:00,4.41,Denver Broncos,Kansas City Chiefs,3,team_total,away,under,3.5,1.6849,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638595671,Regular,2026-11-01T21:25:00+00:00,4.41,Denver Broncos,Kansas City Chiefs,3,total,,over,7.0,1.7194,2000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638595671,Regular,2026-11-01T21:25:00+00:00,4.41,Denver Broncos,Kansas City Chiefs,3,total,,under,7.0,2.18,2000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638595671,Regular,2026-11-01T21:25:00+00:00,4.41,Denver Broncos,Kansas City Chiefs,1,team_total,away,over,9.5,1.7812,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638595671,Regular,2026-11-01T21:25:00+00:00,4.41,Denver Broncos,Kansas City Chiefs,1,spread,,home,0.5,1.7519,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638595671,Regular,2026-11-01T21:25:00+00:00,4.41,Denver Broncos,Kansas City Chiefs,1,spread,,away,-0.5,2.18,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638595671,Regular,2026-11-01T21:25:00+00:00,4.41,Denver Broncos,Kansas City Chiefs,1,total,,over,20.0,1.8264,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638595671,Regular,2026-11-01T21:25:00+00:00,4.41,Denver Broncos,Kansas City Chiefs,0,team_total,home,over,20.5,1.9346,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638595671,Regular,2026-11-01T21:25:00+00:00,4.41,Denver Broncos,Kansas City Chiefs,0,team_total,home,under,20.5,1.9174,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638595671,Regular,2026-11-01T21:25:00+00:00,4.41,Denver Broncos,Kansas City Chiefs,0,team_total,away,over,20.5,1.885,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638595671,Regular,2026-11-01T21:25:00+00:00,4.41,Denver Broncos,Kansas City Chiefs,0,team_total,away,under,20.5,1.9709,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638595671,Regular,2026-11-01T21:25:00+00:00,4.41,Denver Broncos,Kansas City Chiefs,0,spread,,home,1.0,1.8772,100000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638595671,Regular,2026-11-01T21:25:00+00:00,4.41,Denver Broncos,Kansas City Chiefs,0,spread,,away,-1.0,2.03,100000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638595671,Regular,2026-11-01T21:25:00+00:00,4.41,Denver Broncos,Kansas City Chiefs,0,total,,over,41.5,1.9615,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638595671,Regular,2026-11-01T21:25:00+00:00,4.41,Denver Broncos,Kansas City Chiefs,0,total,,under,41.5,1.9174,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582078,Regular,2026-11-01T18:00:00+00:00,1.0,Jacksonville Jaguars,Indianapolis Colts,0,team_total,home,over,27.5,1.7752,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582078,Regular,2026-11-01T18:00:00+00:00,1.0,Jacksonville Jaguars,Indianapolis Colts,0,team_total,home,under,27.5,2.1,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582078,Regular,2026-11-01T18:00:00+00:00,1.0,Jacksonville Jaguars,Indianapolis Colts,0,team_total,away,over,19.5,2.44,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582078,Regular,2026-11-01T18:00:00+00:00,1.0,Jacksonville Jaguars,Indianapolis Colts,0,team_total,away,under,19.5,1.5848,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582078,Regular,2026-11-01T18:00:00+00:00,1.0,Jacksonville Jaguars,Indianapolis Colts,0,spread,,home,-10.5,2.04,75000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582078,Regular,2026-11-01T18:00:00+00:00,1.0,Jacksonville Jaguars,Indianapolis Colts,0,spread,,away,10.5,1.8696,75000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582078,Regular,2026-11-01T18:00:00+00:00,1.0,Jacksonville Jaguars,Indianapolis Colts,0,total,,over,45.5,1.9259,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582078,Regular,2026-11-01T18:00:00+00:00,1.0,Jacksonville Jaguars,Indianapolis Colts,0,total,,under,45.5,1.9524,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582078,Regular,2026-11-01T18:00:00+00:00,1.0,Jacksonville Jaguars,Indianapolis Colts,1,team_total,away,over,8.5,2.2,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582078,Regular,2026-11-01T18:00:00+00:00,1.0,Jacksonville Jaguars,Indianapolis Colts,1,team_total,away,under,8.5,1.7246,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582078,Regular,2026-11-01T18:00:00+00:00,1.0,Jacksonville Jaguars,Indianapolis Colts,1,total,,over,23.0,1.9259,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582078,Regular,2026-11-01T18:00:00+00:00,1.0,Jacksonville Jaguars,Indianapolis Colts,1,total,,under,23.0,1.9434,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582078,Regular,2026-11-01T18:00:00+00:00,1.0,Jacksonville Jaguars,Indianapolis Colts,3,moneyline,,home,,1.3817,2000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582078,Regular,2026-11-01T18:00:00+00:00,1.0,Jacksonville Jaguars,Indianapolis Colts,3,moneyline,,away,,3.17,2000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582078,Regular,2026-11-01T18:00:00+00:00,1.0,Jacksonville Jaguars,Indianapolis Colts,3,team_total,home,over,6.5,1.7353,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582078,Regular,2026-11-01T18:00:00+00:00,1.0,Jacksonville Jaguars,Indianapolis Colts,3,team_total,home,under,6.5,2.16,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638582078,Regular,2026-11-01T18:00:00+00:00,1.0,Jacksonville Jaguars,Indianapolis Colts,3,total,,under,9.5,1.885,2000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576333,Regular,2026-11-01T18:00:00+00:00,1.0,New York Jets,Las Vegas Raiders,3,moneyline,,home,,1.8264,2000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576333,Regular,2026-11-01T18:00:00+00:00,1.0,New York Jets,Las Vegas Raiders,3,team_total,away,over,3.5,2.18,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576333,Regular,2026-11-01T18:00:00+00:00,1.0,New York Jets,Las Vegas Raiders,3,spread,,home,-0.5,2.29,3000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576333,Regular,2026-11-01T18:00:00+00:00,1.0,New York Jets,Las Vegas Raiders,3,spread,,away,0.5,1.6711,3000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576333,Regular,2026-11-01T18:00:00+00:00,1.0,New York Jets,Las Vegas Raiders,0,moneyline,,home,,1.7874,75000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576333,Regular,2026-11-01T18:00:00+00:00,1.0,New York Jets,Las Vegas Raiders,0,moneyline,,away,,2.15,75000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576333,Regular,2026-11-01T18:00:00+00:00,1.0,New York Jets,Las Vegas Raiders,0,team_total,home,over,22.5,1.7299,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576333,Regular,2026-11-01T18:00:00+00:00,1.0,New York Jets,Las Vegas Raiders,0,team_total,home,under,22.5,2.17,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576333,Regular,2026-11-01T18:00:00+00:00,1.0,New York Jets,Las Vegas Raiders,0,team_total,away,over,21.5,1.8547,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576333,Regular,2026-11-01T18:00:00+00:00,1.0,New York Jets,Las Vegas Raiders,0,team_total,away,under,21.5,2.0,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576333,Regular,2026-11-01T18:00:00+00:00,1.0,New York Jets,Las Vegas Raiders,0,spread,,home,-1.0,1.8403,100000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576333,Regular,2026-11-01T18:00:00+00:00,1.0,New York Jets,Las Vegas Raiders,0,spread,,away,1.0,2.08,100000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576333,Regular,2026-11-01T18:00:00+00:00,1.0,New York Jets,Las Vegas Raiders,1,moneyline,,home,,1.813,10000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576333,Regular,2026-11-01T18:00:00+00:00,1.0,New York Jets,Las Vegas Raiders,1,moneyline,,away,,2.1,10000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576333,Regular,2026-11-01T18:00:00+00:00,1.0,New York Jets,Las Vegas Raiders,1,team_total,home,over,10.5,2.0,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576333,Regular,2026-11-01T18:00:00+00:00,1.0,New York Jets,Las Vegas Raiders,1,team_total,away,over,9.5,1.6897,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576333,Regular,2026-11-01T18:00:00+00:00,1.0,New York Jets,Las Vegas Raiders,1,team_total,away,under,9.5,2.26,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576333,Regular,2026-11-01T18:00:00+00:00,1.0,New York Jets,Las Vegas Raiders,1,spread,,home,-0.5,1.9901,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576333,Regular,2026-11-01T18:00:00+00:00,1.0,New York Jets,Las Vegas Raiders,1,spread,,away,0.5,1.9009,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576332,Regular,2026-11-01T18:00:00+00:00,1.0,Pittsburgh Steelers,Cleveland Browns,3,spread,,away,0.5,1.7519,3000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576332,Regular,2026-11-01T18:00:00+00:00,1.0,Pittsburgh Steelers,Cleveland Browns,1,team_total,home,over,10.5,2.28,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576332,Regular,2026-11-01T18:00:00+00:00,1.0,Pittsburgh Steelers,Cleveland Browns,1,team_total,home,under,10.5,1.6757,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576332,Regular,2026-11-01T18:00:00+00:00,1.0,Pittsburgh Steelers,Cleveland Browns,1,team_total,away,over,7.5,2.15,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576332,Regular,2026-11-01T18:00:00+00:00,1.0,Pittsburgh Steelers,Cleveland Browns,1,team_total,away,under,7.5,1.7576,1000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576332,Regular,2026-11-01T18:00:00+00:00,1.0,Pittsburgh Steelers,Cleveland Browns,1,spread,,home,-3.0,2.09,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576332,Regular,2026-11-01T18:00:00+00:00,1.0,Pittsburgh Steelers,Cleveland Browns,1,spread,,away,3.0,1.8197,20000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576332,Regular,2026-11-01T18:00:00+00:00,1.0,Pittsburgh Steelers,Cleveland Browns,1,total,,over,19.5,2.0,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576332,Regular,2026-11-01T18:00:00+00:00,1.0,Pittsburgh Steelers,Cleveland Browns,1,total,,under,19.5,1.8696,5000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576332,Regular,2026-11-01T18:00:00+00:00,1.0,Pittsburgh Steelers,Cleveland Browns,0,moneyline,,home,,1.5025,75000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576332,Regular,2026-11-01T18:00:00+00:00,1.0,Pittsburgh Steelers,Cleveland Browns,0,moneyline,,away,,2.77,75000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576332,Regular,2026-11-01T18:00:00+00:00,1.0,Pittsburgh Steelers,Cleveland Browns,0,spread,,home,-3.5,1.9615,100000
+2026-11-01T17:00:11.503753+00:00,nfl,nfl,1638576332,Regular,2026-11-01T18:00:00+00:00,1.0,Pittsburgh Steelers,Cleveland Browns,0,spread,,away,3.5,1.9434,100000
