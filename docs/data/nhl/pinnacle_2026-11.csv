@@ -1675,490 +1675,179 @@ timestamp_utc,sport,league,pin_id,units,game_time_utc,hours_until_game,home_team
 2026-11-01T19:30:08.508110+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,29.61,Chicago Blackhawks,Colorado Avalanche,6,spread,,home,1.0,1.9615,1250
 2026-11-01T19:30:08.508110+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,29.61,Chicago Blackhawks,Colorado Avalanche,6,spread,,away,-1.0,1.8929,1250
 2026-11-01T19:30:08.508110+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,29.61,Chicago Blackhawks,Colorado Avalanche,6,total,,under,6.0,1.8772,1250
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,5.16,Anaheim Ducks,Ottawa Senators,6,moneyline,,home,,2.58,2500
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,5.16,Anaheim Ducks,Ottawa Senators,6,moneyline,,away,,2.32,2500
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,5.16,Anaheim Ducks,Ottawa Senators,6,team_total,home,over,3.5,2.35,500
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,5.16,Anaheim Ducks,Ottawa Senators,6,team_total,home,under,3.5,1.6061,500
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,5.16,Anaheim Ducks,Ottawa Senators,6,team_total,away,over,3.5,2.18,500
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,5.16,Anaheim Ducks,Ottawa Senators,6,team_total,away,under,3.5,1.6993,500
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,5.16,Anaheim Ducks,Ottawa Senators,6,spread,,home,0.0,2.05,2500
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,5.16,Anaheim Ducks,Ottawa Senators,6,spread,,away,-0.0,1.8333,2500
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,28.28,Florida Panthers,Detroit Red Wings,0,moneyline,,home,,1.5917,2500
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,28.28,Florida Panthers,Detroit Red Wings,0,moneyline,,away,,2.48,2500
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,28.28,Florida Panthers,Detroit Red Wings,0,team_total,home,over,3.5,2.12,250
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,28.28,Florida Panthers,Detroit Red Wings,0,team_total,home,under,3.5,1.7353,250
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,28.28,Florida Panthers,Detroit Red Wings,0,spread,,home,-1.5,2.53,1875
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,28.28,Florida Panthers,Detroit Red Wings,0,spread,,away,1.5,1.5618,1875
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,28.28,Florida Panthers,Detroit Red Wings,0,total,,over,6.0,2.03,1875
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,28.28,Florida Panthers,Detroit Red Wings,0,total,,under,6.0,1.8475,1875
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,28.28,Florida Panthers,Detroit Red Wings,2,total,,over,2.0,2.27,250
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,28.28,Florida Panthers,Detroit Red Wings,2,total,,under,2.0,1.6623,250
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,3.16,New York Rangers,Edmonton Oilers,0,moneyline,,home,,1.8197,10000
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,3.16,New York Rangers,Edmonton Oilers,0,moneyline,,away,,2.11,10000
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,3.16,New York Rangers,Edmonton Oilers,0,team_total,away,over,3.5,2.38,1000
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,3.16,New York Rangers,Edmonton Oilers,0,team_total,away,under,3.5,1.6061,1000
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,3.16,New York Rangers,Edmonton Oilers,0,spread,,home,-1.5,2.94,7500
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,3.16,New York Rangers,Edmonton Oilers,0,spread,,away,1.5,1.4444,7500
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,3.16,New York Rangers,Edmonton Oilers,0,total,,over,6.5,1.8929,7500
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,3.16,New York Rangers,Edmonton Oilers,0,total,,under,6.5,2.0,7500
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,3.16,New York Rangers,Edmonton Oilers,3,moneyline,,away,,2.07,2000
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,3.16,New York Rangers,Edmonton Oilers,3,team_total,home,over,1.5,2.7,1000
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,3.16,New York Rangers,Edmonton Oilers,3,team_total,home,under,1.5,1.4762,1000
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,3.16,New York Rangers,Edmonton Oilers,3,team_total,away,over,0.5,1.463,1000
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,3.16,New York Rangers,Edmonton Oilers,3,team_total,away,under,0.5,2.75,1000
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,3.16,New York Rangers,Edmonton Oilers,3,total,,over,2.0,1.7092,1000
-2026-11-01T19:50:10.912995+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,3.16,New York Rangers,Edmonton Oilers,3,total,,under,2.0,2.21,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,0,moneyline,,home,,2.5,5000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,0,moneyline,,away,,1.5988,5000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,0,team_total,home,over,2.5,1.8547,500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,0,team_total,home,under,2.5,1.9901,500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,0,team_total,away,over,3.5,2.07,500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,0,team_total,away,under,3.5,1.7874,500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,0,spread,,home,1.5,1.565,3750
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,0,spread,,away,-1.5,2.55,3750
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,3,moneyline,,home,,2.28,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,3,moneyline,,away,,1.6667,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,3,team_total,home,over,0.5,1.5714,500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,3,team_total,home,under,0.5,2.44,500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,3,team_total,away,over,1.5,2.72,500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,3,team_total,away,under,1.5,1.4717,500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,3,spread,,home,0.5,1.6944,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,3,spread,,away,-0.5,2.23,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,1,moneyline,,home,,2.25,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,1,moneyline,,away,,1.6849,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,1,team_total,home,over,0.5,1.6944,500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,1,team_total,home,under,0.5,2.18,500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,1,team_total,away,over,0.5,1.5051,500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,1,team_total,away,under,0.5,2.61,500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,1,spread,,home,0.5,1.5848,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,1,spread,,away,-0.5,2.46,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,6,moneyline,,home,,3.23,2500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,6,moneyline,,away,,1.9709,2500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,6,team_total,home,over,2.5,1.9615,500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,6,team_total,home,under,2.5,1.8621,500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,6,team_total,away,over,3.5,2.24,500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,6,team_total,away,under,3.5,1.6667,500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,6,spread,,home,0.5,1.9009,2500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,6,spread,,away,-0.5,1.9709,2500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,2,moneyline,,home,,2.25,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,2,moneyline,,away,,1.6849,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,2,team_total,home,over,0.5,1.6211,500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,2,team_total,home,under,0.5,2.32,500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,2,team_total,away,over,0.5,1.4444,500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,2,team_total,away,under,0.5,2.82,500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,2,spread,,home,0.5,1.6098,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,1.0,Philadelphia Flyers,Utah Mammoth,2,spread,,away,-0.5,2.4,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,0,moneyline,,home,,2.05,10000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,0,moneyline,,away,,1.8621,10000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,0,team_total,home,over,2.5,1.6173,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,0,team_total,home,under,2.5,2.36,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,0,team_total,away,over,3.5,2.33,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,0,team_total,away,under,3.5,1.6289,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,0,spread,,home,1.5,1.3953,7500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,0,spread,,away,-1.5,3.17,7500
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,2,moneyline,,home,,1.9524,2000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,2,moneyline,,away,,1.9009,2000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,2,team_total,home,over,0.5,1.5181,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,2,team_total,home,under,0.5,2.57,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,2,team_total,away,over,0.5,1.5,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,2,team_total,away,under,0.5,2.62,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,2,spread,,home,0.5,1.4975,2000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,2,spread,,away,-0.5,2.7,2000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,1,moneyline,,home,,1.9709,2000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,1,moneyline,,away,,1.885,2000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,1,team_total,home,over,0.5,1.5952,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,1,team_total,home,under,0.5,2.38,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,1,team_total,away,over,0.5,1.5682,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,1,team_total,away,under,0.5,2.44,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,1,spread,,home,0.5,1.4854,2000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,1,spread,,away,-0.5,2.74,2000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,3,moneyline,,home,,1.9524,2000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,3,moneyline,,away,,1.9009,2000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,3,team_total,home,over,0.5,1.4651,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,3,team_total,home,under,0.5,2.74,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,3,team_total,away,over,0.5,1.4484,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,3,team_total,away,under,0.5,2.8,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,3,spread,,home,0.5,1.5525,2000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,3,spread,,away,-0.5,2.54,2000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,6,moneyline,,home,,2.59,5000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,6,moneyline,,away,,2.34,5000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,6,team_total,home,over,2.5,1.7092,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,6,team_total,home,under,2.5,2.16,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,6,team_total,away,over,2.5,1.641,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,6,team_total,away,under,2.5,2.28,1000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,6,spread,,home,0.0,2.04,5000
-2026-11-01T20:00:10.008513+00:00,nhl,nhl,1639273780,Regular,2026-11-01T20:30:00+00:00,0.5,Washington Capitals,Minnesota Wild,6,spread,,away,-0.0,1.8333,5000
-2026-11-01T20:20:08.456325+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,4.66,Anaheim Ducks,Ottawa Senators,0,moneyline,,home,,2.04,5000
-2026-11-01T20:20:08.456325+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,4.66,Anaheim Ducks,Ottawa Senators,0,moneyline,,away,,1.8696,5000
-2026-11-01T20:20:08.456325+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,4.66,Anaheim Ducks,Ottawa Senators,0,team_total,home,over,3.5,2.1,500
-2026-11-01T20:20:08.456325+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,4.66,Anaheim Ducks,Ottawa Senators,0,team_total,home,under,3.5,1.7692,500
-2026-11-01T20:20:08.456325+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,4.66,Anaheim Ducks,Ottawa Senators,0,team_total,away,over,3.5,2.03,500
-2026-11-01T20:20:08.456325+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,4.66,Anaheim Ducks,Ottawa Senators,0,team_total,away,under,3.5,1.8197,500
-2026-11-01T20:20:08.456325+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,4.66,Anaheim Ducks,Ottawa Senators,0,spread,,home,1.5,1.4237,3750
-2026-11-01T20:20:08.456325+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,4.66,Anaheim Ducks,Ottawa Senators,0,spread,,away,-1.5,3.03,3750
-2026-11-01T20:20:08.456325+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,4.66,Anaheim Ducks,Ottawa Senators,0,total,,over,6.5,1.7634,3750
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,3,moneyline,,home,,2.27,1000
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,3,moneyline,,away,,1.6757,1000
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,3,team_total,home,over,0.5,1.5682,500
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,3,team_total,away,under,1.5,1.4695,500
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,3,spread,,home,0.5,1.6897,1000
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,3,spread,,away,-0.5,2.24,1000
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,6,moneyline,,home,,3.18,2500
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,6,moneyline,,away,,1.9901,2500
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,6,moneyline,,draw,,4.28,2500
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,6,team_total,home,over,2.5,1.9434,500
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,6,team_total,home,under,2.5,1.8696,500
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,6,team_total,away,over,3.5,2.25,500
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,6,team_total,away,under,3.5,1.6579,500
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,6,spread,,home,0.5,1.885,2500
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,6,spread,,away,-0.5,1.9901,2500
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,6,total,,under,6.0,1.7752,2500
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,0,moneyline,,home,,2.46,5000
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,0,moneyline,,away,,1.6173,5000
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,0,team_total,home,over,2.5,1.8403,500
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,0,team_total,home,under,2.5,2.0,500
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,0,team_total,away,over,3.5,2.08,500
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,0,team_total,away,under,3.5,1.7752,500
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,0,spread,,home,1.5,1.5556,3750
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,0,spread,,away,-1.5,2.58,3750
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,1,moneyline,,home,,2.24,1000
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,1,moneyline,,away,,1.6897,1000
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,1,team_total,home,under,0.5,2.19,500
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,1,team_total,away,over,0.5,1.5076,500
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,1,team_total,away,under,0.5,2.6,500
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,1,spread,,home,0.5,1.578,1000
-2026-11-01T20:30:09.309811+00:00,nhl,nhl,1639273789,Regular,2026-11-01T21:00:00+00:00,0.5,Philadelphia Flyers,Utah Mammoth,1,spread,,away,-0.5,2.47,1000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,0,team_total,home,over,2.5,2.0,250
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,0,team_total,home,under,2.5,1.8264,250
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,0,team_total,away,over,3.5,1.813,250
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,0,team_total,away,under,3.5,2.02,250
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,0,spread,,away,-1.5,2.12,1875
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,0,total,,over,6.0,1.8333,1875
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,0,total,,under,6.0,2.05,1875
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,1,moneyline,,home,,2.48,500
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,1,moneyline,,away,,1.565,500
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,1,team_total,away,over,0.5,1.4673,250
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,1,team_total,away,under,0.5,2.7,250
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,1,spread,,home,0.5,1.6667,500
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,1,spread,,away,-0.5,2.26,500
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,1,total,,over,1.5,1.7752,250
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,1,total,,under,1.5,2.09,250
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,2,moneyline,,home,,2.56,500
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,2,moneyline,,away,,1.5319,500
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,2,team_total,away,over,1.5,2.79,250
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,2,team_total,away,under,1.5,1.4405,250
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,2,spread,,home,0.5,1.7299,500
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,2,spread,,away,-0.5,2.15,500
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,2,total,,over,2.0,2.1,250
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,2,total,,under,2.0,1.7634,250
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,3,moneyline,,home,,2.61,500
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,3,moneyline,,away,,1.5155,500
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,3,team_total,away,over,1.5,2.42,250
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,3,team_total,away,under,1.5,1.565,250
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,3,spread,,home,0.5,1.8403,500
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,3,spread,,away,-0.5,2.0,500
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,3,total,,over,2.0,1.7812,250
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,3,total,,under,2.0,2.07,250
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,6,team_total,home,over,2.5,2.1,250
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,6,team_total,home,under,2.5,1.7353,250
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,6,team_total,away,over,3.5,1.9346,250
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,6,team_total,away,under,3.5,1.8696,250
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,6,total,,over,6.0,1.9524,1250
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,28.28,Chicago Blackhawks,Colorado Avalanche,6,total,,under,6.0,1.9009,1250
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,0,moneyline,,home,,1.7752,10000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,0,moneyline,,away,,2.17,10000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,0,team_total,home,over,3.5,2.08,1000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,0,team_total,home,under,3.5,1.7812,1000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,0,team_total,away,over,2.5,1.5988,1000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,0,team_total,away,under,2.5,2.4,1000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,0,spread,,home,-1.5,2.88,7500
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,0,spread,,away,1.5,1.463,7500
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,2,moneyline,,home,,1.7937,2000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,2,moneyline,,away,,2.08,2000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,2,team_total,home,over,0.5,1.4348,1000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,2,team_total,home,under,0.5,2.85,1000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,2,team_total,away,over,0.5,1.5155,1000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,2,team_total,away,under,0.5,2.58,1000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,2,spread,,home,-0.5,2.52,2000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,2,spread,,away,0.5,1.5587,2000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,3,moneyline,,home,,1.7812,2000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,3,moneyline,,away,,2.1,2000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,3,team_total,home,over,1.5,2.68,1000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,3,team_total,home,under,1.5,1.4831,1000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,3,team_total,away,over,0.5,1.4695,1000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,3,team_total,away,under,0.5,2.72,1000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,3,spread,,home,-0.5,2.36,2000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,3,spread,,away,0.5,1.6289,2000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,6,moneyline,,home,,2.21,5000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,6,moneyline,,away,,2.74,5000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,6,team_total,home,over,3.5,2.22,1000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,6,team_total,home,under,3.5,1.6757,1000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,6,team_total,away,over,2.5,1.6711,1000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,6,team_total,away,under,2.5,2.23,1000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,6,spread,,home,0.0,1.7407,5000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,6,spread,,away,-0.0,2.18,5000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,6,total,,over,6.0,1.7937,5000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,6,total,,under,6.0,2.1,5000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,1,moneyline,,home,,1.8065,2000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,1,moneyline,,away,,2.06,2000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,1,team_total,home,over,0.5,1.5025,1000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,1,team_total,home,under,0.5,2.62,1000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,1,team_total,away,over,0.5,1.5814,1000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,1,team_total,away,under,0.5,2.41,1000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,1,spread,,home,-0.5,2.6,2000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,1,spread,,away,0.5,1.5291,2000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,1,total,,over,2.0,2.29,1000
-2026-11-01T20:50:07.204476+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,2.16,New York Rangers,Edmonton Oilers,1,total,,under,2.0,1.6623,1000
-2026-11-01T21:00:08.356827+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,4.0,Anaheim Ducks,Ottawa Senators,0,moneyline,,home,,2.05,5000
-2026-11-01T21:00:08.356827+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,4.0,Anaheim Ducks,Ottawa Senators,0,team_total,home,under,3.5,1.7634,500
-2026-11-01T21:00:08.356827+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,4.0,Anaheim Ducks,Ottawa Senators,0,team_total,away,over,3.5,2.02,500
-2026-11-01T21:00:08.356827+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,4.0,Anaheim Ducks,Ottawa Senators,0,total,,over,6.5,1.7519,3750
-2026-11-01T21:00:08.356827+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,4.0,Anaheim Ducks,Ottawa Senators,0,total,,under,6.5,2.18,3750
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,0,team_total,away,over,3.5,1.9901,500
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,0,team_total,away,under,3.5,1.8475,500
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,2,moneyline,,away,,1.8621,1000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,2,team_total,home,over,0.5,1.4566,500
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,2,team_total,home,under,0.5,2.77,500
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,2,team_total,away,over,0.5,1.4202,500
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,2,spread,,home,0.5,1.5348,1000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,2,spread,,away,-0.5,2.59,1000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,6,moneyline,,away,,2.33,2500
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,6,team_total,home,over,3.5,2.34,500
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,6,team_total,home,under,3.5,1.6098,500
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,6,team_total,away,over,3.5,2.17,500
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,6,team_total,away,under,3.5,1.7042,500
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,6,spread,,home,0.0,2.04,2500
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,6,spread,,away,-0.0,1.8403,2500
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,6,total,,under,6.5,1.885,2500
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,1,moneyline,,home,,1.9901,1000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,1,team_total,home,under,0.5,2.57,500
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,1,team_total,away,over,0.5,1.4831,500
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,3,moneyline,,away,,1.8547,1000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,3,team_total,home,over,1.5,2.79,500
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,3,team_total,home,under,1.5,1.4505,500
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,3,team_total,away,over,1.5,2.62,500
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.5,Anaheim Ducks,Ottawa Senators,3,spread,,home,0.5,1.5988,1000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,26.62,Florida Panthers,Detroit Red Wings,6,moneyline,,home,,1.9709,1250
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,26.62,Florida Panthers,Detroit Red Wings,6,moneyline,,away,,3.2,1250
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,26.62,Florida Panthers,Detroit Red Wings,6,team_total,home,over,3.5,2.28,250
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,26.62,Florida Panthers,Detroit Red Wings,6,team_total,home,under,3.5,1.6289,250
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,26.62,Florida Panthers,Detroit Red Wings,6,team_total,away,over,2.5,2.0,250
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,26.62,Florida Panthers,Detroit Red Wings,6,team_total,away,under,2.5,1.813,250
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,26.62,Florida Panthers,Detroit Red Wings,6,spread,,home,-0.5,1.9709,1250
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,26.62,Florida Panthers,Detroit Red Wings,6,spread,,away,0.5,1.885,1250
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,26.62,Florida Panthers,Detroit Red Wings,6,total,,over,6.0,2.19,1250
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,26.62,Florida Panthers,Detroit Red Wings,6,total,,under,6.0,1.7194,1250
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,0,moneyline,,home,,1.7874,10000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,0,moneyline,,away,,2.15,10000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,0,team_total,home,over,3.5,2.09,1000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,0,team_total,home,under,3.5,1.7752,1000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,0,team_total,away,over,3.5,2.39,1000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,0,team_total,away,under,3.5,1.5988,1000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,0,spread,,home,-1.5,2.91,7500
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,0,spread,,away,1.5,1.4545,7500
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,6,moneyline,,home,,2.23,5000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,6,moneyline,,away,,2.72,5000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,6,moneyline,,draw,,4.26,5000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,6,team_total,home,over,3.5,2.23,1000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,6,team_total,home,under,3.5,1.6667,1000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,6,team_total,away,over,2.5,1.6623,1000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,6,team_total,away,under,2.5,2.24,1000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,6,spread,,home,0.0,1.7519,5000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,6,spread,,away,-0.0,2.16,5000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,1,moneyline,,home,,1.813,2000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,1,spread,,home,-0.5,2.61,2000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,1,spread,,away,0.5,1.5263,2000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,2,moneyline,,home,,1.8,2000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,2,moneyline,,away,,2.07,2000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,2,team_total,home,over,0.5,1.4367,1000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,2,spread,,home,-0.5,2.53,2000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,2,spread,,away,0.5,1.5556,2000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,3,moneyline,,home,,1.7874,2000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,3,moneyline,,away,,2.09,2000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,3,team_total,home,over,1.5,2.69,1000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,3,team_total,home,under,1.5,1.4808,1000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,3,team_total,away,over,0.5,1.4673,1000
-2026-11-01T21:30:05.147810+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.5,New York Rangers,Edmonton Oilers,3,team_total,away,under,0.5,2.73,1000
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,27.28,Chicago Blackhawks,Colorado Avalanche,0,team_total,home,under,2.5,1.8333,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,27.28,Chicago Blackhawks,Colorado Avalanche,0,team_total,away,over,3.5,1.8065,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,27.28,Chicago Blackhawks,Colorado Avalanche,0,team_total,away,under,3.5,2.03,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,27.28,Chicago Blackhawks,Colorado Avalanche,0,total,,over,6.5,2.04,1875
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,27.28,Chicago Blackhawks,Colorado Avalanche,0,total,,under,6.5,1.8333,1875
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,27.28,Chicago Blackhawks,Colorado Avalanche,6,team_total,home,over,2.5,2.09,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,27.28,Chicago Blackhawks,Colorado Avalanche,6,team_total,home,under,2.5,1.7407,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,27.28,Chicago Blackhawks,Colorado Avalanche,6,team_total,away,over,3.5,1.9259,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,27.28,Chicago Blackhawks,Colorado Avalanche,6,team_total,away,under,3.5,1.8772,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,27.28,Chicago Blackhawks,Colorado Avalanche,6,total,,over,6.0,1.9346,1250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,27.28,Chicago Blackhawks,Colorado Avalanche,6,total,,under,6.0,1.9174,1250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,0,team_total,home,over,3.5,2.12,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,0,team_total,home,under,3.5,1.7463,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,0,team_total,away,over,3.5,2.02,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,0,team_total,away,under,3.5,1.8264,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,0,spread,,home,1.5,1.4219,3750
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,0,spread,,away,-1.5,3.04,3750
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,0,total,,over,6.5,1.7874,3750
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,0,total,,under,6.5,2.13,3750
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,6,moneyline,,home,,2.57,2500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,6,team_total,home,over,3.5,2.37,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,6,team_total,home,under,3.5,1.5952,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,6,team_total,away,over,3.5,2.2,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,6,team_total,away,under,3.5,1.6849,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,6,total,,over,6.5,2.03,2500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,6,total,,under,6.5,1.8475,2500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,1,team_total,home,over,0.5,1.5263,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,1,team_total,home,under,0.5,2.55,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,1,team_total,away,over,0.5,1.4878,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,1,team_total,away,under,0.5,2.66,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,1,spread,,home,0.5,1.5102,1000
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,1,spread,,away,-0.5,2.66,1000
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,1,total,,over,2.0,2.15,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,1,total,,under,2.0,1.7463,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,2,team_total,home,over,0.5,1.463,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,2,team_total,home,under,0.5,2.75,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,2,team_total,away,over,0.5,1.4255,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,2,team_total,away,under,0.5,2.89,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,2,spread,,home,0.5,1.5319,1000
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,2,total,,over,2.0,1.8772,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,2,total,,under,2.0,1.9709,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,3,team_total,home,over,1.5,2.83,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,3,team_total,home,under,1.5,1.4405,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,3,team_total,away,over,1.5,2.65,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,3,team_total,away,under,1.5,1.4902,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,3,spread,,home,0.5,1.5952,1000
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,3,spread,,away,-0.5,2.43,1000
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,3,total,,over,2.5,2.2,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.16,Anaheim Ducks,Ottawa Senators,3,total,,under,2.5,1.7143,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,0,team_total,home,over,3.5,2.13,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,0,team_total,home,under,3.5,1.7299,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,0,team_total,away,over,2.5,1.6494,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,0,team_total,away,under,2.5,2.26,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,0,spread,,home,-1.5,2.85,1875
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,0,total,,over,6.5,2.0,1875
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,0,total,,under,6.5,1.8696,1875
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,3,team_total,home,over,1.5,2.77,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,3,team_total,home,under,1.5,1.4464,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,3,team_total,away,under,0.5,2.62,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,3,total,,over,2.0,1.7812,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,3,total,,under,2.0,2.08,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,1,team_total,home,over,0.5,1.5348,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,1,team_total,away,over,0.5,1.625,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,1,spread,,away,0.5,1.5181,500
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,1,total,,under,1.5,2.12,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,2,team_total,home,over,0.5,1.4464,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,2,team_total,home,under,0.5,2.77,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,2,team_total,away,over,0.5,1.5348,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,2,team_total,away,under,0.5,2.5,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,2,total,,over,2.0,2.05,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,2,total,,under,2.0,1.8,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,6,moneyline,,away,,2.77,1250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,6,moneyline,,draw,,4.2,1250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,6,team_total,home,over,3.5,2.3,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,6,team_total,away,over,2.5,1.7353,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,6,team_total,away,under,2.5,2.1,250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,6,spread,,away,0.5,1.7194,1250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,6,total,,over,6.0,1.9259,1250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,28.28,San Jose Sharks,Calgary Flames,6,total,,under,6.0,1.9259,1250
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.16,New York Rangers,Edmonton Oilers,0,team_total,away,over,3.5,2.25,1000
-2026-11-01T21:50:07.007919+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.16,New York Rangers,Edmonton Oilers,0,team_total,away,under,3.5,1.6711,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,0,moneyline,,home,,2.06,5000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,0,moneyline,,away,,1.8547,5000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,0,team_total,home,over,3.5,2.14,500
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,0,team_total,home,under,3.5,1.7353,500
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,0,team_total,away,over,3.5,2.01,500
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,0,team_total,away,under,3.5,1.8333,500
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,0,spread,,home,1.5,1.4274,3750
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,0,spread,,away,-1.5,3.02,3750
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,0,total,,over,6.5,1.7937,3750
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,0,total,,under,6.5,2.12,3750
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,1,team_total,home,over,0.5,1.5291,500
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,1,team_total,home,under,0.5,2.54,500
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,2,moneyline,,away,,1.8547,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,2,team_total,home,over,0.5,1.4651,500
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,2,team_total,home,under,0.5,2.74,500
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,2,spread,,home,0.5,1.5348,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,2,total,,over,2.0,1.885,500
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,6,moneyline,,home,,2.6,2500
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,6,moneyline,,away,,2.31,2500
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,6,team_total,home,over,3.5,2.39,500
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,6,team_total,home,under,3.5,1.5882,500
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,6,team_total,away,under,3.5,1.6897,500
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,6,spread,,home,0.0,2.06,2500
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,6,spread,,away,-0.0,1.8264,2500
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,6,total,,over,6.5,2.04,2500
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,6,total,,under,6.5,1.8403,2500
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,3,moneyline,,away,,1.8475,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,3,team_total,home,under,1.5,1.4386,500
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,3.0,Anaheim Ducks,Ottawa Senators,3,team_total,away,under,1.5,1.4926,500
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,0,moneyline,,home,,1.8333,10000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,0,moneyline,,away,,2.09,10000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,0,team_total,home,over,3.5,2.12,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,0,team_total,home,under,3.5,1.7519,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,0,team_total,away,over,3.5,2.21,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,0,team_total,away,under,3.5,1.6944,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,0,spread,,home,-1.5,2.98,7500
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,0,spread,,away,1.5,1.4367,7500
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,1,moneyline,,home,,1.8333,2000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,1,moneyline,,away,,2.03,2000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,1,team_total,home,over,0.5,1.5102,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,1,team_total,home,under,0.5,2.59,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,1,team_total,away,over,0.5,1.5714,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,1,team_total,away,under,0.5,2.43,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,1,spread,,home,-0.5,2.64,2000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,1,spread,,away,0.5,1.5155,2000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,2,moneyline,,home,,1.8197,2000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,2,moneyline,,away,,2.05,2000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,2,team_total,home,over,0.5,1.4425,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,2,team_total,home,under,0.5,2.82,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,2,team_total,away,over,0.5,1.5076,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,2,team_total,away,under,0.5,2.6,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,2,spread,,home,-0.5,2.56,2000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,2,spread,,away,0.5,1.5435,2000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,3,moneyline,,home,,1.8065,2000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,3,moneyline,,away,,2.07,2000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,3,team_total,home,over,1.5,2.71,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,3,team_total,home,under,1.5,1.4739,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,3,team_total,away,over,0.5,1.4608,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,3,team_total,away,under,0.5,2.75,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,3,spread,,home,-0.5,2.39,2000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,3,spread,,away,0.5,1.6135,2000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,6,moneyline,,home,,2.29,5000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,6,moneyline,,away,,2.64,5000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,6,team_total,home,over,3.5,2.27,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,6,team_total,home,under,3.5,1.6494,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,6,team_total,away,over,2.5,1.6452,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,6,team_total,away,under,2.5,2.27,1000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,6,spread,,home,0.0,1.8,5000
-2026-11-01T22:00:06.401678+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,1.0,New York Rangers,Edmonton Oilers,6,spread,,away,-0.0,2.09,5000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,0,moneyline,,home,,1.8475,10000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,0,moneyline,,away,,2.07,10000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,0,team_total,home,over,3.5,2.13,1000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,0,team_total,home,under,3.5,1.7463,1000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,0,team_total,away,over,3.5,2.2,1000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,0,team_total,away,under,3.5,1.6993,1000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,0,spread,,home,-1.5,3.0,7500
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,0,spread,,away,1.5,1.431,7500
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,0,total,,over,6.5,1.885,7500
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,2,moneyline,,home,,1.8264,2000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,2,moneyline,,away,,2.04,2000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,2,team_total,home,over,0.5,1.4444,1000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,2,team_total,away,over,0.5,1.5051,1000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,2,team_total,away,under,0.5,2.61,1000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,1,moneyline,,home,,1.8403,2000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,1,moneyline,,away,,2.02,2000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,1,team_total,home,over,0.5,1.5128,1000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,1,team_total,away,over,0.5,1.5682,1000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,1,team_total,away,under,0.5,2.44,1000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,1,spread,,home,-0.5,2.65,2000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,1,spread,,away,0.5,1.5128,2000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,3,moneyline,,away,,2.06,2000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,3,team_total,home,over,1.5,2.72,1000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,3,team_total,home,under,1.5,1.4717,1000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,3,team_total,away,under,0.5,2.76,1000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,6,moneyline,,home,,2.31,5000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,6,moneyline,,away,,2.62,5000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,6,team_total,home,over,3.5,2.28,1000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,6,team_total,home,under,3.5,1.641,1000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,6,team_total,away,over,2.5,1.6369,1000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,6,team_total,away,under,2.5,2.29,1000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,6,spread,,home,0.0,1.813,5000
-2026-11-01T22:50:06.555521+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.16,New York Rangers,Edmonton Oilers,6,spread,,away,-0.0,2.07,5000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,1,moneyline,,home,,2.48,500
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,1,moneyline,,away,,1.565,500
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,1,team_total,away,over,0.5,1.4673,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,1,team_total,away,under,0.5,2.7,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,1,spread,,home,0.5,1.6667,500
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,1,spread,,away,-0.5,2.26,500
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,1,total,,over,1.5,1.7752,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,1,total,,under,1.5,2.09,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,2,moneyline,,home,,2.56,500
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,2,moneyline,,away,,1.5319,500
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,2,team_total,away,over,1.5,2.79,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,2,team_total,away,under,1.5,1.4405,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,2,spread,,home,0.5,1.7299,500
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,2,spread,,away,-0.5,2.15,500
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,2,total,,over,2.0,2.1,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,2,total,,under,2.0,1.7634,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,3,moneyline,,home,,2.61,500
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,3,moneyline,,away,,1.5155,500
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,3,team_total,away,over,1.5,2.42,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,3,team_total,away,under,1.5,1.565,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,3,spread,,home,0.5,1.8403,500
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,3,spread,,away,-0.5,2.0,500
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,3,total,,over,2.0,1.7812,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,3,total,,under,2.0,2.07,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,0,team_total,home,over,2.5,2.0,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,0,team_total,home,under,2.5,1.8333,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,0,team_total,away,over,3.5,1.8065,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,0,team_total,away,under,3.5,2.03,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,0,spread,,away,-1.5,2.12,1875
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,0,total,,over,6.5,2.04,1875
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,0,total,,under,6.5,1.8333,1875
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,6,team_total,home,over,2.5,2.09,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,6,team_total,home,under,2.5,1.7407,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,6,team_total,away,over,3.5,1.9259,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,6,team_total,away,under,3.5,1.8772,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,6,total,,over,6.0,1.9346,1250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639313891,Regular,2026-11-03T01:07:00+00:00,26.2,Chicago Blackhawks,Colorado Avalanche,6,total,,under,6.0,1.9174,1250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,1,moneyline,,home,,1.9901,2000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,1,team_total,home,over,0.5,1.5291,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,1,team_total,home,under,0.5,2.54,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,1,team_total,away,over,0.5,1.4878,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,1,team_total,away,under,0.5,2.66,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,1,spread,,home,0.5,1.5102,2000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,1,spread,,away,-0.5,2.66,2000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,1,total,,over,2.0,2.15,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,1,total,,under,2.0,1.7463,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,2,team_total,home,over,0.5,1.4651,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,2,team_total,home,under,0.5,2.74,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,2,team_total,away,over,0.5,1.4255,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,2,team_total,away,under,0.5,2.89,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,2,spread,,home,0.5,1.5348,2000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,2,spread,,away,-0.5,2.59,2000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,2,total,,over,2.0,1.885,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,2,total,,under,2.0,1.9709,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,3,team_total,home,over,1.5,2.83,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,3,team_total,home,under,1.5,1.4386,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,3,team_total,away,over,1.5,2.65,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,3,team_total,away,under,1.5,1.4926,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,3,spread,,home,0.5,1.5952,2000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,3,spread,,away,-0.5,2.43,2000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,3,total,,over,2.5,2.2,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,3,total,,under,2.5,1.7143,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,6,team_total,home,over,3.5,2.39,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,6,team_total,home,under,3.5,1.5882,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,6,team_total,away,over,3.5,2.2,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,6,team_total,away,under,3.5,1.6897,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,6,spread,,away,-0.0,1.8264,5000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,6,total,,over,6.5,2.04,5000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,6,total,,under,6.5,1.8403,5000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,0,team_total,home,over,3.5,2.14,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,0,team_total,home,under,3.5,1.7353,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,0,team_total,away,over,3.5,2.01,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,0,team_total,away,under,3.5,1.8333,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,0,spread,,home,1.5,1.4274,7500
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,0,spread,,away,-1.5,3.02,7500
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,0,total,,over,6.5,1.7937,7500
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639278035,Regular,2026-11-02T01:00:00+00:00,2.08,Anaheim Ducks,Ottawa Senators,0,total,,under,6.5,2.12,7500
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,0,moneyline,,home,,1.8475,10000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,0,moneyline,,away,,2.07,10000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,0,team_total,home,over,3.5,2.13,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,0,team_total,home,under,3.5,1.7463,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,0,team_total,away,over,3.5,2.2,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,0,team_total,away,under,3.5,1.6993,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,0,spread,,home,-1.5,3.0,7500
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,0,spread,,away,1.5,1.431,7500
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,0,total,,over,6.5,1.885,7500
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,0,total,,under,6.5,2.0,7500
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,2,moneyline,,home,,1.8264,2000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,2,moneyline,,away,,2.04,2000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,2,team_total,home,over,0.5,1.4444,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,2,team_total,home,under,0.5,2.82,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,2,team_total,away,over,0.5,1.5051,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,2,team_total,away,under,0.5,2.61,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,2,spread,,home,-0.5,2.56,2000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,2,spread,,away,0.5,1.5435,2000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,1,moneyline,,home,,1.8403,2000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,1,moneyline,,away,,2.02,2000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,1,team_total,home,over,0.5,1.5128,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,1,team_total,home,under,0.5,2.59,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,1,team_total,away,over,0.5,1.5682,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,1,team_total,away,under,0.5,2.44,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,1,spread,,home,-0.5,2.65,2000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,1,spread,,away,0.5,1.5128,2000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,1,total,,over,2.0,2.29,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,1,total,,under,2.0,1.6623,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,3,moneyline,,home,,1.8065,2000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,3,moneyline,,away,,2.06,2000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,3,team_total,home,over,1.5,2.72,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,3,team_total,home,under,1.5,1.4717,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,3,team_total,away,over,0.5,1.4608,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,3,team_total,away,under,0.5,2.76,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,3,spread,,home,-0.5,2.39,2000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,3,spread,,away,0.5,1.6135,2000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,3,total,,over,2.0,1.7092,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,3,total,,under,2.0,2.21,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,6,moneyline,,home,,2.31,5000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,6,moneyline,,away,,2.62,5000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,6,moneyline,,draw,,4.26,5000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,6,team_total,home,over,3.5,2.28,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,6,team_total,home,under,3.5,1.641,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,6,team_total,away,over,2.5,1.6369,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,6,team_total,away,under,2.5,2.29,1000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,6,spread,,home,0.0,1.813,5000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,6,spread,,away,-0.0,2.07,5000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,6,total,,over,6.0,1.7937,5000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639280085,Regular,2026-11-01T23:00:00+00:00,0.08,New York Rangers,Edmonton Oilers,6,total,,under,6.0,2.1,5000
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,25.2,Florida Panthers,Detroit Red Wings,0,moneyline,,home,,1.5917,2500
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,25.2,Florida Panthers,Detroit Red Wings,0,moneyline,,away,,2.48,2500
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,25.2,Florida Panthers,Detroit Red Wings,0,team_total,home,over,3.5,2.12,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,25.2,Florida Panthers,Detroit Red Wings,0,team_total,home,under,3.5,1.7353,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,25.2,Florida Panthers,Detroit Red Wings,0,spread,,home,-1.5,2.53,1875
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,25.2,Florida Panthers,Detroit Red Wings,0,spread,,away,1.5,1.5618,1875
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,25.2,Florida Panthers,Detroit Red Wings,0,total,,over,6.0,2.03,1875
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,25.2,Florida Panthers,Detroit Red Wings,0,total,,under,6.0,1.8475,1875
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,25.2,Florida Panthers,Detroit Red Wings,2,total,,over,2.0,2.27,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,25.2,Florida Panthers,Detroit Red Wings,2,total,,under,2.0,1.6623,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,25.2,Florida Panthers,Detroit Red Wings,6,moneyline,,home,,1.9709,1250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,25.2,Florida Panthers,Detroit Red Wings,6,moneyline,,away,,3.2,1250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,25.2,Florida Panthers,Detroit Red Wings,6,team_total,home,over,3.5,2.28,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,25.2,Florida Panthers,Detroit Red Wings,6,team_total,home,under,3.5,1.6289,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,25.2,Florida Panthers,Detroit Red Wings,6,team_total,away,over,2.5,2.0,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,25.2,Florida Panthers,Detroit Red Wings,6,team_total,away,under,2.5,1.813,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,25.2,Florida Panthers,Detroit Red Wings,6,spread,,home,-0.5,1.9709,1250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,25.2,Florida Panthers,Detroit Red Wings,6,spread,,away,0.5,1.885,1250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,25.2,Florida Panthers,Detroit Red Wings,6,total,,over,6.0,2.19,1250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639318687,Regular,2026-11-03T00:07:00+00:00,25.2,Florida Panthers,Detroit Red Wings,6,total,,under,6.0,1.7194,1250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,0,team_total,home,over,3.5,2.13,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,0,team_total,home,under,3.5,1.7299,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,0,team_total,away,over,2.5,1.6494,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,0,team_total,away,under,2.5,2.26,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,0,spread,,home,-1.5,2.85,1875
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,0,total,,over,6.5,2.0,1875
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,0,total,,under,6.5,1.8696,1875
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,3,team_total,home,over,1.5,2.77,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,3,team_total,home,under,1.5,1.4464,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,3,team_total,away,under,0.5,2.62,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,3,total,,over,2.0,1.7812,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,3,total,,under,2.0,2.08,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,1,team_total,home,over,0.5,1.5348,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,1,team_total,away,over,0.5,1.625,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,1,spread,,away,0.5,1.5181,500
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,1,total,,under,1.5,2.12,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,2,team_total,home,over,0.5,1.4464,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,2,team_total,home,under,0.5,2.77,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,2,team_total,away,over,0.5,1.5348,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,2,team_total,away,under,0.5,2.5,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,2,total,,over,2.0,2.05,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,2,total,,under,2.0,1.8,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,6,moneyline,,away,,2.77,1250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,6,moneyline,,draw,,4.2,1250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,6,team_total,home,over,3.5,2.3,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,6,team_total,away,over,2.5,1.7353,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,6,team_total,away,under,2.5,2.1,250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,6,spread,,away,0.5,1.7194,1250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,6,total,,over,6.0,1.9259,1250
+2026-11-01T22:55:17.557970+00:00,nhl,nhl,1639326125,Regular,2026-11-03T02:07:00+00:00,27.2,San Jose Sharks,Calgary Flames,6,total,,under,6.0,1.9259,1250
