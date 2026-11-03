@@ -53117,3 +53117,876 @@ timestamp_utc,sport,league,pin_id,units,game_time_utc,hours_until_game,home_team
 2026-11-03T08:25:17.931166+00:00,soccer,por,1639798002,Regular,2026-11-08T20:30:00+00:00,132.08,Estrela da Amadora,Benfica,1,spread,,away,-0.75,1.8772,100
 2026-11-03T08:25:17.931166+00:00,soccer,por,1639798002,Regular,2026-11-08T20:30:00+00:00,132.08,Estrela da Amadora,Benfica,1,total,,over,1.25,1.7692,100
 2026-11-03T08:25:17.931166+00:00,soccer,por,1639798002,Regular,2026-11-08T20:30:00+00:00,132.08,Estrela da Amadora,Benfica,1,total,,under,1.25,2.03,100
+2026-11-03T09:25:19.980917+00:00,soccer,epl,1639201955,Corners,2026-11-08T16:30:00+00:00,127.08,Manchester United (Corners),Aston Villa (Corners),1,spread,,home,-0.5,1.7353,125
+2026-11-03T09:25:19.980917+00:00,soccer,epl,1639201955,Corners,2026-11-08T16:30:00+00:00,127.08,Manchester United (Corners),Aston Villa (Corners),1,spread,,away,0.5,2.03,125
+2026-11-03T09:25:19.980917+00:00,soccer,epl,1639201955,Corners,2026-11-08T16:30:00+00:00,127.08,Manchester United (Corners),Aston Villa (Corners),0,team_total,home,over,5.5,1.8197,125
+2026-11-03T09:25:19.980917+00:00,soccer,epl,1639201955,Corners,2026-11-08T16:30:00+00:00,127.08,Manchester United (Corners),Aston Villa (Corners),0,team_total,home,under,5.5,1.9434,125
+2026-11-03T09:25:19.980917+00:00,soccer,epl,1639201955,Corners,2026-11-08T16:30:00+00:00,127.08,Manchester United (Corners),Aston Villa (Corners),0,team_total,away,over,3.5,1.6452,125
+2026-11-03T09:25:19.980917+00:00,soccer,epl,1639201955,Corners,2026-11-08T16:30:00+00:00,127.08,Manchester United (Corners),Aston Villa (Corners),0,team_total,away,under,3.5,2.16,125
+2026-11-03T09:25:19.980917+00:00,soccer,epl,1639201955,Corners,2026-11-08T16:30:00+00:00,127.08,Manchester United (Corners),Aston Villa (Corners),0,spread,,home,-1.5,1.8929,250
+2026-11-03T09:25:19.980917+00:00,soccer,epl,1639201955,Corners,2026-11-08T16:30:00+00:00,127.08,Manchester United (Corners),Aston Villa (Corners),0,spread,,away,1.5,1.9091,250
+2026-11-03T09:25:19.980917+00:00,soccer,epl,1639201955,Corners,2026-11-08T16:30:00+00:00,127.08,Manchester United (Corners),Aston Villa (Corners),0,total,,over,10.0,1.8929,500
+2026-11-03T09:25:19.980917+00:00,soccer,epl,1639201953,Corners,2026-11-08T14:00:00+00:00,124.58,Sunderland (Corners),Chelsea (Corners),0,team_total,home,over,4.5,1.8264,125
+2026-11-03T09:25:19.980917+00:00,soccer,epl,1639201953,Corners,2026-11-08T14:00:00+00:00,124.58,Sunderland (Corners),Chelsea (Corners),0,team_total,home,under,4.5,1.9434,125
+2026-11-03T09:25:19.980917+00:00,soccer,epl,1639201953,Corners,2026-11-08T14:00:00+00:00,124.58,Sunderland (Corners),Chelsea (Corners),0,team_total,away,over,4.5,1.7463,125
+2026-11-03T09:25:19.980917+00:00,soccer,epl,1639201953,Corners,2026-11-08T14:00:00+00:00,124.58,Sunderland (Corners),Chelsea (Corners),0,team_total,away,under,4.5,2.02,125
+2026-11-03T09:25:19.980917+00:00,soccer,laliga,1639273737,Corners,2026-11-08T17:30:00+00:00,128.08,Celta Vigo (Corners),Levante (Corners),1,spread,,home,-0.5,1.7874,125
+2026-11-03T09:25:19.980917+00:00,soccer,laliga,1639273737,Corners,2026-11-08T17:30:00+00:00,128.08,Celta Vigo (Corners),Levante (Corners),1,spread,,away,0.5,1.9709,125
+2026-11-03T09:25:19.980917+00:00,soccer,laliga,1639273737,Corners,2026-11-08T17:30:00+00:00,128.08,Celta Vigo (Corners),Levante (Corners),1,total,,over,4.0,1.9091,250
+2026-11-03T09:25:19.980917+00:00,soccer,laliga,1639273737,Corners,2026-11-08T17:30:00+00:00,128.08,Celta Vigo (Corners),Levante (Corners),1,total,,under,4.0,1.8547,250
+2026-11-03T09:25:19.980917+00:00,soccer,laliga,1639270423,Corners,2026-11-08T15:15:00+00:00,125.83,Real Sociedad (Corners),Rayo Vallecano (Corners),1,spread,,home,-0.5,1.7519,125
+2026-11-03T09:25:19.980917+00:00,soccer,laliga,1639270423,Corners,2026-11-08T15:15:00+00:00,125.83,Real Sociedad (Corners),Rayo Vallecano (Corners),1,total,,over,5.0,1.9615,250
+2026-11-03T09:25:19.980917+00:00,soccer,laliga,1639270423,Corners,2026-11-08T15:15:00+00:00,125.83,Real Sociedad (Corners),Rayo Vallecano (Corners),1,total,,under,5.0,1.8,250
+2026-11-03T09:25:19.980917+00:00,soccer,laliga,1639270423,Corners,2026-11-08T15:15:00+00:00,125.83,Real Sociedad (Corners),Rayo Vallecano (Corners),0,team_total,home,over,5.5,1.7092,125
+2026-11-03T09:25:19.980917+00:00,soccer,laliga,1639270423,Corners,2026-11-08T15:15:00+00:00,125.83,Real Sociedad (Corners),Rayo Vallecano (Corners),0,team_total,home,under,5.5,2.06,125
+2026-11-03T09:25:19.980917+00:00,soccer,laliga,1639270423,Corners,2026-11-08T15:15:00+00:00,125.83,Real Sociedad (Corners),Rayo Vallecano (Corners),0,team_total,away,over,4.5,2.08,125
+2026-11-03T09:25:19.980917+00:00,soccer,laliga,1639270423,Corners,2026-11-08T15:15:00+00:00,125.83,Real Sociedad (Corners),Rayo Vallecano (Corners),0,team_total,away,under,4.5,1.6993,125
+2026-11-03T09:25:19.980917+00:00,soccer,laliga,1639270423,Corners,2026-11-08T15:15:00+00:00,125.83,Real Sociedad (Corners),Rayo Vallecano (Corners),0,spread,,home,-1.5,1.8929,250
+2026-11-03T09:25:19.980917+00:00,soccer,laliga,1639270423,Corners,2026-11-08T15:15:00+00:00,125.83,Real Sociedad (Corners),Rayo Vallecano (Corners),0,total,,over,10.5,1.9804,500
+2026-11-03T09:25:19.980917+00:00,soccer,laliga,1639270423,Corners,2026-11-08T15:15:00+00:00,125.83,Real Sociedad (Corners),Rayo Vallecano (Corners),0,total,,under,10.5,1.8475,500
+2026-11-03T09:25:19.980917+00:00,soccer,bundesliga,1639183498,Regular,2026-11-07T14:30:00+00:00,101.08,Mainz 05,Bayern Munich,0,moneyline,,home,,5.88,2000
+2026-11-03T09:25:19.980917+00:00,soccer,bundesliga,1639183498,Regular,2026-11-07T14:30:00+00:00,101.08,Mainz 05,Bayern Munich,0,moneyline,,away,,1.3968,2000
+2026-11-03T09:25:19.980917+00:00,soccer,bundesliga,1639183498,Regular,2026-11-07T14:30:00+00:00,101.08,Mainz 05,Bayern Munich,0,moneyline,,draw,,6.68,2000
+2026-11-03T09:25:19.980917+00:00,soccer,bundesliga,1639183498,Regular,2026-11-07T14:30:00+00:00,101.08,Mainz 05,Bayern Munich,0,team_total,home,over,1.5,2.5,300
+2026-11-03T09:25:19.980917+00:00,soccer,bundesliga,1639183498,Regular,2026-11-07T14:30:00+00:00,101.08,Mainz 05,Bayern Munich,0,team_total,home,under,1.5,1.5556,300
+2026-11-03T09:25:19.980917+00:00,soccer,bundesliga,1639183498,Regular,2026-11-07T14:30:00+00:00,101.08,Mainz 05,Bayern Munich,0,team_total,away,over,2.5,1.7576,300
+2026-11-03T09:25:19.980917+00:00,soccer,bundesliga,1639183498,Regular,2026-11-07T14:30:00+00:00,101.08,Mainz 05,Bayern Munich,0,team_total,away,under,2.5,2.11,300
+2026-11-03T09:25:19.980917+00:00,soccer,bundesliga,1639183498,Regular,2026-11-07T14:30:00+00:00,101.08,Mainz 05,Bayern Munich,0,spread,,home,1.5,1.9434,2000
+2026-11-03T09:25:19.980917+00:00,soccer,bundesliga,1639183498,Regular,2026-11-07T14:30:00+00:00,101.08,Mainz 05,Bayern Munich,0,spread,,away,-1.5,1.9615,2000
+2026-11-03T09:25:19.980917+00:00,soccer,bundesliga,1639183498,Regular,2026-11-07T14:30:00+00:00,101.08,Mainz 05,Bayern Munich,1,moneyline,,home,,5.88,300
+2026-11-03T09:25:19.980917+00:00,soccer,bundesliga,1639183498,Regular,2026-11-07T14:30:00+00:00,101.08,Mainz 05,Bayern Munich,1,team_total,home,over,0.5,2.22,100
+2026-11-03T09:25:19.980917+00:00,soccer,bundesliga,1639183498,Regular,2026-11-07T14:30:00+00:00,101.08,Mainz 05,Bayern Munich,1,team_total,away,over,1.5,2.57,100
+2026-11-03T09:25:19.980917+00:00,soccer,bundesliga,1639183498,Regular,2026-11-07T14:30:00+00:00,101.08,Mainz 05,Bayern Munich,1,team_total,away,under,1.5,1.5076,100
+2026-11-03T09:25:19.980917+00:00,soccer,bundesliga,1639183498,Regular,2026-11-07T14:30:00+00:00,101.08,Mainz 05,Bayern Munich,1,spread,,away,-0.75,2.05,300
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Bookings,2026-11-03T20:00:00+00:00,10.58,Barcelona (Bookings),Aston Villa (Bookings),0,moneyline,,home,,3.57,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Bookings,2026-11-03T20:00:00+00:00,10.58,Barcelona (Bookings),Aston Villa (Bookings),0,moneyline,,away,,1.813,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Bookings,2026-11-03T20:00:00+00:00,10.58,Barcelona (Bookings),Aston Villa (Bookings),0,moneyline,,draw,,3.93,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Bookings,2026-11-03T20:00:00+00:00,10.58,Barcelona (Bookings),Aston Villa (Bookings),0,team_total,home,over,1.5,2.22,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Bookings,2026-11-03T20:00:00+00:00,10.58,Barcelona (Bookings),Aston Villa (Bookings),0,team_total,home,under,1.5,1.6135,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Bookings,2026-11-03T20:00:00+00:00,10.58,Barcelona (Bookings),Aston Villa (Bookings),0,team_total,away,over,1.5,1.6135,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Bookings,2026-11-03T20:00:00+00:00,10.58,Barcelona (Bookings),Aston Villa (Bookings),0,team_total,away,under,1.5,2.22,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Bookings,2026-11-03T20:00:00+00:00,10.58,Barcelona (Bookings),Aston Villa (Bookings),0,spread,,home,0.5,1.9346,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Bookings,2026-11-03T20:00:00+00:00,10.58,Barcelona (Bookings),Aston Villa (Bookings),0,spread,,away,-0.5,1.813,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Bookings,2026-11-03T20:00:00+00:00,10.58,Barcelona (Bookings),Aston Villa (Bookings),0,total,,over,3.0,1.813,1125
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Bookings,2026-11-03T20:00:00+00:00,10.58,Barcelona (Bookings),Aston Villa (Bookings),0,total,,under,3.0,2.02,1125
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Corners,2026-11-03T20:00:00+00:00,10.58,Barcelona (Corners),Aston Villa (Corners),1,spread,,home,-1.5,1.7463,300
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Corners,2026-11-03T20:00:00+00:00,10.58,Barcelona (Corners),Aston Villa (Corners),1,spread,,away,1.5,2.02,300
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Corners,2026-11-03T20:00:00+00:00,10.58,Barcelona (Corners),Aston Villa (Corners),1,total,,over,4.5,1.8197,625
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Corners,2026-11-03T20:00:00+00:00,10.58,Barcelona (Corners),Aston Villa (Corners),1,total,,under,4.5,1.9434,625
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Regular,2026-11-03T20:00:00+00:00,10.58,Barcelona,Aston Villa,0,moneyline,,home,,1.2801,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Regular,2026-11-03T20:00:00+00:00,10.58,Barcelona,Aston Villa,0,moneyline,,away,,8.53,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Regular,2026-11-03T20:00:00+00:00,10.58,Barcelona,Aston Villa,0,moneyline,,draw,,6.99,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Regular,2026-11-03T20:00:00+00:00,10.58,Barcelona,Aston Villa,0,team_total,home,over,2.5,1.565,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Regular,2026-11-03T20:00:00+00:00,10.58,Barcelona,Aston Villa,0,team_total,home,under,2.5,2.44,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Regular,2026-11-03T20:00:00+00:00,10.58,Barcelona,Aston Villa,0,team_total,away,over,1.5,2.75,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Regular,2026-11-03T20:00:00+00:00,10.58,Barcelona,Aston Villa,0,team_total,away,under,1.5,1.463,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Regular,2026-11-03T20:00:00+00:00,10.58,Barcelona,Aston Villa,0,spread,,home,-1.75,1.8621,30000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Regular,2026-11-03T20:00:00+00:00,10.58,Barcelona,Aston Villa,0,spread,,away,1.75,2.03,30000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Regular,2026-11-03T20:00:00+00:00,10.58,Barcelona,Aston Villa,0,total,,over,4.25,2.0,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Regular,2026-11-03T20:00:00+00:00,10.58,Barcelona,Aston Villa,0,total,,under,4.25,1.8772,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Regular,2026-11-03T20:00:00+00:00,10.58,Barcelona,Aston Villa,1,moneyline,,home,,1.5917,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Regular,2026-11-03T20:00:00+00:00,10.58,Barcelona,Aston Villa,1,moneyline,,away,,7.18,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Regular,2026-11-03T20:00:00+00:00,10.58,Barcelona,Aston Villa,1,moneyline,,draw,,3.54,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Regular,2026-11-03T20:00:00+00:00,10.58,Barcelona,Aston Villa,1,team_total,home,over,1.5,2.26,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Regular,2026-11-03T20:00:00+00:00,10.58,Barcelona,Aston Villa,1,team_total,home,under,1.5,1.625,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Regular,2026-11-03T20:00:00+00:00,10.58,Barcelona,Aston Villa,1,team_total,away,over,0.5,2.41,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Regular,2026-11-03T20:00:00+00:00,10.58,Barcelona,Aston Villa,1,team_total,away,under,0.5,1.5556,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Regular,2026-11-03T20:00:00+00:00,10.58,Barcelona,Aston Villa,1,spread,,home,-0.75,1.7937,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Regular,2026-11-03T20:00:00+00:00,10.58,Barcelona,Aston Villa,1,spread,,away,0.75,2.08,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Regular,2026-11-03T20:00:00+00:00,10.58,Barcelona,Aston Villa,1,total,,over,1.75,1.885,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854582,Regular,2026-11-03T20:00:00+00:00,10.58,Barcelona,Aston Villa,1,total,,under,1.75,1.9346,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638849096,Regular,2026-11-03T17:45:00+00:00,8.33,Galatasaray,Stuttgart,0,moneyline,,draw,,4.25,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638849096,Regular,2026-11-03T17:45:00+00:00,8.33,Galatasaray,Stuttgart,0,team_total,home,over,1.5,1.5464,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638849096,Regular,2026-11-03T17:45:00+00:00,8.33,Galatasaray,Stuttgart,0,team_total,home,under,1.5,2.52,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638849096,Regular,2026-11-03T17:45:00+00:00,8.33,Galatasaray,Stuttgart,0,team_total,away,over,1.5,1.8696,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638849096,Regular,2026-11-03T17:45:00+00:00,8.33,Galatasaray,Stuttgart,0,team_total,away,under,1.5,1.9615,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638849096,Regular,2026-11-03T17:45:00+00:00,8.33,Galatasaray,Stuttgart,0,spread,,home,-0.25,1.8696,30000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638849096,Regular,2026-11-03T17:45:00+00:00,8.33,Galatasaray,Stuttgart,0,total,,over,3.75,2.0,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638849096,Regular,2026-11-03T17:45:00+00:00,8.33,Galatasaray,Stuttgart,0,total,,under,3.75,1.8929,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638849096,Regular,2026-11-03T17:45:00+00:00,8.33,Galatasaray,Stuttgart,1,moneyline,,draw,,2.83,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638849096,Regular,2026-11-03T17:45:00+00:00,8.33,Galatasaray,Stuttgart,1,team_total,home,over,0.5,1.5556,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638849096,Regular,2026-11-03T17:45:00+00:00,8.33,Galatasaray,Stuttgart,1,team_total,home,under,0.5,2.44,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638849096,Regular,2026-11-03T17:45:00+00:00,8.33,Galatasaray,Stuttgart,1,team_total,away,over,0.5,1.7812,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638849096,Regular,2026-11-03T17:45:00+00:00,8.33,Galatasaray,Stuttgart,1,spread,,away,0.25,1.7812,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638849096,Regular,2026-11-03T17:45:00+00:00,8.33,Galatasaray,Stuttgart,1,total,,over,1.5,1.8929,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638849096,Regular,2026-11-03T17:45:00+00:00,8.33,Galatasaray,Stuttgart,1,total,,under,1.5,1.9346,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Regular,2026-11-03T20:00:00+00:00,10.58,Feyenoord,Internazionale,0,moneyline,,home,,3.81,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Regular,2026-11-03T20:00:00+00:00,10.58,Feyenoord,Internazionale,0,moneyline,,away,,1.8929,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Regular,2026-11-03T20:00:00+00:00,10.58,Feyenoord,Internazionale,0,moneyline,,draw,,4.14,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Regular,2026-11-03T20:00:00+00:00,10.58,Feyenoord,Internazionale,0,team_total,home,over,1.5,2.3,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Regular,2026-11-03T20:00:00+00:00,10.58,Feyenoord,Internazionale,0,team_total,home,under,1.5,1.6452,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Regular,2026-11-03T20:00:00+00:00,10.58,Feyenoord,Internazionale,0,team_total,away,over,1.5,1.5747,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Regular,2026-11-03T20:00:00+00:00,10.58,Feyenoord,Internazionale,0,team_total,away,under,1.5,2.45,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Regular,2026-11-03T20:00:00+00:00,10.58,Feyenoord,Internazionale,0,spread,,home,0.5,2.01,30000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Regular,2026-11-03T20:00:00+00:00,10.58,Feyenoord,Internazionale,0,spread,,away,-0.5,1.9009,30000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Regular,2026-11-03T20:00:00+00:00,10.58,Feyenoord,Internazionale,0,total,,over,3.25,1.885,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Regular,2026-11-03T20:00:00+00:00,10.58,Feyenoord,Internazionale,0,total,,under,3.25,2.0,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Regular,2026-11-03T20:00:00+00:00,10.58,Feyenoord,Internazionale,1,moneyline,,home,,3.91,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Regular,2026-11-03T20:00:00+00:00,10.58,Feyenoord,Internazionale,1,moneyline,,away,,2.42,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Regular,2026-11-03T20:00:00+00:00,10.58,Feyenoord,Internazionale,1,moneyline,,draw,,2.7,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Regular,2026-11-03T20:00:00+00:00,10.58,Feyenoord,Internazionale,1,team_total,home,over,0.5,2.02,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Regular,2026-11-03T20:00:00+00:00,10.58,Feyenoord,Internazionale,1,team_total,home,under,0.5,1.7937,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Regular,2026-11-03T20:00:00+00:00,10.58,Feyenoord,Internazionale,1,team_total,away,over,0.5,1.5988,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Regular,2026-11-03T20:00:00+00:00,10.58,Feyenoord,Internazionale,1,team_total,away,under,0.5,2.34,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Regular,2026-11-03T20:00:00+00:00,10.58,Feyenoord,Internazionale,1,spread,,home,0.25,1.885,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Regular,2026-11-03T20:00:00+00:00,10.58,Feyenoord,Internazionale,1,spread,,away,-0.25,1.9901,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Regular,2026-11-03T20:00:00+00:00,10.58,Feyenoord,Internazionale,1,total,,over,1.25,1.7634,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Regular,2026-11-03T20:00:00+00:00,10.58,Feyenoord,Internazionale,1,total,,under,1.25,2.1,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Bookings,2026-11-03T20:00:00+00:00,10.58,Feyenoord (Bookings),Internazionale (Bookings),0,moneyline,,home,,2.2,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Bookings,2026-11-03T20:00:00+00:00,10.58,Feyenoord (Bookings),Internazionale (Bookings),0,moneyline,,away,,2.79,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Bookings,2026-11-03T20:00:00+00:00,10.58,Feyenoord (Bookings),Internazionale (Bookings),0,team_total,home,over,1.5,1.625,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Bookings,2026-11-03T20:00:00+00:00,10.58,Feyenoord (Bookings),Internazionale (Bookings),0,team_total,home,under,1.5,2.2,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Bookings,2026-11-03T20:00:00+00:00,10.58,Feyenoord (Bookings),Internazionale (Bookings),0,team_total,away,over,1.5,1.8621,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Bookings,2026-11-03T20:00:00+00:00,10.58,Feyenoord (Bookings),Internazionale (Bookings),0,team_total,away,under,1.5,1.8772,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Bookings,2026-11-03T20:00:00+00:00,10.58,Feyenoord (Bookings),Internazionale (Bookings),0,spread,,home,0.0,1.6667,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Bookings,2026-11-03T20:00:00+00:00,10.58,Feyenoord (Bookings),Internazionale (Bookings),0,spread,,away,-0.0,2.13,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860584,Bookings,2026-11-03T20:00:00+00:00,10.58,Feyenoord (Bookings),Internazionale (Bookings),0,total,,under,3.5,1.8333,1125
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860586,Regular,2026-11-03T20:00:00+00:00,10.58,Villarreal,Paris Saint-Germain,1,moneyline,,home,,4.3,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860586,Regular,2026-11-03T20:00:00+00:00,10.58,Villarreal,Paris Saint-Germain,1,moneyline,,away,,2.19,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860586,Regular,2026-11-03T20:00:00+00:00,10.58,Villarreal,Paris Saint-Germain,1,moneyline,,draw,,2.85,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860586,Regular,2026-11-03T20:00:00+00:00,10.58,Villarreal,Paris Saint-Germain,1,team_total,home,over,0.5,2.03,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860586,Regular,2026-11-03T20:00:00+00:00,10.58,Villarreal,Paris Saint-Germain,1,team_total,home,under,0.5,1.7874,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860586,Regular,2026-11-03T20:00:00+00:00,10.58,Villarreal,Paris Saint-Germain,1,team_total,away,over,0.5,1.4878,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860586,Regular,2026-11-03T20:00:00+00:00,10.58,Villarreal,Paris Saint-Germain,1,team_total,away,under,0.5,2.63,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860586,Regular,2026-11-03T20:00:00+00:00,10.58,Villarreal,Paris Saint-Germain,1,spread,,home,0.25,2.06,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860586,Regular,2026-11-03T20:00:00+00:00,10.58,Villarreal,Paris Saint-Germain,1,spread,,away,-0.25,1.8197,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860586,Regular,2026-11-03T20:00:00+00:00,10.58,Villarreal,Paris Saint-Germain,1,total,,over,1.5,1.9615,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860586,Regular,2026-11-03T20:00:00+00:00,10.58,Villarreal,Paris Saint-Germain,1,total,,under,1.5,1.8772,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860586,Regular,2026-11-03T20:00:00+00:00,10.58,Villarreal,Paris Saint-Germain,0,moneyline,,home,,4.18,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860586,Regular,2026-11-03T20:00:00+00:00,10.58,Villarreal,Paris Saint-Germain,0,moneyline,,away,,1.7576,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860586,Regular,2026-11-03T20:00:00+00:00,10.58,Villarreal,Paris Saint-Germain,0,moneyline,,draw,,4.43,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860586,Regular,2026-11-03T20:00:00+00:00,10.58,Villarreal,Paris Saint-Germain,0,team_total,home,over,1.5,2.24,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860586,Regular,2026-11-03T20:00:00+00:00,10.58,Villarreal,Paris Saint-Germain,0,team_total,home,under,1.5,1.6757,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860586,Regular,2026-11-03T20:00:00+00:00,10.58,Villarreal,Paris Saint-Germain,0,team_total,away,over,2.5,2.41,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860586,Regular,2026-11-03T20:00:00+00:00,10.58,Villarreal,Paris Saint-Germain,0,team_total,away,under,2.5,1.5882,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860586,Regular,2026-11-03T20:00:00+00:00,10.58,Villarreal,Paris Saint-Germain,0,spread,,home,0.75,1.9524,30000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860586,Regular,2026-11-03T20:00:00+00:00,10.58,Villarreal,Paris Saint-Germain,0,spread,,away,-0.75,1.9524,30000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860586,Regular,2026-11-03T20:00:00+00:00,10.58,Villarreal,Paris Saint-Germain,0,total,,over,3.5,1.8929,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Corners,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt (Corners),Lille (Corners),0,team_total,home,over,5.5,1.8475,300
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Corners,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt (Corners),Lille (Corners),0,team_total,home,under,5.5,1.9174,300
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Corners,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt (Corners),Lille (Corners),0,team_total,away,over,3.5,1.8403,300
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Corners,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt (Corners),Lille (Corners),0,team_total,away,under,3.5,1.9259,300
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Corners,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt (Corners),Lille (Corners),0,total,,over,9.5,1.9804,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Corners,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt (Corners),Lille (Corners),0,total,,under,9.5,1.8475,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Corners,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt (Corners),Lille (Corners),1,spread,,home,-1.0,1.9174,300
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Corners,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt (Corners),Lille (Corners),1,spread,,away,1.0,1.8475,300
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Corners,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt (Corners),Lille (Corners),1,total,,over,4.5,1.9346,625
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Corners,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt (Corners),Lille (Corners),1,total,,under,4.5,1.8264,625
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Regular,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt,Lille,0,moneyline,,home,,1.7092,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Regular,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt,Lille,0,moneyline,,away,,4.65,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Regular,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt,Lille,0,moneyline,,draw,,4.29,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Regular,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt,Lille,0,team_total,home,over,1.5,1.5263,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Regular,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt,Lille,0,team_total,home,under,1.5,2.58,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Regular,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt,Lille,0,team_total,away,over,1.5,2.71,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Regular,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt,Lille,0,team_total,away,under,1.5,1.4831,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Regular,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt,Lille,0,spread,,home,-0.75,1.8929,30000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Regular,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt,Lille,0,spread,,away,0.75,2.02,30000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Regular,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt,Lille,0,total,,over,3.25,1.9804,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Regular,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt,Lille,0,total,,under,3.25,1.9091,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Regular,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt,Lille,1,moneyline,,home,,2.19,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Regular,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt,Lille,1,moneyline,,away,,4.71,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Regular,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt,Lille,1,team_total,home,over,0.5,1.5435,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Regular,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt,Lille,1,team_total,home,under,0.5,2.47,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Regular,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt,Lille,1,team_total,away,over,0.5,2.28,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Regular,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt,Lille,1,team_total,away,under,0.5,1.6289,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Regular,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt,Lille,1,spread,,home,-0.25,1.8,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Regular,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt,Lille,1,spread,,away,0.25,2.09,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Regular,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt,Lille,1,total,,over,1.25,1.8197,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Regular,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt,Lille,1,total,,under,1.25,2.02,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Bookings,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt (Bookings),Lille (Bookings),0,moneyline,,home,,3.41,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Bookings,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt (Bookings),Lille (Bookings),0,moneyline,,away,,1.8264,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Bookings,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt (Bookings),Lille (Bookings),0,moneyline,,draw,,4.08,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Bookings,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt (Bookings),Lille (Bookings),0,team_total,home,over,1.5,2.1,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Bookings,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt (Bookings),Lille (Bookings),0,team_total,home,under,1.5,1.6849,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Bookings,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt (Bookings),Lille (Bookings),0,team_total,away,over,1.5,1.5155,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Bookings,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt (Bookings),Lille (Bookings),0,team_total,away,under,1.5,2.44,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Bookings,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt (Bookings),Lille (Bookings),0,spread,,home,0.5,1.9174,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Bookings,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt (Bookings),Lille (Bookings),0,spread,,away,-0.5,1.8264,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638942985,Bookings,2026-11-03T20:00:00+00:00,10.58,Bodo Glimt (Bookings),Lille (Bookings),0,total,,over,3.5,1.9615,1125
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Regular,2026-11-04T17:45:00+00:00,32.33,AEK Athens,Real Madrid,0,moneyline,,home,,10.4,4500
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Regular,2026-11-04T17:45:00+00:00,32.33,AEK Athens,Real Madrid,0,moneyline,,away,,1.2439,4500
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Regular,2026-11-04T17:45:00+00:00,32.33,AEK Athens,Real Madrid,0,moneyline,,draw,,7.1,4500
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Regular,2026-11-04T17:45:00+00:00,32.33,AEK Athens,Real Madrid,0,team_total,home,over,0.5,1.5587,750
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Regular,2026-11-04T17:45:00+00:00,32.33,AEK Athens,Real Madrid,0,team_total,home,under,0.5,2.46,750
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Regular,2026-11-04T17:45:00+00:00,32.33,AEK Athens,Real Madrid,0,team_total,away,over,2.5,1.7299,750
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Regular,2026-11-04T17:45:00+00:00,32.33,AEK Athens,Real Madrid,0,team_total,away,under,2.5,2.13,750
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Regular,2026-11-04T17:45:00+00:00,32.33,AEK Athens,Real Madrid,0,spread,,home,1.75,2.02,4500
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Regular,2026-11-04T17:45:00+00:00,32.33,AEK Athens,Real Madrid,0,spread,,away,-1.75,1.8696,4500
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Regular,2026-11-04T17:45:00+00:00,32.33,AEK Athens,Real Madrid,0,total,,over,3.5,1.8264,3000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Regular,2026-11-04T17:45:00+00:00,32.33,AEK Athens,Real Madrid,0,total,,under,3.5,2.05,3000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Regular,2026-11-04T17:45:00+00:00,32.33,AEK Athens,Real Madrid,1,moneyline,,home,,8.12,750
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Regular,2026-11-04T17:45:00+00:00,32.33,AEK Athens,Real Madrid,1,moneyline,,away,,1.6211,750
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Regular,2026-11-04T17:45:00+00:00,32.33,AEK Athens,Real Madrid,1,moneyline,,draw,,3.23,750
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Regular,2026-11-04T17:45:00+00:00,32.33,AEK Athens,Real Madrid,1,team_total,home,over,0.5,2.93,200
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Regular,2026-11-04T17:45:00+00:00,32.33,AEK Athens,Real Madrid,1,team_total,home,under,0.5,1.3968,200
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Regular,2026-11-04T17:45:00+00:00,32.33,AEK Athens,Real Madrid,1,team_total,away,over,1.5,2.57,200
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Regular,2026-11-04T17:45:00+00:00,32.33,AEK Athens,Real Madrid,1,team_total,away,under,1.5,1.4975,200
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Regular,2026-11-04T17:45:00+00:00,32.33,AEK Athens,Real Madrid,1,spread,,home,0.75,2.01,750
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Regular,2026-11-04T17:45:00+00:00,32.33,AEK Athens,Real Madrid,1,spread,,away,-0.75,1.8475,750
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Regular,2026-11-04T17:45:00+00:00,32.33,AEK Athens,Real Madrid,1,total,,over,1.5,1.9174,750
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Corners,2026-11-04T17:45:00+00:00,32.33,AEK Athens (Corners),Real Madrid (Corners),0,team_total,home,over,3.5,2.14,125
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Corners,2026-11-04T17:45:00+00:00,32.33,AEK Athens (Corners),Real Madrid (Corners),0,team_total,home,under,3.5,1.6623,125
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Corners,2026-11-04T17:45:00+00:00,32.33,AEK Athens (Corners),Real Madrid (Corners),0,team_total,away,over,6.5,2.09,125
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Corners,2026-11-04T17:45:00+00:00,32.33,AEK Athens (Corners),Real Madrid (Corners),0,team_total,away,under,6.5,1.6897,125
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Corners,2026-11-04T17:45:00+00:00,32.33,AEK Athens (Corners),Real Madrid (Corners),0,spread,,away,-2.5,1.8197,250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Corners,2026-11-04T17:45:00+00:00,32.33,AEK Athens (Corners),Real Madrid (Corners),0,total,,over,9.5,1.885,500
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Corners,2026-11-04T17:45:00+00:00,32.33,AEK Athens (Corners),Real Madrid (Corners),0,total,,under,9.5,1.9524,500
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Corners,2026-11-04T17:45:00+00:00,32.33,AEK Athens (Corners),Real Madrid (Corners),1,total,,over,4.5,1.9901,250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638935637,Corners,2026-11-04T17:45:00+00:00,32.33,AEK Athens (Corners),Real Madrid (Corners),1,total,,under,4.5,1.7752,250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Bookings,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk (Bookings),Sporting CP (Bookings),0,moneyline,,home,,1.9524,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Bookings,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk (Bookings),Sporting CP (Bookings),0,moneyline,,away,,2.98,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Bookings,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk (Bookings),Sporting CP (Bookings),0,moneyline,,draw,,4.22,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Bookings,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk (Bookings),Sporting CP (Bookings),0,team_total,away,over,1.5,1.5102,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Bookings,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk (Bookings),Sporting CP (Bookings),0,team_total,away,under,1.5,2.45,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Bookings,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk (Bookings),Sporting CP (Bookings),0,spread,,home,-0.5,1.9524,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Bookings,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk (Bookings),Sporting CP (Bookings),0,spread,,away,0.5,1.7937,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Bookings,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk (Bookings),Sporting CP (Bookings),0,total,,over,4.5,1.9901,1125
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Bookings,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk (Bookings),Sporting CP (Bookings),0,total,,under,4.5,1.8333,1125
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Regular,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk,Sporting CP,0,moneyline,,home,,3.51,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Regular,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk,Sporting CP,0,moneyline,,away,,2.07,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Regular,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk,Sporting CP,0,moneyline,,draw,,3.79,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Regular,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk,Sporting CP,0,team_total,home,over,1.5,2.67,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Regular,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk,Sporting CP,0,team_total,home,under,1.5,1.495,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Regular,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk,Sporting CP,0,spread,,home,0.5,1.8403,30000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Regular,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk,Sporting CP,0,spread,,away,-0.5,2.08,30000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Regular,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk,Sporting CP,0,total,,over,2.75,1.8929,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Regular,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk,Sporting CP,0,total,,under,2.75,2.0,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Regular,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk,Sporting CP,1,moneyline,,home,,4.02,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Regular,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk,Sporting CP,1,moneyline,,away,,2.62,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Regular,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk,Sporting CP,1,team_total,home,over,0.5,2.24,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Regular,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk,Sporting CP,1,team_total,home,under,0.5,1.6536,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Regular,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk,Sporting CP,1,team_total,away,over,0.5,1.7812,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Regular,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk,Sporting CP,1,spread,,home,0.25,1.7874,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Regular,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk,Sporting CP,1,spread,,away,-0.25,2.11,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Regular,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk,Sporting CP,1,total,,over,1.25,2.09,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638854523,Regular,2026-11-03T17:45:00+00:00,8.33,Shakhtar Donetsk,Sporting CP,1,total,,under,1.25,1.7692,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Regular,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid,Bayern Munich,0,moneyline,,home,,2.81,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Regular,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid,Bayern Munich,0,moneyline,,away,,2.37,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Regular,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid,Bayern Munich,0,moneyline,,draw,,3.95,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Regular,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid,Bayern Munich,0,team_total,home,over,1.5,1.9346,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Regular,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid,Bayern Munich,0,team_total,home,under,1.5,1.8929,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Regular,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid,Bayern Munich,0,team_total,away,over,1.5,1.7812,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Regular,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid,Bayern Munich,0,team_total,away,under,1.5,2.08,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Regular,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid,Bayern Munich,0,spread,,home,0.25,1.8333,30000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Regular,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid,Bayern Munich,0,spread,,away,-0.25,2.09,30000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Regular,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid,Bayern Munich,0,total,,over,3.25,1.8696,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Regular,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid,Bayern Munich,0,total,,under,3.25,2.02,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Regular,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid,Bayern Munich,1,moneyline,,home,,3.21,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Regular,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid,Bayern Munich,1,moneyline,,away,,2.83,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Regular,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid,Bayern Munich,1,moneyline,,draw,,2.67,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Regular,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid,Bayern Munich,1,team_total,home,over,0.5,1.813,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Regular,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid,Bayern Munich,1,team_total,home,under,0.5,2.0,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Regular,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid,Bayern Munich,1,team_total,away,over,0.5,1.7092,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Regular,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid,Bayern Munich,1,team_total,away,under,0.5,2.14,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Regular,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid,Bayern Munich,1,spread,,home,0.0,2.07,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Regular,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid,Bayern Munich,1,spread,,away,-0.0,1.813,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Regular,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid,Bayern Munich,1,total,,over,1.5,2.09,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Regular,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid,Bayern Munich,1,total,,under,1.5,1.7692,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Bookings,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid (Bookings),Bayern Munich (Bookings),0,moneyline,,away,,2.58,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Bookings,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid (Bookings),Bayern Munich (Bookings),0,team_total,home,over,1.5,1.5952,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Bookings,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid (Bookings),Bayern Munich (Bookings),0,team_total,away,over,1.5,1.6849,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Bookings,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid (Bookings),Bayern Munich (Bookings),0,spread,,away,-0.0,1.9804,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Bookings,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid (Bookings),Bayern Munich (Bookings),0,total,,over,3.5,1.8197,1125
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Bookings,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid (Bookings),Bayern Munich (Bookings),0,total,,under,3.5,2.01,1125
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Corners,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid (Corners),Bayern Munich (Corners),1,spread,,home,0.0,1.8475,300
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860582,Corners,2026-11-03T20:00:00+00:00,10.58,Atletico Madrid (Corners),Bayern Munich (Corners),1,spread,,away,-0.0,1.9174,300
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Bookings,2026-11-03T20:00:00+00:00,10.58,LASK Linz (Bookings),Slovan Bratislava (Bookings),0,team_total,home,over,1.5,1.7752,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Bookings,2026-11-03T20:00:00+00:00,10.58,LASK Linz (Bookings),Slovan Bratislava (Bookings),0,team_total,home,under,1.5,1.9709,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Bookings,2026-11-03T20:00:00+00:00,10.58,LASK Linz (Bookings),Slovan Bratislava (Bookings),0,team_total,away,under,2.5,1.7752,375
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Regular,2026-11-03T20:00:00+00:00,10.58,LASK Linz,Slovan Bratislava,0,moneyline,,home,,1.3571,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Regular,2026-11-03T20:00:00+00:00,10.58,LASK Linz,Slovan Bratislava,0,moneyline,,away,,7.64,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Regular,2026-11-03T20:00:00+00:00,10.58,LASK Linz,Slovan Bratislava,0,moneyline,,draw,,5.96,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Regular,2026-11-03T20:00:00+00:00,10.58,LASK Linz,Slovan Bratislava,0,team_total,home,over,2.5,1.8772,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Regular,2026-11-03T20:00:00+00:00,10.58,LASK Linz,Slovan Bratislava,0,team_total,home,under,2.5,1.9615,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Regular,2026-11-03T20:00:00+00:00,10.58,LASK Linz,Slovan Bratislava,0,team_total,away,over,0.5,1.4525,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Regular,2026-11-03T20:00:00+00:00,10.58,LASK Linz,Slovan Bratislava,0,team_total,away,under,0.5,2.82,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Regular,2026-11-03T20:00:00+00:00,10.58,LASK Linz,Slovan Bratislava,0,spread,,home,-1.5,1.9091,30000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Regular,2026-11-03T20:00:00+00:00,10.58,LASK Linz,Slovan Bratislava,0,spread,,away,1.5,2.0,30000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Regular,2026-11-03T20:00:00+00:00,10.58,LASK Linz,Slovan Bratislava,0,total,,over,3.5,1.8333,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Regular,2026-11-03T20:00:00+00:00,10.58,LASK Linz,Slovan Bratislava,0,total,,under,3.5,2.07,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Regular,2026-11-03T20:00:00+00:00,10.58,LASK Linz,Slovan Bratislava,1,moneyline,,home,,1.7353,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Regular,2026-11-03T20:00:00+00:00,10.58,LASK Linz,Slovan Bratislava,1,moneyline,,away,,6.79,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Regular,2026-11-03T20:00:00+00:00,10.58,LASK Linz,Slovan Bratislava,1,moneyline,,draw,,3.14,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Regular,2026-11-03T20:00:00+00:00,10.58,LASK Linz,Slovan Bratislava,1,team_total,home,over,1.5,2.75,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Regular,2026-11-03T20:00:00+00:00,10.58,LASK Linz,Slovan Bratislava,1,team_total,home,under,1.5,1.4505,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Regular,2026-11-03T20:00:00+00:00,10.58,LASK Linz,Slovan Bratislava,1,team_total,away,over,0.5,2.6,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Regular,2026-11-03T20:00:00+00:00,10.58,LASK Linz,Slovan Bratislava,1,team_total,away,under,0.5,1.4975,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Regular,2026-11-03T20:00:00+00:00,10.58,LASK Linz,Slovan Bratislava,1,spread,,home,-0.75,2.02,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Regular,2026-11-03T20:00:00+00:00,10.58,LASK Linz,Slovan Bratislava,1,spread,,away,0.75,1.8547,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Regular,2026-11-03T20:00:00+00:00,10.58,LASK Linz,Slovan Bratislava,1,total,,over,1.5,1.9259,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860583,Regular,2026-11-03T20:00:00+00:00,10.58,LASK Linz,Slovan Bratislava,1,total,,under,1.5,1.9091,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860585,Regular,2026-11-03T20:00:00+00:00,10.58,Manchester United,Roma,0,moneyline,,home,,2.18,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860585,Regular,2026-11-03T20:00:00+00:00,10.58,Manchester United,Roma,0,moneyline,,away,,3.07,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860585,Regular,2026-11-03T20:00:00+00:00,10.58,Manchester United,Roma,0,moneyline,,draw,,4.05,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860585,Regular,2026-11-03T20:00:00+00:00,10.58,Manchester United,Roma,0,team_total,home,under,1.5,2.04,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860585,Regular,2026-11-03T20:00:00+00:00,10.58,Manchester United,Roma,0,team_total,away,over,1.5,2.2,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860585,Regular,2026-11-03T20:00:00+00:00,10.58,Manchester United,Roma,0,team_total,away,under,1.5,1.6993,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860585,Regular,2026-11-03T20:00:00+00:00,10.58,Manchester United,Roma,0,spread,,home,-0.25,1.9259,30000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860585,Regular,2026-11-03T20:00:00+00:00,10.58,Manchester United,Roma,0,spread,,away,0.25,1.9804,30000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860585,Regular,2026-11-03T20:00:00+00:00,10.58,Manchester United,Roma,0,total,,over,3.0,1.8333,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860585,Regular,2026-11-03T20:00:00+00:00,10.58,Manchester United,Roma,0,total,,under,3.0,2.07,20000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860585,Regular,2026-11-03T20:00:00+00:00,10.58,Manchester United,Roma,1,moneyline,,home,,2.73,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860585,Regular,2026-11-03T20:00:00+00:00,10.58,Manchester United,Roma,1,moneyline,,away,,3.53,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860585,Regular,2026-11-03T20:00:00+00:00,10.58,Manchester United,Roma,1,moneyline,,draw,,2.58,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860585,Regular,2026-11-03T20:00:00+00:00,10.58,Manchester United,Roma,1,team_total,home,over,0.5,1.7299,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860585,Regular,2026-11-03T20:00:00+00:00,10.58,Manchester United,Roma,1,team_total,home,under,0.5,2.11,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860585,Regular,2026-11-03T20:00:00+00:00,10.58,Manchester United,Roma,1,team_total,away,over,0.5,1.9709,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860585,Regular,2026-11-03T20:00:00+00:00,10.58,Manchester United,Roma,1,team_total,away,under,0.5,1.8333,1250
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860585,Regular,2026-11-03T20:00:00+00:00,10.58,Manchester United,Roma,1,spread,,home,-0.25,2.22,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860585,Regular,2026-11-03T20:00:00+00:00,10.58,Manchester United,Roma,1,spread,,away,0.25,1.7143,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860585,Regular,2026-11-03T20:00:00+00:00,10.58,Manchester United,Roma,1,total,,over,1.25,1.8696,5000
+2026-11-03T09:25:19.980917+00:00,soccer,ucl,1638860585,Regular,2026-11-03T20:00:00+00:00,10.58,Manchester United,Roma,1,total,,under,1.25,1.9615,5000
+2026-11-03T09:25:19.980917+00:00,soccer,den,1639614986,Regular,2026-11-06T18:00:00+00:00,80.58,Silkeborg,Lyngby,0,moneyline,,home,,2.44,450
+2026-11-03T09:25:19.980917+00:00,soccer,den,1639614986,Regular,2026-11-06T18:00:00+00:00,80.58,Silkeborg,Lyngby,0,moneyline,,away,,2.62,450
+2026-11-03T09:25:19.980917+00:00,soccer,den,1639614986,Regular,2026-11-06T18:00:00+00:00,80.58,Silkeborg,Lyngby,0,team_total,home,over,1.5,1.9804,100
+2026-11-03T09:25:19.980917+00:00,soccer,den,1639614986,Regular,2026-11-06T18:00:00+00:00,80.58,Silkeborg,Lyngby,0,team_total,home,under,1.5,1.8264,100
+2026-11-03T09:25:19.980917+00:00,soccer,den,1639614986,Regular,2026-11-06T18:00:00+00:00,80.58,Silkeborg,Lyngby,0,team_total,away,over,1.5,2.07,100
+2026-11-03T09:25:19.980917+00:00,soccer,den,1639614986,Regular,2026-11-06T18:00:00+00:00,80.58,Silkeborg,Lyngby,0,team_total,away,under,1.5,1.7576,100
+2026-11-03T09:25:19.980917+00:00,soccer,den,1639614986,Regular,2026-11-06T18:00:00+00:00,80.58,Silkeborg,Lyngby,0,spread,,home,0.0,1.8621,450
+2026-11-03T09:25:19.980917+00:00,soccer,den,1639614986,Regular,2026-11-06T18:00:00+00:00,80.58,Silkeborg,Lyngby,0,spread,,away,-0.0,2.0,450
+2026-11-03T09:25:19.980917+00:00,soccer,den,1639614986,Regular,2026-11-06T18:00:00+00:00,80.58,Silkeborg,Lyngby,1,moneyline,,home,,2.96,150
+2026-11-03T09:25:19.980917+00:00,soccer,den,1639614986,Regular,2026-11-06T18:00:00+00:00,80.58,Silkeborg,Lyngby,1,moneyline,,away,,3.17,150
+2026-11-03T09:25:19.980917+00:00,soccer,den,1639614986,Regular,2026-11-06T18:00:00+00:00,80.58,Silkeborg,Lyngby,1,team_total,home,over,0.5,1.8197,100
+2026-11-03T09:25:19.980917+00:00,soccer,den,1639614986,Regular,2026-11-06T18:00:00+00:00,80.58,Silkeborg,Lyngby,1,team_total,home,under,0.5,1.9524,100
+2026-11-03T09:25:19.980917+00:00,soccer,den,1639614986,Regular,2026-11-06T18:00:00+00:00,80.58,Silkeborg,Lyngby,1,team_total,away,over,0.5,1.885,100
+2026-11-03T09:25:19.980917+00:00,soccer,den,1639614986,Regular,2026-11-06T18:00:00+00:00,80.58,Silkeborg,Lyngby,1,team_total,away,under,0.5,1.885,100
+2026-11-03T09:25:19.980917+00:00,soccer,den,1639614986,Regular,2026-11-06T18:00:00+00:00,80.58,Silkeborg,Lyngby,1,spread,,home,0.0,1.8403,150
+2026-11-03T09:25:19.980917+00:00,soccer,den,1639614986,Regular,2026-11-06T18:00:00+00:00,80.58,Silkeborg,Lyngby,1,spread,,away,-0.0,1.9804,150
+2026-11-03T09:25:19.980917+00:00,soccer,den,1639614986,Regular,2026-11-06T18:00:00+00:00,80.58,Silkeborg,Lyngby,1,total,,over,1.25,1.8929,150
+2026-11-03T09:25:19.980917+00:00,soccer,den,1639614986,Regular,2026-11-06T18:00:00+00:00,80.58,Silkeborg,Lyngby,1,total,,under,1.25,1.8929,150
+2026-11-03T09:25:19.980917+00:00,soccer,por,1639538427,Regular,2026-11-06T20:45:00+00:00,83.33,Famalicao,Arouca,0,moneyline,,draw,,3.53,600
+2026-11-03T09:25:19.980917+00:00,soccer,por,1639538427,Regular,2026-11-06T20:45:00+00:00,83.33,Famalicao,Arouca,0,team_total,home,over,1.5,2.11,100
+2026-11-03T09:25:19.980917+00:00,soccer,por,1639538427,Regular,2026-11-06T20:45:00+00:00,83.33,Famalicao,Arouca,0,team_total,home,under,1.5,1.7246,100
+2026-11-03T09:25:19.980917+00:00,soccer,por,1639538427,Regular,2026-11-06T20:45:00+00:00,83.33,Famalicao,Arouca,0,team_total,away,over,0.5,1.4219,100
+2026-11-03T09:25:19.980917+00:00,soccer,por,1639538427,Regular,2026-11-06T20:45:00+00:00,83.33,Famalicao,Arouca,0,team_total,away,under,0.5,2.87,100
+2026-11-03T09:25:19.980917+00:00,soccer,por,1639538427,Regular,2026-11-06T20:45:00+00:00,83.33,Famalicao,Arouca,0,total,,over,2.5,1.9709,450
+2026-11-03T09:25:19.980917+00:00,soccer,por,1639538427,Regular,2026-11-06T20:45:00+00:00,83.33,Famalicao,Arouca,0,total,,under,2.5,1.8696,450
+2026-11-03T09:25:19.980917+00:00,soccer,por,1639538427,Regular,2026-11-06T20:45:00+00:00,83.33,Famalicao,Arouca,1,moneyline,,draw,,2.25,200
+2026-11-03T09:25:19.980917+00:00,soccer,por,1639538427,Regular,2026-11-06T20:45:00+00:00,83.33,Famalicao,Arouca,1,team_total,home,over,0.5,1.8929,100
+2026-11-03T09:25:19.980917+00:00,soccer,por,1639538427,Regular,2026-11-06T20:45:00+00:00,83.33,Famalicao,Arouca,1,team_total,home,under,0.5,1.8772,100
+2026-11-03T09:25:19.980917+00:00,soccer,por,1639538427,Regular,2026-11-06T20:45:00+00:00,83.33,Famalicao,Arouca,1,team_total,away,over,0.5,2.47,100
+2026-11-03T09:25:19.980917+00:00,soccer,por,1639538427,Regular,2026-11-06T20:45:00+00:00,83.33,Famalicao,Arouca,1,team_total,away,under,0.5,1.5236,100
+2026-11-03T09:25:19.980917+00:00,soccer,por,1639538427,Regular,2026-11-06T20:45:00+00:00,83.33,Famalicao,Arouca,1,total,,over,1.0,1.8547,200
+2026-11-03T09:25:19.980917+00:00,soccer,por,1639538427,Regular,2026-11-06T20:45:00+00:00,83.33,Famalicao,Arouca,1,total,,under,1.0,1.9259,200
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318693,Regular,2026-11-03T19:45:00+00:00,10.33,Portsmouth,Swansea City,0,moneyline,,draw,,3.24,2000
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318693,Regular,2026-11-03T19:45:00+00:00,10.33,Portsmouth,Swansea City,0,team_total,home,over,1.5,2.9,300
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318693,Regular,2026-11-03T19:45:00+00:00,10.33,Portsmouth,Swansea City,0,team_total,home,under,1.5,1.4405,300
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318693,Regular,2026-11-03T19:45:00+00:00,10.33,Portsmouth,Swansea City,0,team_total,away,over,1.5,2.86,300
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318693,Regular,2026-11-03T19:45:00+00:00,10.33,Portsmouth,Swansea City,0,team_total,away,under,1.5,1.4525,300
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318693,Regular,2026-11-03T19:45:00+00:00,10.33,Portsmouth,Swansea City,0,total,,over,2.25,1.9615,1500
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318693,Regular,2026-11-03T19:45:00+00:00,10.33,Portsmouth,Swansea City,0,total,,under,2.25,1.9259,1500
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318693,Bookings,2026-11-03T19:45:00+00:00,10.33,Portsmouth (Bookings),Swansea City (Bookings),0,moneyline,,home,,2.68,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318693,Bookings,2026-11-03T19:45:00+00:00,10.33,Portsmouth (Bookings),Swansea City (Bookings),0,moneyline,,away,,2.2,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318693,Bookings,2026-11-03T19:45:00+00:00,10.33,Portsmouth (Bookings),Swansea City (Bookings),0,moneyline,,draw,,3.93,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318693,Bookings,2026-11-03T19:45:00+00:00,10.33,Portsmouth (Bookings),Swansea City (Bookings),0,team_total,home,over,1.5,1.6757,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318693,Bookings,2026-11-03T19:45:00+00:00,10.33,Portsmouth (Bookings),Swansea City (Bookings),0,team_total,home,under,1.5,2.11,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318693,Bookings,2026-11-03T19:45:00+00:00,10.33,Portsmouth (Bookings),Swansea City (Bookings),0,team_total,away,over,1.5,1.5236,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318693,Bookings,2026-11-03T19:45:00+00:00,10.33,Portsmouth (Bookings),Swansea City (Bookings),0,team_total,away,under,1.5,2.42,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318693,Bookings,2026-11-03T19:45:00+00:00,10.33,Portsmouth (Bookings),Swansea City (Bookings),0,spread,,home,0.0,2.08,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318693,Bookings,2026-11-03T19:45:00+00:00,10.33,Portsmouth (Bookings),Swansea City (Bookings),0,spread,,away,-0.0,1.6993,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318693,Bookings,2026-11-03T19:45:00+00:00,10.33,Portsmouth (Bookings),Swansea City (Bookings),0,total,,over,4.0,1.9709,375
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318693,Bookings,2026-11-03T19:45:00+00:00,10.33,Portsmouth (Bookings),Swansea City (Bookings),0,total,,under,4.0,1.8197,375
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318694,Regular,2026-11-03T19:45:00+00:00,10.33,Blackburn Rovers,Stoke City,1,moneyline,,home,,3.3,600
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318694,Regular,2026-11-03T19:45:00+00:00,10.33,Blackburn Rovers,Stoke City,1,moneyline,,away,,3.49,600
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318694,Regular,2026-11-03T19:45:00+00:00,10.33,Blackburn Rovers,Stoke City,1,moneyline,,draw,,2.22,600
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318694,Regular,2026-11-03T19:45:00+00:00,10.33,Blackburn Rovers,Stoke City,1,team_total,home,over,0.5,2.16,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318694,Regular,2026-11-03T19:45:00+00:00,10.33,Blackburn Rovers,Stoke City,1,team_total,home,under,0.5,1.7092,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318694,Regular,2026-11-03T19:45:00+00:00,10.33,Blackburn Rovers,Stoke City,1,team_total,away,over,0.5,2.24,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318694,Regular,2026-11-03T19:45:00+00:00,10.33,Blackburn Rovers,Stoke City,1,team_total,away,under,0.5,1.6667,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318694,Regular,2026-11-03T19:45:00+00:00,10.33,Blackburn Rovers,Stoke City,1,spread,,home,0.0,1.8772,600
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318694,Regular,2026-11-03T19:45:00+00:00,10.33,Blackburn Rovers,Stoke City,1,spread,,away,-0.0,1.9901,600
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318694,Regular,2026-11-03T19:45:00+00:00,10.33,Blackburn Rovers,Stoke City,1,total,,over,1.0,1.9434,600
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318694,Regular,2026-11-03T19:45:00+00:00,10.33,Blackburn Rovers,Stoke City,1,total,,under,1.0,1.8929,600
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318694,Regular,2026-11-03T19:45:00+00:00,10.33,Blackburn Rovers,Stoke City,0,moneyline,,home,,2.71,2000
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318694,Regular,2026-11-03T19:45:00+00:00,10.33,Blackburn Rovers,Stoke City,0,moneyline,,away,,2.79,2000
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318694,Regular,2026-11-03T19:45:00+00:00,10.33,Blackburn Rovers,Stoke City,0,moneyline,,draw,,3.31,2000
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318694,Regular,2026-11-03T19:45:00+00:00,10.33,Blackburn Rovers,Stoke City,0,team_total,home,over,1.5,2.6,300
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318694,Regular,2026-11-03T19:45:00+00:00,10.33,Blackburn Rovers,Stoke City,0,team_total,home,under,1.5,1.5291,300
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318694,Regular,2026-11-03T19:45:00+00:00,10.33,Blackburn Rovers,Stoke City,0,team_total,away,over,1.5,2.68,300
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318694,Regular,2026-11-03T19:45:00+00:00,10.33,Blackburn Rovers,Stoke City,0,team_total,away,under,1.5,1.5,300
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318694,Regular,2026-11-03T19:45:00+00:00,10.33,Blackburn Rovers,Stoke City,0,spread,,home,0.0,1.9259,2000
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318694,Regular,2026-11-03T19:45:00+00:00,10.33,Blackburn Rovers,Stoke City,0,spread,,away,-0.0,1.9804,2000
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318694,Regular,2026-11-03T19:45:00+00:00,10.33,Blackburn Rovers,Stoke City,0,total,,over,2.5,2.06,1500
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318694,Regular,2026-11-03T19:45:00+00:00,10.33,Blackburn Rovers,Stoke City,0,total,,under,2.5,1.8403,1500
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639313887,Regular,2026-11-03T19:45:00+00:00,10.33,Charlton Athletic,Bolton Wanderers,0,team_total,away,over,1.5,2.58,300
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639313887,Regular,2026-11-03T19:45:00+00:00,10.33,Charlton Athletic,Bolton Wanderers,0,team_total,away,under,1.5,1.5348,300
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639313887,Regular,2026-11-03T19:45:00+00:00,10.33,Charlton Athletic,Bolton Wanderers,1,team_total,away,over,0.5,2.17,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639313887,Regular,2026-11-03T19:45:00+00:00,10.33,Charlton Athletic,Bolton Wanderers,1,team_total,away,under,0.5,1.7042,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Regular,2026-11-03T20:00:00+00:00,10.58,Birmingham City,Millwall,0,moneyline,,home,,1.9524,2000
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Regular,2026-11-03T20:00:00+00:00,10.58,Birmingham City,Millwall,0,moneyline,,away,,3.9,2000
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Regular,2026-11-03T20:00:00+00:00,10.58,Birmingham City,Millwall,0,moneyline,,draw,,3.79,2000
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Regular,2026-11-03T20:00:00+00:00,10.58,Birmingham City,Millwall,0,team_total,away,over,0.5,1.4219,300
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Regular,2026-11-03T20:00:00+00:00,10.58,Birmingham City,Millwall,0,team_total,away,under,0.5,2.98,300
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Regular,2026-11-03T20:00:00+00:00,10.58,Birmingham City,Millwall,0,spread,,home,-0.5,1.9615,2000
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Regular,2026-11-03T20:00:00+00:00,10.58,Birmingham City,Millwall,0,spread,,away,0.5,1.9434,2000
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Regular,2026-11-03T20:00:00+00:00,10.58,Birmingham City,Millwall,0,total,,over,2.75,2.06,1500
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Regular,2026-11-03T20:00:00+00:00,10.58,Birmingham City,Millwall,0,total,,under,2.75,1.8403,1500
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Regular,2026-11-03T20:00:00+00:00,10.58,Birmingham City,Millwall,1,moneyline,,away,,4.47,600
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Regular,2026-11-03T20:00:00+00:00,10.58,Birmingham City,Millwall,1,team_total,home,over,0.5,1.8,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Regular,2026-11-03T20:00:00+00:00,10.58,Birmingham City,Millwall,1,team_total,away,over,0.5,2.48,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Regular,2026-11-03T20:00:00+00:00,10.58,Birmingham City,Millwall,1,team_total,away,under,0.5,1.5495,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Regular,2026-11-03T20:00:00+00:00,10.58,Birmingham City,Millwall,1,spread,,home,-0.25,2.02,600
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Regular,2026-11-03T20:00:00+00:00,10.58,Birmingham City,Millwall,1,spread,,away,0.25,1.8547,600
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Bookings,2026-11-03T20:00:00+00:00,10.58,Birmingham City (Bookings),Millwall (Bookings),0,moneyline,,home,,2.91,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Bookings,2026-11-03T20:00:00+00:00,10.58,Birmingham City (Bookings),Millwall (Bookings),0,moneyline,,away,,2.12,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Bookings,2026-11-03T20:00:00+00:00,10.58,Birmingham City (Bookings),Millwall (Bookings),0,moneyline,,draw,,3.74,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Bookings,2026-11-03T20:00:00+00:00,10.58,Birmingham City (Bookings),Millwall (Bookings),0,team_total,home,over,1.5,1.9009,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Bookings,2026-11-03T20:00:00+00:00,10.58,Birmingham City (Bookings),Millwall (Bookings),0,team_total,home,under,1.5,1.8403,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Bookings,2026-11-03T20:00:00+00:00,10.58,Birmingham City (Bookings),Millwall (Bookings),0,team_total,away,over,1.5,1.6024,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Bookings,2026-11-03T20:00:00+00:00,10.58,Birmingham City (Bookings),Millwall (Bookings),0,spread,,home,0.5,1.6711,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Bookings,2026-11-03T20:00:00+00:00,10.58,Birmingham City (Bookings),Millwall (Bookings),0,spread,,away,-0.5,2.12,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318517,Bookings,2026-11-03T20:00:00+00:00,10.58,Birmingham City (Bookings),Millwall (Bookings),0,total,,under,3.5,1.8475,375
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318516,Corners,2026-11-03T19:45:00+00:00,10.33,Derby County (Corners),Norwich City (Corners),0,team_total,home,over,4.5,1.813,200
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318516,Corners,2026-11-03T19:45:00+00:00,10.33,Derby County (Corners),Norwich City (Corners),0,team_total,home,under,4.5,1.9804,200
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318516,Corners,2026-11-03T19:45:00+00:00,10.33,Derby County (Corners),Norwich City (Corners),0,team_total,away,under,4.5,2.12,200
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318516,Corners,2026-11-03T19:45:00+00:00,10.33,Derby County (Corners),Norwich City (Corners),0,spread,,home,0.5,1.8333,375
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318516,Corners,2026-11-03T19:45:00+00:00,10.33,Derby County (Corners),Norwich City (Corners),0,spread,,away,-0.5,1.9615,375
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318516,Corners,2026-11-03T19:45:00+00:00,10.33,Derby County (Corners),Norwich City (Corners),0,total,,over,10.0,1.9434,750
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318516,Bookings,2026-11-03T19:45:00+00:00,10.33,Derby County (Bookings),Norwich City (Bookings),0,moneyline,,home,,2.39,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318516,Bookings,2026-11-03T19:45:00+00:00,10.33,Derby County (Bookings),Norwich City (Bookings),0,moneyline,,away,,2.42,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318516,Bookings,2026-11-03T19:45:00+00:00,10.33,Derby County (Bookings),Norwich City (Bookings),0,team_total,home,over,1.5,1.4831,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318516,Bookings,2026-11-03T19:45:00+00:00,10.33,Derby County (Bookings),Norwich City (Bookings),0,team_total,home,under,1.5,2.53,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318516,Bookings,2026-11-03T19:45:00+00:00,10.33,Derby County (Bookings),Norwich City (Bookings),0,team_total,away,over,1.5,1.4831,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318516,Bookings,2026-11-03T19:45:00+00:00,10.33,Derby County (Bookings),Norwich City (Bookings),0,team_total,away,under,1.5,2.53,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318516,Bookings,2026-11-03T19:45:00+00:00,10.33,Derby County (Bookings),Norwich City (Bookings),0,spread,,home,0.0,1.8547,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639318516,Bookings,2026-11-03T19:45:00+00:00,10.33,Derby County (Bookings),Norwich City (Bookings),0,spread,,away,-0.0,1.885,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639313888,Regular,2026-11-03T19:45:00+00:00,10.33,Preston North End,Sheffield United,0,moneyline,,home,,3.85,2000
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639313888,Regular,2026-11-03T19:45:00+00:00,10.33,Preston North End,Sheffield United,0,moneyline,,away,,1.9804,2000
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639313888,Regular,2026-11-03T19:45:00+00:00,10.33,Preston North End,Sheffield United,0,moneyline,,draw,,3.73,2000
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639313888,Regular,2026-11-03T19:45:00+00:00,10.33,Preston North End,Sheffield United,0,team_total,home,over,0.5,1.4167,300
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639313888,Regular,2026-11-03T19:45:00+00:00,10.33,Preston North End,Sheffield United,0,team_total,home,under,0.5,3.01,300
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639313888,Regular,2026-11-03T19:45:00+00:00,10.33,Preston North End,Sheffield United,0,team_total,away,over,1.5,1.9615,300
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639313888,Regular,2026-11-03T19:45:00+00:00,10.33,Preston North End,Sheffield United,0,team_total,away,under,1.5,1.8929,300
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639313888,Regular,2026-11-03T19:45:00+00:00,10.33,Preston North End,Sheffield United,0,spread,,home,0.5,1.9174,2000
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639313888,Regular,2026-11-03T19:45:00+00:00,10.33,Preston North End,Sheffield United,0,spread,,away,-0.5,1.9901,2000
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639313888,Regular,2026-11-03T19:45:00+00:00,10.33,Preston North End,Sheffield United,0,total,,over,2.5,1.8475,1500
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639313888,Regular,2026-11-03T19:45:00+00:00,10.33,Preston North End,Sheffield United,1,moneyline,,home,,4.25,600
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639313888,Regular,2026-11-03T19:45:00+00:00,10.33,Preston North End,Sheffield United,1,moneyline,,away,,2.64,600
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639313888,Regular,2026-11-03T19:45:00+00:00,10.33,Preston North End,Sheffield United,1,team_total,home,over,0.5,2.41,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639313888,Regular,2026-11-03T19:45:00+00:00,10.33,Preston North End,Sheffield United,1,team_total,home,under,0.5,1.578,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639313888,Regular,2026-11-03T19:45:00+00:00,10.33,Preston North End,Sheffield United,1,team_total,away,over,0.5,1.8475,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639313888,Regular,2026-11-03T19:45:00+00:00,10.33,Preston North End,Sheffield United,1,team_total,away,under,0.5,1.9709,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639313888,Regular,2026-11-03T19:45:00+00:00,10.33,Preston North End,Sheffield United,1,spread,,home,0.25,1.7874,600
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639313888,Regular,2026-11-03T19:45:00+00:00,10.33,Preston North End,Sheffield United,1,spread,,away,-0.25,2.11,600
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639313888,Regular,2026-11-03T19:45:00+00:00,10.33,Preston North End,Sheffield United,1,total,,under,1.0,2.09,600
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639375279,Regular,2026-11-03T19:45:00+00:00,10.33,Watford,Lincoln City,0,moneyline,,home,,2.6,2000
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639375279,Regular,2026-11-03T19:45:00+00:00,10.33,Watford,Lincoln City,0,moneyline,,away,,2.75,2000
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639375279,Regular,2026-11-03T19:45:00+00:00,10.33,Watford,Lincoln City,0,moneyline,,draw,,3.54,2000
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639375279,Regular,2026-11-03T19:45:00+00:00,10.33,Watford,Lincoln City,0,team_total,home,over,1.5,2.36,300
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639375279,Regular,2026-11-03T19:45:00+00:00,10.33,Watford,Lincoln City,0,team_total,home,under,1.5,1.625,300
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639375279,Regular,2026-11-03T19:45:00+00:00,10.33,Watford,Lincoln City,0,team_total,away,over,1.5,2.47,300
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639375279,Regular,2026-11-03T19:45:00+00:00,10.33,Watford,Lincoln City,0,team_total,away,under,1.5,1.578,300
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639375279,Regular,2026-11-03T19:45:00+00:00,10.33,Watford,Lincoln City,0,total,,over,2.5,1.8696,1500
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639375279,Regular,2026-11-03T19:45:00+00:00,10.33,Watford,Lincoln City,0,total,,under,2.5,2.02,1500
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639375279,Regular,2026-11-03T19:45:00+00:00,10.33,Watford,Lincoln City,1,moneyline,,home,,3.17,600
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639375279,Regular,2026-11-03T19:45:00+00:00,10.33,Watford,Lincoln City,1,moneyline,,draw,,2.33,600
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639375279,Regular,2026-11-03T19:45:00+00:00,10.33,Watford,Lincoln City,1,team_total,home,over,0.5,2.04,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639375279,Regular,2026-11-03T19:45:00+00:00,10.33,Watford,Lincoln City,1,team_total,home,under,0.5,1.7937,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639375279,Regular,2026-11-03T19:45:00+00:00,10.33,Watford,Lincoln City,1,team_total,away,over,0.5,2.13,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639375279,Regular,2026-11-03T19:45:00+00:00,10.33,Watford,Lincoln City,1,team_total,away,under,0.5,1.7299,150
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639375279,Regular,2026-11-03T19:45:00+00:00,10.33,Watford,Lincoln City,1,total,,over,1.0,1.7752,600
+2026-11-03T09:25:19.980917+00:00,soccer,champ,1639375279,Regular,2026-11-03T19:45:00+00:00,10.33,Watford,Lincoln City,1,total,,under,1.0,2.08,600
+2026-11-03T09:25:19.980917+00:00,soccer,arg,1639776990,Regular,2026-11-06T18:00:00+00:00,80.58,Barracas Central,Racing Club,0,team_total,home,over,1.5,2.47,100
+2026-11-03T09:25:19.980917+00:00,soccer,arg,1639776990,Regular,2026-11-06T18:00:00+00:00,80.58,Barracas Central,Racing Club,0,team_total,home,under,1.5,1.5435,100
+2026-11-03T09:25:19.980917+00:00,soccer,bel,1639647400,Regular,2026-11-07T19:45:00+00:00,106.33,RAAL La Louviere,Cercle Brugge,0,moneyline,,draw,,3.47,450
+2026-11-03T09:25:19.980917+00:00,soccer,bel,1639647400,Regular,2026-11-07T19:45:00+00:00,106.33,RAAL La Louviere,Cercle Brugge,0,team_total,home,over,1.5,2.3,100
+2026-11-03T09:25:19.980917+00:00,soccer,bel,1639647400,Regular,2026-11-07T19:45:00+00:00,106.33,RAAL La Louviere,Cercle Brugge,0,team_total,home,under,1.5,1.6173,100
+2026-11-03T09:25:19.980917+00:00,soccer,bel,1639647400,Regular,2026-11-07T19:45:00+00:00,106.33,RAAL La Louviere,Cercle Brugge,0,team_total,away,over,1.5,2.16,100
+2026-11-03T09:25:19.980917+00:00,soccer,bel,1639647400,Regular,2026-11-07T19:45:00+00:00,106.33,RAAL La Louviere,Cercle Brugge,0,team_total,away,under,1.5,1.6993,100
+2026-11-03T09:25:19.980917+00:00,soccer,bel,1639647400,Regular,2026-11-07T19:45:00+00:00,106.33,RAAL La Louviere,Cercle Brugge,0,total,,over,2.75,1.9434,300
+2026-11-03T09:25:19.980917+00:00,soccer,bel,1639647400,Regular,2026-11-07T19:45:00+00:00,106.33,RAAL La Louviere,Cercle Brugge,0,total,,under,2.75,1.8929,300
+2026-11-03T09:25:19.980917+00:00,soccer,bel,1639647400,Regular,2026-11-07T19:45:00+00:00,106.33,RAAL La Louviere,Cercle Brugge,1,moneyline,,home,,3.23,150
+2026-11-03T09:25:19.980917+00:00,soccer,bel,1639647400,Regular,2026-11-07T19:45:00+00:00,106.33,RAAL La Louviere,Cercle Brugge,1,team_total,home,over,0.5,2.0,100
+2026-11-03T09:25:19.980917+00:00,soccer,bel,1639647400,Regular,2026-11-07T19:45:00+00:00,106.33,RAAL La Louviere,Cercle Brugge,1,team_total,home,under,0.5,1.7812,100
+2026-11-03T09:25:19.980917+00:00,soccer,bel,1639647400,Regular,2026-11-07T19:45:00+00:00,106.33,RAAL La Louviere,Cercle Brugge,1,team_total,away,over,0.5,1.9615,100
+2026-11-03T09:25:19.980917+00:00,soccer,bel,1639647400,Regular,2026-11-07T19:45:00+00:00,106.33,RAAL La Louviere,Cercle Brugge,1,team_total,away,under,0.5,1.813,100
+2026-11-03T09:25:19.980917+00:00,soccer,swe,1639261744,Regular,2026-11-03T18:00:00+00:00,8.58,Sirius,Halmstads,0,moneyline,,home,,1.3185,1450
+2026-11-03T09:25:19.980917+00:00,soccer,swe,1639261744,Regular,2026-11-03T18:00:00+00:00,8.58,Sirius,Halmstads,0,moneyline,,away,,8.33,1450
+2026-11-03T09:25:19.980917+00:00,soccer,swe,1639261744,Regular,2026-11-03T18:00:00+00:00,8.58,Sirius,Halmstads,0,moneyline,,draw,,6.05,1450
+2026-11-03T09:25:19.980917+00:00,soccer,swe,1639261744,Regular,2026-11-03T18:00:00+00:00,8.58,Sirius,Halmstads,0,team_total,home,over,2.5,2.04,250
+2026-11-03T09:25:19.980917+00:00,soccer,swe,1639261744,Regular,2026-11-03T18:00:00+00:00,8.58,Sirius,Halmstads,0,team_total,home,under,2.5,1.7937,250
+2026-11-03T09:25:19.980917+00:00,soccer,swe,1639261744,Regular,2026-11-03T18:00:00+00:00,8.58,Sirius,Halmstads,0,team_total,away,over,0.5,1.6135,250
+2026-11-03T09:25:19.980917+00:00,soccer,swe,1639261744,Regular,2026-11-03T18:00:00+00:00,8.58,Sirius,Halmstads,0,team_total,away,under,0.5,2.34,250
+2026-11-03T09:25:19.980917+00:00,soccer,swe,1639261744,Regular,2026-11-03T18:00:00+00:00,8.58,Sirius,Halmstads,0,spread,,home,-1.5,1.8772,1450
+2026-11-03T09:25:19.980917+00:00,soccer,swe,1639261744,Regular,2026-11-03T18:00:00+00:00,8.58,Sirius,Halmstads,0,spread,,away,1.5,1.9901,1450
+2026-11-03T09:25:19.980917+00:00,soccer,swe,1639261744,Regular,2026-11-03T18:00:00+00:00,8.58,Sirius,Halmstads,0,total,,over,3.25,1.9091,1075
+2026-11-03T09:25:19.980917+00:00,soccer,swe,1639261744,Regular,2026-11-03T18:00:00+00:00,8.58,Sirius,Halmstads,0,total,,under,3.25,1.9434,1075
+2026-11-03T09:25:19.980917+00:00,soccer,swe,1639261744,Regular,2026-11-03T18:00:00+00:00,8.58,Sirius,Halmstads,1,moneyline,,home,,1.7143,475
+2026-11-03T09:25:19.980917+00:00,soccer,swe,1639261744,Regular,2026-11-03T18:00:00+00:00,8.58,Sirius,Halmstads,1,moneyline,,draw,,2.97,475
+2026-11-03T09:25:19.980917+00:00,soccer,swe,1639261744,Regular,2026-11-03T18:00:00+00:00,8.58,Sirius,Halmstads,1,team_total,home,over,1.5,2.92,125
+2026-11-03T09:25:19.980917+00:00,soccer,swe,1639261744,Regular,2026-11-03T18:00:00+00:00,8.58,Sirius,Halmstads,1,team_total,home,under,1.5,1.4049,125
+2026-11-03T09:25:19.980917+00:00,soccer,swe,1639261744,Regular,2026-11-03T18:00:00+00:00,8.58,Sirius,Halmstads,1,team_total,away,over,0.5,2.88,125
+2026-11-03T09:25:19.980917+00:00,soccer,swe,1639261744,Regular,2026-11-03T18:00:00+00:00,8.58,Sirius,Halmstads,1,team_total,away,under,0.5,1.4132,125
+2026-11-03T09:25:19.980917+00:00,soccer,swe,1639261744,Regular,2026-11-03T18:00:00+00:00,8.58,Sirius,Halmstads,1,spread,,home,-0.75,2.0,475
+2026-11-03T09:25:19.980917+00:00,soccer,swe,1639261744,Regular,2026-11-03T18:00:00+00:00,8.58,Sirius,Halmstads,1,spread,,away,0.75,1.8403,475
+2026-11-03T09:25:19.980917+00:00,soccer,swe,1639261744,Regular,2026-11-03T18:00:00+00:00,8.58,Sirius,Halmstads,1,total,,over,1.5,2.09,475
+2026-11-03T09:25:19.980917+00:00,soccer,swe,1639261744,Regular,2026-11-03T18:00:00+00:00,8.58,Sirius,Halmstads,1,total,,under,1.5,1.7463,475
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639227206,Bookings,2026-11-03T22:30:00+00:00,13.08,Chapecoense (Bookings),Mirassol (Bookings),0,moneyline,,home,,2.41,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639227206,Bookings,2026-11-03T22:30:00+00:00,13.08,Chapecoense (Bookings),Mirassol (Bookings),0,moneyline,,away,,2.41,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639227206,Bookings,2026-11-03T22:30:00+00:00,13.08,Chapecoense (Bookings),Mirassol (Bookings),0,moneyline,,draw,,3.97,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639227206,Bookings,2026-11-03T22:30:00+00:00,13.08,Chapecoense (Bookings),Mirassol (Bookings),0,team_total,home,over,1.5,1.4902,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639227206,Bookings,2026-11-03T22:30:00+00:00,13.08,Chapecoense (Bookings),Mirassol (Bookings),0,team_total,home,under,1.5,2.5,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639227206,Bookings,2026-11-03T22:30:00+00:00,13.08,Chapecoense (Bookings),Mirassol (Bookings),0,team_total,away,over,1.5,1.4902,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639227206,Bookings,2026-11-03T22:30:00+00:00,13.08,Chapecoense (Bookings),Mirassol (Bookings),0,team_total,away,under,1.5,2.5,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639227206,Bookings,2026-11-03T22:30:00+00:00,13.08,Chapecoense (Bookings),Mirassol (Bookings),0,total,,over,4.0,1.7874,250
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639227206,Bookings,2026-11-03T22:30:00+00:00,13.08,Chapecoense (Bookings),Mirassol (Bookings),0,total,,under,4.0,2.0,250
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639227206,Corners,2026-11-03T22:30:00+00:00,13.08,Chapecoense (Corners),Mirassol (Corners),0,team_total,home,over,4.5,1.6369,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639227206,Corners,2026-11-03T22:30:00+00:00,13.08,Chapecoense (Corners),Mirassol (Corners),0,team_total,home,under,4.5,2.17,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639227206,Corners,2026-11-03T22:30:00+00:00,13.08,Chapecoense (Corners),Mirassol (Corners),0,team_total,away,over,4.5,1.6667,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639227206,Corners,2026-11-03T22:30:00+00:00,13.08,Chapecoense (Corners),Mirassol (Corners),0,team_total,away,under,4.5,2.13,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639227206,Corners,2026-11-03T22:30:00+00:00,13.08,Chapecoense (Corners),Mirassol (Corners),0,spread,,home,0.0,1.9091,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639227206,Corners,2026-11-03T22:30:00+00:00,13.08,Chapecoense (Corners),Mirassol (Corners),0,spread,,away,-0.0,1.8547,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639227206,Corners,2026-11-03T22:30:00+00:00,13.08,Chapecoense (Corners),Mirassol (Corners),0,total,,over,10.5,1.9804,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639227206,Corners,2026-11-03T22:30:00+00:00,13.08,Chapecoense (Corners),Mirassol (Corners),0,total,,under,10.5,1.8,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639227206,Corners,2026-11-03T22:30:00+00:00,13.08,Chapecoense (Corners),Mirassol (Corners),1,spread,,home,0.5,1.7407,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639227206,Corners,2026-11-03T22:30:00+00:00,13.08,Chapecoense (Corners),Mirassol (Corners),1,spread,,away,-0.5,2.03,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639227206,Corners,2026-11-03T22:30:00+00:00,13.08,Chapecoense (Corners),Mirassol (Corners),1,total,,over,4.5,1.7576,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639227206,Corners,2026-11-03T22:30:00+00:00,13.08,Chapecoense (Corners),Mirassol (Corners),1,total,,under,4.5,2.0,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639229303,Regular,2026-11-04T00:30:00+00:00,15.08,Internacional,Coritiba,0,moneyline,,draw,,4.11,1200
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639229303,Regular,2026-11-04T00:30:00+00:00,15.08,Internacional,Coritiba,0,team_total,home,over,1.5,1.6897,200
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639229303,Regular,2026-11-04T00:30:00+00:00,15.08,Internacional,Coritiba,0,team_total,home,under,1.5,2.22,200
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639229303,Regular,2026-11-04T00:30:00+00:00,15.08,Internacional,Coritiba,0,total,,over,2.75,1.9901,900
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639229303,Regular,2026-11-04T00:30:00+00:00,15.08,Internacional,Coritiba,1,team_total,home,over,0.5,1.6452,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639229303,Regular,2026-11-04T00:30:00+00:00,15.08,Internacional,Coritiba,1,team_total,away,under,0.5,1.4274,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639229303,Regular,2026-11-04T00:30:00+00:00,15.08,Internacional,Coritiba,1,total,,over,1.0,1.7092,400
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639229303,Bookings,2026-11-04T00:30:00+00:00,15.08,Internacional (Bookings),Coritiba (Bookings),0,moneyline,,draw,,4.38,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639229303,Bookings,2026-11-04T00:30:00+00:00,15.08,Internacional (Bookings),Coritiba (Bookings),0,team_total,home,over,2.5,2.39,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639229303,Bookings,2026-11-04T00:30:00+00:00,15.08,Internacional (Bookings),Coritiba (Bookings),0,team_total,home,under,2.5,1.5291,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639229303,Bookings,2026-11-04T00:30:00+00:00,15.08,Internacional (Bookings),Coritiba (Bookings),0,spread,,home,0.5,1.8547,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639229303,Bookings,2026-11-04T00:30:00+00:00,15.08,Internacional (Bookings),Coritiba (Bookings),0,total,,under,5.0,1.8065,250
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639229303,Corners,2026-11-04T00:30:00+00:00,15.08,Internacional (Corners),Coritiba (Corners),0,team_total,home,over,6.5,1.8065,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639229303,Corners,2026-11-04T00:30:00+00:00,15.08,Internacional (Corners),Coritiba (Corners),0,team_total,home,under,6.5,1.9524,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639229303,Corners,2026-11-04T00:30:00+00:00,15.08,Internacional (Corners),Coritiba (Corners),0,team_total,away,over,3.5,1.8772,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639229303,Corners,2026-11-04T00:30:00+00:00,15.08,Internacional (Corners),Coritiba (Corners),0,team_total,away,under,3.5,1.8772,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639229303,Corners,2026-11-04T00:30:00+00:00,15.08,Internacional (Corners),Coritiba (Corners),0,spread,,home,-3.0,1.8772,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639229303,Corners,2026-11-04T00:30:00+00:00,15.08,Internacional (Corners),Coritiba (Corners),0,spread,,away,3.0,1.8772,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639229303,Corners,2026-11-04T00:30:00+00:00,15.08,Internacional (Corners),Coritiba (Corners),0,total,,over,10.5,1.8929,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639229303,Corners,2026-11-04T00:30:00+00:00,15.08,Internacional (Corners),Coritiba (Corners),0,total,,under,10.5,1.8929,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639229303,Corners,2026-11-04T00:30:00+00:00,15.08,Internacional (Corners),Coritiba (Corners),1,spread,,home,-1.5,1.9346,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639229303,Corners,2026-11-04T00:30:00+00:00,15.08,Internacional (Corners),Coritiba (Corners),1,spread,,away,1.5,1.8264,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273755,Regular,2026-11-06T23:00:00+00:00,85.58,Vitoria,Fluminense,0,moneyline,,home,,2.85,600
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273755,Regular,2026-11-06T23:00:00+00:00,85.58,Vitoria,Fluminense,0,moneyline,,draw,,3.31,600
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273755,Regular,2026-11-06T23:00:00+00:00,85.58,Vitoria,Fluminense,0,team_total,home,over,1.5,2.73,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273755,Regular,2026-11-06T23:00:00+00:00,85.58,Vitoria,Fluminense,0,team_total,home,under,1.5,1.4608,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273755,Regular,2026-11-06T23:00:00+00:00,85.58,Vitoria,Fluminense,0,team_total,away,over,1.5,2.52,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273755,Regular,2026-11-06T23:00:00+00:00,85.58,Vitoria,Fluminense,0,team_total,away,under,1.5,1.5291,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273755,Regular,2026-11-06T23:00:00+00:00,85.58,Vitoria,Fluminense,0,spread,,home,0.0,2.04,600
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273755,Regular,2026-11-06T23:00:00+00:00,85.58,Vitoria,Fluminense,0,spread,,away,-0.0,1.8264,600
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273755,Regular,2026-11-06T23:00:00+00:00,85.58,Vitoria,Fluminense,0,total,,over,2.5,2.05,450
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273755,Regular,2026-11-06T23:00:00+00:00,85.58,Vitoria,Fluminense,0,total,,under,2.5,1.8,450
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273755,Regular,2026-11-06T23:00:00+00:00,85.58,Vitoria,Fluminense,1,moneyline,,home,,3.5,200
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273755,Regular,2026-11-06T23:00:00+00:00,85.58,Vitoria,Fluminense,1,moneyline,,away,,3.21,200
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273755,Regular,2026-11-06T23:00:00+00:00,85.58,Vitoria,Fluminense,1,team_total,home,over,0.5,2.24,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273755,Regular,2026-11-06T23:00:00+00:00,85.58,Vitoria,Fluminense,1,team_total,home,under,0.5,1.6369,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273755,Regular,2026-11-06T23:00:00+00:00,85.58,Vitoria,Fluminense,1,total,,over,1.0,1.9259,200
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273755,Regular,2026-11-06T23:00:00+00:00,85.58,Vitoria,Fluminense,1,total,,under,1.0,1.8621,200
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273754,Regular,2026-11-06T00:30:00+00:00,63.08,Cruzeiro,Bahia,0,moneyline,,home,,1.6757,900
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273754,Regular,2026-11-06T00:30:00+00:00,63.08,Cruzeiro,Bahia,0,moneyline,,away,,4.57,900
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273754,Regular,2026-11-06T00:30:00+00:00,63.08,Cruzeiro,Bahia,0,moneyline,,draw,,4.29,900
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273754,Regular,2026-11-06T00:30:00+00:00,63.08,Cruzeiro,Bahia,0,team_total,home,over,1.5,1.6061,150
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273754,Regular,2026-11-06T00:30:00+00:00,63.08,Cruzeiro,Bahia,0,team_total,home,under,1.5,2.33,150
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273754,Regular,2026-11-06T00:30:00+00:00,63.08,Cruzeiro,Bahia,0,team_total,away,over,1.5,2.92,150
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273754,Regular,2026-11-06T00:30:00+00:00,63.08,Cruzeiro,Bahia,0,team_total,away,under,1.5,1.4149,150
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273754,Regular,2026-11-06T00:30:00+00:00,63.08,Cruzeiro,Bahia,0,spread,,home,-0.75,1.8621,900
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273754,Regular,2026-11-06T00:30:00+00:00,63.08,Cruzeiro,Bahia,0,spread,,away,0.75,2.0,900
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273754,Regular,2026-11-06T00:30:00+00:00,63.08,Cruzeiro,Bahia,0,total,,over,3.0,1.8772,675
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273754,Regular,2026-11-06T00:30:00+00:00,63.08,Cruzeiro,Bahia,0,total,,under,3.0,1.9615,675
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273754,Regular,2026-11-06T00:30:00+00:00,63.08,Cruzeiro,Bahia,1,moneyline,,home,,2.15,300
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273754,Regular,2026-11-06T00:30:00+00:00,63.08,Cruzeiro,Bahia,1,moneyline,,away,,4.86,300
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273754,Regular,2026-11-06T00:30:00+00:00,63.08,Cruzeiro,Bahia,1,moneyline,,draw,,2.59,300
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273754,Regular,2026-11-06T00:30:00+00:00,63.08,Cruzeiro,Bahia,1,team_total,home,over,0.5,1.565,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273754,Regular,2026-11-06T00:30:00+00:00,63.08,Cruzeiro,Bahia,1,team_total,home,under,0.5,2.38,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273754,Regular,2026-11-06T00:30:00+00:00,63.08,Cruzeiro,Bahia,1,team_total,away,over,0.5,2.4,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273754,Regular,2026-11-06T00:30:00+00:00,63.08,Cruzeiro,Bahia,1,team_total,away,under,0.5,1.5556,100
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273754,Regular,2026-11-06T00:30:00+00:00,63.08,Cruzeiro,Bahia,1,spread,,home,-0.25,1.7634,300
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273754,Regular,2026-11-06T00:30:00+00:00,63.08,Cruzeiro,Bahia,1,spread,,away,0.25,2.08,300
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273754,Regular,2026-11-06T00:30:00+00:00,63.08,Cruzeiro,Bahia,1,total,,over,1.25,1.8929,300
+2026-11-03T09:25:19.980917+00:00,soccer,bra,1639273754,Regular,2026-11-06T00:30:00+00:00,63.08,Cruzeiro,Bahia,1,total,,under,1.25,1.8929,300
+2026-11-03T09:25:19.980917+00:00,soccer,gre,1638769214,Regular,2026-11-08T19:00:00+00:00,129.58,Olympiakos,PAOK,0,moneyline,,home,,1.6289,300
+2026-11-03T09:25:19.980917+00:00,soccer,gre,1638769214,Regular,2026-11-08T19:00:00+00:00,129.58,Olympiakos,PAOK,0,moneyline,,away,,5.22,300
+2026-11-03T09:25:19.980917+00:00,soccer,gre,1638769214,Regular,2026-11-08T19:00:00+00:00,129.58,Olympiakos,PAOK,0,moneyline,,draw,,3.97,300
+2026-11-03T09:25:19.980917+00:00,soccer,gre,1638769214,Regular,2026-11-08T19:00:00+00:00,129.58,Olympiakos,PAOK,0,team_total,home,over,1.5,1.6803,100
+2026-11-03T09:25:19.980917+00:00,soccer,gre,1638769214,Regular,2026-11-08T19:00:00+00:00,129.58,Olympiakos,PAOK,0,team_total,home,under,1.5,2.17,100
+2026-11-03T09:25:19.980917+00:00,soccer,gre,1638769214,Regular,2026-11-08T19:00:00+00:00,129.58,Olympiakos,PAOK,0,team_total,away,over,0.5,1.5556,100
+2026-11-03T09:25:19.980917+00:00,soccer,gre,1638769214,Regular,2026-11-08T19:00:00+00:00,129.58,Olympiakos,PAOK,0,team_total,away,under,0.5,2.41,100
+2026-11-03T09:25:19.980917+00:00,soccer,gre,1638769214,Regular,2026-11-08T19:00:00+00:00,129.58,Olympiakos,PAOK,0,spread,,home,-0.75,1.8065,300
+2026-11-03T09:25:19.980917+00:00,soccer,gre,1638769214,Regular,2026-11-08T19:00:00+00:00,129.58,Olympiakos,PAOK,0,spread,,away,0.75,2.04,300
+2026-11-03T09:25:19.980917+00:00,soccer,gre,1638769214,Regular,2026-11-08T19:00:00+00:00,129.58,Olympiakos,PAOK,0,total,,over,2.5,1.813,225
+2026-11-03T09:25:19.980917+00:00,soccer,gre,1638769214,Regular,2026-11-08T19:00:00+00:00,129.58,Olympiakos,PAOK,1,moneyline,,home,,2.15,100
+2026-11-03T09:25:19.980917+00:00,soccer,gre,1638769214,Regular,2026-11-08T19:00:00+00:00,129.58,Olympiakos,PAOK,1,moneyline,,away,,5.54,100
+2026-11-03T09:25:19.980917+00:00,soccer,gre,1638769214,Regular,2026-11-08T19:00:00+00:00,129.58,Olympiakos,PAOK,1,moneyline,,draw,,2.39,100
+2026-11-03T09:25:19.980917+00:00,soccer,gre,1638769214,Regular,2026-11-08T19:00:00+00:00,129.58,Olympiakos,PAOK,1,team_total,home,over,0.5,1.6494,100
+2026-11-03T09:25:19.980917+00:00,soccer,gre,1638769214,Regular,2026-11-08T19:00:00+00:00,129.58,Olympiakos,PAOK,1,team_total,home,under,0.5,2.18,100
+2026-11-03T09:25:19.980917+00:00,soccer,gre,1638769214,Regular,2026-11-08T19:00:00+00:00,129.58,Olympiakos,PAOK,1,team_total,away,over,0.5,2.87,100
+2026-11-03T09:25:19.980917+00:00,soccer,gre,1638769214,Regular,2026-11-08T19:00:00+00:00,129.58,Olympiakos,PAOK,1,team_total,away,under,0.5,1.3953,100
+2026-11-03T09:25:19.980917+00:00,soccer,gre,1638769214,Regular,2026-11-08T19:00:00+00:00,129.58,Olympiakos,PAOK,1,spread,,home,-0.25,1.7246,100
+2026-11-03T09:25:19.980917+00:00,soccer,gre,1638769214,Regular,2026-11-08T19:00:00+00:00,129.58,Olympiakos,PAOK,1,spread,,away,0.25,2.11,100
+2026-11-03T09:25:19.980917+00:00,soccer,gre,1638769214,Regular,2026-11-08T19:00:00+00:00,129.58,Olympiakos,PAOK,1,total,,over,1.0,1.7353,100
+2026-11-03T09:25:19.980917+00:00,soccer,gre,1638769214,Regular,2026-11-08T19:00:00+00:00,129.58,Olympiakos,PAOK,1,total,,under,1.0,2.06,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639737285,Regular,2026-11-07T17:30:00+00:00,104.08,Al-Ahli,Al-Taawoun,0,moneyline,,home,,1.6098,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639737285,Regular,2026-11-07T17:30:00+00:00,104.08,Al-Ahli,Al-Taawoun,0,moneyline,,away,,5.21,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639737285,Regular,2026-11-07T17:30:00+00:00,104.08,Al-Ahli,Al-Taawoun,0,moneyline,,draw,,3.08,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639737285,Regular,2026-11-07T17:30:00+00:00,104.08,Al-Ahli,Al-Taawoun,0,team_total,home,over,1.5,1.5076,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639737285,Regular,2026-11-07T17:30:00+00:00,104.08,Al-Ahli,Al-Taawoun,0,team_total,home,under,1.5,2.23,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639737285,Regular,2026-11-07T17:30:00+00:00,104.08,Al-Ahli,Al-Taawoun,0,team_total,away,over,0.5,1.3788,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639737285,Regular,2026-11-07T17:30:00+00:00,104.08,Al-Ahli,Al-Taawoun,0,team_total,away,under,0.5,2.59,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639737285,Regular,2026-11-07T17:30:00+00:00,104.08,Al-Ahli,Al-Taawoun,0,spread,,home,-0.75,1.7874,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639737285,Regular,2026-11-07T17:30:00+00:00,104.08,Al-Ahli,Al-Taawoun,0,spread,,away,0.75,1.8403,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639737285,Regular,2026-11-07T17:30:00+00:00,104.08,Al-Ahli,Al-Taawoun,0,total,,over,3.0,1.9174,300
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639737285,Regular,2026-11-07T17:30:00+00:00,104.08,Al-Ahli,Al-Taawoun,0,total,,under,3.0,1.7092,300
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639737285,Regular,2026-11-07T17:30:00+00:00,104.08,Al-Ahli,Al-Taawoun,1,moneyline,,home,,1.9804,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639737285,Regular,2026-11-07T17:30:00+00:00,104.08,Al-Ahli,Al-Taawoun,1,moneyline,,away,,4.7,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639737285,Regular,2026-11-07T17:30:00+00:00,104.08,Al-Ahli,Al-Taawoun,1,moneyline,,draw,,2.37,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639737285,Regular,2026-11-07T17:30:00+00:00,104.08,Al-Ahli,Al-Taawoun,1,team_total,home,over,0.5,1.5128,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639737285,Regular,2026-11-07T17:30:00+00:00,104.08,Al-Ahli,Al-Taawoun,1,team_total,home,under,0.5,2.22,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639737285,Regular,2026-11-07T17:30:00+00:00,104.08,Al-Ahli,Al-Taawoun,1,team_total,away,over,0.5,2.52,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639737285,Regular,2026-11-07T17:30:00+00:00,104.08,Al-Ahli,Al-Taawoun,1,team_total,away,under,0.5,1.4,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639737285,Regular,2026-11-07T17:30:00+00:00,104.08,Al-Ahli,Al-Taawoun,1,spread,,home,-0.5,1.9804,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639737285,Regular,2026-11-07T17:30:00+00:00,104.08,Al-Ahli,Al-Taawoun,1,spread,,away,0.5,1.6452,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639737285,Regular,2026-11-07T17:30:00+00:00,104.08,Al-Ahli,Al-Taawoun,1,total,,over,1.25,1.9259,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639737285,Regular,2026-11-07T17:30:00+00:00,104.08,Al-Ahli,Al-Taawoun,1,total,,under,1.25,1.6897,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639596131,Regular,2026-11-06T14:30:00+00:00,77.08,Al-Fateh,Al-Riyadh,0,moneyline,,home,,2.2,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639596131,Regular,2026-11-06T14:30:00+00:00,77.08,Al-Fateh,Al-Riyadh,0,moneyline,,away,,3.07,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639596131,Regular,2026-11-06T14:30:00+00:00,77.08,Al-Fateh,Al-Riyadh,0,moneyline,,draw,,3.53,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639596131,Regular,2026-11-06T14:30:00+00:00,77.08,Al-Fateh,Al-Riyadh,0,team_total,home,over,1.5,2.0,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639596131,Regular,2026-11-06T14:30:00+00:00,77.08,Al-Fateh,Al-Riyadh,0,team_total,home,under,1.5,1.7692,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639596131,Regular,2026-11-06T14:30:00+00:00,77.08,Al-Fateh,Al-Riyadh,0,team_total,away,over,1.5,2.5,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639596131,Regular,2026-11-06T14:30:00+00:00,77.08,Al-Fateh,Al-Riyadh,0,team_total,away,under,1.5,1.5,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639596131,Regular,2026-11-06T14:30:00+00:00,77.08,Al-Fateh,Al-Riyadh,0,spread,,home,-0.25,1.9174,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639596131,Regular,2026-11-06T14:30:00+00:00,77.08,Al-Fateh,Al-Riyadh,0,spread,,away,0.25,1.885,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639596131,Regular,2026-11-06T14:30:00+00:00,77.08,Al-Fateh,Al-Riyadh,0,total,,over,2.75,1.9091,300
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639596131,Regular,2026-11-06T14:30:00+00:00,77.08,Al-Fateh,Al-Riyadh,0,total,,under,2.75,1.8696,300
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639596131,Regular,2026-11-06T14:30:00+00:00,77.08,Al-Fateh,Al-Riyadh,1,moneyline,,home,,2.74,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639596131,Regular,2026-11-06T14:30:00+00:00,77.08,Al-Fateh,Al-Riyadh,1,moneyline,,draw,,2.33,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639596131,Regular,2026-11-06T14:30:00+00:00,77.08,Al-Fateh,Al-Riyadh,1,team_total,home,over,0.5,1.8264,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639596131,Regular,2026-11-06T14:30:00+00:00,77.08,Al-Fateh,Al-Riyadh,1,team_total,home,under,0.5,1.9009,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639596131,Regular,2026-11-06T14:30:00+00:00,77.08,Al-Fateh,Al-Riyadh,1,team_total,away,over,0.5,2.14,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639596131,Regular,2026-11-06T14:30:00+00:00,77.08,Al-Fateh,Al-Riyadh,1,team_total,away,under,0.5,1.6494,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639596131,Regular,2026-11-06T14:30:00+00:00,77.08,Al-Fateh,Al-Riyadh,1,spread,,home,-0.25,2.2,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639596131,Regular,2026-11-06T14:30:00+00:00,77.08,Al-Fateh,Al-Riyadh,1,spread,,away,0.25,1.6494,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639596131,Regular,2026-11-06T14:30:00+00:00,77.08,Al-Fateh,Al-Riyadh,1,total,,over,1.25,2.1,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639596131,Regular,2026-11-06T14:30:00+00:00,77.08,Al-Fateh,Al-Riyadh,1,total,,under,1.25,1.6849,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639719655,Regular,2026-11-07T14:30:00+00:00,101.08,Al-Ettifaq,Al-Hilal,0,moneyline,,home,,7.33,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639719655,Regular,2026-11-07T14:30:00+00:00,101.08,Al-Ettifaq,Al-Hilal,0,moneyline,,away,,1.3289,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639719655,Regular,2026-11-07T14:30:00+00:00,101.08,Al-Ettifaq,Al-Hilal,0,moneyline,,draw,,3.9,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639719655,Regular,2026-11-07T14:30:00+00:00,101.08,Al-Ettifaq,Al-Hilal,0,team_total,home,over,0.5,1.4115,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639719655,Regular,2026-11-07T14:30:00+00:00,101.08,Al-Ettifaq,Al-Hilal,0,team_total,home,under,0.5,2.48,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639719655,Regular,2026-11-07T14:30:00+00:00,101.08,Al-Ettifaq,Al-Hilal,0,team_total,away,over,2.5,1.8333,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639719655,Regular,2026-11-07T14:30:00+00:00,101.08,Al-Ettifaq,Al-Hilal,0,team_total,away,under,2.5,1.7692,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639719655,Regular,2026-11-07T14:30:00+00:00,101.08,Al-Ettifaq,Al-Hilal,0,spread,,home,1.5,1.7752,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639719655,Regular,2026-11-07T14:30:00+00:00,101.08,Al-Ettifaq,Al-Hilal,0,spread,,away,-1.5,1.8475,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639719655,Regular,2026-11-07T14:30:00+00:00,101.08,Al-Ettifaq,Al-Hilal,0,total,,over,3.5,1.7752,300
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639719655,Regular,2026-11-07T14:30:00+00:00,101.08,Al-Ettifaq,Al-Hilal,0,total,,under,3.5,1.8403,300
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639719655,Regular,2026-11-07T14:30:00+00:00,101.08,Al-Ettifaq,Al-Hilal,1,moneyline,,home,,5.7,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639719655,Regular,2026-11-07T14:30:00+00:00,101.08,Al-Ettifaq,Al-Hilal,1,moneyline,,away,,1.6173,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639719655,Regular,2026-11-07T14:30:00+00:00,101.08,Al-Ettifaq,Al-Hilal,1,moneyline,,draw,,2.83,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639719655,Regular,2026-11-07T14:30:00+00:00,101.08,Al-Ettifaq,Al-Hilal,1,team_total,home,over,0.5,2.54,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639719655,Regular,2026-11-07T14:30:00+00:00,101.08,Al-Ettifaq,Al-Hilal,1,team_total,home,under,0.5,1.3953,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639719655,Regular,2026-11-07T14:30:00+00:00,101.08,Al-Ettifaq,Al-Hilal,1,team_total,away,over,1.5,2.64,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639719655,Regular,2026-11-07T14:30:00+00:00,101.08,Al-Ettifaq,Al-Hilal,1,team_total,away,under,1.5,1.365,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639719655,Regular,2026-11-07T14:30:00+00:00,101.08,Al-Ettifaq,Al-Hilal,1,spread,,home,0.75,1.7194,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639719655,Regular,2026-11-07T14:30:00+00:00,101.08,Al-Ettifaq,Al-Hilal,1,spread,,away,-0.75,1.885,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639719655,Regular,2026-11-07T14:30:00+00:00,101.08,Al-Ettifaq,Al-Hilal,1,total,,over,1.5,1.8621,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639719655,Regular,2026-11-07T14:30:00+00:00,101.08,Al-Ettifaq,Al-Hilal,1,total,,under,1.5,1.7407,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639496282,Regular,2026-11-05T13:25:00+00:00,51.99,Al-Kholood,Al-Khaleej,0,moneyline,,home,,2.28,675
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639496282,Regular,2026-11-05T13:25:00+00:00,51.99,Al-Kholood,Al-Khaleej,0,moneyline,,away,,3.63,675
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639496282,Regular,2026-11-05T13:25:00+00:00,51.99,Al-Kholood,Al-Khaleej,0,moneyline,,draw,,2.87,675
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639496282,Regular,2026-11-05T13:25:00+00:00,51.99,Al-Kholood,Al-Khaleej,0,team_total,home,over,1.5,2.17,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639496282,Regular,2026-11-05T13:25:00+00:00,51.99,Al-Kholood,Al-Khaleej,0,team_total,home,under,1.5,1.6536,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639496282,Regular,2026-11-05T13:25:00+00:00,51.99,Al-Kholood,Al-Khaleej,0,team_total,away,over,0.5,1.431,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639496282,Regular,2026-11-05T13:25:00+00:00,51.99,Al-Kholood,Al-Khaleej,0,team_total,away,under,0.5,2.72,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639496282,Regular,2026-11-05T13:25:00+00:00,51.99,Al-Kholood,Al-Khaleej,0,spread,,home,-0.25,1.9091,675
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639496282,Regular,2026-11-05T13:25:00+00:00,51.99,Al-Kholood,Al-Khaleej,0,spread,,away,0.25,1.8929,675
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639496282,Regular,2026-11-05T13:25:00+00:00,51.99,Al-Kholood,Al-Khaleej,0,total,,over,2.5,1.9615,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639496282,Regular,2026-11-05T13:25:00+00:00,51.99,Al-Kholood,Al-Khaleej,0,total,,under,2.5,1.8333,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639496282,Regular,2026-11-05T13:25:00+00:00,51.99,Al-Kholood,Al-Khaleej,1,moneyline,,home,,2.75,225
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639496282,Regular,2026-11-05T13:25:00+00:00,51.99,Al-Kholood,Al-Khaleej,1,moneyline,,away,,3.95,225
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639496282,Regular,2026-11-05T13:25:00+00:00,51.99,Al-Kholood,Al-Khaleej,1,moneyline,,draw,,2.19,225
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639496282,Regular,2026-11-05T13:25:00+00:00,51.99,Al-Kholood,Al-Khaleej,1,team_total,home,over,0.5,1.9259,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639496282,Regular,2026-11-05T13:25:00+00:00,51.99,Al-Kholood,Al-Khaleej,1,team_total,home,under,0.5,1.8,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639496282,Regular,2026-11-05T13:25:00+00:00,51.99,Al-Kholood,Al-Khaleej,1,team_total,away,over,0.5,2.39,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639496282,Regular,2026-11-05T13:25:00+00:00,51.99,Al-Kholood,Al-Khaleej,1,team_total,away,under,0.5,1.5236,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639496282,Regular,2026-11-05T13:25:00+00:00,51.99,Al-Kholood,Al-Khaleej,1,spread,,away,0.25,1.6623,225
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639496282,Regular,2026-11-05T13:25:00+00:00,51.99,Al-Kholood,Al-Khaleej,1,total,,over,1.0,1.8696,225
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639496282,Regular,2026-11-05T13:25:00+00:00,51.99,Al-Kholood,Al-Khaleej,1,total,,under,1.0,1.8696,225
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639579543,Regular,2026-11-06T14:55:00+00:00,77.49,Al-Hazem,Al-Nassr,1,moneyline,,home,,6.74,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639579543,Regular,2026-11-06T14:55:00+00:00,77.49,Al-Hazem,Al-Nassr,1,moneyline,,away,,1.5155,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639579543,Regular,2026-11-06T14:55:00+00:00,77.49,Al-Hazem,Al-Nassr,1,moneyline,,draw,,2.92,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639579543,Regular,2026-11-06T14:55:00+00:00,77.49,Al-Hazem,Al-Nassr,1,team_total,home,over,0.5,2.93,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639579543,Regular,2026-11-06T14:55:00+00:00,77.49,Al-Hazem,Al-Nassr,1,team_total,home,under,0.5,1.2994,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639579543,Regular,2026-11-06T14:55:00+00:00,77.49,Al-Hazem,Al-Nassr,1,team_total,away,over,1.5,2.6,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639579543,Regular,2026-11-06T14:55:00+00:00,77.49,Al-Hazem,Al-Nassr,1,team_total,away,under,1.5,1.4405,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639579543,Regular,2026-11-06T14:55:00+00:00,77.49,Al-Hazem,Al-Nassr,1,spread,,home,0.75,1.8772,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639579543,Regular,2026-11-06T14:55:00+00:00,77.49,Al-Hazem,Al-Nassr,1,spread,,away,-0.75,1.7299,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639579543,Regular,2026-11-06T14:55:00+00:00,77.49,Al-Hazem,Al-Nassr,1,total,,over,1.5,1.8929,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639579543,Regular,2026-11-06T14:55:00+00:00,77.49,Al-Hazem,Al-Nassr,1,total,,under,1.5,1.7143,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639579543,Regular,2026-11-06T14:55:00+00:00,77.49,Al-Hazem,Al-Nassr,0,moneyline,,home,,8.84,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639579543,Regular,2026-11-06T14:55:00+00:00,77.49,Al-Hazem,Al-Nassr,0,moneyline,,away,,1.2342,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639579543,Regular,2026-11-06T14:55:00+00:00,77.49,Al-Hazem,Al-Nassr,0,moneyline,,draw,,4.38,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639579543,Regular,2026-11-06T14:55:00+00:00,77.49,Al-Hazem,Al-Nassr,0,team_total,home,over,0.5,1.5405,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639579543,Regular,2026-11-06T14:55:00+00:00,77.49,Al-Hazem,Al-Nassr,0,team_total,home,under,0.5,2.16,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639579543,Regular,2026-11-06T14:55:00+00:00,77.49,Al-Hazem,Al-Nassr,0,team_total,away,over,2.5,1.813,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639579543,Regular,2026-11-06T14:55:00+00:00,77.49,Al-Hazem,Al-Nassr,0,team_total,away,under,2.5,1.9259,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639579543,Regular,2026-11-06T14:55:00+00:00,77.49,Al-Hazem,Al-Nassr,0,spread,,home,1.75,1.8065,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639579543,Regular,2026-11-06T14:55:00+00:00,77.49,Al-Hazem,Al-Nassr,0,spread,,away,-1.75,1.8065,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639579543,Regular,2026-11-06T14:55:00+00:00,77.49,Al-Hazem,Al-Nassr,0,total,,over,3.5,1.7752,300
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639579543,Regular,2026-11-06T14:55:00+00:00,77.49,Al-Hazem,Al-Nassr,0,total,,under,3.5,1.8264,300
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639529595,Regular,2026-11-05T17:30:00+00:00,56.08,Al-Qadisiyah,Al-Fayha,1,moneyline,,home,,1.7812,225
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639529595,Regular,2026-11-05T17:30:00+00:00,56.08,Al-Qadisiyah,Al-Fayha,1,moneyline,,away,,4.75,225
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639529595,Regular,2026-11-05T17:30:00+00:00,56.08,Al-Qadisiyah,Al-Fayha,1,moneyline,,draw,,2.7,225
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639529595,Regular,2026-11-05T17:30:00+00:00,56.08,Al-Qadisiyah,Al-Fayha,1,team_total,home,over,0.5,1.3472,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639529595,Regular,2026-11-05T17:30:00+00:00,56.08,Al-Qadisiyah,Al-Fayha,1,team_total,home,under,0.5,2.71,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639529595,Regular,2026-11-05T17:30:00+00:00,56.08,Al-Qadisiyah,Al-Fayha,1,team_total,away,over,0.5,2.23,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639529595,Regular,2026-11-05T17:30:00+00:00,56.08,Al-Qadisiyah,Al-Fayha,1,team_total,away,under,0.5,1.5076,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639529595,Regular,2026-11-05T17:30:00+00:00,56.08,Al-Qadisiyah,Al-Fayha,1,spread,,home,-0.5,1.7812,225
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639529595,Regular,2026-11-05T17:30:00+00:00,56.08,Al-Qadisiyah,Al-Fayha,1,spread,,away,0.5,1.8197,225
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639529595,Regular,2026-11-05T17:30:00+00:00,56.08,Al-Qadisiyah,Al-Fayha,1,total,,over,1.5,1.8696,225
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639529595,Regular,2026-11-05T17:30:00+00:00,56.08,Al-Qadisiyah,Al-Fayha,1,total,,under,1.5,1.7353,225
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639529595,Regular,2026-11-05T17:30:00+00:00,56.08,Al-Qadisiyah,Al-Fayha,0,moneyline,,home,,1.5208,675
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639529595,Regular,2026-11-05T17:30:00+00:00,56.08,Al-Qadisiyah,Al-Fayha,0,moneyline,,away,,6.55,675
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639529595,Regular,2026-11-05T17:30:00+00:00,56.08,Al-Qadisiyah,Al-Fayha,0,moneyline,,draw,,3.01,675
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639529595,Regular,2026-11-05T17:30:00+00:00,56.08,Al-Qadisiyah,Al-Fayha,0,team_total,home,over,2.5,2.02,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639529595,Regular,2026-11-05T17:30:00+00:00,56.08,Al-Qadisiyah,Al-Fayha,0,team_total,home,under,2.5,1.6211,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639529595,Regular,2026-11-05T17:30:00+00:00,56.08,Al-Qadisiyah,Al-Fayha,0,team_total,away,over,1.5,2.57,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639529595,Regular,2026-11-05T17:30:00+00:00,56.08,Al-Qadisiyah,Al-Fayha,0,team_total,away,under,1.5,1.3861,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639529595,Regular,2026-11-05T17:30:00+00:00,56.08,Al-Qadisiyah,Al-Fayha,0,spread,,home,-1.0,1.7937,675
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639529595,Regular,2026-11-05T17:30:00+00:00,56.08,Al-Qadisiyah,Al-Fayha,0,spread,,away,1.0,1.8333,675
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639529595,Regular,2026-11-05T17:30:00+00:00,56.08,Al-Qadisiyah,Al-Fayha,0,total,,over,3.5,1.7353,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639529595,Regular,2026-11-05T17:30:00+00:00,56.08,Al-Qadisiyah,Al-Fayha,0,total,,under,3.5,1.885,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639620636,Regular,2026-11-06T17:30:00+00:00,80.08,Al-Ittihad,Neom,0,moneyline,,home,,1.9709,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639620636,Regular,2026-11-06T17:30:00+00:00,80.08,Al-Ittihad,Neom,0,moneyline,,away,,3.99,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639620636,Regular,2026-11-06T17:30:00+00:00,80.08,Al-Ittihad,Neom,0,moneyline,,draw,,3.24,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639620636,Regular,2026-11-06T17:30:00+00:00,80.08,Al-Ittihad,Neom,0,team_total,home,over,1.5,1.8065,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639620636,Regular,2026-11-06T17:30:00+00:00,80.08,Al-Ittihad,Neom,0,team_total,home,under,1.5,1.9524,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639620636,Regular,2026-11-06T17:30:00+00:00,80.08,Al-Ittihad,Neom,0,team_total,away,over,1.5,2.75,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639620636,Regular,2026-11-06T17:30:00+00:00,80.08,Al-Ittihad,Neom,0,team_total,away,under,1.5,1.4237,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639620636,Regular,2026-11-06T17:30:00+00:00,80.08,Al-Ittihad,Neom,0,spread,,home,-0.5,1.9804,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639620636,Regular,2026-11-06T17:30:00+00:00,80.08,Al-Ittihad,Neom,0,spread,,away,0.5,1.8264,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639620636,Regular,2026-11-06T17:30:00+00:00,80.08,Al-Ittihad,Neom,0,total,,over,2.75,1.8475,300
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639620636,Regular,2026-11-06T17:30:00+00:00,80.08,Al-Ittihad,Neom,0,total,,under,2.75,1.9346,300
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639620636,Regular,2026-11-06T17:30:00+00:00,80.08,Al-Ittihad,Neom,1,moneyline,,home,,2.42,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639620636,Regular,2026-11-06T17:30:00+00:00,80.08,Al-Ittihad,Neom,1,moneyline,,away,,4.13,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639620636,Regular,2026-11-06T17:30:00+00:00,80.08,Al-Ittihad,Neom,1,moneyline,,draw,,2.4,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639620636,Regular,2026-11-06T17:30:00+00:00,80.08,Al-Ittihad,Neom,1,team_total,home,over,0.5,1.6897,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639620636,Regular,2026-11-06T17:30:00+00:00,80.08,Al-Ittihad,Neom,1,team_total,home,under,0.5,2.07,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639620636,Regular,2026-11-06T17:30:00+00:00,80.08,Al-Ittihad,Neom,1,team_total,away,over,0.5,2.28,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639620636,Regular,2026-11-06T17:30:00+00:00,80.08,Al-Ittihad,Neom,1,team_total,away,under,0.5,1.5714,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639620636,Regular,2026-11-06T17:30:00+00:00,80.08,Al-Ittihad,Neom,1,spread,,home,-0.25,1.9524,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639620636,Regular,2026-11-06T17:30:00+00:00,80.08,Al-Ittihad,Neom,1,spread,,away,0.25,1.8197,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639620636,Regular,2026-11-06T17:30:00+00:00,80.08,Al-Ittihad,Neom,1,total,,over,1.25,2.03,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639620636,Regular,2026-11-06T17:30:00+00:00,80.08,Al-Ittihad,Neom,1,total,,under,1.25,1.7299,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639701771,Regular,2026-11-07T13:20:00+00:00,99.91,Al-Faisaly,Al Diriyah,0,moneyline,,home,,3.41,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639701771,Regular,2026-11-07T13:20:00+00:00,99.91,Al-Faisaly,Al Diriyah,0,moneyline,,away,,2.05,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639701771,Regular,2026-11-07T13:20:00+00:00,99.91,Al-Faisaly,Al Diriyah,0,moneyline,,draw,,3.53,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639701771,Regular,2026-11-07T13:20:00+00:00,99.91,Al-Faisaly,Al Diriyah,0,team_total,home,over,1.5,2.72,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639701771,Regular,2026-11-07T13:20:00+00:00,99.91,Al-Faisaly,Al Diriyah,0,team_total,home,under,1.5,1.4329,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639701771,Regular,2026-11-07T13:20:00+00:00,99.91,Al-Faisaly,Al Diriyah,0,team_total,away,over,1.5,1.9259,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639701771,Regular,2026-11-07T13:20:00+00:00,99.91,Al-Faisaly,Al Diriyah,0,team_total,away,under,1.5,1.8333,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639701771,Regular,2026-11-07T13:20:00+00:00,99.91,Al-Faisaly,Al Diriyah,0,spread,,home,0.25,2.03,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639701771,Regular,2026-11-07T13:20:00+00:00,99.91,Al-Faisaly,Al Diriyah,0,spread,,away,-0.25,1.7812,450
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639701771,Regular,2026-11-07T13:20:00+00:00,99.91,Al-Faisaly,Al Diriyah,0,total,,over,2.75,1.9434,300
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639701771,Regular,2026-11-07T13:20:00+00:00,99.91,Al-Faisaly,Al Diriyah,0,total,,under,2.75,1.8475,300
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639701771,Regular,2026-11-07T13:20:00+00:00,99.91,Al-Faisaly,Al Diriyah,1,moneyline,,home,,3.9,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639701771,Regular,2026-11-07T13:20:00+00:00,99.91,Al-Faisaly,Al Diriyah,1,moneyline,,away,,2.6,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639701771,Regular,2026-11-07T13:20:00+00:00,99.91,Al-Faisaly,Al Diriyah,1,moneyline,,draw,,2.32,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639701771,Regular,2026-11-07T13:20:00+00:00,99.91,Al-Faisaly,Al Diriyah,1,team_total,home,over,0.5,2.25,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639701771,Regular,2026-11-07T13:20:00+00:00,99.91,Al-Faisaly,Al Diriyah,1,team_total,home,under,0.5,1.5882,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639701771,Regular,2026-11-07T13:20:00+00:00,99.91,Al-Faisaly,Al Diriyah,1,team_total,away,over,0.5,1.7874,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639701771,Regular,2026-11-07T13:20:00+00:00,99.91,Al-Faisaly,Al Diriyah,1,team_total,away,under,0.5,1.9434,100
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639701771,Regular,2026-11-07T13:20:00+00:00,99.91,Al-Faisaly,Al Diriyah,1,spread,,home,0.25,1.7194,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639701771,Regular,2026-11-07T13:20:00+00:00,99.91,Al-Faisaly,Al Diriyah,1,spread,,away,-0.25,2.08,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639701771,Regular,2026-11-07T13:20:00+00:00,99.91,Al-Faisaly,Al Diriyah,1,total,,over,1.0,1.6711,150
+2026-11-03T09:25:19.980917+00:00,soccer,ksa,1639701771,Regular,2026-11-07T13:20:00+00:00,99.91,Al-Faisaly,Al Diriyah,1,total,,under,1.0,2.12,150
+2026-11-03T09:25:19.980917+00:00,soccer,jpn,1639677570,Regular,2026-11-07T07:00:00+00:00,93.58,Kashiwa Reysol,Kawasaki Frontale,0,moneyline,,home,,2.23,600
+2026-11-03T09:25:19.980917+00:00,soccer,jpn,1639677570,Regular,2026-11-07T07:00:00+00:00,93.58,Kashiwa Reysol,Kawasaki Frontale,0,moneyline,,away,,2.92,600
+2026-11-03T09:25:19.980917+00:00,soccer,jpn,1639677570,Regular,2026-11-07T07:00:00+00:00,93.58,Kashiwa Reysol,Kawasaki Frontale,0,moneyline,,draw,,3.88,600
+2026-11-03T09:25:19.980917+00:00,soccer,jpn,1639677570,Regular,2026-11-07T07:00:00+00:00,93.58,Kashiwa Reysol,Kawasaki Frontale,0,team_total,home,over,1.5,1.7692,100
+2026-11-03T09:25:19.980917+00:00,soccer,jpn,1639677570,Regular,2026-11-07T07:00:00+00:00,93.58,Kashiwa Reysol,Kawasaki Frontale,0,team_total,home,under,1.5,2.05,100
+2026-11-03T09:25:19.980917+00:00,soccer,jpn,1639677570,Regular,2026-11-07T07:00:00+00:00,93.58,Kashiwa Reysol,Kawasaki Frontale,0,team_total,away,over,1.5,2.06,100
+2026-11-03T09:25:19.980917+00:00,soccer,jpn,1639677570,Regular,2026-11-07T07:00:00+00:00,93.58,Kashiwa Reysol,Kawasaki Frontale,0,team_total,away,under,1.5,1.7634,100
+2026-11-03T09:25:19.980917+00:00,soccer,jpn,1639677570,Regular,2026-11-07T07:00:00+00:00,93.58,Kashiwa Reysol,Kawasaki Frontale,0,spread,,home,-0.25,1.9709,600
+2026-11-03T09:25:19.980917+00:00,soccer,jpn,1639677570,Regular,2026-11-07T07:00:00+00:00,93.58,Kashiwa Reysol,Kawasaki Frontale,0,spread,,away,0.25,1.885,600
+2026-11-03T09:25:19.980917+00:00,soccer,jpn,1639677570,Regular,2026-11-07T07:00:00+00:00,93.58,Kashiwa Reysol,Kawasaki Frontale,1,moneyline,,home,,2.7,200
+2026-11-03T09:25:19.980917+00:00,soccer,jpn,1639677570,Regular,2026-11-07T07:00:00+00:00,93.58,Kashiwa Reysol,Kawasaki Frontale,1,moneyline,,away,,3.37,200
+2026-11-03T09:25:19.980917+00:00,soccer,jpn,1639677570,Regular,2026-11-07T07:00:00+00:00,93.58,Kashiwa Reysol,Kawasaki Frontale,1,team_total,home,over,0.5,1.6993,100
+2026-11-03T09:25:19.980917+00:00,soccer,jpn,1639677570,Regular,2026-11-07T07:00:00+00:00,93.58,Kashiwa Reysol,Kawasaki Frontale,1,team_total,home,under,0.5,2.12,100
+2026-11-03T09:25:19.980917+00:00,soccer,jpn,1639677570,Regular,2026-11-07T07:00:00+00:00,93.58,Kashiwa Reysol,Kawasaki Frontale,1,team_total,away,over,0.5,1.9009,100
+2026-11-03T09:25:19.980917+00:00,soccer,jpn,1639677570,Regular,2026-11-07T07:00:00+00:00,93.58,Kashiwa Reysol,Kawasaki Frontale,1,team_total,away,under,0.5,1.8696,100
+2026-11-03T09:25:19.980917+00:00,soccer,jpn,1639677570,Regular,2026-11-07T07:00:00+00:00,93.58,Kashiwa Reysol,Kawasaki Frontale,1,spread,,home,0.0,1.7143,200
+2026-11-03T09:25:19.980917+00:00,soccer,jpn,1639677570,Regular,2026-11-07T07:00:00+00:00,93.58,Kashiwa Reysol,Kawasaki Frontale,1,spread,,away,-0.0,2.15,200
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000194,Regular,2026-11-05T17:45:00+00:00,56.33,Lincoln Red Imps,Hajduk Split,0,moneyline,,home,,8.07,450
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000194,Regular,2026-11-05T17:45:00+00:00,56.33,Lincoln Red Imps,Hajduk Split,0,moneyline,,away,,1.3676,450
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000194,Regular,2026-11-05T17:45:00+00:00,56.33,Lincoln Red Imps,Hajduk Split,0,moneyline,,draw,,4.87,450
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000194,Regular,2026-11-05T17:45:00+00:00,56.33,Lincoln Red Imps,Hajduk Split,0,team_total,home,over,0.5,1.885,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000194,Regular,2026-11-05T17:45:00+00:00,56.33,Lincoln Red Imps,Hajduk Split,0,team_total,home,under,0.5,1.9009,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000194,Regular,2026-11-05T17:45:00+00:00,56.33,Lincoln Red Imps,Hajduk Split,0,team_total,away,over,2.5,2.58,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000194,Regular,2026-11-05T17:45:00+00:00,56.33,Lincoln Red Imps,Hajduk Split,0,team_total,away,under,2.5,1.4926,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000194,Regular,2026-11-05T17:45:00+00:00,56.33,Lincoln Red Imps,Hajduk Split,0,spread,,home,1.25,2.03,450
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000194,Regular,2026-11-05T17:45:00+00:00,56.33,Lincoln Red Imps,Hajduk Split,0,spread,,away,-1.25,1.8197,450
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000194,Regular,2026-11-05T17:45:00+00:00,56.33,Lincoln Red Imps,Hajduk Split,0,total,,over,2.75,1.9346,350
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000194,Regular,2026-11-05T17:45:00+00:00,56.33,Lincoln Red Imps,Hajduk Split,0,total,,under,2.75,1.885,350
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000194,Regular,2026-11-05T17:45:00+00:00,56.33,Lincoln Red Imps,Hajduk Split,1,moneyline,,home,,8.43,150
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000194,Regular,2026-11-05T17:45:00+00:00,56.33,Lincoln Red Imps,Hajduk Split,1,moneyline,,away,,1.7299,150
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000194,Regular,2026-11-05T17:45:00+00:00,56.33,Lincoln Red Imps,Hajduk Split,1,moneyline,,draw,,2.7,150
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000194,Regular,2026-11-05T17:45:00+00:00,56.33,Lincoln Red Imps,Hajduk Split,1,team_total,home,over,0.5,3.71,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000194,Regular,2026-11-05T17:45:00+00:00,56.33,Lincoln Red Imps,Hajduk Split,1,team_total,home,under,0.5,1.2577,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000194,Regular,2026-11-05T17:45:00+00:00,56.33,Lincoln Red Imps,Hajduk Split,1,team_total,away,over,0.5,1.4566,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000194,Regular,2026-11-05T17:45:00+00:00,56.33,Lincoln Red Imps,Hajduk Split,1,team_total,away,under,0.5,2.64,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000194,Regular,2026-11-05T17:45:00+00:00,56.33,Lincoln Red Imps,Hajduk Split,1,spread,,home,0.75,1.7634,150
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000194,Regular,2026-11-05T17:45:00+00:00,56.33,Lincoln Red Imps,Hajduk Split,1,spread,,away,-0.75,2.06,150
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000194,Regular,2026-11-05T17:45:00+00:00,56.33,Lincoln Red Imps,Hajduk Split,1,total,,over,1.25,2.06,150
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000194,Regular,2026-11-05T17:45:00+00:00,56.33,Lincoln Red Imps,Hajduk Split,1,total,,under,1.25,1.7353,150
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000200,Regular,2026-11-05T17:45:00+00:00,56.33,AGF,Braga,0,moneyline,,home,,3.78,450
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000200,Regular,2026-11-05T17:45:00+00:00,56.33,AGF,Braga,0,moneyline,,away,,2.05,450
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000200,Regular,2026-11-05T17:45:00+00:00,56.33,AGF,Braga,0,moneyline,,draw,,3.31,450
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000200,Regular,2026-11-05T17:45:00+00:00,56.33,AGF,Braga,0,team_total,home,over,0.5,1.4255,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000200,Regular,2026-11-05T17:45:00+00:00,56.33,AGF,Braga,0,team_total,home,under,0.5,2.82,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000200,Regular,2026-11-05T17:45:00+00:00,56.33,AGF,Braga,0,team_total,away,over,1.5,2.04,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000200,Regular,2026-11-05T17:45:00+00:00,56.33,AGF,Braga,0,team_total,away,under,1.5,1.7634,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000200,Regular,2026-11-05T17:45:00+00:00,56.33,AGF,Braga,0,spread,,home,0.5,1.7937,450
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000200,Regular,2026-11-05T17:45:00+00:00,56.33,AGF,Braga,0,spread,,away,-0.5,2.06,450
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000200,Regular,2026-11-05T17:45:00+00:00,56.33,AGF,Braga,1,moneyline,,home,,4.45,150
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000200,Regular,2026-11-05T17:45:00+00:00,56.33,AGF,Braga,1,moneyline,,away,,2.57,150
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000200,Regular,2026-11-05T17:45:00+00:00,56.33,AGF,Braga,1,moneyline,,draw,,2.23,150
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000200,Regular,2026-11-05T17:45:00+00:00,56.33,AGF,Braga,1,team_total,home,over,0.5,2.56,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000200,Regular,2026-11-05T17:45:00+00:00,56.33,AGF,Braga,1,team_total,home,under,0.5,1.4808,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000200,Regular,2026-11-05T17:45:00+00:00,56.33,AGF,Braga,1,team_total,away,over,0.5,1.8547,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000200,Regular,2026-11-05T17:45:00+00:00,56.33,AGF,Braga,1,team_total,away,under,0.5,1.9009,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000200,Regular,2026-11-05T17:45:00+00:00,56.33,AGF,Braga,1,spread,,home,0.25,1.7874,150
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000200,Regular,2026-11-05T17:45:00+00:00,56.33,AGF,Braga,1,spread,,away,-0.25,2.03,150
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639000200,Regular,2026-11-05T17:45:00+00:00,56.33,AGF,Braga,1,total,,over,1.0,1.8696,150
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639013936,Regular,2026-11-05T17:45:00+00:00,56.33,Mjallby,Borac Banja Luka,0,moneyline,,home,,2.31,450
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639013936,Regular,2026-11-05T17:45:00+00:00,56.33,Mjallby,Borac Banja Luka,0,moneyline,,away,,3.27,450
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639013936,Regular,2026-11-05T17:45:00+00:00,56.33,Mjallby,Borac Banja Luka,0,team_total,home,over,1.5,2.39,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639013936,Regular,2026-11-05T17:45:00+00:00,56.33,Mjallby,Borac Banja Luka,0,team_total,home,under,1.5,1.5682,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639013936,Regular,2026-11-05T17:45:00+00:00,56.33,Mjallby,Borac Banja Luka,0,team_total,away,over,0.5,1.4149,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639013936,Regular,2026-11-05T17:45:00+00:00,56.33,Mjallby,Borac Banja Luka,0,team_total,away,under,0.5,2.86,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639013936,Regular,2026-11-05T17:45:00+00:00,56.33,Mjallby,Borac Banja Luka,0,spread,,home,-0.25,1.9709,450
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639013936,Regular,2026-11-05T17:45:00+00:00,56.33,Mjallby,Borac Banja Luka,0,spread,,away,0.25,1.8621,450
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639013936,Regular,2026-11-05T17:45:00+00:00,56.33,Mjallby,Borac Banja Luka,0,total,,under,2.25,1.9615,350
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639013936,Regular,2026-11-05T17:45:00+00:00,56.33,Mjallby,Borac Banja Luka,1,moneyline,,home,,2.95,150
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639013936,Regular,2026-11-05T17:45:00+00:00,56.33,Mjallby,Borac Banja Luka,1,moneyline,,away,,3.94,150
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639013936,Regular,2026-11-05T17:45:00+00:00,56.33,Mjallby,Borac Banja Luka,1,moneyline,,draw,,2.13,150
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639013936,Regular,2026-11-05T17:45:00+00:00,56.33,Mjallby,Borac Banja Luka,1,team_total,home,over,0.5,2.06,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639013936,Regular,2026-11-05T17:45:00+00:00,56.33,Mjallby,Borac Banja Luka,1,team_total,home,under,0.5,1.7246,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639013936,Regular,2026-11-05T17:45:00+00:00,56.33,Mjallby,Borac Banja Luka,1,team_total,away,over,0.5,2.45,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639013936,Regular,2026-11-05T17:45:00+00:00,56.33,Mjallby,Borac Banja Luka,1,team_total,away,under,0.5,1.5181,100
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639013936,Regular,2026-11-05T17:45:00+00:00,56.33,Mjallby,Borac Banja Luka,1,spread,,home,0.0,1.6494,150
+2026-11-03T09:25:19.980917+00:00,soccer,uecl,1639013936,Regular,2026-11-05T17:45:00+00:00,56.33,Mjallby,Borac Banja Luka,1,spread,,away,-0.0,2.24,150
+2026-11-03T09:25:19.980917+00:00,soccer,cdr,1639481856,Regular,2026-11-03T18:00:00+00:00,8.58,Pamplona,Eibar,8,moneyline,,home,,6.98,50
+2026-11-03T09:25:19.980917+00:00,soccer,cdr,1639481856,Regular,2026-11-03T18:00:00+00:00,8.58,Pamplona,Eibar,8,moneyline,,away,,1.0605,50
+2026-11-03T09:25:19.980917+00:00,soccer,cdr,1639481856,Regular,2026-11-03T18:00:00+00:00,8.58,Pamplona,Eibar,0,moneyline,,home,,8.95,125
+2026-11-03T09:25:19.980917+00:00,soccer,cdr,1639481856,Regular,2026-11-03T18:00:00+00:00,8.58,Pamplona,Eibar,0,moneyline,,away,,1.1764,125
+2026-11-03T09:25:19.980917+00:00,soccer,cdr,1639481856,Regular,2026-11-03T18:00:00+00:00,8.58,Pamplona,Eibar,0,moneyline,,draw,,5.31,125
+2026-11-03T09:25:19.980917+00:00,soccer,cdr,1639481856,Regular,2026-11-03T18:00:00+00:00,8.58,Pamplona,Eibar,0,team_total,home,over,0.5,2.25,50
+2026-11-03T09:25:19.980917+00:00,soccer,cdr,1639481856,Regular,2026-11-03T18:00:00+00:00,8.58,Pamplona,Eibar,0,team_total,home,under,0.5,1.5076,50
+2026-11-03T09:25:19.980917+00:00,soccer,cdr,1639481856,Regular,2026-11-03T18:00:00+00:00,8.58,Pamplona,Eibar,0,team_total,away,over,2.5,2.12,50
+2026-11-03T09:25:19.980917+00:00,soccer,cdr,1639481856,Regular,2026-11-03T18:00:00+00:00,8.58,Pamplona,Eibar,0,team_total,away,under,2.5,1.5848,50
+2026-11-03T09:25:19.980917+00:00,soccer,cdr,1639481856,Regular,2026-11-03T18:00:00+00:00,8.58,Pamplona,Eibar,0,spread,,home,1.75,1.8475,125
+2026-11-03T09:25:19.980917+00:00,soccer,cdr,1639481856,Regular,2026-11-03T18:00:00+00:00,8.58,Pamplona,Eibar,0,spread,,away,-1.75,1.7937,125
+2026-11-03T09:25:19.980917+00:00,soccer,cdr,1639481856,Regular,2026-11-03T18:00:00+00:00,8.58,Pamplona,Eibar,0,total,,over,2.75,1.8547,125
+2026-11-03T09:25:19.980917+00:00,soccer,cdr,1639481856,Regular,2026-11-03T18:00:00+00:00,8.58,Pamplona,Eibar,0,total,,under,2.75,1.7812,125
+2026-11-03T09:25:19.980917+00:00,soccer,cdr,1639481856,Regular,2026-11-03T18:00:00+00:00,8.58,Pamplona,Eibar,1,spread,,home,0.75,1.8547,50
+2026-11-03T09:25:19.980917+00:00,soccer,cdr,1639481856,Regular,2026-11-03T18:00:00+00:00,8.58,Pamplona,Eibar,1,spread,,away,-0.75,1.7692,50
+2026-11-03T09:25:19.980917+00:00,soccer,cdr,1639481856,Regular,2026-11-03T18:00:00+00:00,8.58,Pamplona,Eibar,1,total,,over,1.25,1.9709,50
+2026-11-03T09:25:19.980917+00:00,soccer,cdr,1639481856,Regular,2026-11-03T18:00:00+00:00,8.58,Pamplona,Eibar,1,total,,under,1.25,1.6757,50
