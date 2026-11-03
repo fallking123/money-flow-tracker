@@ -1,10 +1,10 @@
 {
- "updated_utc": "2026-11-02T22:21Z",
+ "updated_utc": "2026-11-03T01:49Z",
  "season": "2026-27",
  "rule": "模型比 Pinnacle 多看好 15%–30%",
- "games": 216,
- "games_settled": 212,
- "picks": 10,
+ "games": 223,
+ "games_settled": 215,
+ "picks": 11,
  "clv": [
   -0.03,
   0.0148,
@@ -16,6 +16,21 @@
   10
  ],
  "move_toward": 90,
- "move_away": 75,
- "pending": []
+ "move_away": 77,
+ "pending": [
+  {
+   "game_id": "1639394512",
+   "date": "2026-11-03",
+   "home": "NJD",
+   "away": "EDM",
+   "decided_utc": "2026-11-03T01:49Z",
+   "how": "實戰",
+   "p_model": 0.4823,
+   "odds_home": 1.6803,
+   "odds_away": 2.3,
+   "fair_home_dec": 0.5778,
+   "pick": "away",
+   "edge": 0.1907
+  }
+ ]
 }
