@@ -4541,83 +4541,64 @@ timestamp_utc,sport,league,pin_id,units,game_time_utc,hours_until_game,home_team
 2026-11-04T01:00:11.270314+00:00,nfl,nfl,1639104450,Regular,2026-11-08T18:00:00+00:00,113.0,Kansas City Chiefs,New York Jets,1,team_total,away,under,7.5,1.8929,500
 2026-11-04T01:00:11.270314+00:00,nfl,nfl,1639104450,Regular,2026-11-08T18:00:00+00:00,113.0,Kansas City Chiefs,New York Jets,1,total,,over,23.0,1.8264,500
 2026-11-04T01:00:11.270314+00:00,nfl,nfl,1639104450,Regular,2026-11-08T18:00:00+00:00,113.0,Kansas City Chiefs,New York Jets,1,total,,under,23.0,2.05,500
-2026-11-04T01:40:08.554857+00:00,nfl,nfl,1639081939,Regular,2026-11-08T18:00:00+00:00,112.33,Carolina Panthers,Denver Broncos,0,moneyline,,home,,2.34,10000
-2026-11-04T01:40:08.554857+00:00,nfl,nfl,1639081939,Regular,2026-11-08T18:00:00+00:00,112.33,Carolina Panthers,Denver Broncos,0,moneyline,,away,,1.6452,10000
-2026-11-04T01:40:08.554857+00:00,nfl,nfl,1639081939,Regular,2026-11-08T18:00:00+00:00,112.33,Carolina Panthers,Denver Broncos,0,team_total,home,over,20.5,1.885,2000
-2026-11-04T01:40:08.554857+00:00,nfl,nfl,1639081939,Regular,2026-11-08T18:00:00+00:00,112.33,Carolina Panthers,Denver Broncos,0,team_total,home,under,20.5,1.9709,2000
-2026-11-04T01:40:08.554857+00:00,nfl,nfl,1639081939,Regular,2026-11-08T18:00:00+00:00,112.33,Carolina Panthers,Denver Broncos,0,spread,,home,3.0,1.8547,20000
-2026-11-04T01:40:08.554857+00:00,nfl,nfl,1639081939,Regular,2026-11-08T18:00:00+00:00,112.33,Carolina Panthers,Denver Broncos,0,spread,,away,-3.0,2.04,20000
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639127322,Regular,2026-11-09T01:20:00+00:00,119.5,Chicago Bears,Tampa Bay Buccaneers,1,team_total,home,over,13.5,1.8772,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639127322,Regular,2026-11-09T01:20:00+00:00,119.5,Chicago Bears,Tampa Bay Buccaneers,1,team_total,home,under,13.5,2.0,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639127322,Regular,2026-11-09T01:20:00+00:00,119.5,Chicago Bears,Tampa Bay Buccaneers,1,team_total,away,over,9.5,1.8929,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639127322,Regular,2026-11-09T01:20:00+00:00,119.5,Chicago Bears,Tampa Bay Buccaneers,1,team_total,away,under,9.5,1.9804,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639127322,Regular,2026-11-09T01:20:00+00:00,119.5,Chicago Bears,Tampa Bay Buccaneers,1,total,,over,23.0,1.885,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639127322,Regular,2026-11-09T01:20:00+00:00,119.5,Chicago Bears,Tampa Bay Buccaneers,1,total,,under,23.0,1.9804,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,115.58,Seattle Seahawks,Arizona Cardinals,3,team_total,home,over,6.5,1.7752,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,115.58,Seattle Seahawks,Arizona Cardinals,3,team_total,home,under,6.5,2.1,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,115.58,Seattle Seahawks,Arizona Cardinals,3,team_total,away,over,0.5,2.26,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,115.58,Seattle Seahawks,Arizona Cardinals,3,team_total,away,under,0.5,1.6757,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,115.58,Seattle Seahawks,Arizona Cardinals,3,spread,,away,3.0,2.05,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,115.58,Seattle Seahawks,Arizona Cardinals,3,total,,over,7.5,2.02,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,115.58,Seattle Seahawks,Arizona Cardinals,3,total,,under,7.5,1.8403,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,115.58,Seattle Seahawks,Arizona Cardinals,1,team_total,home,over,14.5,2.14,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,115.58,Seattle Seahawks,Arizona Cardinals,1,team_total,home,under,14.5,1.7634,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,115.58,Seattle Seahawks,Arizona Cardinals,1,team_total,away,over,7.5,2.58,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,115.58,Seattle Seahawks,Arizona Cardinals,1,team_total,away,under,7.5,1.5435,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,115.58,Seattle Seahawks,Arizona Cardinals,1,total,,over,22.5,2.07,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,115.58,Seattle Seahawks,Arizona Cardinals,1,total,,under,22.5,1.813,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,115.58,Seattle Seahawks,Arizona Cardinals,0,team_total,home,over,27.5,1.9174,2000
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,115.58,Seattle Seahawks,Arizona Cardinals,0,team_total,home,under,27.5,1.9346,2000
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,115.58,Seattle Seahawks,Arizona Cardinals,0,team_total,away,over,16.5,2.24,2000
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,115.58,Seattle Seahawks,Arizona Cardinals,0,team_total,away,under,16.5,1.6849,2000
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,115.58,Seattle Seahawks,Arizona Cardinals,0,total,,over,42.5,2.04,5000
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,115.58,Seattle Seahawks,Arizona Cardinals,0,total,,under,42.5,1.8333,5000
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639104450,Regular,2026-11-08T18:00:00+00:00,112.16,Kansas City Chiefs,New York Jets,3,team_total,home,over,6.5,1.7042,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639104450,Regular,2026-11-08T18:00:00+00:00,112.16,Kansas City Chiefs,New York Jets,3,team_total,home,under,6.5,2.21,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639104450,Regular,2026-11-08T18:00:00+00:00,112.16,Kansas City Chiefs,New York Jets,3,team_total,away,over,0.5,1.8403,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639104450,Regular,2026-11-08T18:00:00+00:00,112.16,Kansas City Chiefs,New York Jets,3,team_total,away,under,0.5,2.02,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639104450,Regular,2026-11-08T18:00:00+00:00,112.16,Kansas City Chiefs,New York Jets,3,spread,,away,3.0,1.9901,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639104450,Regular,2026-11-08T18:00:00+00:00,112.16,Kansas City Chiefs,New York Jets,3,total,,over,9.5,1.9091,500
-2026-11-04T01:50:08.616185+00:00,nfl,nfl,1639104450,Regular,2026-11-08T18:00:00+00:00,112.16,Kansas City Chiefs,New York Jets,3,total,,under,9.5,1.9434,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.91,Seattle Seahawks,Arizona Cardinals,0,team_total,home,over,27.5,1.9434,2000
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.91,Seattle Seahawks,Arizona Cardinals,0,team_total,home,under,27.5,1.9091,2000
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.91,Seattle Seahawks,Arizona Cardinals,0,team_total,away,over,16.5,2.27,2000
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.91,Seattle Seahawks,Arizona Cardinals,0,team_total,away,under,16.5,1.6667,2000
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.91,Seattle Seahawks,Arizona Cardinals,0,spread,,home,-13.0,2.02,20000
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.91,Seattle Seahawks,Arizona Cardinals,0,total,,over,41.5,1.9434,5000
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.91,Seattle Seahawks,Arizona Cardinals,0,total,,under,41.5,1.9259,5000
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.91,Seattle Seahawks,Arizona Cardinals,1,team_total,home,over,14.5,2.16,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.91,Seattle Seahawks,Arizona Cardinals,1,team_total,home,under,14.5,1.7519,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.91,Seattle Seahawks,Arizona Cardinals,1,team_total,away,over,7.5,2.6,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.91,Seattle Seahawks,Arizona Cardinals,1,team_total,away,under,7.5,1.5319,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.91,Seattle Seahawks,Arizona Cardinals,1,spread,,home,-7.0,1.9174,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.91,Seattle Seahawks,Arizona Cardinals,1,spread,,away,7.0,1.9709,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.91,Seattle Seahawks,Arizona Cardinals,1,total,,over,22.5,2.1,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.91,Seattle Seahawks,Arizona Cardinals,1,total,,under,22.5,1.7937,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.91,Seattle Seahawks,Arizona Cardinals,3,team_total,home,over,6.5,1.7874,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.91,Seattle Seahawks,Arizona Cardinals,3,team_total,home,under,6.5,2.09,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.91,Seattle Seahawks,Arizona Cardinals,3,team_total,away,over,0.5,2.27,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.91,Seattle Seahawks,Arizona Cardinals,3,team_total,away,under,0.5,1.6711,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.91,Seattle Seahawks,Arizona Cardinals,3,spread,,home,-3.0,1.8333,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.91,Seattle Seahawks,Arizona Cardinals,3,spread,,away,3.0,2.04,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.91,Seattle Seahawks,Arizona Cardinals,3,total,,over,7.5,2.04,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.91,Seattle Seahawks,Arizona Cardinals,3,total,,under,7.5,1.8264,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.75,Minnesota Vikings,Buffalo Bills,0,team_total,home,over,21.5,2.13,2000
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.75,Minnesota Vikings,Buffalo Bills,0,team_total,home,under,21.5,1.7519,2000
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.75,Minnesota Vikings,Buffalo Bills,0,team_total,away,over,24.5,2.08,2000
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.75,Minnesota Vikings,Buffalo Bills,0,team_total,away,under,24.5,1.7937,2000
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.75,Minnesota Vikings,Buffalo Bills,0,total,,over,45.5,1.9804,3000
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.75,Minnesota Vikings,Buffalo Bills,0,total,,under,45.5,1.8929,3000
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.75,Minnesota Vikings,Buffalo Bills,3,team_total,home,over,3.5,2.31,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.75,Minnesota Vikings,Buffalo Bills,3,team_total,home,under,3.5,1.6494,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.75,Minnesota Vikings,Buffalo Bills,3,team_total,away,over,3.5,1.9009,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.75,Minnesota Vikings,Buffalo Bills,3,team_total,away,under,3.5,1.9524,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.75,Minnesota Vikings,Buffalo Bills,3,spread,,home,0.5,1.7407,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.75,Minnesota Vikings,Buffalo Bills,3,total,,over,9.5,2.02,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.75,Minnesota Vikings,Buffalo Bills,3,total,,under,9.5,1.8403,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.75,Minnesota Vikings,Buffalo Bills,1,team_total,home,over,9.5,1.7937,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.75,Minnesota Vikings,Buffalo Bills,1,team_total,home,under,9.5,2.1,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.75,Minnesota Vikings,Buffalo Bills,1,team_total,away,over,12.5,1.9009,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.75,Minnesota Vikings,Buffalo Bills,1,team_total,away,under,12.5,1.9709,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.75,Minnesota Vikings,Buffalo Bills,1,total,,over,23.0,2.01,500
-2026-11-04T02:30:08.157950+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.75,Minnesota Vikings,Buffalo Bills,1,total,,under,23.0,1.8621,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.76,Seattle Seahawks,Arizona Cardinals,0,team_total,home,over,27.5,1.9434,2000
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.76,Seattle Seahawks,Arizona Cardinals,0,team_total,home,under,27.5,1.9091,2000
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.76,Seattle Seahawks,Arizona Cardinals,0,team_total,away,over,16.5,2.27,2000
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.76,Seattle Seahawks,Arizona Cardinals,0,team_total,away,under,16.5,1.6667,2000
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.76,Seattle Seahawks,Arizona Cardinals,0,spread,,home,-13.0,2.02,20000
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.76,Seattle Seahawks,Arizona Cardinals,0,total,,over,41.5,1.9434,5000
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.76,Seattle Seahawks,Arizona Cardinals,0,total,,under,41.5,1.9259,5000
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.76,Seattle Seahawks,Arizona Cardinals,1,team_total,home,over,14.5,2.16,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.76,Seattle Seahawks,Arizona Cardinals,1,team_total,home,under,14.5,1.7519,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.76,Seattle Seahawks,Arizona Cardinals,1,team_total,away,over,7.5,2.6,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.76,Seattle Seahawks,Arizona Cardinals,1,team_total,away,under,7.5,1.5319,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.76,Seattle Seahawks,Arizona Cardinals,1,spread,,home,-7.0,1.9174,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.76,Seattle Seahawks,Arizona Cardinals,1,spread,,away,7.0,1.9709,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.76,Seattle Seahawks,Arizona Cardinals,1,total,,over,22.5,2.1,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.76,Seattle Seahawks,Arizona Cardinals,1,total,,under,22.5,1.7937,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.76,Seattle Seahawks,Arizona Cardinals,3,team_total,home,over,6.5,1.7874,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.76,Seattle Seahawks,Arizona Cardinals,3,team_total,home,under,6.5,2.09,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.76,Seattle Seahawks,Arizona Cardinals,3,team_total,away,over,0.5,2.27,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.76,Seattle Seahawks,Arizona Cardinals,3,team_total,away,under,0.5,1.6711,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.76,Seattle Seahawks,Arizona Cardinals,3,spread,,home,-3.0,1.8333,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.76,Seattle Seahawks,Arizona Cardinals,3,spread,,away,3.0,2.04,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.76,Seattle Seahawks,Arizona Cardinals,3,total,,over,7.5,2.04,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639120017,Regular,2026-11-08T21:25:00+00:00,114.76,Seattle Seahawks,Arizona Cardinals,3,total,,under,7.5,1.8264,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639104450,Regular,2026-11-08T18:00:00+00:00,111.34,Kansas City Chiefs,New York Jets,3,team_total,home,over,6.5,1.7042,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639104450,Regular,2026-11-08T18:00:00+00:00,111.34,Kansas City Chiefs,New York Jets,3,team_total,home,under,6.5,2.21,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639104450,Regular,2026-11-08T18:00:00+00:00,111.34,Kansas City Chiefs,New York Jets,3,team_total,away,over,0.5,1.8403,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639104450,Regular,2026-11-08T18:00:00+00:00,111.34,Kansas City Chiefs,New York Jets,3,team_total,away,under,0.5,2.02,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639104450,Regular,2026-11-08T18:00:00+00:00,111.34,Kansas City Chiefs,New York Jets,3,spread,,away,3.0,1.9901,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639104450,Regular,2026-11-08T18:00:00+00:00,111.34,Kansas City Chiefs,New York Jets,3,total,,over,9.5,1.9091,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639104450,Regular,2026-11-08T18:00:00+00:00,111.34,Kansas City Chiefs,New York Jets,3,total,,under,9.5,1.9434,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639081939,Regular,2026-11-08T18:00:00+00:00,111.34,Carolina Panthers,Denver Broncos,0,moneyline,,home,,2.34,10000
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639081939,Regular,2026-11-08T18:00:00+00:00,111.34,Carolina Panthers,Denver Broncos,0,moneyline,,away,,1.6452,10000
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639081939,Regular,2026-11-08T18:00:00+00:00,111.34,Carolina Panthers,Denver Broncos,0,team_total,home,over,20.5,1.885,2000
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639081939,Regular,2026-11-08T18:00:00+00:00,111.34,Carolina Panthers,Denver Broncos,0,team_total,home,under,20.5,1.9709,2000
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639081939,Regular,2026-11-08T18:00:00+00:00,111.34,Carolina Panthers,Denver Broncos,0,spread,,home,3.0,1.8547,20000
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639081939,Regular,2026-11-08T18:00:00+00:00,111.34,Carolina Panthers,Denver Broncos,0,spread,,away,-3.0,2.04,20000
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639127322,Regular,2026-11-09T01:20:00+00:00,118.68,Chicago Bears,Tampa Bay Buccaneers,1,team_total,home,over,13.5,1.8772,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639127322,Regular,2026-11-09T01:20:00+00:00,118.68,Chicago Bears,Tampa Bay Buccaneers,1,team_total,home,under,13.5,2.0,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639127322,Regular,2026-11-09T01:20:00+00:00,118.68,Chicago Bears,Tampa Bay Buccaneers,1,team_total,away,over,9.5,1.8929,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639127322,Regular,2026-11-09T01:20:00+00:00,118.68,Chicago Bears,Tampa Bay Buccaneers,1,team_total,away,under,9.5,1.9804,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639127322,Regular,2026-11-09T01:20:00+00:00,118.68,Chicago Bears,Tampa Bay Buccaneers,1,total,,over,23.0,1.885,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639127322,Regular,2026-11-09T01:20:00+00:00,118.68,Chicago Bears,Tampa Bay Buccaneers,1,total,,under,23.0,1.9804,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.59,Minnesota Vikings,Buffalo Bills,0,team_total,home,over,21.5,2.13,2000
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.59,Minnesota Vikings,Buffalo Bills,0,team_total,home,under,21.5,1.7519,2000
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.59,Minnesota Vikings,Buffalo Bills,0,team_total,away,over,24.5,2.08,2000
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.59,Minnesota Vikings,Buffalo Bills,0,team_total,away,under,24.5,1.7937,2000
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.59,Minnesota Vikings,Buffalo Bills,0,total,,over,45.5,1.9804,3000
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.59,Minnesota Vikings,Buffalo Bills,0,total,,under,45.5,1.8929,3000
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.59,Minnesota Vikings,Buffalo Bills,3,team_total,home,over,3.5,2.31,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.59,Minnesota Vikings,Buffalo Bills,3,team_total,home,under,3.5,1.6494,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.59,Minnesota Vikings,Buffalo Bills,3,team_total,away,over,3.5,1.9009,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.59,Minnesota Vikings,Buffalo Bills,3,team_total,away,under,3.5,1.9524,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.59,Minnesota Vikings,Buffalo Bills,3,spread,,home,0.5,1.7407,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.59,Minnesota Vikings,Buffalo Bills,3,total,,over,9.5,2.02,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.59,Minnesota Vikings,Buffalo Bills,3,total,,under,9.5,1.8403,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.59,Minnesota Vikings,Buffalo Bills,1,team_total,home,over,9.5,1.7937,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.59,Minnesota Vikings,Buffalo Bills,1,team_total,home,under,9.5,2.1,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.59,Minnesota Vikings,Buffalo Bills,1,team_total,away,over,12.5,1.9009,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.59,Minnesota Vikings,Buffalo Bills,1,team_total,away,under,12.5,1.9709,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.59,Minnesota Vikings,Buffalo Bills,1,total,,over,23.0,2.01,500
+2026-11-04T02:39:19.227482+00:00,nfl,nfl,1639235117,Regular,2026-11-10T01:15:00+00:00,142.59,Minnesota Vikings,Buffalo Bills,1,total,,under,23.0,1.8621,500
