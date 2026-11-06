@@ -1,10 +1,10 @@
 {
- "updated_utc": "2026-11-06T10:53Z",
+ "updated_utc": "2026-11-06T19:58Z",
  "season": "2026-27",
  "rule": "模型比 Pinnacle 多看好 15%–30%",
- "games": 243,
+ "games": 252,
  "games_settled": 240,
- "picks": 13,
+ "picks": 14,
  "clv": [
   -0.0348,
   0.0127,
@@ -43,12 +43,30 @@
    "away": "ANA",
    "decided_utc": "2026-11-06T10:53Z",
    "how": "實戰",
-   "p_model": 0.4298,
-   "odds_home": 1.8065,
-   "odds_away": 2.1,
-   "fair_home_dec": 0.5376,
+   "p_model": "0.4298",
+   "odds_home": "1.8065",
+   "odds_away": "2.1",
+   "fair_home_dec": "0.5376",
    "pick": "away",
-   "edge": 0.1975
+   "edge": "0.1975",
+   "close_fair_home": "",
+   "clv": "",
+   "result": "",
+   "profit": ""
+  },
+  {
+   "game_id": "1639746939",
+   "date": "2026-11-07",
+   "home": "OTT",
+   "away": "UTA",
+   "decided_utc": "2026-11-06T19:58Z",
+   "how": "實戰",
+   "p_model": 0.5662,
+   "odds_home": 2.07,
+   "odds_away": 1.8333,
+   "fair_home_dec": 0.4697,
+   "pick": "home",
+   "edge": 0.172
   }
  ]
 }
