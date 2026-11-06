@@ -1,10 +1,10 @@
 {
- "updated_utc": "2026-11-06T00:34Z",
+ "updated_utc": "2026-11-06T10:53Z",
  "season": "2026-27",
  "rule": "模型比 Pinnacle 多看好 15%–30%",
- "games": 241,
- "games_settled": 239,
- "picks": 12,
+ "games": 243,
+ "games_settled": 240,
+ "picks": 13,
  "clv": [
   -0.0348,
   0.0127,
@@ -15,7 +15,7 @@
   0.2527,
   11
  ],
- "move_toward": 101,
+ "move_toward": 102,
  "move_away": 86,
  "pending": [
   {
@@ -35,6 +35,20 @@
    "clv": "-0.0609",
    "result": "",
    "profit": ""
+  },
+  {
+   "game_id": "1639653305",
+   "date": "2026-11-06",
+   "home": "CGY",
+   "away": "ANA",
+   "decided_utc": "2026-11-06T10:53Z",
+   "how": "實戰",
+   "p_model": 0.4298,
+   "odds_home": 1.8065,
+   "odds_away": 2.1,
+   "fair_home_dec": 0.5376,
+   "pick": "away",
+   "edge": 0.1975
   }
  ]
 }
