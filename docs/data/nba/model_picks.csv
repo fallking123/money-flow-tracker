@@ -1929,111 +1929,123 @@ nba,nba,sr:match:73719560,2026-11-08T03:00Z,San Antonio Spurs,Portland Trail Bla
 nba,nba,sr:match:73719560,2026-11-08T03:00Z,San Antonio Spurs,Portland Trail Blazers,馬刺,拓荒者,model3_pin,away,馬刺,0.6657,0.6607,1.4739,1.4739,pin,-0.0188,2.67,2026-11-08T00:30Z,win,1.4739,pin,0.4739,
 nba,nba,sr:match:73719560,2026-11-08T03:00Z,San Antonio Spurs,Portland Trail Blazers,馬刺,拓荒者,model3_pin_tw,away,馬刺,0.6657,0.6607,1.4808,1.34,est,-0.0188,2.67,2026-11-08T00:30Z,win,1.34,est,0.34,1.301
 nba,nba,sr:match:73719560,2026-11-08T03:00Z,San Antonio Spurs,Portland Trail Blazers,馬刺,拓荒者,underdog,home,拓荒者,0.3343,0.3393,2.72,2.356,est,-0.2124,2.67,2026-11-08T00:30Z,loss,2.356,est,-1.0,
-nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,favorite,away,七六人,0.778,0.7729,1.2132,1.141,est,-0.1123,0.17,2026-11-08T20:20Z,,,,,
-nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model1,home,公牛,0.222,0.2271,4.6,3.407,est,-0.2436,0.17,2026-11-08T20:20Z,,,,,4.042
-nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model1_all_tw,ml|home|,獨贏・公牛,0.222,0.222,4.6,3.407,est,0.0212,0.17,2026-11-08T20:20Z,,,,,
-nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model1_all_us,ml|home|,獨贏・公牛,0.222,0.222,4.6,4.6,us,0.0212,0.17,2026-11-08T20:20Z,,,,,
-nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model1_ou_tw,ou|over|237.5,大小・大 237.5,0.5,0.5,1.9091,1.702,est,-0.0454,0.17,2026-11-08T20:20Z,,,,,
-nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model1_ou_us,ou|over|237.5,大小・大 237.5,0.5,0.5,1.9091,1.9091,us,-0.0454,0.17,2026-11-08T20:20Z,,,,,
-nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model1_sp_tw,sp|home|9.5,讓分・公牛 +9.5,0.5139,0.5139,1.9524,1.721,est,0.0034,0.17,2026-11-08T20:20Z,,,,,
-nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model1_sp_us,sp|home|9.5,讓分・公牛 +9.5,0.5139,0.5139,1.9524,1.9524,us,0.0034,0.17,2026-11-08T20:20Z,,,,,
-nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model1_us,home,公牛,0.222,0.2271,4.6,4.6,us,0.0212,0.17,2026-11-08T20:20Z,,,,,
-nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model1_us_tw,home,公牛,0.222,0.2271,4.6,3.407,est,0.0212,0.17,2026-11-08T20:20Z,,,,,
-nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model3,away,七六人,0.778,0.7729,1.2132,1.141,est,-0.1123,0.17,2026-11-08T20:20Z,,,,,1.066
-nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model3_pin,away,七六人,0.778,0.7729,1.2632,1.2632,pin,-0.0172,0.17,2026-11-08T20:20Z,,,,,
-nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model3_pin_tw,away,七六人,0.778,0.7729,1.2132,1.141,est,-0.0172,0.17,2026-11-08T20:20Z,,,,,1.066
-nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,underdog,home,公牛,0.222,0.2271,4.6,3.407,est,-0.2436,0.17,2026-11-08T20:20Z,,,,,
-nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,favorite,home,活塞,0.6886,0.6895,1.3717,1.273,est,-0.1234,2,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model1,away,湖人,0.3114,0.3105,3.2,2.608,est,-0.1879,2,2026-11-08T21:00Z,,,,,2.812
-nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model1_all_tw,ml|away|,獨贏・湖人,0.3114,0.3114,3.2,2.608,est,-0.0035,2,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model1_all_us,ml|away|,獨贏・湖人,0.3114,0.3114,3.2,3.2,us,-0.0035,2,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model1_ou_tw,ou|over|217.5,大小・大 217.5,0.5,0.5,1.9091,1.709,est,-0.0454,2,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model1_ou_us,ou|over|217.5,大小・大 217.5,0.5,0.5,1.9091,1.9091,us,-0.0454,2,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model1_sp_tw,sp|away|6.5,讓分・湖人 +6.5,0.5,0.5,1.9091,1.717,est,-0.0454,2,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model1_sp_us,sp|away|6.5,讓分・湖人 +6.5,0.5,0.5,1.9091,1.9091,us,-0.0454,2,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model1_us,away,湖人,0.3114,0.3105,3.2,3.2,us,-0.0035,2,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model1_us_tw,away,湖人,0.3114,0.3105,3.2,2.608,est,-0.0035,2,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model3,home,活塞,0.6886,0.6895,1.3717,1.273,est,-0.1234,2,2026-11-08T21:00Z,,,,,1.205
-nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model3_pin,away,湖人,0.3114,0.3105,3.15,3.15,pin,-0.0191,2,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model3_pin_tw,away,湖人,0.3114,0.3105,3.2,2.608,est,-0.0191,2,2026-11-08T21:00Z,,,,,2.812
-nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,underdog,away,湖人,0.3114,0.3105,3.2,2.608,est,-0.1879,2,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,favorite,home,灰狼,0.8276,0.8268,1.1541,1.069,est,-0.1153,3.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model1,away,爵士,0.1724,0.1732,5.75,4.138,est,-0.2866,3.17,2026-11-08T21:00Z,,,,,5.052
-nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model1_all_tw,ml|away|,獨贏・爵士,0.1724,0.1724,5.75,4.138,est,-0.0087,3.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model1_all_us,ml|away|,獨贏・爵士,0.1724,0.1724,5.75,5.75,us,-0.0087,3.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model1_ou_tw,ou|over|222.5,大小・大 222.5,0.5,0.5,1.9091,1.717,est,-0.0454,3.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model1_ou_us,ou|over|222.5,大小・大 222.5,0.5,0.5,1.9091,1.9091,us,-0.0454,3.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model1_sp_tw,sp|away|11.5,讓分・爵士 +11.5,0.5,0.5,1.9091,1.732,est,-0.0454,3.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model1_sp_us,sp|away|11.5,讓分・爵士 +11.5,0.5,0.5,1.9091,1.9091,us,-0.0454,3.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model1_us,away,爵士,0.1724,0.1732,5.75,5.75,us,-0.0087,3.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model1_us_tw,away,爵士,0.1724,0.1732,5.75,4.138,est,-0.0087,3.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model3,home,灰狼,0.8276,0.8268,1.1541,1.069,est,-0.1153,3.17,2026-11-08T21:00Z,,,,,1.014
-nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model3_pin,home,灰狼,0.8276,0.8268,1.1645,1.1645,pin,-0.0363,3.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model3_pin_tw,home,灰狼,0.8276,0.8268,1.1541,1.069,est,-0.0363,3.17,2026-11-08T21:00Z,,,,,1.014
-nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,underdog,away,爵士,0.1724,0.1732,5.75,4.138,est,-0.2866,3.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,favorite,home,獨行俠,0.7244,0.7248,1.3279,1.22,est,-0.1162,3.67,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model1,home,獨行俠,0.7244,0.7248,1.3279,1.22,est,-0.1162,3.67,2026-11-08T21:00Z,,,,,1.167
-nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model1_all_tw,sp|away|7.5,讓分・籃網 +7.5,0.5139,0.5139,1.885,1.702,est,-0.0312,3.67,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model1_all_us,sp|away|7.5,讓分・籃網 +7.5,0.5139,0.5139,1.885,1.885,us,-0.0312,3.67,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model1_ou_tw,ou|over|223.5,大小・大 223.5,0.5,0.5,1.9091,1.724,est,-0.0454,3.67,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model1_ou_us,ou|over|223.5,大小・大 223.5,0.5,0.5,1.9091,1.9091,us,-0.0454,3.67,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model1_sp_tw,sp|away|7.5,讓分・籃網 +7.5,0.5139,0.5139,1.885,1.702,est,-0.0312,3.67,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model1_sp_us,sp|away|7.5,讓分・籃網 +7.5,0.5139,0.5139,1.885,1.885,us,-0.0312,3.67,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model1_us,home,獨行俠,0.7244,0.7248,1.3279,1.3279,us,-0.0381,3.67,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model1_us_tw,home,獨行俠,0.7244,0.7248,1.3279,1.22,est,-0.0381,3.67,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model3,home,獨行俠,0.7244,0.7248,1.3279,1.22,est,-0.1162,3.67,2026-11-08T21:00Z,,,,,1.167
-nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model3_pin,away,籃網,0.2756,0.2752,3.53,3.53,pin,-0.0271,3.67,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model3_pin_tw,away,籃網,0.2756,0.2752,3.4,2.834,est,-0.0271,3.67,2026-11-08T21:00Z,,,,,2.987
-nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,underdog,away,籃網,0.2756,0.2752,3.4,2.834,est,-0.2189,3.67,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,favorite,away,塞爾提克,0.8519,0.8474,1.133,1.056,est,-0.1004,4.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model1,away,塞爾提克,0.8519,0.8474,1.133,1.056,est,-0.1004,4.17,2026-11-08T21:00Z,,,,,0.995
-nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model1_all_tw,ml|away|,獨贏・塞爾提克,0.8519,0.8519,1.133,1.056,est,-0.0348,4.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model1_all_us,ml|away|,獨贏・塞爾提克,0.8519,0.8519,1.133,1.133,us,-0.0348,4.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model1_ou_tw,ou|over|222.5,大小・大 222.5,0.5,0.5,1.9259,1.748,est,-0.0371,4.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model1_ou_us,ou|over|222.5,大小・大 222.5,0.5,0.5,1.9259,1.9259,us,-0.0371,4.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model1_sp_tw,sp|away|-12.5,讓分・塞爾提克 -12.5,0.5173,0.5173,1.8547,1.681,est,-0.0406,4.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model1_sp_us,sp|away|-12.5,讓分・塞爾提克 -12.5,0.5173,0.5173,1.8547,1.8547,us,-0.0406,4.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model1_us,away,塞爾提克,0.8519,0.8474,1.133,1.133,us,-0.0348,4.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model1_us_tw,away,塞爾提克,0.8519,0.8474,1.133,1.056,est,-0.0348,4.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model3,away,塞爾提克,0.8519,0.8474,1.133,1.056,est,-0.1004,4.17,2026-11-08T21:00Z,,,,,0.995
-nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model3_pin,away,塞爾提克,0.8519,0.8474,1.1433,1.1433,pin,-0.026,4.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model3_pin_tw,away,塞爾提克,0.8519,0.8474,1.133,1.056,est,-0.026,4.17,2026-11-08T21:00Z,,,,,0.995
-nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,underdog,home,公鹿,0.1481,0.1526,6.25,4.403,est,-0.3479,4.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,favorite,away,鵜鶘,0.528,0.5242,1.8333,1.603,est,-0.1536,5.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,model1,away,鵜鶘,0.528,0.5242,1.8333,1.603,est,-0.1536,5.17,2026-11-08T21:00Z,,,,,1.611
-nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,model1_all_tw,ml|away|,獨贏・鵜鶘,0.528,0.528,1.8333,1.603,est,-0.032,5.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,model1_all_us,ml|away|,獨贏・鵜鶘,0.528,0.528,1.8333,1.8333,us,-0.032,5.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,model1_ou_tw,ou|under|226.5,大小・小 226.5,0.5043,0.5043,1.8929,1.695,est,-0.0454,5.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,model1_ou_us,ou|under|226.5,大小・小 226.5,0.5043,0.5043,1.8929,1.8929,us,-0.0454,5.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,model1_sp_tw,sp|away|-1.5,讓分・鵜鶘 -1.5,0.5,0.5,1.9091,1.709,est,-0.0454,5.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,model1_sp_us,sp|away|-1.5,讓分・鵜鶘 -1.5,0.5,0.5,1.9091,1.9091,us,-0.0454,5.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,model1_us,away,鵜鶘,0.528,0.5242,1.8333,1.8333,us,-0.032,5.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,model1_us_tw,away,鵜鶘,0.528,0.5242,1.8333,1.603,est,-0.032,5.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,model3,home,快艇,0.472,0.4758,2.02,1.798,est,-0.1513,5.17,2026-11-08T21:00Z,,,,,1.775
-nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,underdog,home,快艇,0.472,0.4758,2.02,1.798,est,-0.1513,5.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,favorite,away,熱火,0.7862,0.7811,1.2242,1.138,est,-0.1053,5.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model1,away,熱火,0.7862,0.7811,1.2242,1.138,est,-0.1053,5.17,2026-11-08T21:00Z,,,,,1.076
-nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model1_all_tw,ml|away|,獨贏・熱火,0.7862,0.7862,1.2242,1.138,est,-0.0375,5.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model1_all_us,ml|away|,獨贏・熱火,0.7862,0.7862,1.2242,1.2242,us,-0.0375,5.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model1_ou_tw,ou|over|237.5,大小・大 237.5,0.5,0.5,1.9091,1.668,est,-0.0454,5.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model1_ou_us,ou|over|237.5,大小・大 237.5,0.5,0.5,1.9091,1.9091,us,-0.0454,5.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model1_sp_tw,sp|away|-10.5,讓分・熱火 -10.5,0.5,0.5,1.9091,1.724,est,-0.0454,5.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model1_sp_us,sp|away|-10.5,讓分・熱火 -10.5,0.5,0.5,1.9091,1.9091,us,-0.0454,5.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model1_us,away,熱火,0.7862,0.7811,1.2242,1.2242,us,-0.0375,5.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model1_us_tw,away,熱火,0.7862,0.7811,1.2242,1.138,est,-0.0375,5.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model3,away,熱火,0.7862,0.7811,1.2242,1.138,est,-0.1053,5.17,2026-11-08T21:00Z,,,,,1.076
-nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model3_pin,away,熱火,0.7862,0.7811,1.2415,1.2415,pin,-0.0239,5.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model3_pin_tw,away,熱火,0.7862,0.7811,1.2242,1.138,est,-0.0239,5.17,2026-11-08T21:00Z,,,,,1.076
-nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,underdog,home,國王,0.2138,0.2189,4.4,3.391,est,-0.275,5.17,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,favorite,home,火箭,0.6135,0.6155,1.5618,1.411,est,-0.1344,29.5,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,model1,away,金塊,0.3865,0.3845,2.5,2.135,est,-0.1748,29.5,2026-11-08T21:00Z,,,,,2.197
-nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,model1_all_tw,ml|away|,獨贏・金塊,0.3865,0.3865,2.5,2.135,est,-0.0337,29.5,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,model1_all_us,ml|away|,獨贏・金塊,0.3865,0.3865,2.5,2.5,us,-0.0337,29.5,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,model1_ou_tw,ou|under|222.5,大小・小 222.5,0.5108,0.5108,1.8696,1.681,est,-0.0449,29.5,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,model1_ou_us,ou|under|222.5,大小・小 222.5,0.5108,0.5108,1.8696,1.8696,us,-0.0449,29.5,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,model1_sp_tw,sp|away|4.5,讓分・金塊 +4.5,0.5108,0.5108,1.8696,1.681,est,-0.0449,29.5,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,model1_sp_us,sp|away|4.5,讓分・金塊 +4.5,0.5108,0.5108,1.8696,1.8696,us,-0.0449,29.5,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,model1_us,away,金塊,0.3865,0.3845,2.5,2.5,us,-0.0337,29.5,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,model1_us_tw,away,金塊,0.3865,0.3845,2.5,2.135,est,-0.0337,29.5,2026-11-08T21:00Z,,,,,
-nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,model3,home,火箭,0.6135,0.6155,1.5618,1.411,est,-0.1344,29.5,2026-11-08T21:00Z,,,,,1.372
-nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,underdog,away,金塊,0.3865,0.3845,2.5,2.135,est,-0.1748,29.5,2026-11-08T21:00Z,,,,,
+nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,favorite,away,七六人,0.7992,0.7942,1.2268,1.129,est,-0.0977,1,2026-11-08T19:30Z,,,,,
+nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model1,away,七六人,0.7992,0.7942,1.2268,1.129,est,-0.0977,1,2026-11-08T19:30Z,,,,,1.078
+nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model1_all_tw,ml|away|,獨贏・七六人,0.7992,0.7992,1.2268,1.129,est,-0.0195,1,2026-11-08T19:30Z,,,,,
+nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model1_all_us,ml|away|,獨贏・七六人,0.7992,0.7992,1.2268,1.2268,us,-0.0195,1,2026-11-08T19:30Z,,,,,
+nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model1_ou_tw,ou|over|238.5,大小・大 238.5,0.5,0.5,1.9091,1.717,est,-0.0454,1,2026-11-08T19:30Z,,,,,
+nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model1_ou_us,ou|over|238.5,大小・大 238.5,0.5,0.5,1.9091,1.9091,us,-0.0454,1,2026-11-08T19:30Z,,,,,
+nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model1_sp_tw,sp|away|-9.5,讓分・七六人 -9.5,0.5162,0.5162,1.8696,1.699,est,-0.0348,1,2026-11-08T19:30Z,,,,,
+nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model1_sp_us,sp|away|-9.5,讓分・七六人 -9.5,0.5162,0.5162,1.8696,1.8696,us,-0.0348,1,2026-11-08T19:30Z,,,,,
+nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model1_us,away,七六人,0.7992,0.7942,1.2268,1.2268,us,-0.0195,1,2026-11-08T19:30Z,,,,,
+nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model1_us_tw,away,七六人,0.7992,0.7942,1.2268,1.129,est,-0.0195,1,2026-11-08T19:30Z,,,,,
+nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model3,away,七六人,0.7992,0.7942,1.2268,1.129,est,-0.0977,1,2026-11-08T19:30Z,,,,,1.078
+nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model3_pin,away,七六人,0.7992,0.7942,1.2208,1.2208,pin,-0.0243,1,2026-11-08T19:30Z,,,,,
+nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,model3_pin_tw,away,七六人,0.7992,0.7942,1.2268,1.129,est,-0.0243,1,2026-11-08T19:30Z,,,,,1.078
+nba,nba,sr:match:73719562,2026-11-08T20:30Z,Philadelphia 76ers,Chicago Bulls,七六人,公牛,underdog,home,公牛,0.2008,0.2058,4.41,3.47,est,-0.3032,1,2026-11-08T19:30Z,,,,,
+nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,favorite,home,活塞,0.6886,0.6895,1.3717,1.273,est,-0.1234,1.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model1,away,湖人,0.3114,0.3105,3.2,2.608,est,-0.1879,1.98,2026-11-08T21:01Z,,,,,2.812
+nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model1_all_tw,ml|away|,獨贏・湖人,0.3114,0.3114,3.2,2.608,est,-0.0035,1.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model1_all_us,ml|away|,獨贏・湖人,0.3114,0.3114,3.2,3.2,us,-0.0035,1.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model1_ou_tw,ou|over|217.5,大小・大 217.5,0.5,0.5,1.9091,1.709,est,-0.0454,1.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model1_ou_us,ou|over|217.5,大小・大 217.5,0.5,0.5,1.9091,1.9091,us,-0.0454,1.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model1_sp_tw,sp|away|6.5,讓分・湖人 +6.5,0.5,0.5,1.9091,1.717,est,-0.0454,1.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model1_sp_us,sp|away|6.5,讓分・湖人 +6.5,0.5,0.5,1.9091,1.9091,us,-0.0454,1.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model1_us,away,湖人,0.3114,0.3105,3.2,3.2,us,-0.0035,1.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model1_us_tw,away,湖人,0.3114,0.3105,3.2,2.608,est,-0.0035,1.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model3,home,活塞,0.6886,0.6895,1.3717,1.273,est,-0.1234,1.98,2026-11-08T21:01Z,,,,,1.205
+nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model3_pin,away,湖人,0.3114,0.3105,3.15,3.15,pin,-0.0191,1.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,model3_pin_tw,away,湖人,0.3114,0.3105,3.2,2.608,est,-0.0191,1.98,2026-11-08T21:01Z,,,,,2.812
+nba,nba,sr:match:73719564,2026-11-08T23:00Z,Los Angeles Lakers,Detroit Pistons,湖人,活塞,underdog,away,湖人,0.3114,0.3105,3.2,2.608,est,-0.1879,1.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,favorite,home,灰狼,0.8276,0.8268,1.1541,1.069,est,-0.1153,2.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model1,away,爵士,0.1724,0.1732,5.75,4.138,est,-0.2866,2.98,2026-11-08T21:01Z,,,,,5.052
+nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model1_all_tw,ml|away|,獨贏・爵士,0.1724,0.1724,5.75,4.138,est,-0.0087,2.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model1_all_us,ml|away|,獨贏・爵士,0.1724,0.1724,5.75,5.75,us,-0.0087,2.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model1_ou_tw,ou|over|222.5,大小・大 222.5,0.5,0.5,1.9091,1.717,est,-0.0454,2.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model1_ou_us,ou|over|222.5,大小・大 222.5,0.5,0.5,1.9091,1.9091,us,-0.0454,2.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model1_sp_tw,sp|away|11.5,讓分・爵士 +11.5,0.4935,0.4935,1.9346,1.74,est,-0.0453,2.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model1_sp_us,sp|away|11.5,讓分・爵士 +11.5,0.4935,0.4935,1.9346,1.9346,us,-0.0453,2.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model1_us,away,爵士,0.1724,0.1732,5.75,5.75,us,-0.0087,2.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model1_us_tw,away,爵士,0.1724,0.1732,5.75,4.138,est,-0.0087,2.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model3,home,灰狼,0.8276,0.8268,1.1541,1.069,est,-0.1153,2.98,2026-11-08T21:01Z,,,,,1.014
+nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model3_pin,home,灰狼,0.8276,0.8268,1.1645,1.1645,pin,-0.0363,2.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,model3_pin_tw,home,灰狼,0.8276,0.8268,1.1541,1.069,est,-0.0363,2.98,2026-11-08T21:01Z,,,,,1.014
+nba,nba,sr:match:73719566,2026-11-09T00:00Z,Utah Jazz,Minnesota Timberwolves,爵士,灰狼,underdog,away,爵士,0.1724,0.1732,5.75,4.138,est,-0.2866,2.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,favorite,home,獨行俠,0.7244,0.7248,1.3279,1.22,est,-0.1162,3.48,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model1,home,獨行俠,0.7244,0.7248,1.3279,1.22,est,-0.1162,3.48,2026-11-08T21:01Z,,,,,1.167
+nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model1_all_tw,sp|away|7.5,讓分・籃網 +7.5,0.5139,0.5139,1.885,1.702,est,-0.0312,3.48,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model1_all_us,sp|away|7.5,讓分・籃網 +7.5,0.5139,0.5139,1.885,1.885,us,-0.0312,3.48,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model1_ou_tw,ou|over|223.5,大小・大 223.5,0.5,0.5,1.9091,1.724,est,-0.0454,3.48,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model1_ou_us,ou|over|223.5,大小・大 223.5,0.5,0.5,1.9091,1.9091,us,-0.0454,3.48,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model1_sp_tw,sp|away|7.5,讓分・籃網 +7.5,0.5139,0.5139,1.885,1.702,est,-0.0312,3.48,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model1_sp_us,sp|away|7.5,讓分・籃網 +7.5,0.5139,0.5139,1.885,1.885,us,-0.0312,3.48,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model1_us,home,獨行俠,0.7244,0.7248,1.3279,1.3279,us,-0.0381,3.48,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model1_us_tw,home,獨行俠,0.7244,0.7248,1.3279,1.22,est,-0.0381,3.48,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model3,home,獨行俠,0.7244,0.7248,1.3279,1.22,est,-0.1162,3.48,2026-11-08T21:01Z,,,,,1.167
+nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model3_pin,away,籃網,0.2756,0.2752,3.53,3.53,pin,-0.0271,3.48,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,model3_pin_tw,away,籃網,0.2756,0.2752,3.4,2.834,est,-0.0271,3.48,2026-11-08T21:01Z,,,,,2.987
+nba,nba,sr:match:73719568,2026-11-09T00:30Z,Brooklyn Nets,Dallas Mavericks,籃網,獨行俠,underdog,away,籃網,0.2756,0.2752,3.4,2.834,est,-0.2189,3.48,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,favorite,away,塞爾提克,0.8519,0.8474,1.133,1.056,est,-0.1004,3.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model1,away,塞爾提克,0.8519,0.8474,1.133,1.056,est,-0.1004,3.98,2026-11-08T21:01Z,,,,,0.995
+nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model1_all_tw,ou|over|222.5,大小・大 222.5,0.5,0.5,1.9434,1.752,est,-0.0283,3.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model1_all_us,ou|over|222.5,大小・大 222.5,0.5,0.5,1.9434,1.9434,us,-0.0283,3.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model1_ou_tw,ou|over|222.5,大小・大 222.5,0.5,0.5,1.9434,1.752,est,-0.0283,3.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model1_ou_us,ou|over|222.5,大小・大 222.5,0.5,0.5,1.9434,1.9434,us,-0.0283,3.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model1_sp_tw,sp|away|-12.5,讓分・塞爾提克 -12.5,0.5173,0.5173,1.8475,1.675,est,-0.0443,3.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model1_sp_us,sp|away|-12.5,讓分・塞爾提克 -12.5,0.5173,0.5173,1.8475,1.8475,us,-0.0443,3.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model1_us,away,塞爾提克,0.8519,0.8474,1.133,1.133,us,-0.0348,3.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model1_us_tw,away,塞爾提克,0.8519,0.8474,1.133,1.056,est,-0.0348,3.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model3,away,塞爾提克,0.8519,0.8474,1.133,1.056,est,-0.1004,3.98,2026-11-08T21:01Z,,,,,0.995
+nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model3_pin,away,塞爾提克,0.8519,0.8474,1.1433,1.1433,pin,-0.026,3.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,model3_pin_tw,away,塞爾提克,0.8519,0.8474,1.133,1.056,est,-0.026,3.98,2026-11-08T21:01Z,,,,,0.995
+nba,nba,sr:match:73719570,2026-11-09T01:00Z,Boston Celtics,Milwaukee Bucks,塞爾提克,公鹿,underdog,home,公鹿,0.1481,0.1526,6.25,4.403,est,-0.3479,3.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,favorite,away,鵜鶘,0.528,0.5242,1.8333,1.603,est,-0.1536,4.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,model1,away,鵜鶘,0.528,0.5242,1.8333,1.603,est,-0.1536,4.98,2026-11-08T21:01Z,,,,,1.611
+nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,model1_all_tw,ml|away|,獨贏・鵜鶘,0.528,0.528,1.8333,1.603,est,-0.032,4.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,model1_all_us,ml|away|,獨贏・鵜鶘,0.528,0.528,1.8333,1.8333,us,-0.032,4.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,model1_ou_tw,ou|under|226.5,大小・小 226.5,0.5043,0.5043,1.8929,1.695,est,-0.0454,4.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,model1_ou_us,ou|under|226.5,大小・小 226.5,0.5043,0.5043,1.8929,1.8929,us,-0.0454,4.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,model1_sp_tw,sp|away|-1.5,讓分・鵜鶘 -1.5,0.5,0.5,1.9091,1.709,est,-0.0454,4.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,model1_sp_us,sp|away|-1.5,讓分・鵜鶘 -1.5,0.5,0.5,1.9091,1.9091,us,-0.0454,4.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,model1_us,away,鵜鶘,0.528,0.5242,1.8333,1.8333,us,-0.032,4.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,model1_us_tw,away,鵜鶘,0.528,0.5242,1.8333,1.603,est,-0.032,4.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,model3,home,快艇,0.472,0.4758,2.02,1.798,est,-0.1513,4.98,2026-11-08T21:01Z,,,,,1.775
+nba,nba,sr:match:73719572,2026-11-09T02:00Z,New Orleans Pelicans,LA Clippers,鵜鶘,快艇,underdog,home,快艇,0.472,0.4758,2.02,1.798,est,-0.1513,4.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,favorite,away,熱火,0.7862,0.7811,1.2242,1.138,est,-0.1053,4.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model1,away,熱火,0.7862,0.7811,1.2242,1.138,est,-0.1053,4.98,2026-11-08T21:01Z,,,,,1.076
+nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model1_all_tw,ml|away|,獨贏・熱火,0.7862,0.7862,1.2242,1.138,est,-0.0375,4.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model1_all_us,ml|away|,獨贏・熱火,0.7862,0.7862,1.2242,1.2242,us,-0.0375,4.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model1_ou_tw,ou|over|237.5,大小・大 237.5,0.4935,0.4935,1.9346,1.748,est,-0.0453,4.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model1_ou_us,ou|over|237.5,大小・大 237.5,0.4935,0.4935,1.9346,1.9346,us,-0.0453,4.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model1_sp_tw,sp|home|10.5,讓分・國王 +10.5,0.5022,0.5022,1.9009,1.709,est,-0.0454,4.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model1_sp_us,sp|home|10.5,讓分・國王 +10.5,0.5022,0.5022,1.9009,1.9009,us,-0.0454,4.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model1_us,away,熱火,0.7862,0.7811,1.2242,1.2242,us,-0.0375,4.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model1_us_tw,away,熱火,0.7862,0.7811,1.2242,1.138,est,-0.0375,4.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model3,away,熱火,0.7862,0.7811,1.2242,1.138,est,-0.1053,4.98,2026-11-08T21:01Z,,,,,1.076
+nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model3_pin,away,熱火,0.7862,0.7811,1.2415,1.2415,pin,-0.0239,4.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,model3_pin_tw,away,熱火,0.7862,0.7811,1.2242,1.138,est,-0.0239,4.98,2026-11-08T21:01Z,,,,,1.076
+nba,nba,sr:match:73719574,2026-11-09T02:00Z,Miami Heat,Sacramento Kings,熱火,國王,underdog,home,國王,0.2138,0.2189,4.4,3.391,est,-0.275,4.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,favorite,home,火箭,0.6077,0.6097,1.5747,1.422,est,-0.1359,28.48,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,model1,away,金塊,0.3923,0.3903,2.46,2.106,est,-0.1738,28.48,2026-11-08T21:01Z,,,,,2.161
+nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,model1_all_tw,ml|away|,獨贏・金塊,0.3923,0.3923,2.46,2.106,est,-0.0349,28.48,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,model1_all_us,ml|away|,獨贏・金塊,0.3923,0.3923,2.46,2.46,us,-0.0349,28.48,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,model1_ou_tw,ou|over|222.5,大小・大 222.5,0.5,0.5,1.9091,1.717,est,-0.0454,28.48,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,model1_ou_us,ou|over|222.5,大小・大 222.5,0.5,0.5,1.9091,1.9091,us,-0.0454,28.48,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,model1_sp_tw,sp|away|4.5,讓分・金塊 +4.5,0.5,0.5,1.9091,1.717,est,-0.0454,28.48,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,model1_sp_us,sp|away|4.5,讓分・金塊 +4.5,0.5,0.5,1.9091,1.9091,us,-0.0454,28.48,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,model1_us,away,金塊,0.3923,0.3903,2.46,2.46,us,-0.0349,28.48,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,model1_us_tw,away,金塊,0.3923,0.3903,2.46,2.106,est,-0.0349,28.48,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,model3,home,火箭,0.6077,0.6097,1.5747,1.422,est,-0.1359,28.48,2026-11-08T21:01Z,,,,,1.384
+nba,nba,sr:match:73719586,2026-11-10T01:30Z,Denver Nuggets,Houston Rockets,金塊,火箭,underdog,away,金塊,0.3923,0.3903,2.46,2.106,est,-0.1738,28.48,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719588,2026-11-10T02:00Z,San Antonio Spurs,Phoenix Suns,馬刺,太陽,favorite,away,馬刺,0.6851,0.68,1.4115,1.287,est,-0.1183,28.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719588,2026-11-10T02:00Z,San Antonio Spurs,Phoenix Suns,馬刺,太陽,model1,away,馬刺,0.6851,0.68,1.4115,1.287,est,-0.1183,28.98,2026-11-08T21:01Z,,,,,1.24
+nba,nba,sr:match:73719588,2026-11-10T02:00Z,San Antonio Spurs,Phoenix Suns,馬刺,太陽,model1_all_tw,ml|away|,獨贏・馬刺,0.6851,0.6851,1.4115,1.287,est,-0.033,28.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719588,2026-11-10T02:00Z,San Antonio Spurs,Phoenix Suns,馬刺,太陽,model1_all_us,ml|away|,獨贏・馬刺,0.6851,0.6851,1.4115,1.4115,us,-0.033,28.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719588,2026-11-10T02:00Z,San Antonio Spurs,Phoenix Suns,馬刺,太陽,model1_ou_tw,ou|over|225.5,大小・大 225.5,0.5,0.5,1.9091,1.717,est,-0.0454,28.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719588,2026-11-10T02:00Z,San Antonio Spurs,Phoenix Suns,馬刺,太陽,model1_ou_us,ou|over|225.5,大小・大 225.5,0.5,0.5,1.9091,1.9091,us,-0.0454,28.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719588,2026-11-10T02:00Z,San Antonio Spurs,Phoenix Suns,馬刺,太陽,model1_sp_tw,sp|away|-7.5,讓分・馬刺 -7.5,0.5,0.5,1.9091,1.717,est,-0.0454,28.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719588,2026-11-10T02:00Z,San Antonio Spurs,Phoenix Suns,馬刺,太陽,model1_sp_us,sp|away|-7.5,讓分・馬刺 -7.5,0.5,0.5,1.9091,1.9091,us,-0.0454,28.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719588,2026-11-10T02:00Z,San Antonio Spurs,Phoenix Suns,馬刺,太陽,model1_us,away,馬刺,0.6851,0.68,1.4115,1.4115,us,-0.033,28.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719588,2026-11-10T02:00Z,San Antonio Spurs,Phoenix Suns,馬刺,太陽,model1_us_tw,away,馬刺,0.6851,0.68,1.4115,1.287,est,-0.033,28.98,2026-11-08T21:01Z,,,,,
+nba,nba,sr:match:73719588,2026-11-10T02:00Z,San Antonio Spurs,Phoenix Suns,馬刺,太陽,model3,away,馬刺,0.6851,0.68,1.4115,1.287,est,-0.1183,28.98,2026-11-08T21:01Z,,,,,1.24
+nba,nba,sr:match:73719588,2026-11-10T02:00Z,San Antonio Spurs,Phoenix Suns,馬刺,太陽,underdog,home,太陽,0.3149,0.32,3,2.489,est,-0.2162,28.98,2026-11-08T21:01Z,,,,,
