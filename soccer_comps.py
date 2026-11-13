@@ -61,6 +61,13 @@ COMPS = {
 }
 GROUP_ZH = {"big5": "五大聯賽", "euro": "歐洲賽事", "cup": "盃賽", "intl": "國家隊", "league": "其他聯賽"}
 BIG5 = [k for k, v in COMPS.items() if v["group"] == "big5"]
+# 暫停更新的分組（使用者 2026-11-13：「其他聯賽的部分都先停止更新」）：不再記新比賽的盤口／資金流向，
+# 已經記過的比賽照常補賽果、結算。要恢復就把這裡改成空的 set()
+PAUSED_GROUPS = {"league"}
+
+
+def paused(code):
+    return (COMPS.get(code) or {}).get("group") in PAUSED_GROUPS
 
 
 def pin_comp(name):

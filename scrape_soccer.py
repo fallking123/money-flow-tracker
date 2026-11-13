@@ -208,7 +208,10 @@ def build_row(league, g, now):
 
 def collect_money_flow(now, state):
     rows = []
+    from soccer_comps import paused
     for key, cfg in LEAGUES.items():
+        if paused(key):                                   # 暫停更新的聯賽（美職）
+            continue
         n_games = 0
         for i in range(HORIZON_DAYS + 1):
             day = (now.astimezone(ET) + timedelta(days=i)).date()
