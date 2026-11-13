@@ -1231,17 +1231,31 @@ nfl,nfl,sr:match:71516006,2026-11-10T01:15Z,Buffalo Bills,Minnesota Vikings,比�
 nfl,nfl,sr:match:71516006,2026-11-10T01:15Z,Buffalo Bills,Minnesota Vikings,比爾,維京人,model3_pin,away,比爾,0.6656,0.6459,1.5076,1.5076,pin,0.0035,2.58,2026-11-09T23:00Z,win,1.5076,pin,0.5076,
 nfl,nfl,sr:match:71516006,2026-11-10T01:15Z,Buffalo Bills,Minnesota Vikings,比爾,維京人,model3_pin_tw,away,比爾,0.6656,0.6459,1.525,1.385,est,0.0035,2.58,2026-11-09T23:00Z,win,1.385,est,0.385,1.37
 nfl,nfl,sr:match:71516006,2026-11-10T01:15Z,Buffalo Bills,Minnesota Vikings,比爾,維京人,underdog,home,維京人,0.3344,0.3541,2.595,2.281,est,-0.2372,2.58,2026-11-09T23:00Z,loss,2.281,est,-1.0,
-nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,favorite,home,巨人,0.527,0.5379,1.8033,1.62,est,-0.1463,0.08,2026-11-13T01:10Z,,,,,
-nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model1,away,指揮官,0.473,0.4621,2.05,1.837,est,-0.1311,0.08,2026-11-13T01:10Z,,,,,1.842
-nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model1_all_tw,ml|away|,獨贏・指揮官,0.473,0.473,2.05,1.837,est,-0.0304,0.08,2026-11-13T01:10Z,,,,,
-nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model1_all_us,ml|away|,獨贏・指揮官,0.473,0.473,2.05,2.05,us,-0.0304,0.08,2026-11-13T01:10Z,,,,,
-nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model1_ou_tw,ou|over|40.5,大小・大 40.5,0.5069,0.5069,1.885,1.703,est,-0.0445,0.08,2026-11-13T01:10Z,,,,,
-nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model1_ou_us,ou|over|40.5,大小・大 40.5,0.5069,0.5069,1.885,1.885,us,-0.0445,0.08,2026-11-13T01:10Z,,,,,
-nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model1_sp_tw,sp|home|-1.5,讓分・巨人 -1.5,0.5046,0.5046,1.9091,1.74,est,-0.0366,0.08,2026-11-13T01:10Z,,,,,
-nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model1_sp_us,sp|home|-1.5,讓分・巨人 -1.5,0.5046,0.5046,1.9091,1.9091,us,-0.0366,0.08,2026-11-13T01:10Z,,,,,
-nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model1_us,away,指揮官,0.473,0.4621,2.05,2.05,us,-0.0304,0.08,2026-11-13T01:10Z,,,,,
-nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model1_us_tw,away,指揮官,0.473,0.4621,2.05,1.837,est,-0.0304,0.08,2026-11-13T01:10Z,,,,,
-nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model3,away,指揮官,0.473,0.4621,2.05,1.837,est,-0.1311,0.08,2026-11-13T01:10Z,,,,,1.842
-nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model3_pin,away,指揮官,0.473,0.4621,2.11,2.11,pin,-0.002,0.08,2026-11-13T01:10Z,,,,,
-nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model3_pin_tw,away,指揮官,0.473,0.4621,2.05,1.837,est,-0.002,0.08,2026-11-13T01:10Z,,,,,1.842
-nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,underdog,away,指揮官,0.473,0.4621,2.05,1.837,est,-0.1311,0.08,2026-11-13T01:10Z,,,,,
+nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,favorite,home,巨人,0.527,0.5379,1.8033,1.62,est,-0.1463,0.08,2026-11-13T01:10Z,loss,1.62,est,-1.0,
+nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model1,away,指揮官,0.473,0.4621,2.05,1.837,est,-0.1311,0.08,2026-11-13T01:10Z,win,1.837,est,0.837,1.842
+nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model1_all_tw,ml|away|,獨贏・指揮官,0.473,0.473,2.05,1.837,est,-0.0304,0.08,2026-11-13T01:10Z,win,1.837,est,0.837,
+nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model1_all_us,ml|away|,獨贏・指揮官,0.473,0.473,2.05,2.05,us,-0.0304,0.08,2026-11-13T01:10Z,win,2.05,us,1.05,
+nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model1_ou_tw,ou|over|40.5,大小・大 40.5,0.5069,0.5069,1.885,1.703,est,-0.0445,0.08,2026-11-13T01:10Z,win,1.703,est,0.703,
+nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model1_ou_us,ou|over|40.5,大小・大 40.5,0.5069,0.5069,1.885,1.885,us,-0.0445,0.08,2026-11-13T01:10Z,win,1.885,us,0.885,
+nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model1_sp_tw,sp|home|-1.5,讓分・巨人 -1.5,0.5046,0.5046,1.9091,1.74,est,-0.0366,0.08,2026-11-13T01:10Z,loss,1.74,est,-1.0,
+nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model1_sp_us,sp|home|-1.5,讓分・巨人 -1.5,0.5046,0.5046,1.9091,1.9091,us,-0.0366,0.08,2026-11-13T01:10Z,loss,1.9091,us,-1.0,
+nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model1_us,away,指揮官,0.473,0.4621,2.05,2.05,us,-0.0304,0.08,2026-11-13T01:10Z,win,2.05,us,1.05,
+nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model1_us_tw,away,指揮官,0.473,0.4621,2.05,1.837,est,-0.0304,0.08,2026-11-13T01:10Z,win,1.837,est,0.837,
+nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model3,away,指揮官,0.473,0.4621,2.05,1.837,est,-0.1311,0.08,2026-11-13T01:10Z,win,1.837,est,0.837,1.842
+nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model3_pin,away,指揮官,0.473,0.4621,2.11,2.11,pin,-0.002,0.08,2026-11-13T01:10Z,win,2.11,pin,1.11,
+nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,model3_pin_tw,away,指揮官,0.473,0.4621,2.05,1.837,est,-0.002,0.08,2026-11-13T01:10Z,win,1.837,est,0.837,1.842
+nfl,nfl,sr:match:71516008,2026-11-13T01:15Z,Washington Commanders,New York Giants,指揮官,巨人,underdog,away,指揮官,0.473,0.4621,2.05,1.837,est,-0.1311,0.08,2026-11-13T01:10Z,win,1.837,est,0.837,
+nfl,nfl,sr:match:71488892,2026-11-15T14:30Z,New England Patriots,Detroit Lions,愛國者,雄獅,favorite,home,雄獅,0.5695,0.5778,1.6579,1.509,est,-0.1406,49.33,2026-11-13T16:14Z,,,,,
+nfl,nfl,sr:match:71488892,2026-11-15T14:30Z,New England Patriots,Detroit Lions,愛國者,雄獅,model1,away,愛國者,0.4305,0.4222,2.27,1.995,est,-0.1412,49.33,2026-11-13T16:14Z,,,,,2.04
+nfl,nfl,sr:match:71488892,2026-11-15T14:30Z,New England Patriots,Detroit Lions,愛國者,雄獅,model1_all_tw,ml|away|,獨贏・愛國者,0.4305,0.4305,2.27,1.995,est,-0.0228,49.33,2026-11-13T16:14Z,,,,,
+nfl,nfl,sr:match:71488892,2026-11-15T14:30Z,New England Patriots,Detroit Lions,愛國者,雄獅,model1_all_us,ml|away|,獨贏・愛國者,0.4305,0.4305,2.27,2.27,us,-0.0228,49.33,2026-11-13T16:14Z,,,,,
+nfl,nfl,sr:match:71488892,2026-11-15T14:30Z,New England Patriots,Detroit Lions,愛國者,雄獅,model1_ou_tw,ou|under|50.5,大小・小 50.5,0.5033,0.5033,1.9009,1.581,est,-0.0433,49.33,2026-11-13T16:14Z,,,,,
+nfl,nfl,sr:match:71488892,2026-11-15T14:30Z,New England Patriots,Detroit Lions,愛國者,雄獅,model1_ou_us,ou|under|50.5,大小・小 50.5,0.5033,0.5033,1.9009,1.9009,us,-0.0433,49.33,2026-11-13T16:14Z,,,,,
+nfl,nfl,sr:match:71488892,2026-11-15T14:30Z,New England Patriots,Detroit Lions,愛國者,雄獅,model1_sp_tw,sp|away|2.5,讓分・愛國者 +2.5,0.4794,0.4794,2,1.739,est,-0.0411,49.33,2026-11-13T16:14Z,,,,,
+nfl,nfl,sr:match:71488892,2026-11-15T14:30Z,New England Patriots,Detroit Lions,愛國者,雄獅,model1_sp_us,sp|away|2.5,讓分・愛國者 +2.5,0.4794,0.4794,2,2,us,-0.0411,49.33,2026-11-13T16:14Z,,,,,
+nfl,nfl,sr:match:71488892,2026-11-15T14:30Z,New England Patriots,Detroit Lions,愛國者,雄獅,model1_us,away,愛國者,0.4305,0.4222,2.27,2.27,us,-0.0228,49.33,2026-11-13T16:14Z,,,,,
+nfl,nfl,sr:match:71488892,2026-11-15T14:30Z,New England Patriots,Detroit Lions,愛國者,雄獅,model1_us_tw,away,愛國者,0.4305,0.4222,2.27,1.995,est,-0.0228,49.33,2026-11-13T16:14Z,,,,,
+nfl,nfl,sr:match:71488892,2026-11-15T14:30Z,New England Patriots,Detroit Lions,愛國者,雄獅,model3,home,雄獅,0.5695,0.5778,1.6579,1.509,est,-0.1406,49.33,2026-11-13T16:14Z,,,,,1.49
+nfl,nfl,sr:match:71488892,2026-11-15T14:30Z,New England Patriots,Detroit Lions,愛國者,雄獅,model3_pin,away,愛國者,0.4305,0.4222,2.3,2.3,pin,-0.0099,49.33,2026-11-13T16:14Z,,,,,
+nfl,nfl,sr:match:71488892,2026-11-15T14:30Z,New England Patriots,Detroit Lions,愛國者,雄獅,model3_pin_tw,away,愛國者,0.4305,0.4222,2.27,1.995,est,-0.0099,49.33,2026-11-13T16:14Z,,,,,2.04
+nfl,nfl,sr:match:71488892,2026-11-15T14:30Z,New England Patriots,Detroit Lions,愛國者,雄獅,underdog,away,愛國者,0.4305,0.4222,2.27,1.995,est,-0.1412,49.33,2026-11-13T16:14Z,,,,,
