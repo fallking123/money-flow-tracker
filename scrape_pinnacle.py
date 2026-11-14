@@ -102,7 +102,7 @@ def soccer_leagues():
     """足球：每次先問 Pinnacle 現在有哪些聯賽有比賽，對到 soccer_comps 清單裡的都記（盃賽、國家隊賽事沒比賽時不會出現）"""
     from soccer_comps import pin_comp, paused
     fixed = dict((v, k) for k, v in LEAGUES["soccer"])
-    out = list(LEAGUES["soccer"])
+    out = [x for x in LEAGUES["soccer"] if not paused(x[0])]
     try:
         for x in get("sports/29/leagues?all=false"):
             code = pin_comp(x.get("name"))

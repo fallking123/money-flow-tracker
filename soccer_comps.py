@@ -63,7 +63,7 @@ GROUP_ZH = {"big5": "五大聯賽", "euro": "歐洲賽事", "cup": "盃賽", "in
 BIG5 = [k for k, v in COMPS.items() if v["group"] == "big5"]
 # 暫停更新的分組（使用者 2026-11-13：「其他聯賽的部分都先停止更新」）：不再記新比賽的盤口／資金流向，
 # 已經記過的比賽照常補賽果、結算。要恢復就把這裡改成空的 set()
-PAUSED_GROUPS = {"league"}
+PAUSED_GROUPS = {"league", "euro", "cup", "intl"}   # 2026-11-14：「全部都先暫停」＝五大聯賽以外全部
 
 
 def paused(code):
