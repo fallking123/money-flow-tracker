@@ -1,5 +1,10 @@
 # 給 Claude 的專案說明（每個新對話先讀這份）
 
+## ⚠️ 整個系統暫停中（使用者 2026-11-14 16:47「整個都停止更新」）
+- GitHub Actions 17 個工作全部 disable（`gh api -X PUT repos/fallking123/money-flow-tracker/actions/workflows/<id>/disable`，恢復用 `/enable`；resident 要恢復記得手動 dispatch 一次）。
+- Claude 排程任務全部停用：更新資金流向看板、台彩截圖需求清單、職業版網頁更新＋NHL 新注通知、立即更新賽果（看板按鈕會失效）。恢復＝update_trigger enabled=true。
+- 足球 `soccer_comps.PAUSED_GROUPS` 也設成五大以外全部（恢復時另外問使用者要不要打開）。
+
 ## 使用者
 - 住台灣，在**台灣運彩（台彩）**下注，用 iPhone／iPad 看看板。不會寫程式，所有修改都由 Claude 做。
 - **一律用繁體中文回覆**（就算使用者打簡體字也一樣）。用白話，少用術語；數字用表格，結論放前面。
